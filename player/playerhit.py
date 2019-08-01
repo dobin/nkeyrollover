@@ -34,6 +34,14 @@ class PlayerHit(object):
         self.sprite.initSprite(Action.hit, direction)
 
 
+    def isHitting(self): 
+        return self.isActive
+
+
+    def getHitCoordinates(self): 
+        return { 'x': self.x, 'y': self.y }
+
+
     def advance(self):
         if not self.isActive: 
             return 

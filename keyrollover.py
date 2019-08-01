@@ -5,6 +5,7 @@ from player.player import Player
 from enemy.enemy import Enemy
 from scene.scene import Scene
 import logging
+from player.action import Action
 
 
 ROWS = 25
@@ -61,6 +62,8 @@ class Keyrollover(object):
             self.player.getInput()
             #win.refresh()
 
+            self.collisionDetection()
+
             time.sleep(0.02)
             n = n + 1
 
@@ -69,6 +72,16 @@ class Keyrollover(object):
         self.win.keypad(0)
         curses.echo()
         curses.endwin()
+
+
+    def collisionDetection(self):
+        if not self.player.playerHit.isHitting():
+            return
+
+        hitCoords = self.player.playerHit.getHitCoordinates()
+
+        if self.enemy.collidesWithPoint(hitCoords):
+            self.enemy.playerAction.changeTo(Action.dying, None)
 
 
 def main(stdscr):

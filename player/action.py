@@ -7,3 +7,4 @@ class Action(Enum):
     shrugging = 3
     hit = 4
     speech = 5
+    dying = 6

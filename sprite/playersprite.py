@@ -175,3 +175,21 @@ class PlayerSprite(Sprite):
                 ]                                
             ]
 
+        if type is Action.dying:
+            self.width = 3
+            self.height = 3
+            self.frameCount = 1
+            self.frameIndex = 0
+            self.frameTime = []
+            self.isActive = True
+            self.advanceByStep = False
+            self.frameTime = None
+            self.endless = True
+
+            self.arr = [
+                [
+                    [ ' ', 'x', ' ' ],
+                    [ '/', '|', '\\'],
+                    [ '/', ' ', '\\']
+                ]
+            ]

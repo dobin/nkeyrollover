@@ -77,3 +77,11 @@ class Player(object):
 
     def addSprite(self, sprite): 
         self.aSprite = sprite
+
+
+    def collidesWithPoint(self, hitCoords):
+        if hitCoords['x'] >= self.x and hitCoords['x'] <= self.x + 3:
+            if hitCoords['y'] >= self.y and hitCoords['y'] <= self.y + 3:
+                return True
+
+        return False
