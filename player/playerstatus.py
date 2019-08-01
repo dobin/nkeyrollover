@@ -14,6 +14,8 @@ class PlayerStatus(object):
         self.healthRegen = 1
         self.manaRegen = 1
 
+        self.points = 0
+
     
     def isAlive(self): 
         if self.health > 0:

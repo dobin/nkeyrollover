@@ -19,11 +19,13 @@ class Keyrollover(object):
 
         # Create a new Curses window
         #curses.initScr()
-        self.win = curses.newwin(ROWS, COLUMNS)    
+        self.win = curses.newwin(ROWS, COLUMNS)
         curses.noecho()
         curses.cbreak()
         self.win.keypad(1)
         curses.curs_set(0)    
+
+        self.statusBarWin = curses.newwin(3, COLUMNS, 0, 0)
 
         # Initialize color pairs
         curses.start_color()    
@@ -44,13 +46,13 @@ class Keyrollover(object):
         self.player = Player(self.win)
         self.enemy = Enemy(self.win)
 
+        self.statusBarWin.border()
+
     def loop(self): 
         n = 0
         while True: 
             self.win.erase()
             self.win.border()
-            
-            self.win.addstr(1, 75, str(n))
 
             self.enemy.draw()
             self.enemy.advance()
@@ -63,7 +65,7 @@ class Keyrollover(object):
             #win.refresh()
 
             self.collisionDetection()
-
+            self.drawStatusbar(n)
             time.sleep(0.02)
             n = n + 1
 
@@ -72,6 +74,15 @@ class Keyrollover(object):
         self.win.keypad(0)
         curses.echo()
         curses.endwin()
+
+    def drawStatusbar(self, n):
+        s = "Health: " + str(self.player.playerStatus.health)
+        s += "    Mana: " + str(self.player.playerStatus.mana)
+        s += "    Points: " + str(self.player.playerStatus.points)
+        
+        self.statusBarWin.addstr(1, 2, s)
+        self.statusBarWin.addstr(1, 73, str(n))
+        self.statusBarWin.refresh()
 
 
     def collisionDetection(self):

@@ -17,7 +17,9 @@ class PlayerHit(object):
         self.sprite = PlayerSprite(Action.hit)
         self.x = 0
         self.y = 0
-        self.isActive = False
+
+        # for drawing the hit, and see if the char is "hitting"
+        self.isActive = False 
 
 
     def doHit(self, x, y, direction):
