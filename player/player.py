@@ -79,7 +79,7 @@ class Player(object):
                     self.playerAction.advanceStep()
             if key == curses.KEY_UP: 
                 if self.y > 2:
-                    self.y = self.y - 2
+                    self.y = self.y - 1
                     self.playerAction.changeTo(Action.walking, self.direction)
                     self.playerAction.advanceStep()
             if key == curses.KEY_DOWN: 
