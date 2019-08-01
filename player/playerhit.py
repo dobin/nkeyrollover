@@ -21,6 +21,7 @@ class PlayerHit(object):
 
         # for drawing the hit, and see if the char is "hitting"
         self.isActive = False 
+        self.collisionDetectionDone = False
 
 
     def doHit(self, x, y, direction):
@@ -32,6 +33,7 @@ class PlayerHit(object):
             self.x = x - 1
             self.y = y + 1
 
+        self.collisionDetectionDone = False
         self.isActive = True
         self.durationLeft = self.duration
         self.sprite.initSprite(Action.hit, direction)

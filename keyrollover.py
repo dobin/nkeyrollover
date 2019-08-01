@@ -106,8 +106,11 @@ class Keyrollover(object):
             return
 
         # player hits enemies
-        hitCoords = self.player.playerHit.getHitCoordinates()
-        self.director.collisionDetection(hitCoords)
+        if not self.player.playerHit.collisionDetectionDone: 
+            hitCoords = self.player.playerHit.getHitCoordinates()
+            self.director.collisionDetection(hitCoords)
+            self.player.playerHit.collisionDetectionDone = True
+        
 
         # enemies hit player
 
