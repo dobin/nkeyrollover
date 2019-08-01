@@ -40,14 +40,18 @@ class Enemy(Player):
         self.playerAction.advanceStep()
 
         if playerLocation['x'] > self.x:
-            self.x += 1
+            if self.x < Config.columns - 4:
+                self.x += 1
         else: 
-            self.x -= 1
+            if self.x > 2:
+                self.x -= 1
 
         if playerLocation['y'] > self.y:
-            self.y += 1
+            if self.y < Config.rows - 4:
+                self.y += 1
         else: 
-            self.y -= 1
+            if self.y > 2:
+                self.y -= 1
 
         self.lastInput = 0
 
