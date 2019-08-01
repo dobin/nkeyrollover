@@ -2,6 +2,10 @@
 
 from sprite.sprite import Sprite
 from action import Action
+from direction import Direction
+import logging 
+
+logger = logging.getLogger(__name__)
 
 
 class PlayerAction(object):
@@ -13,13 +17,40 @@ class PlayerAction(object):
 
 
     def changeTo(self, action, direction):
-        self.type = action
-        self.duration = 50
-        self.durationLeft = 50
-        self.sprite.initSprite(self.type, direction)
+        if action is Action.walking:
+            # we start, or continue, walking
+            self.duration = 50
+            self.durationLeft = 50
 
+            # if we were already walking, dont destroy the animation state
+            if self.type is not Action.walking:
+                self.sprite.initSprite(action, direction)
+        else: 
+            self.duration = 50
+            self.durationLeft = 50
+
+            self.sprite.initSprite(action, direction)
+
+        self.type = action
+
+
+    # advance by step taken by the player
+    def advanceStep(self):
+        self.sprite.advanceStep()
+
+
+    # advance by time
     def advance(self): 
         self.sprite.advance()
+
+        self.durationLeft = self.durationLeft - 1
+
+        # stand still after some non walking
+        if self.type is Action.walking: 
+            if self.durationLeft == 0:
+                self.type = Action.standing
+                self.sprite.initSprite(Action.standing, Direction.right)
+
 
     def draw(self, win, x, y):
         self.sprite.draw(win, x, y)

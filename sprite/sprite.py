@@ -23,6 +23,7 @@ class Sprite(object):
             self.frameIndex = 0
             self.frameTime = 0
             self.isActive = True
+            self.advanceByStep = False
 
             self.arr = [
                 [
@@ -44,6 +45,7 @@ class Sprite(object):
             ]
             self.frameTimeLeft = self.frameTime[self.frameIndex]
             self.endless = False
+            self.advanceByStep = True
 
             if direction is Direction.right:
                 self.arr = [
@@ -84,6 +86,7 @@ class Sprite(object):
             ]
             self.frameTimeLeft = self.frameTime[self.frameIndex]
             self.isActive = True
+            self.advanceByStep = False
 
             if direction is Direction.right:
                 self.arr = [
@@ -119,6 +122,7 @@ class Sprite(object):
             self.frameIndex = 1
             self.endless = True
             self.isActive = True
+            self.advanceByStep = False
 
             self.frameTime = [
                 100,
@@ -147,11 +151,12 @@ class Sprite(object):
             self.frameIndex = 0
             self.endless = False
             self.isActive = True
+            self.advanceByStep = False
             
             self.frameTime = [
-                10,
-                10,
-                10
+                5,
+                5,
+                5
             ]
             self.frameTimeLeft = self.frameTime[self.frameIndex]
 
@@ -169,11 +174,21 @@ class Sprite(object):
             ]
 
 
+    def advanceStep(self): 
+        if not self.advanceByStep: 
+            return
+
+        self.frameIndex = (self.frameIndex + 1) % self.frameCount
+ 
+
     def advance(self):
         if self.frameTime == 0 or self.frameCount == 1: 
             return
 
         if not self.isActive: 
+            return
+
+        if self.advanceByStep: 
             return
 
         self.frameTimeLeft = self.frameTimeLeft - 1

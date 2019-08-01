@@ -27,13 +27,11 @@ class Player(object):
 
     def draw(self):
         self.playerAction.draw(self.win, self.x, self.y)
-
         self.playerHit.draw(self.win)
 
 
     def advance(self): 
         self.playerAction.advance()
-
         self.playerHit.advance()
 
 
@@ -51,13 +49,17 @@ class Player(object):
             self.x = self.x - 1
             self.direction = Direction.left
             self.playerAction.changeTo(Action.walking, self.direction)
+            self.playerAction.advanceStep()
         if key == curses.KEY_RIGHT: 
             self.x = self.x + 1
             self.direction = Direction.right
             self.playerAction.changeTo(Action.walking, self.direction)
+            self.playerAction.advanceStep()
         if key == curses.KEY_UP: 
             self.y = self.y - 1
             self.playerAction.changeTo(Action.walking, self.direction)
+            self.playerAction.advanceStep()
         if key == curses.KEY_DOWN: 
             self.y = self.y + 1
             self.playerAction.changeTo(Action.walking, self.direction)
+            self.playerAction.advanceStep()
