@@ -2,6 +2,7 @@
 
 import curses, random, time
 from player.player import Player
+from enemy.enemy import Enemy
 from scene.scene import Scene
 import logging
 
@@ -41,6 +42,7 @@ def main(stdscr):
     win.nodelay(1) # make getch() nonblocking
 
     player = Player(win)
+    enemy = Enemy(win)
 
     n = 0
     while True: 
@@ -48,6 +50,9 @@ def main(stdscr):
         win.border()
         
         win.addstr(1, 75, str(n))
+
+        enemy.draw()
+        enemy.advance()
 
         player.draw()
         player.advance()
