@@ -81,7 +81,7 @@ class Keyrollover(object):
         hitCoords = self.player.playerHit.getHitCoordinates()
 
         if self.enemy.collidesWithPoint(hitCoords):
-            self.enemy.playerAction.changeTo(Action.dying, None)
+            self.enemy.getHit(50)
 
 
 def main(stdscr):

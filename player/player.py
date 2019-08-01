@@ -7,6 +7,7 @@ from enum import Enum
 
 from playeraction import PlayerAction
 from playerhit import PlayerHit
+from playerstatus import PlayerStatus
 from action import Action
 from direction import Direction
 
@@ -21,6 +22,7 @@ class Player(object):
         self.win = win
         self.direction = Direction.right
         
+        self.playerStatus = PlayerStatus()
         self.playerAction = PlayerAction()
         self.playerHit = PlayerHit()
         self.aSprite = None
@@ -37,9 +39,16 @@ class Player(object):
     def advance(self): 
         self.playerAction.advance()
         self.playerHit.advance()
+        self.playerStatus.advance()
 
         if self.aSprite is not None: 
             self.aSprite.advance()
+
+
+    def getHit(self, damage):
+        self.playerStatus.getHit(damage)
+        if not self.playerStatus.isAlive():
+            self.playerAction.changeTo(Action.dying, None)
 
 
     def getInput(self):
