@@ -33,6 +33,11 @@ class Director(object):
             enemy.advance()
 
 
+    def getInput(self, playerLocation): 
+        for enemy in self.enemiesAlive: 
+            enemy.getInput(playerLocation)
+
+
     def drawEnemies(self):
         for enemy in self.enemiesAlive: 
             enemy.draw()
@@ -58,3 +63,5 @@ class Director(object):
                     logger.warning("Move newly dead enemy to dead queue")
                     self.enemiesDead.append(enemy)
                     self.enemiesAlive.remove(enemy)
+
+        

@@ -9,3 +9,5 @@ class Config:
     @staticmethod
     def secToFrames(sec): 
         return sec * Config.fpsf
+
+    

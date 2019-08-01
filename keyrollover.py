@@ -8,10 +8,6 @@ from player.action import Action
 from director import Director
 from config import Config
 
-#ROWS = 25
-#COLUMNS = 80
-#FPS = 50
-
 current_milli_time = lambda: int(round(time.time() * 1000))
 
 
@@ -69,6 +65,7 @@ class Keyrollover(object):
             # has to be after draw, as getch() does a refresh
             # https://stackoverflow.com/questions/19748685/curses-library-why-does-getch-clear-my-screen
             self.player.getInput()
+            self.director.getInput(self.player.getLocation())
             #win.refresh()
 
             self.collisionDetection()

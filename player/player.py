@@ -96,3 +96,11 @@ class Player(object):
                 return True
 
         return False
+
+
+    def getLocation(self): 
+        loc = {
+            'x': self.x,
+            'y': self.y,
+        }
+        return loc
