@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from sprite.sprite import Sprite
+from sprite.playersprite import PlayerSprite
 from action import Action
 from direction import Direction
 import logging 
@@ -13,7 +13,7 @@ class PlayerAction(object):
         self.duration = 0
         self.durationLeft = 0
         self.type = Action.standing
-        self.sprite = Sprite(self.type)
+        self.sprite = PlayerSprite(self.type)
 
 
     def changeTo(self, action, direction):

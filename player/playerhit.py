@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from sprite.sprite import Sprite
+from sprite.playersprite import PlayerSprite
 from action import Action
 from direction import Direction
 import logging
@@ -14,7 +14,7 @@ class PlayerHit(object):
     def __init__(self):
         self.duration = 30
         self.durationLeft = 30
-        self.sprite = Sprite(Action.hit)
+        self.sprite = PlayerSprite(Action.hit)
         self.x = 0
         self.y = 0
         self.isActive = False
