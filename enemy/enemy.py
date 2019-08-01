@@ -5,15 +5,15 @@ from player.action import Action
 
 import random
 from config import Config
-
+from player.figure import Figure
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-class Enemy(Player):
+class Enemy(Figure):
     def __init__(self, win, coordinates):
-        Player.__init__(self, win, coordinates)
+        Figure.__init__(self, win, coordinates)
         self.coordinates = coordinates
         self.speed = Config.secToFrames(1)
         self.playerAction = EnemyAction()
