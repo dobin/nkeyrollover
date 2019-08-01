@@ -3,7 +3,8 @@
 from sprite.playersprite import PlayerSprite
 from action import Action
 from direction import Direction
-import logging 
+from config import Config
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -19,15 +20,15 @@ class PlayerAction(object):
     def changeTo(self, action, direction):
         if action is Action.walking:
             # we start, or continue, walking
-            self.duration = 50
-            self.durationLeft = 50
+            self.duration = Config.secToFrames(1)
+            self.durationLeft = Config.secToFrames(1)
 
             # if we were already walking, dont destroy the animation state
             if self.type is not Action.walking:
                 self.sprite.initSprite(action, direction)
         else: 
-            self.duration = 50
-            self.durationLeft = 50
+            self.duration = Config.secToFrames(1)
+            self.durationLeft = Config.secToFrames(1)
 
             self.sprite.initSprite(action, direction)
 

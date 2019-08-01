@@ -4,6 +4,7 @@ from sprite.playersprite import PlayerSprite
 from action import Action
 from direction import Direction
 import logging
+from config import Config
 
 logger = logging.getLogger(__name__)
 
@@ -12,8 +13,8 @@ logger = logging.getLogger(__name__)
 # - Used for collision detection
 class PlayerHit(object):
     def __init__(self):
-        self.duration = 30
-        self.durationLeft = 30
+        self.duration = Config.secToFrames(0.7)
+        self.durationLeft = Config.secToFrames(0.7)
         self.sprite = PlayerSprite(Action.hit)
         self.x = 0
         self.y = 0

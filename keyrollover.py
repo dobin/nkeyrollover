@@ -6,11 +6,14 @@ from scene.scene import Scene
 import logging
 from player.action import Action
 from director import Director
+from config import Config
 
+#ROWS = 25
+#COLUMNS = 80
+#FPS = 50
 
-ROWS = 25
-COLUMNS = 80
-FPS = 50
+current_milli_time = lambda: int(round(time.time() * 1000))
+
 
 class Keyrollover(object): 
     def __init__(self): 
@@ -19,13 +22,13 @@ class Keyrollover(object):
 
         # Create a new Curses window
         #curses.initScr()
-        self.win = curses.newwin(ROWS, COLUMNS)
+        self.win = curses.newwin(Config.rows, Config.columns)
         curses.noecho()
         curses.cbreak()
         self.win.keypad(1)
         curses.curs_set(0)    
 
-        self.statusBarWin = curses.newwin(3, COLUMNS, 0, 0)
+        self.statusBarWin = curses.newwin(3, Config.columns, 0, 0)
 
         # Initialize color pairs
         curses.start_color()    
@@ -43,10 +46,13 @@ class Keyrollover(object):
         self.win.border()
         self.win.nodelay(1) # make getch() nonblocking
 
-        self.player = Player(self.win, { 'max_y': 80, 'max_x': 25 })
+        self.player = Player(self.win, { 'max_y': Config.columns, 'max_x': Config.rows })
         self.director = Director(self.win)
 
         self.statusBarWin.border()
+
+        self.startTime = current_milli_time()
+        self.currentTime = self.startTime
 
     def loop(self): 
         n = 0
@@ -67,7 +73,7 @@ class Keyrollover(object):
             self.collisionDetection()
             self.director.worldUpdate()
             self.drawStatusbar(n)
-            time.sleep(0.02)
+            time.sleep( 1.0 / Config.fps)
             n = n + 1
 
         # Clean up before exiting
@@ -78,10 +84,15 @@ class Keyrollover(object):
 
 
     def drawStatusbar(self, n):
+        fps = 0
+        if n > 100: 
+            fps = 1000 * (float)(n) / (float)(current_milli_time() - self.startTime)
+
         #self.statusBarWin.erase()
         s = "Health: " + str(self.player.playerStatus.health)
         s += "    Mana: " + str(self.player.playerStatus.mana)
         s += "    Points: " + str(self.player.playerStatus.points)
+        s += "    FPS: %.0f" % (fps)
         
         self.statusBarWin.addstr(1, 2, s)
         self.statusBarWin.addstr(1, 73, str(n))
