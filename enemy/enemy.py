@@ -1,6 +1,8 @@
 from player.player import Player
-from player.playeraction import Action
+from .enemyaction import EnemyAction
 from player.direction import Direction
+from player.action import Action
+
 import random
 from config import Config
 
@@ -14,20 +16,27 @@ class Enemy(Player):
         Player.__init__(self, win, coordinates)
         self.coordinates = coordinates
         self.speed = Config.secToFrames(1)
-        self.lastInput = 0
+        self.playerAction = EnemyAction()
         self.init()
 
 
     def init(self):
         self.x = random.randint(self.coordinates['min_x'], self.coordinates['max_x'])
         self.y = random.randint(self.coordinates['min_y'], self.coordinates['max_y'])
-        logger.warning("New enemy at: " + str(self.x) + " / " + str(self.y))
         self.direction = Direction.left
+        self.lastInput = 0
 
 
-    def getInput(self, playerLocation): 
+    def getInput(self, playerLocation):
+        logging.warning("E Input 1: " + str(self.playerAction.type))
+        if not self.playerAction.type is Action.walking: 
+            return
+        logging.warning("E Input 2: " + str(self.lastInput))
         if not self.lastInput > self.speed: 
             return
+        logging.warning("E Input 3")
+
+        self.playerAction.changeTo(Action.walking, Direction.left)
 
         if playerLocation['x'] > self.x:
             self.x += 1
@@ -46,10 +55,13 @@ class Enemy(Player):
         if self.playerStatus.isAlive(): 
             return
 
+        logger.warning("E New enemy at: " + str(self.x) + " / " + str(self.y))
         self.init()
         self.playerStatus.init()
         self.playerAction.changeTo(Action.walking, None)
 
+
     def advance(self): 
         super(Enemy, self).advance()
         self.lastInput += 1
+        

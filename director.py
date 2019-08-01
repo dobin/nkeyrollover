@@ -11,10 +11,10 @@ class Director(object):
         self.enemiesAlive = []
         self.lastEnemyResurrectedTime = 0
         self.enemyRessuractionTime = Config.secToFrames(1)
-        self.maxEnemies = 5
+        self.maxEnemies = 1
 
         n = 0
-        while n < 16:
+        while n < 1:
             data = {
                 'min_x': 30, 
                 'min_y': 10,
@@ -53,15 +53,19 @@ class Director(object):
                 enemy.ressurectMe()
                 self.enemiesAlive.append(enemy)
 
+        # remove inactive enemies
+        for enemy in self.enemiesAlive:
+            if not enemy.playerAction.isActive:
+                logger.warning("Move newly dead enemy to dead queue")
+                self.enemiesDead.append(enemy)
+                self.enemiesAlive.remove(enemy)
+
 
     def collisionDetection(self, playerHitCoordinates): 
         for enemy in self.enemiesAlive: 
             if enemy.collidesWithPoint(playerHitCoordinates):
                 enemy.getHit(50)
 
-                if not enemy.playerStatus.isAlive():
-                    logger.warning("Move newly dead enemy to dead queue")
-                    self.enemiesDead.append(enemy)
-                    self.enemiesAlive.remove(enemy)
+
 
         

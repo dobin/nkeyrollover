@@ -1,18 +1,18 @@
 
-from .action import Action
+from player.action import Action
 from config import Config
-from direction import Direction
+from player.direction import Direction
 
-from .baseaction import BaseAction
+from player.baseaction import BaseAction
 
 import logging
 
 logger = logging.getLogger(__name__)
 
-class PlayerAction(BaseAction):
+class EnemyAction(BaseAction):
     def changeTo(self, action, direction):
         self.isActive = True
-
+        
         if action is Action.walking:
             # we start, or continue, walking
             self.duration = Config.secToFrames(1)
@@ -20,10 +20,10 @@ class PlayerAction(BaseAction):
 
             # if we were already walking, dont destroy the animation state
             if self.type is not Action.walking:
-                logger.warning("Change action to1: " + str(action))
+                logger.warning("EE Change action to1: " + str(action))
                 self.sprite.initSprite(action, direction)
         else: 
-            logger.warning("Change action to2: " + str(action))
+            logger.warning("EE Change action to2: " + str(action))
             self.duration = Config.secToFrames(1)
             self.durationLeft = Config.secToFrames(1)
 
@@ -33,18 +33,6 @@ class PlayerAction(BaseAction):
 
 
     def specificAdvance(self):
-        # stand still after some non walking
-        if self.type is Action.walking: 
-            if self.durationLeft == 0:
-                self.type = Action.standing
-                self.sprite.initSprite(Action.standing, Direction.right)
-
-        # after hitting is finished, stand still
-        if self.type is Action.hitting: 
-            if self.durationLeft == 0:
-                self.type = Action.standing
-                self.sprite.initSprite(Action.standing, Direction.right)
-
         # when dying, desintegrate
         if self.type is Action.dying: 
             if self.durationLeft == 0:
