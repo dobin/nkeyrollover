@@ -2,6 +2,7 @@
 
 from sprite.sprite import Sprite
 from action import Action
+from direction import Direction
 import logging
 
 logger = logging.getLogger(__name__)
@@ -19,10 +20,14 @@ class PlayerHit(object):
         self.isActive = False
 
 
-    def doHit(self, x, y):
+    def doHit(self, x, y, direction):
         # move hit to desired destination
-        self.x = x + 4
-        self.y = y + 1
+        if direction is Direction.right:
+            self.x = x + 3
+            self.y = y + 1
+        else:
+            self.x = x - 1
+            self.y = y + 1
 
         self.isActive = True
         self.durationLeft = self.duration

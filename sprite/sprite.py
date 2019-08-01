@@ -3,6 +3,7 @@ import logging
 
 from enum import Enum
 from player.action import Action
+from player.direction import Direction
 
 logger = logging.getLogger(__name__)
 
