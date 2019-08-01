@@ -16,7 +16,7 @@ from sprite.speechsprite import SpeechSprite
 logger = logging.getLogger(__name__)
 
 class Player(object):
-    def __init__(self, win):
+    def __init__(self, win, coordinates):
         self.x = 10
         self.y = 10
         self.win = win

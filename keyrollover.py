@@ -2,10 +2,10 @@
 
 import curses, random, time
 from player.player import Player
-from enemy.enemy import Enemy
 from scene.scene import Scene
 import logging
 from player.action import Action
+from director import Director
 
 
 ROWS = 25
@@ -43,8 +43,8 @@ class Keyrollover(object):
         self.win.border()
         self.win.nodelay(1) # make getch() nonblocking
 
-        self.player = Player(self.win)
-        self.enemy = Enemy(self.win)
+        self.player = Player(self.win, { 'max_y': 80, 'max_x': 25 })
+        self.director = Director(self.win)
 
         self.statusBarWin.border()
 
@@ -54,8 +54,8 @@ class Keyrollover(object):
             self.win.erase()
             self.win.border()
 
-            self.enemy.draw()
-            self.enemy.advance()
+            self.director.drawEnemies()
+            self.director.advanceEnemies()
 
             self.player.draw()
             self.player.advance()
@@ -65,6 +65,7 @@ class Keyrollover(object):
             #win.refresh()
 
             self.collisionDetection()
+            self.director.worldUpdate()
             self.drawStatusbar(n)
             time.sleep(0.02)
             n = n + 1
@@ -74,6 +75,7 @@ class Keyrollover(object):
         self.win.keypad(0)
         curses.echo()
         curses.endwin()
+
 
     def drawStatusbar(self, n):
         #self.statusBarWin.erase()
@@ -88,15 +90,13 @@ class Keyrollover(object):
         self.statusBarWin.refresh()
 
 
-
     def collisionDetection(self):
         if not self.player.playerHit.isHitting():
             return
 
         # player hits enemies
         hitCoords = self.player.playerHit.getHitCoordinates()
-        if self.enemy.collidesWithPoint(hitCoords):
-            self.enemy.getHit(50)
+        self.director.collisionDetection(hitCoords)
 
         # enemies hit player
 
