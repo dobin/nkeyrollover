@@ -62,6 +62,7 @@ class Keyrollover(object):
 
             self.director.drawEnemies()
             self.director.advanceEnemies()
+            self.drawStatusbar(n)
 
             self.player.draw()
             self.player.advance()
@@ -72,7 +73,6 @@ class Keyrollover(object):
 
             self.collisionDetection()
             self.director.worldUpdate()
-            self.drawStatusbar(n)
             time.sleep( 1.0 / Config.fps)
             n = n + 1
 
@@ -88,17 +88,17 @@ class Keyrollover(object):
         if n > 100: 
             fps = 1000 * (float)(n) / (float)(current_milli_time() - self.startTime)
 
-        #self.statusBarWin.erase()
         s = "Health: " + str(self.player.playerStatus.health)
         s += "    Mana: " + str(self.player.playerStatus.mana)
         s += "    Points: " + str(self.player.playerStatus.points)
         s += "    FPS: %.0f" % (fps)
-        
-        self.statusBarWin.addstr(1, 2, s)
-        self.statusBarWin.addstr(1, 73, str(n))
-        self.statusBarWin.border()
+        self.win.addstr(1, 2, s)
 
-        self.statusBarWin.refresh()
+        self.win.border()
+
+        # we dont use self.statusBar atm for flickering reasons
+        #self.statusBarWin.erase()
+        #self.statusbarWin.refresh()
 
 
     def collisionDetection(self):
