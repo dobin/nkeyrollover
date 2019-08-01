@@ -23,8 +23,10 @@ class BaseAction(object):
     def changeTo(self, action, direction):
         pass
 
+
     def specificAdvance(self): 
         pass
+
 
     # advance by step taken by the player
     def advanceStep(self):
@@ -36,8 +38,6 @@ class BaseAction(object):
         self.sprite.advance()
         self.durationLeft = self.durationLeft - 1
         self.specificAdvance()
-
-
 
 
     def draw(self, win, x, y):

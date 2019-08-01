@@ -33,7 +33,11 @@ class Enemy(Player):
         if not self.lastInput > self.speed: 
             return
 
+        # to update timers
         self.playerAction.changeTo(Action.walking, Direction.left)
+
+        # to make animation run
+        self.playerAction.advanceStep()
 
         if playerLocation['x'] > self.x:
             self.x += 1
