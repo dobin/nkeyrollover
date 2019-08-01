@@ -10,12 +10,13 @@ class Director(object):
         self.enemiesDead = []
         self.enemiesAlive = []
         self.lastEnemyResurrectedTime = 0
-        self.maxEnemies = 3
+        self.enemyRessuractionTime = Config.secToFrames(1)
+        self.maxEnemies = 5
 
         n = 0
         while n < 16:
             data = {
-                'min_x': 4, 
+                'min_x': 30, 
                 'min_y': 10,
                 'max_x': Config.columns - 5,
                 'max_y': Config.rows - 5
@@ -40,7 +41,8 @@ class Director(object):
     def worldUpdate(self): 
         # make more enemies
         if len(self.enemiesAlive) < self.maxEnemies:
-            if self.lastEnemyResurrectedTime > 50: 
+            if self.lastEnemyResurrectedTime > self.enemyRessuractionTime:
+                self.lastEnemyResurrectedTime = 0
                 logger.warning("Ressurect, alive: " + str(len(self.enemiesAlive)))
                 enemy = self.enemiesDead.pop()
                 enemy.ressurectMe()
