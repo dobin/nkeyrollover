@@ -13,8 +13,8 @@ current_milli_time = lambda: int(round(time.time() * 1000))
 
 class Keyrollover(object): 
     def __init__(self): 
-        logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
-        logging.warning('This will get logged to a file')
+        logging.basicConfig(filename='app.log', filemode='w', level=logging.DEBUG,
+            format='%(levelname)s %(name)s: %(message)s')
 
         # Create a new Curses window
         #curses.initScr()

@@ -28,7 +28,7 @@ class PlayerStatus(object):
 
     def getHit(self, damage): 
         self.health -= damage
-        logger.warning("New health: " + str(self.health))
+        logger.info("New health: " + str(self.health))
 
     def advance(self): 
         pass

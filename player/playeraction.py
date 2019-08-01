@@ -20,10 +20,10 @@ class PlayerAction(BaseAction):
 
             # if we were already walking, dont destroy the animation state
             if self.type is not Action.walking:
-                logger.warning("Change action to1: " + str(action))
+                logger.info("PP Change action to1: " + str(action))
                 self.sprite.initSprite(action, direction)
         else: 
-            logger.warning("Change action to2: " + str(action))
+            logger.info("PP Change action to2: " + str(action))
             self.duration = Config.secToFrames(1)
             self.durationLeft = Config.secToFrames(1)
 
@@ -48,5 +48,5 @@ class PlayerAction(BaseAction):
         # when dying, desintegrate
         if self.type is Action.dying: 
             if self.durationLeft == 0:
-                logging.warning("Deactivate!")
+                logging.warning("PP Deactivate!")
                 self.isActive = False

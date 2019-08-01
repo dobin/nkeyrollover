@@ -48,7 +48,7 @@ class Director(object):
         if len(self.enemiesAlive) < self.maxEnemies:
             if self.lastEnemyResurrectedTime > self.enemyRessuractionTime:
                 self.lastEnemyResurrectedTime = 0
-                logger.warning("Ressurect, alive: " + str(len(self.enemiesAlive)))
+                logger.info("Ressurect, alive: " + str(len(self.enemiesAlive)))
                 enemy = self.enemiesDead.pop()
                 enemy.ressurectMe()
                 self.enemiesAlive.append(enemy)
@@ -56,7 +56,7 @@ class Director(object):
         # remove inactive enemies
         for enemy in self.enemiesAlive:
             if not enemy.playerAction.isActive:
-                logger.warning("Move newly dead enemy to dead queue")
+                logger.info("Move newly dead enemy to dead queue")
                 self.enemiesDead.append(enemy)
                 self.enemiesAlive.remove(enemy)
 

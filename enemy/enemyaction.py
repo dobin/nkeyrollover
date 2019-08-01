@@ -20,10 +20,10 @@ class EnemyAction(BaseAction):
 
             # if we were already walking, dont destroy the animation state
             if self.type is not Action.walking:
-                logger.warning("EE Change action to1: " + str(action))
+                logger.info("EE Change action to1: " + str(action))
                 self.sprite.initSprite(action, direction)
         else: 
-            logger.warning("EE Change action to2: " + str(action))
+            logger.info("EE Change action to2: " + str(action))
             self.duration = Config.secToFrames(1)
             self.durationLeft = Config.secToFrames(1)
 
@@ -36,5 +36,5 @@ class EnemyAction(BaseAction):
         # when dying, desintegrate
         if self.type is Action.dying: 
             if self.durationLeft == 0:
-                logging.warning("Deactivate!")
+                logging.warning("EE Deactivate!")
                 self.isActive = False

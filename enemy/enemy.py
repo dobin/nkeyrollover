@@ -28,13 +28,10 @@ class Enemy(Player):
 
 
     def getInput(self, playerLocation):
-        logging.warning("E Input 1: " + str(self.playerAction.type))
         if not self.playerAction.type is Action.walking: 
             return
-        logging.warning("E Input 2: " + str(self.lastInput))
         if not self.lastInput > self.speed: 
             return
-        logging.warning("E Input 3")
 
         self.playerAction.changeTo(Action.walking, Direction.left)
 
@@ -55,7 +52,7 @@ class Enemy(Player):
         if self.playerStatus.isAlive(): 
             return
 
-        logger.warning("E New enemy at: " + str(self.x) + " / " + str(self.y))
+        logger.info("E New enemy at: " + str(self.x) + " / " + str(self.y))
         self.init()
         self.playerStatus.init()
         self.playerAction.changeTo(Action.walking, None)
