@@ -76,23 +76,29 @@ class Keyrollover(object):
         curses.endwin()
 
     def drawStatusbar(self, n):
+        #self.statusBarWin.erase()
         s = "Health: " + str(self.player.playerStatus.health)
         s += "    Mana: " + str(self.player.playerStatus.mana)
         s += "    Points: " + str(self.player.playerStatus.points)
         
         self.statusBarWin.addstr(1, 2, s)
         self.statusBarWin.addstr(1, 73, str(n))
+        self.statusBarWin.border()
+
         self.statusBarWin.refresh()
+
 
 
     def collisionDetection(self):
         if not self.player.playerHit.isHitting():
             return
 
+        # player hits enemies
         hitCoords = self.player.playerHit.getHitCoordinates()
-
         if self.enemy.collidesWithPoint(hitCoords):
             self.enemy.getHit(50)
+
+        # enemies hit player
 
 
 def main(stdscr):
