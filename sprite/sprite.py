@@ -11,10 +11,10 @@ logger = logging.getLogger(__name__)
 class Sprite(object): 
     def __init__(self, type):
         self.type = type
-        self.initSprite(type)
+        self.initSprite(type, Direction.right)
 
 
-    def initSprite(self, type):
+    def initSprite(self, type, direction):
 
         if type is Action.standing:
             self.width = 3
@@ -45,18 +45,32 @@ class Sprite(object):
             self.frameTimeLeft = self.frameTime[self.frameIndex]
             self.endless = False
 
-            self.arr = [
-                [
-                    [ ' ', 'O', ' ' ],
-                    [ '/', '|', '\\'],
-                    [ ' ', '|', '\\']
-                ],
-                [
-                    [ ' ', 'o', ' ' ],
-                    [ '/', '|', '\\'],
-                    [ '/', '|', ' ']
+            if direction is Direction.right:
+                self.arr = [
+                    [
+                        [ ' ', 'O', ' ' ],
+                        [ '/', '|', '\\'],
+                        [ ' ', '|', '\\']
+                    ],
+                    [
+                        [ ' ', 'o', ' ' ],
+                        [ '/', '|', '\\'],
+                        [ '/', '|', ' ']
+                    ]                
+                ]
+            else: 
+                self.arr = [
+                    [
+                        [ ' ', 'o', ' ' ],
+                        [ '/', '|', '\\'],
+                        [ '/', '|', ' ']
+                    ],
+                    [
+                        [ ' ', 'O', ' ' ],
+                        [ '/', '|', '\\'],
+                        [ ' ', '|', '\\']
+                    ]
                 ]                
-            ]
 
         if type is Action.hitting:
             self.width = 3
@@ -71,18 +85,32 @@ class Sprite(object):
             self.frameTimeLeft = self.frameTime[self.frameIndex]
             self.isActive = True
 
-            self.arr = [
-                [
-                    [ ' ', 'o', ' ' ],
-                    [ '/', '|', '-'],
-                    [ '/', ' ', '\\']
-                ],
-                [
-                    [ ' ', 'o', ' ' ],
-                    [ '/', '|', '\\'],
-                    [ '/', ' ', '\\']
+            if direction is Direction.right:
+                self.arr = [
+                    [
+                        [ ' ', 'o', ' ' ],
+                        [ '/', '|', '-'],
+                        [ '/', ' ', '\\']
+                    ],
+                    [
+                        [ ' ', 'o', ' ' ],
+                        [ '/', '|', '\\'],
+                        [ '/', ' ', '\\']
+                    ]
                 ]
-            ]
+            else: 
+                self.arr = [
+                    [
+                        [ ' ', 'o', ' ' ],
+                        [ '-', '|', '\\'],
+                        [ '/', ' ', '\\']
+                    ],
+                    [
+                        [ ' ', 'o', ' ' ],
+                        [ '/', '|', '\\'],
+                        [ '/', ' ', '\\']
+                    ]
+                ]
 
         if type is Action.shrugging:
             self.width = 3

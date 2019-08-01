@@ -12,11 +12,11 @@ class PlayerAction(object):
         self.sprite = Sprite(self.type)
 
 
-    def changeTo(self, action):
+    def changeTo(self, action, direction):
         self.type = action
         self.duration = 50
         self.durationLeft = 50
-        self.sprite = Sprite(self.type)
+        self.sprite.initSprite(self.type, direction)
 
     def advance(self): 
         self.sprite.advance()

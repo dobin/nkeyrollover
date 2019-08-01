@@ -31,7 +31,7 @@ class PlayerHit(object):
 
         self.isActive = True
         self.durationLeft = self.duration
-        self.sprite.initSprite(Action.hit)
+        self.sprite.initSprite(Action.hit, direction)
 
 
     def advance(self):

@@ -41,24 +41,23 @@ class Player(object):
         key = self.win.getch()
 
         if key == ord(' '):
-            self.playerAction.changeTo(Action.hitting)
+            self.playerAction.changeTo(Action.hitting, self.direction)
             self.playerHit.doHit(self.x, self.y, self.direction)
 
         if key == ord('q'):
-            self.playerAction.changeTo(Action.shrugging)
-
+            self.playerAction.changeTo(Action.shrugging, self.direction)
 
         if key == curses.KEY_LEFT: 
             self.x = self.x - 1
             self.direction = Direction.left
-            self.playerAction.changeTo(Action.walking)
+            self.playerAction.changeTo(Action.walking, self.direction)
         if key == curses.KEY_RIGHT: 
             self.x = self.x + 1
             self.direction = Direction.right
-            self.playerAction.changeTo(Action.walking)
+            self.playerAction.changeTo(Action.walking, self.direction)
         if key == curses.KEY_UP: 
             self.y = self.y - 1
-            self.playerAction.changeTo(Action.walking)
+            self.playerAction.changeTo(Action.walking, self.direction)
         if key == curses.KEY_DOWN: 
             self.y = self.y + 1
-            self.playerAction.changeTo(Action.walking)
+            self.playerAction.changeTo(Action.walking, self.direction)
