@@ -25,6 +25,8 @@ class Sprite(object):
         self.endless = False
         self.frameTime = []
         self.arr = []
+        self.xoffset = 0
+        self.yoffset = 0
 
 
     def advanceStep(self): 
@@ -35,34 +37,40 @@ class Sprite(object):
  
 
     def advance(self):
-        if self.frameTime == 0 or self.frameCount == 1: 
+        # no need to advance stuff which is forever
+        if self.frameTime is None and self.endless == True: 
             return
 
+        # not active, no work
         if not self.isActive: 
             return
 
+        # done in advanceStep()
         if self.advanceByStep: 
             return
 
         self.frameTimeLeft = self.frameTimeLeft - 1
         if self.frameTimeLeft == 0:
+            # animation ended, check if we need to restart it, 
+            # or take the next one
             if self.endless:
+                # endless, just advance
                 self.frameIndex = (self.frameIndex + 1) % self.frameCount
                 self.frameTimeLeft = self.frameTime[ self.frameIndex ]
-            else: 
-                self.frameTimeLeft = self.frameTime[ self.frameIndex ]
-
+            else:
+                # check if it is the last animation, if yes stop it
                 if self.frameIndex == self.frameCount - 1:
                     self.isActive = False
                     return
                 else: 
+                    self.frameTimeLeft = self.frameTime[ self.frameIndex ]
                     self.frameIndex = (self.frameIndex + 1) % self.frameCount
        
 
     def draw(self, win, basex, basey):
-        # if not self.isActive: 
-        #    return
+        if not self.isActive: 
+            return
 
         for (y, rows) in enumerate(self.arr[ self.frameIndex ]):
             for (x, column) in enumerate(rows):
-                win.addch(basey + y, basex + x, column, curses.color_pair(1))
+                win.addch(basey + self.yoffset + y, basex + self.xoffset + x, column, curses.color_pair(1))

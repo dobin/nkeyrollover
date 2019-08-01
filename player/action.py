@@ -6,3 +6,4 @@ class Action(Enum):
     hitting = 2
     shrugging = 3
     hit = 4
+    speech = 5

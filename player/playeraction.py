@@ -51,6 +51,13 @@ class PlayerAction(object):
                 self.type = Action.standing
                 self.sprite.initSprite(Action.standing, Direction.right)
 
+        # after hitting is finished, stand still
+        if self.type is Action.hitting: 
+            if self.durationLeft == 0:
+                self.type = Action.standing
+                self.sprite.initSprite(Action.standing, Direction.right)
+
+
 
     def draw(self, win, x, y):
         self.sprite.draw(win, x, y)

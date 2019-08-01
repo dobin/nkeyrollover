@@ -8,20 +8,24 @@ from .sprite import Sprite
 class PlayerSprite(Sprite): 
     def __init__(self, type):
         self.type = type
+        #Sprite.__init__(self, type)
         self.initSprite(type, Direction.right)
-
-
+        
 
     def initSprite(self, type, direction):
+        self.xoffset = 0
+        self.yoffset = 0
 
         if type is Action.standing:
             self.width = 3
             self.height = 3
             self.frameCount = 1
             self.frameIndex = 0
-            self.frameTime = 0
+            self.frameTime = []
             self.isActive = True
             self.advanceByStep = False
+            self.frameTime = None
+            self.endless = True
 
             self.arr = [
                 [
@@ -42,7 +46,7 @@ class PlayerSprite(Sprite):
                 10
             ]
             self.frameTimeLeft = self.frameTime[self.frameIndex]
-            self.endless = False
+            self.endless = True
             self.advanceByStep = True
 
             if direction is Direction.right:

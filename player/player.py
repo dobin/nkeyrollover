@@ -10,7 +10,7 @@ from playerhit import PlayerHit
 from action import Action
 from direction import Direction
 
-from sprite.sprite import Sprite
+from sprite.speechsprite import SpeechSprite
 
 logger = logging.getLogger(__name__)
 
@@ -23,16 +23,23 @@ class Player(object):
         
         self.playerAction = PlayerAction()
         self.playerHit = PlayerHit()
+        self.aSprite = None
         
 
     def draw(self):
         self.playerAction.draw(self.win, self.x, self.y)
         self.playerHit.draw(self.win)
 
+        if self.aSprite is not None: 
+            self.aSprite.draw(self.win, self.x, self.y)
+
 
     def advance(self): 
         self.playerAction.advance()
         self.playerHit.advance()
+
+        if self.aSprite is not None: 
+            self.aSprite.advance()
 
 
     def getInput(self):
@@ -44,6 +51,9 @@ class Player(object):
 
         if key == ord('q'):
             self.playerAction.changeTo(Action.shrugging, self.direction)
+
+        if key == ord('w'):
+            self.addSprite( SpeechSprite(None) )
 
         if key == curses.KEY_LEFT: 
             self.x = self.x - 1
@@ -63,3 +73,7 @@ class Player(object):
             self.y = self.y + 1
             self.playerAction.changeTo(Action.walking, self.direction)
             self.playerAction.advanceStep()
+
+
+    def addSprite(self, sprite): 
+        self.aSprite = sprite
