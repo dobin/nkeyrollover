@@ -20,7 +20,7 @@ class BaseAction(object):
         self.changeTo(Action.walking, Direction.left)
 
 
-    def changeTo(self, action, direction):
+    def changeTo(self, newAction, direction):
         pass
 
 

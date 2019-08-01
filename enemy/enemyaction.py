@@ -10,26 +10,30 @@ import logging
 logger = logging.getLogger(__name__)
 
 class EnemyAction(BaseAction):
-    def changeTo(self, action, direction):
+    def changeTo(self, newAction, direction):
         self.isActive = True
         
-        if action is Action.walking:
+        if newAction is Action.walking:
             # we start, or continue, walking
             self.duration = Config.secToFrames(1)
             self.durationLeft = Config.secToFrames(1)
 
             # if we were already walking, dont destroy the animation state
             if self.type is not Action.walking:
-                logger.info("EE Change action to1: " + str(action))
-                self.sprite.initSprite(action, direction)
-        else: 
-            logger.info("EE Change action to2: " + str(action))
+                logger.info("EE Change action to1: " + str(newAction))
+                self.sprite.initSprite(newAction, direction)
+        elif newAction is Action.dying: 
+            logger.info("EE Change action to2: " + str(newAction))
             self.duration = Config.secToFrames(1)
             self.durationLeft = Config.secToFrames(1)
+            self.sprite.initSprite(newAction, direction)
+        else: 
+            logger.info("EE Change action to3: " + str(newAction))
+            self.duration = Config.secToFrames(1)
+            self.durationLeft = Config.secToFrames(1)
+            self.sprite.initSprite(newAction, direction)
 
-            self.sprite.initSprite(action, direction)
-
-        self.type = action
+        self.type = newAction
 
 
     def specificAdvance(self):
