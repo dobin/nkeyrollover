@@ -11,3 +11,5 @@ class Action(Enum):
 
     # for SpeckSprite
     flying = 7
+
+    spawning = 10

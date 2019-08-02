@@ -5,16 +5,18 @@ from action import Action
 from direction import Direction
 import logging
 from config import Config
+from .entity import Entity
 
 logger = logging.getLogger(__name__)
 
 # Draws a "hit" at a specific location
 # - Used to indicate where hit landed to the user
 # - Used for collision detection
-class PlayerHit(object):
-    def __init__(self, parentFigure):
+class PlayerHit(Entity):
+    def __init__(self, win, parentFigure):
+        super(PlayerHit, self).__init__(win, parentFigure, None)
         self.parentFigure = parentFigure
-        self.sprite = PhenomenaSprite(Action.hit, self)
+        self.sprite = PhenomenaSprite(action=Action.hit, parentEntity=self)
 
         # timeframe of this hit animation
         self.duration = Config.secToFrames(0.7)
@@ -45,20 +47,12 @@ class PlayerHit(object):
         return self.getLocation()
 
 
-    def advance(self):
-        if not self.isActive: 
-            return 
-
-        self.sprite.advance()
-        self.durationLeft = self.durationLeft - 1
-        if self.durationLeft == 0:
-            self.isActive = False
-
-
+    # we overwrite getLocation for now
+    # should be fixed with mirroring implemented TODO
     def getLocation(self): 
-        loc = self.parentFigure.getLocation()
+        loc = self.parent.getLocation()
 
-        if self.parentFigure.direction is Direction.right: 
+        if self.parent.direction is Direction.right: 
             loc['x'] += 3
             loc['y'] += 1
         else: 
@@ -67,8 +61,4 @@ class PlayerHit(object):
 
         return loc
 
-
-    def draw(self, win):
-        if self.isActive:
-            self.sprite.draw(win)
 

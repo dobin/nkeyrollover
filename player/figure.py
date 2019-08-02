@@ -11,20 +11,18 @@ from playerhit import PlayerHit
 from playerstatus import PlayerStatus
 from action import Action
 from direction import Direction
+from .entity import Entity
 
 from sprite.speechsprite import SpeechSprite
 
 logger = logging.getLogger(__name__)
 
-class Figure(object):
-    def __init__(self, win, coordinates):
-        self.x = 10
-        self.y = 10
-        self.win = win
-        self.direction = Direction.right
+class Figure(Entity):
+    def __init__(self, win, parent, coordinates):
+        super(Figure, self).__init__(win, parent, coordinates)
         
         self.playerStatus = PlayerStatus()
-        self.playerHit = PlayerHit(self)
+        self.playerHit = PlayerHit(win=win, parentFigure=self)
         self.aSprite = None
         self.actionCtrl = None # filled in children
 
@@ -38,14 +36,15 @@ class Figure(object):
 
 
     def draw(self):
-        self.actionCtrl.draw(self.win)
+        super(Figure, self).draw(self.win)
         self.playerHit.draw(self.win)
 
         if self.aSprite is not None: 
             self.aSprite.draw(self.win)
 
 
-    def advance(self): 
+    def advance(self):
+        super(Figure, self).advance()
         self.actionCtrl.advance()
         self.playerHit.advance()
         self.playerStatus.advance()
@@ -71,12 +70,3 @@ class Figure(object):
 
         return False
 
-
-    def getLocation(self): 
-        loc = {
-            'x': self.x,
-            'y': self.y,
-        }
-        return loc
-
- 

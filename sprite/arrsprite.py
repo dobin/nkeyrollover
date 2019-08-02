@@ -12,13 +12,14 @@ class ArrSprite(object):
     # abstract class
     # cant be used really as no animation is stored in arr
     # initSprite needs to be overwritten to make it work
-    def __init__(self, action, parent=None):
+    def __init__(self, action=None, parentEntity=None):
         self.type = action
-        self.initSprite(action, Direction.right, None)
+        self.initSprite(action=None, direction=Direction.right, animationIndex=None)
 
         # our position is relative to this
         # if None, its absolute
-        self.parent = parent
+        # parent needs to be of type Entity
+        self.parent = parentEntity
         
 
     def initSprite(self, action, direction, animationIndex):

@@ -6,11 +6,8 @@ from player.direction import Direction
 from .arrsprite import ArrSprite
 
 class FigureSprite(ArrSprite): 
-    def __init__(self, action, parent):
-        super(FigureSprite, self).__init__(action, parent)
-        
-
     def initSprite(self, action, direction, animationIndex):
+        super(FigureSprite, self).initSprite(action=action, direction=None, animationIndex=None)
         self.xoffset = 0
         self.yoffset = 0
 

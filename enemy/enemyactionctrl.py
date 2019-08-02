@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 class EnemyActionCtrl(BaseActionCtrl):
     def changeTo(self, newAction, direction):
-        self.isActive = True
+        self.parentEntity.setActive(True)
         
         if newAction is Action.walking:
             # we start, or continue, walking
@@ -22,27 +22,26 @@ class EnemyActionCtrl(BaseActionCtrl):
             # if we were already walking, dont destroy the animation state
             if self.type is not Action.walking:
                 logger.info("EE Change action to1: " + str(newAction))
-                self.sprite.initSprite(newAction, direction, None)
+                self.parentEntity.sprite.initSprite(newAction, direction, None)
         elif newAction is Action.dying: 
             logger.info("EE Change action to2: " + str(newAction))
             self.duration = Config.secToFrames(1)
             self.durationLeft = Config.secToFrames(1)
             #animationIndex = random.randint(0, 1)
-            animationIndex = 2
+            animationIndex = 1
 
             if animationIndex == 2:
                 logger.info("Death animation deluxe")
                 #world.makeExplode(self.sprite, None)
-                self.sprite.initSprite(newAction, direction, animationIndex)
-                self.isActive = False
-                
+                self.parentEntity.sprite.initSprite(newAction, direction, animationIndex)
+                self.parentEntity.isActive = False
             else: 
-                self.sprite.initSprite(newAction, direction, animationIndex)
+                self.parentEntity.sprite.initSprite(newAction, direction, animationIndex)
         else: 
             logger.info("EE Change action to3: " + str(newAction))
             self.duration = Config.secToFrames(1)
             self.durationLeft = Config.secToFrames(1)
-            self.sprite.initSprite(newAction, direction, None)
+            self.parentEntity.sprite.initSprite(newAction, direction, None)
 
         self.type = newAction
 
@@ -52,4 +51,4 @@ class EnemyActionCtrl(BaseActionCtrl):
         if self.type is Action.dying: 
             if self.durationLeft == 0:
                 logging.warning("EE Deactivate!")
-                self.isActive = False
+                self.parentEntity.setActive(False)

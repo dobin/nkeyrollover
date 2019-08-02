@@ -7,16 +7,22 @@ import random
 from config import Config
 from player.figure import Figure
 import logging
+from sprite.figuresprite import FigureSprite
 
 logger = logging.getLogger(__name__)
 
 
 class Enemy(Figure):
-    def __init__(self, win, coordinates):
-        Figure.__init__(self, win, coordinates)
+    def __init__(self, win, parent, coordinates):
+        Figure.__init__(self, win, parent, coordinates)
+        self.actionCtrl = EnemyActionCtrl(parentEntity=self)
+        self.sprite = FigureSprite(parentEntity=self)
+        
+        # make him walk
+        self.actionCtrl.changeTo(Action.walking, Direction.left)
+
         self.coordinates = coordinates
         self.speed = Config.secToFrames(1)
-        self.actionCtrl = EnemyActionCtrl(self)
         self.init()
 
 
@@ -37,7 +43,7 @@ class Enemy(Figure):
         self.actionCtrl.changeTo(Action.walking, Direction.left)
 
         # to make animation run
-        self.actionCtrl.advanceStep()
+        self.sprite.advanceStep()
 
         if playerLocation['x'] > self.x:
             if self.x < Config.columns - 4:

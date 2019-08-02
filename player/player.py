@@ -14,13 +14,22 @@ from direction import Direction
 from .figure import Figure
 
 from sprite.speechsprite import SpeechSprite
+from sprite.figuresprite import FigureSprite
+
 
 logger = logging.getLogger(__name__)
 
 class Player(Figure):
-    def __init__(self, win, coordinates):
-        Figure.__init__(self, win, coordinates)
-        self.actionCtrl = PlayerActionCtrl(self)
+    def __init__(self, win, parent, coordinates):
+        Figure.__init__(self, win, parent, coordinates)
+        self.actionCtrl = PlayerActionCtrl(parentEntity=self)
+        self.sprite = FigureSprite(parentEntity=self)
+
+        # first action is standing around
+        self.actionCtrl.changeTo(Action.walking, Direction.left)
+
+        self.x = 10
+        self.y = 10
 
 
     def getInput(self):
@@ -34,30 +43,30 @@ class Player(Figure):
                 self.actionCtrl.changeTo(Action.shrugging, self.direction)
 
             if key == ord('w'):
-                self.addSprite( SpeechSprite(None, parent=self) )
+                self.addSprite( SpeechSprite(None, parentEntity=self) )
 
             if key == curses.KEY_LEFT:
                 if self.x > 2:
                     self.x = self.x - 1
                     self.direction = Direction.left
                     self.actionCtrl.changeTo(Action.walking, self.direction)
-                    self.actionCtrl.advanceStep()
+                    self.advanceStep()
             if key == curses.KEY_RIGHT: 
                 if self.x < Config.columns - 4:
                     self.x = self.x + 1
                     self.direction = Direction.right
                     self.actionCtrl.changeTo(Action.walking, self.direction)
-                    self.actionCtrl.advanceStep()
+                    self.advanceStep()
             if key == curses.KEY_UP: 
                 if self.y > 2:
                     self.y = self.y - 1
                     self.actionCtrl.changeTo(Action.walking, self.direction)
-                    self.actionCtrl.advanceStep()
+                    self.advanceStep()
             if key == curses.KEY_DOWN: 
                 if self.y < Config.rows - 4:
                     self.y = self.y + 1
                     self.actionCtrl.changeTo(Action.walking, self.direction)
-                    self.actionCtrl.advanceStep()
+                    self.advanceStep()
 
             key = self.win.getch()
 

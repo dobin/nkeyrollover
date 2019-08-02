@@ -6,10 +6,6 @@ from player.direction import Direction
 from .arrsprite import ArrSprite
 
 class PhenomenaSprite(ArrSprite): 
-    def __init__(self, action, parent):
-        super(PhenomenaSprite, self).__init__(action, parent)
-        
-
     def initSprite(self, action, direction, animationIndex):
         self.xoffset = 0
         self.yoffset = 0

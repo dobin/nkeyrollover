@@ -15,13 +15,13 @@ class Director(object):
 
         n = 0
         while n < 1:
-            data = {
+            coordinates = {
                 'min_x': 30, 
                 'min_y': 10,
                 'max_x': Config.columns - 5,
                 'max_y': Config.rows - 5
             }
-            newEnemy = Enemy(self.win, data)
+            newEnemy = Enemy(win=self.win, parent=None, coordinates=coordinates)
             self.enemiesDead.append(newEnemy)
             n = n + 1
 
@@ -55,7 +55,7 @@ class Director(object):
 
         # remove inactive enemies
         for enemy in self.enemiesAlive:
-            if not enemy.actionCtrl.isActive:
+            if not enemy.isActive:
                 logger.info("Move newly dead enemy to dead queue")
                 self.enemiesDead.append(enemy)
                 self.enemiesAlive.remove(enemy)
