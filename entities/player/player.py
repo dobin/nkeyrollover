@@ -46,13 +46,13 @@ class Player(Character):
                 self.addSprite( SpeechSprite(None, parentEntity=self) )
 
             if key == curses.KEY_LEFT:
-                if self.x > 2:
+                if self.x > 1:
                     self.x = self.x - 1
                     self.direction = Direction.left
                     self.actionCtrl.changeTo(Action.walking, self.direction)
                     self.advanceStep()
             if key == curses.KEY_RIGHT: 
-                if self.x < Config.columns - 4:
+                if self.x < Config.columns - self.sprite.width - 1:
                     self.x = self.x + 1
                     self.direction = Direction.right
                     self.actionCtrl.changeTo(Action.walking, self.direction)
@@ -63,7 +63,7 @@ class Player(Character):
                     self.actionCtrl.changeTo(Action.walking, self.direction)
                     self.advanceStep()
             if key == curses.KEY_DOWN: 
-                if self.y < Config.rows - 4:
+                if self.y < Config.rows - self.sprite.height - 1:
                     self.y = self.y + 1
                     self.actionCtrl.changeTo(Action.walking, self.direction)
                     self.advanceStep()

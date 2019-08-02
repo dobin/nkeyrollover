@@ -46,16 +46,16 @@ class Enemy(Character):
         self.sprite.advanceStep()
 
         if playerLocation['x'] > self.x:
-            if self.x < Config.columns - 4:
+            if self.x < Config.columns - self.sprite.width - 1:
                 self.x += 1
                 self.direction = Direction.right
         else: 
-            if self.x > 2:
+            if self.x > 1:
                 self.x -= 1
                 self.direction = Direction.left
 
         if playerLocation['y'] > self.y:
-            if self.y < Config.rows - 4:
+            if self.y < Config.rows - self.sprite.height - 1:
                 self.y += 1
         else: 
             if self.y > 2:
