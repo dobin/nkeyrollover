@@ -55,7 +55,7 @@ class Keyrollover(object):
         self.player = Player(
             win=self.win, 
             parent=None, 
-            coordinates={ 'max_y': Config.columns, 'max_x': Config.rows }, 
+            spawnBoundaries={ 'max_y': Config.columns, 'max_x': Config.rows }, 
             world=self.world)
         self.director = Director(self.win, self.world)
         

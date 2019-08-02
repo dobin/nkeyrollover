@@ -22,7 +22,7 @@ class Director(object):
                 'max_x': Config.columns - 5,
                 'max_y': Config.rows - 5
             }
-            newEnemy = Enemy(win=self.win, parent=None, coordinates=coordinates, world=world)
+            newEnemy = Enemy(win=self.win, parent=None, spawnBoundaries=coordinates, world=world)
             self.enemiesDead.append(newEnemy)
             n = n + 1
 

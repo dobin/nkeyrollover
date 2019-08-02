@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 # - Used for collision detection
 class CharacterWeapon(Entity):
     def __init__(self, win, parentCharacter):
-        super(CharacterWeapon, self).__init__(win, parentCharacter, None)
+        super(CharacterWeapon, self).__init__(win, parentCharacter)
         self.parentCharacter = parentCharacter
         self.sprite = PhenomenaSprite(action=Action.hit, parentEntity=self)
 

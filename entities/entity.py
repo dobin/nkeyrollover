@@ -5,7 +5,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class Entity(object):
-    def __init__(self, win, parent, coordinates):
+    def __init__(self, win, parent):
         self.win = win
         self.parent = parent
         self.sprite = None

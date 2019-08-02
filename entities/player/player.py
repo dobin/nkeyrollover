@@ -20,8 +20,8 @@ from sprite.charactersprite import CharacterSprite
 logger = logging.getLogger(__name__)
 
 class Player(Character):
-    def __init__(self, win, parent, coordinates, world):
-        Character.__init__(self, win, parent, coordinates, world)
+    def __init__(self, win, parent, spawnBoundaries, world):
+        Character.__init__(self, win, parent, spawnBoundaries, world)
         self.actionCtrl = PlayerActionCtrl(parentEntity=self, world=world)
         self.sprite = CharacterSprite(parentEntity=self)
 

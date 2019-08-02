@@ -13,22 +13,21 @@ logger = logging.getLogger(__name__)
 
 
 class Enemy(Character):
-    def __init__(self, win, parent, coordinates, world):
-        Character.__init__(self, win, parent, coordinates, world)
+    def __init__(self, win, parent, spawnBoundaries, world):
+        Character.__init__(self, win, parent, spawnBoundaries, world)
         self.actionCtrl = EnemyActionCtrl(parentEntity=self, world=world)
         self.sprite = CharacterSprite(parentEntity=self)
         
         # make him walk
         self.actionCtrl.changeTo(Action.walking, Direction.left)
 
-        self.coordinates = coordinates
         self.speed = Config.secToFrames(1)
         self.init()
 
 
     def init(self):
-        self.x = random.randint(self.coordinates['min_x'], self.coordinates['max_x'])
-        self.y = random.randint(self.coordinates['min_y'], self.coordinates['max_y'])
+        self.x = random.randint(self.spawnBoundaries['min_x'], self.spawnBoundaries['max_x'])
+        self.y = random.randint(self.spawnBoundaries['min_y'], self.spawnBoundaries['max_y'])
         self.direction = Direction.left
         self.lastInput = 0
 
