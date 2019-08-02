@@ -15,8 +15,6 @@ class PlayerHit(object):
     def __init__(self, parentFigure):
         self.parentFigure = parentFigure
         self.sprite = PhenomenaSprite(Action.hit, self)
-        self.x = 0
-        self.y = 0
 
         # timeframe of this hit animation
         self.duration = Config.secToFrames(0.7)
@@ -33,14 +31,6 @@ class PlayerHit(object):
 
 
     def doHit(self, x, y, direction):
-        # move hit to desired destination
-        if direction is Direction.right:
-            self.x = x + 3
-            self.y = y + 1
-        else:
-            self.x = x - 1
-            self.y = y + 1
-
         self.collisionDetectionDone = False
         self.isActive = True
         self.durationLeft = self.duration
@@ -52,7 +42,7 @@ class PlayerHit(object):
 
 
     def getHitCoordinates(self): 
-        return { 'x': self.x, 'y': self.y }
+        return self.getLocation()
 
 
     def advance(self):
