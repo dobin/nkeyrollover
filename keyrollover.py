@@ -7,12 +7,23 @@ import logging
 from player.action import Action
 from director import Director
 from config import Config
+from world.world import World
 
 current_milli_time = lambda: int(round(time.time() * 1000))
 
 
 class Keyrollover(object): 
     def __init__(self): 
+        self.win = None         # canvas to draw
+        self.player = None      # the player
+        self.director = None    # the enemies
+        self.world = None       # the world
+        self.currentTime = None
+
+        self.init()
+
+
+    def init(self): 
         logging.basicConfig(filename='app.log', filemode='w', level=logging.DEBUG,
             format='%(levelname)s %(name)s: %(message)s')
 
@@ -23,8 +34,6 @@ class Keyrollover(object):
         curses.cbreak()
         self.win.keypad(1)
         curses.curs_set(0)    
-
-        self.statusBarWin = curses.newwin(3, Config.columns, 0, 0)
 
         # Initialize color pairs
         curses.start_color()    
@@ -44,8 +53,7 @@ class Keyrollover(object):
 
         self.player = Player(self.win, { 'max_y': Config.columns, 'max_x': Config.rows })
         self.director = Director(self.win)
-
-        self.statusBarWin.border()
+        self.world = World(self.win)
 
         self.startTime = current_milli_time()
         self.currentTime = self.startTime
@@ -62,6 +70,10 @@ class Keyrollover(object):
 
             self.player.draw()
             self.player.advance()
+
+            self.world.draw()
+            self.world.advance()
+            
             # has to be after draw, as getch() does a refresh
             # https://stackoverflow.com/questions/19748685/curses-library-why-does-getch-clear-my-screen
             self.player.getInput()

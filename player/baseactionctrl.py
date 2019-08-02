@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from sprite.playersprite import PlayerSprite
+from sprite.figuresprite import FigureSprite
 from action import Action
 from direction import Direction
 from config import Config
@@ -15,7 +15,7 @@ class BaseActionCtrl(object):
         self.durationLeft = 0
         
         # the sprite beloging to this action
-        self.sprite = PlayerSprite(None)
+        self.sprite = FigureSprite(None)
 
         # the director will remove figure from the Alive list if this is false
         # making us unrenderable, and unadvancable (aka when truly dead)

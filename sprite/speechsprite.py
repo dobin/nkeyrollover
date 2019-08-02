@@ -3,9 +3,9 @@ from enum import Enum
 from player.action import Action
 from player.direction import Direction
 
-from .sprite import Sprite
+from .arrsprite import ArrSprite
 
-class SpeechSprite(Sprite): 
+class SpeechSprite(ArrSprite): 
 
     def initSprite(self, action, direction, animationIndex):
         self.action = Action.speech

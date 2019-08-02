@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from sprite.playersprite import PlayerSprite
+from sprite.phenomenasprite import PhenomenaSprite
 from action import Action
 from direction import Direction
 import logging
@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 # - Used for collision detection
 class PlayerHit(object):
     def __init__(self):
-        self.sprite = PlayerSprite(Action.hit)
+        self.sprite = PhenomenaSprite(Action.hit)
         self.x = 0
         self.y = 0
 

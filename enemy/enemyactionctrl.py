@@ -32,7 +32,7 @@ class EnemyActionCtrl(BaseActionCtrl):
 
             if animationIndex == 2:
                 logger.info("Death animation deluxe")
-                #world.makeExplode(self.sprite)
+                #world.makeExplode(self.sprite, None)
                 self.sprite.initSprite(newAction, direction, animationIndex)
                 self.isActive = False
                 

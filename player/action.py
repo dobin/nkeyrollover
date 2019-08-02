@@ -8,3 +8,6 @@ class Action(Enum):
     hit = 4
     speech = 5
     dying = 6
+
+    # for SpeckSprite
+    flying = 7
