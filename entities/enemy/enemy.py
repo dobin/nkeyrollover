@@ -34,7 +34,7 @@ class Enemy(Character):
 
 
     def getInput(self, playerLocation):
-        if not self.actionCtrl.type is Action.walking: 
+        if not self.actionCtrl.getAction() is Action.walking: 
             return
         if not self.lastInput > self.speed: 
             return

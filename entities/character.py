@@ -18,6 +18,8 @@ from sprite.speechsprite import SpeechSprite
 logger = logging.getLogger(__name__)
 
 class Character(Entity):
+    """ A character is either a player or an enemy"""
+
     def __init__(self, win, parent, coordinates):
         super(Character, self).__init__(win, parent, coordinates)
         
@@ -28,11 +30,11 @@ class Character(Entity):
 
 
     def getInput(self, playerLocation): 
-        pass
+        raise NotImplementedError('subclasses must override this abstract method')
 
 
     def ressurectMe(self): 
-        pass
+        raise NotImplementedError('subclasses must override this abstract method')
 
 
     def draw(self):
@@ -44,12 +46,12 @@ class Character(Entity):
 
 
     def advance(self):
-        super(Character, self).advance()
-        self.actionCtrl.advance()
-        self.characterWeapon.advance()
-        self.characterStatus.advance()
+        super(Character, self).advance() # advance Entity part (duration, sprite)
+        self.actionCtrl.advance() # advance actions (duration, Action transfers)
+        self.characterWeapon.advance() # update weapon (duration, sprite)
+        self.characterStatus.advance() # update health, mana etc.
 
-        if self.aSprite is not None: 
+        if self.aSprite is not None: # update additional sprites, if any
             self.aSprite.advance()
 
 
@@ -61,12 +63,3 @@ class Character(Entity):
 
     def addSprite(self, sprite): 
         self.aSprite = sprite
-
-
-    def collidesWithPoint(self, hitCoords):
-        if hitCoords['x'] >= self.x and hitCoords['x'] <= self.x + 3:
-            if hitCoords['y'] >= self.y and hitCoords['y'] <= self.y + 3:
-                return True
-
-        return False
-

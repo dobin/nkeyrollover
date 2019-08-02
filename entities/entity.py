@@ -1,4 +1,4 @@
-from direction import Direction
+from .direction import Direction
 
 import logging
 
@@ -68,6 +68,15 @@ class Entity(object):
             return
 
         self.sprite.draw(win)
+
+
+    def collidesWithPoint(self, hitCoords):
+        # TODO make this more generic, not just for simple 3x3
+        if hitCoords['x'] >= self.x and hitCoords['x'] <= self.x + 3:
+            if hitCoords['y'] >= self.y and hitCoords['y'] <= self.y + 3:
+                return True
+
+        return False
 
 
     def setActive(self, isActive):
