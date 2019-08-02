@@ -73,4 +73,9 @@ class Sprite(object):
 
         for (y, rows) in enumerate(self.arr[ self.frameIndex ]):
             for (x, column) in enumerate(rows):
-                win.addch(basey + self.yoffset + y, basex + self.xoffset + x, column, curses.color_pair(1))
+                if column is not '':
+                    win.addch(
+                        basey + self.yoffset + y, 
+                        basex + self.xoffset + x, 
+                        column, 
+                        curses.color_pair(1))
