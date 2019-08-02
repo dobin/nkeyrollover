@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 class Player(Figure):
     def __init__(self, win, coordinates):
         Figure.__init__(self, win, coordinates)
-        self.actionCtrl = PlayerActionCtrl()
+        self.actionCtrl = PlayerActionCtrl(self)
 
 
     def getInput(self):
@@ -34,7 +34,7 @@ class Player(Figure):
                 self.actionCtrl.changeTo(Action.shrugging, self.direction)
 
             if key == ord('w'):
-                self.addSprite( SpeechSprite(None) )
+                self.addSprite( SpeechSprite(None, parent=self) )
 
             if key == curses.KEY_LEFT:
                 if self.x > 2:

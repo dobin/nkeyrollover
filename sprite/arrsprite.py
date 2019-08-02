@@ -8,10 +8,13 @@ from player.direction import Direction
 logger = logging.getLogger(__name__)
 
 
-class ArrSprite(object): 
-    def __init__(self, action):
+class ArrSprite(object):
+    # abstract class
+    # cant be used really as no animation is stored in arr
+    # initSprite needs to be overwritten to make it work
+    def __init__(self, action, parent=None):
         self.type = action
-        self.parentSprite = None        
+        self.parent = parent
         self.initSprite(action, Direction.right, None)
 
 
@@ -72,12 +75,18 @@ class ArrSprite(object):
         if not self.isActive: 
             return
 
+        if self.parent is None: 
+            parentPos = { 'x': 0, 'y': 0 }
+        else: 
+            parentPos = self.parent.getLocation()
+        
+
         for (y, rows) in enumerate(self.arr[ self.frameIndex ]):
             for (x, column) in enumerate(rows):
                 if column is not '':
                     win.addch(
-                        basey + self.yoffset + y, 
-                        basex + self.xoffset + x, 
+                        y + self.yoffset + parentPos['y'], 
+                        x + self.xoffset + parentPos['x'], 
                         column, 
                         curses.color_pair(1))
 

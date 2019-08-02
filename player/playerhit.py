@@ -12,8 +12,9 @@ logger = logging.getLogger(__name__)
 # - Used to indicate where hit landed to the user
 # - Used for collision detection
 class PlayerHit(object):
-    def __init__(self):
-        self.sprite = PhenomenaSprite(Action.hit)
+    def __init__(self, parentFigure):
+        self.parentFigure = parentFigure
+        self.sprite = PhenomenaSprite(Action.hit, self)
         self.x = 0
         self.y = 0
 
@@ -62,6 +63,19 @@ class PlayerHit(object):
         self.durationLeft = self.durationLeft - 1
         if self.durationLeft == 0:
             self.isActive = False
+
+
+    def getLocation(self): 
+        loc = self.parentFigure.getLocation()
+
+        if self.parentFigure.direction is Direction.right: 
+            loc['x'] += 3
+            loc['y'] += 1
+        else: 
+            loc['x'] -= 1
+            loc['y'] += 1
+
+        return loc
 
 
     def draw(self, win):

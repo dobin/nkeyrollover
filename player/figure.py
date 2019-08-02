@@ -24,7 +24,7 @@ class Figure(object):
         self.direction = Direction.right
         
         self.playerStatus = PlayerStatus()
-        self.playerHit = PlayerHit()
+        self.playerHit = PlayerHit(self)
         self.aSprite = None
         self.actionCtrl = None # filled in children
 
@@ -77,4 +77,6 @@ class Figure(object):
             'x': self.x,
             'y': self.y,
         }
-        return loc            
+        return loc
+
+ 

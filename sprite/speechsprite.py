@@ -15,7 +15,7 @@ class SpeechSprite(ArrSprite):
         self.frameCount = 1
         self.frameIndex = 0
         self.frameTime = [
-            5, 
+            50, 
         ]
         self.frameTimeLeft = self.frameTime[self.frameIndex]
         self.endless = False

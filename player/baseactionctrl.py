@@ -10,12 +10,12 @@ logger = logging.getLogger(__name__)
 
 
 class BaseActionCtrl(object):
-    def __init__(self):
+    def __init__(self, parentFigure):
         self.duration = 0
         self.durationLeft = 0
         
         # the sprite beloging to this action
-        self.sprite = FigureSprite(None)
+        self.sprite = FigureSprite(None, parentFigure)
 
         # the director will remove figure from the Alive list if this is false
         # making us unrenderable, and unadvancable (aka when truly dead)

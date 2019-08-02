@@ -16,7 +16,7 @@ class Enemy(Figure):
         Figure.__init__(self, win, coordinates)
         self.coordinates = coordinates
         self.speed = Config.secToFrames(1)
-        self.actionCtrl = EnemyActionCtrl()
+        self.actionCtrl = EnemyActionCtrl(self)
         self.init()
 
 
