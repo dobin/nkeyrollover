@@ -13,22 +13,26 @@ class BaseAction(object):
     def __init__(self):
         self.duration = 0
         self.durationLeft = 0
-        self.type = Action.standing
-        self.sprite = PlayerSprite(self.type)
+        
+        # the sprite beloging to this action
+        self.sprite = PlayerSprite(None)
+
+        # the director will remove figure from the Alive list if this is false
+        # making us unrenderable, and unadvancable (aka when truly dead)
         self.isActive = True
 
+        # init a sane one
+        self.type = Action.standing
         self.changeTo(Action.walking, Direction.left)
 
 
+    # change to another action
+    # implemented by children
     def changeTo(self, newAction, direction):
         pass
 
 
-    def specificAdvance(self): 
-        pass
-
-
-    # advance by step taken by the player
+    # advance, step taken by the player via input
     def advanceStep(self):
         self.sprite.advanceStep()
 
@@ -38,6 +42,11 @@ class BaseAction(object):
         self.sprite.advance()
         self.durationLeft = self.durationLeft - 1
         self.specificAdvance()
+
+    
+    # implemented by children
+    def specificAdvance(self): 
+        pass
 
 
     def draw(self, win, x, y):
