@@ -14,9 +14,12 @@ class ArrSprite(object):
     # initSprite needs to be overwritten to make it work
     def __init__(self, action, parent=None):
         self.type = action
-        self.parent = parent
         self.initSprite(action, Direction.right, None)
 
+        # our position is relative to this
+        # if None, its absolute
+        self.parent = parent
+        
 
     def initSprite(self, action, direction, animationIndex):
         self.width = 0
@@ -71,7 +74,7 @@ class ArrSprite(object):
                     self.frameIndex = (self.frameIndex + 1) % self.frameCount
        
 
-    def draw(self, win, basex, basey):
+    def draw(self, win):
         if not self.isActive: 
             return
 
@@ -79,7 +82,6 @@ class ArrSprite(object):
             parentPos = { 'x': 0, 'y': 0 }
         else: 
             parentPos = self.parent.getLocation()
-        
 
         for (y, rows) in enumerate(self.arr[ self.frameIndex ]):
             for (x, column) in enumerate(rows):

@@ -38,11 +38,11 @@ class Figure(object):
 
 
     def draw(self):
-        self.actionCtrl.draw(self.win, self.x, self.y)
+        self.actionCtrl.draw(self.win)
         self.playerHit.draw(self.win)
 
         if self.aSprite is not None: 
-            self.aSprite.draw(self.win, self.x, self.y)
+            self.aSprite.draw(self.win)
 
 
     def advance(self): 

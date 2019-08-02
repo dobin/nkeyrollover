@@ -49,6 +49,6 @@ class BaseActionCtrl(object):
         pass
 
 
-    def draw(self, win, x, y):
-        self.sprite.draw(win, x, y)
+    def draw(self, win):
+        self.sprite.draw(win)
 

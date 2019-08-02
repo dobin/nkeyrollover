@@ -80,5 +80,5 @@ class PlayerHit(object):
 
     def draw(self, win):
         if self.isActive:
-            self.sprite.draw(win, self.x, self.y)
+            self.sprite.draw(win)
 
