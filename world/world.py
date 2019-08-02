@@ -1,5 +1,6 @@
 from sprite.specksprite import SpeckSprite
 import logging
+from entities.direction import Direction
 
 logger = logging.getLogger(__name__)
 
@@ -9,7 +10,7 @@ class World(object):
         self.sprites = []
 
 
-    def makeExplode(self, sprite, data):
+    def makeExplode(self, sprite, charDirection, data):
         frame = sprite.getCurrentFrameCopy()
         pos = sprite.getLocation()
 
@@ -21,10 +22,10 @@ class World(object):
 
             for (x, column) in enumerate(rows):
                 if column is not '':
-                    self.makeEffect(effect, pos, x, y, column, columnCount, rowCnt)
+                    self.makeEffect(effect, pos, x, y, column, columnCount, rowCnt, charDirection)
 
         
-    def makeEffect(self, effect, pos, x, y, char, columnCount, rowCnt): 
+    def makeEffect(self, effect, pos, x, y, char, columnCount, rowCnt, charDirection): 
         # explode
         if effect == 1: 
             movementX = 0
@@ -46,18 +47,25 @@ class World(object):
                 pos['y'] + y,
                 movementX, 
                 movementY, 
-                [ 10, 10, 10])
+                [ 10, 10, 10], 
+                1)
             self.addSprite(speckSprite)
 
-        # push right
-        if effect == 2: 
+        # push away
+        if effect == 2:
+            if charDirection is Direction.right: 
+                d = -1
+            else: 
+                d = 1
+
             speckSprite = SpeckSprite(
                 char, 
                 pos['x'] + x,
                 pos['y'] + y,
-                1, 
+                d * 2, 
                 0, 
-                [ 5, 10, 20, 40 ] )
+                [ 5, 10, 20, 40 ], 
+                2 )
             self.addSprite(speckSprite)
 
 

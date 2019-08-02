@@ -48,9 +48,11 @@ class Enemy(Character):
         if playerLocation['x'] > self.x:
             if self.x < Config.columns - 4:
                 self.x += 1
+                self.direction = Direction.right
         else: 
             if self.x > 2:
                 self.x -= 1
+                self.direction = Direction.left
 
         if playerLocation['y'] > self.y:
             if self.y < Config.rows - 4:

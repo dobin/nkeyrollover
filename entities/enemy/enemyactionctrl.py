@@ -43,7 +43,7 @@ class EnemyActionCtrl(ActionCtrl):
 
             if animationIndex == 2:
                 logger.info("Death animation deluxe")
-                self.world.makeExplode(self.parentEntity.sprite, None)
+                self.world.makeExplode(self.parentEntity.sprite, self.parentEntity.direction, None)
                 self.parentEntity.sprite.initSprite(newAction, direction, animationIndex)
                 self.parentEntity.isActive = False
             else: 

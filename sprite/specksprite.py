@@ -4,8 +4,9 @@ from entities.action import Action
 import curses
 
 class SpeckSprite(object): 
-    def __init__(self, char, x, y, movementX, movementY, timeArr): 
+    def __init__(self, char, x, y, movementX, movementY, timeArr, effect): 
         self.char = char
+        self.effect = effect
         self.movementX = movementX
         self.movementY = movementY
         self.x = x
