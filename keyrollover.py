@@ -51,9 +51,14 @@ class Keyrollover(object):
         self.win.border()
         self.win.nodelay(1) # make getch() nonblocking
 
-        self.player = Player(win=self.win, parent=None, coordinates={ 'max_y': Config.columns, 'max_x': Config.rows })
-        self.director = Director(self.win)
         self.world = World(self.win)
+        self.player = Player(
+            win=self.win, 
+            parent=None, 
+            coordinates={ 'max_y': Config.columns, 'max_x': Config.rows }, 
+            world=self.world)
+        self.director = Director(self.win, self.world)
+        
 
         self.startTime = current_milli_time()
         self.currentTime = self.startTime

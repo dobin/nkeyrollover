@@ -5,8 +5,9 @@ logger = logging.getLogger(__name__)
 from config import Config
 
 class Director(object):
-    def __init__(self, win):
+    def __init__(self, win, world):
         self.win = win
+        self.world = world
         self.enemiesDead = []
         self.enemiesAlive = []
         self.lastEnemyResurrectedTime = 0
@@ -21,7 +22,7 @@ class Director(object):
                 'max_x': Config.columns - 5,
                 'max_y': Config.rows - 5
             }
-            newEnemy = Enemy(win=self.win, parent=None, coordinates=coordinates)
+            newEnemy = Enemy(win=self.win, parent=None, coordinates=coordinates, world=world)
             self.enemiesDead.append(newEnemy)
             n = n + 1
 

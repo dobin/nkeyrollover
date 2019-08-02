@@ -6,7 +6,7 @@ import logging
 from enum import Enum
 
 from config import Config
-from playeractionctrl import PlayerActionCtrl
+from .playeractionctrl import PlayerActionCtrl
 from entities.characterweapon import CharacterWeapon
 from entities.characterstatus import CharacterStatus
 from entities.action import Action
@@ -20,9 +20,9 @@ from sprite.charactersprite import CharacterSprite
 logger = logging.getLogger(__name__)
 
 class Player(Character):
-    def __init__(self, win, parent, coordinates):
-        Character.__init__(self, win, parent, coordinates)
-        self.actionCtrl = PlayerActionCtrl(parentEntity=self)
+    def __init__(self, win, parent, coordinates, world):
+        Character.__init__(self, win, parent, coordinates, world)
+        self.actionCtrl = PlayerActionCtrl(parentEntity=self, world=world)
         self.sprite = CharacterSprite(parentEntity=self)
 
         # first action is standing around

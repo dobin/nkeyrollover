@@ -1,5 +1,7 @@
-
 from sprite.specksprite import SpeckSprite
+import logging
+
+logger = logging.getLogger(__name__)
 
 class World(object): 
     def __init__(self, win): 
@@ -9,6 +11,9 @@ class World(object):
 
     def makeExplode(self, sprite, data):
         frame = sprite.getCurrentFrameCopy()
+        pos = sprite.getLocation()
+
+        effect = 2
 
         columnCount = len(frame)
         for (y, rows) in enumerate(frame):
@@ -16,35 +21,59 @@ class World(object):
 
             for (x, column) in enumerate(rows):
                 if column is not '':
-                    movementX = 0
-                    movementY = 0
+                    self.makeEffect(effect, pos, x, y, column, columnCount, rowCnt)
 
-                    if y == 0:
-                        movementY = -1
-                    if x == 0: 
-                        movementX = -1
-
-                    if y == columnCount:
-                        movementY = 1
-                    if x == rowCnt: 
-                        movementX = 1
-
-                    speckSprite = SpeckSprite(
-                        column, 
-                        sprite.x + x,
-                        sprite.y + y,
-                        movementX, 
-                        movementY)
-                    self.addSprite(speckSprite)
         
+    def makeEffect(self, effect, pos, x, y, char, columnCount, rowCnt): 
+        # explode
+        if effect == 1: 
+            movementX = 0
+            movementY = 0
+
+            if y == 0:
+                movementY = -1
+            if x == 0: 
+                movementX = -1
+
+            if y == columnCount - 1:
+                movementY = 1
+            if x == rowCnt - 1: 
+                movementX = 1
+
+            speckSprite = SpeckSprite(
+                char, 
+                pos['x'] + x,
+                pos['y'] + y,
+                movementX, 
+                movementY, 
+                [ 10, 10, 10])
+            self.addSprite(speckSprite)
+
+        # push right
+        if effect == 2: 
+            speckSprite = SpeckSprite(
+                char, 
+                pos['x'] + x,
+                pos['y'] + y,
+                1, 
+                0, 
+                [ 5, 10, 20, 40 ] )
+            self.addSprite(speckSprite)
+
+
 
     def addSprite(self, sprite): 
-        pass
+        self.sprites.append(sprite)
 
 
     def draw(self):
-        pass
+        for sprite in self.sprites: 
+            sprite.draw(self.win)
 
 
     def advance(self):
-        pass
+        for sprite in self.sprites: 
+            sprite.advance()
+
+            if not sprite.isActive: 
+                self.sprites.remove(sprite)

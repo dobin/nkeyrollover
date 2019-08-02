@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 from sprite.phenomenasprite import PhenomenaSprite
-from action import Action
-from direction import Direction
+from .action import Action
+from .direction import Direction
 import logging
 from config import Config
 from .entity import Entity

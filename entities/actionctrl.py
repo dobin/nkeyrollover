@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 from sprite.charactersprite import CharacterSprite
-from action import Action
-from direction import Direction
+from .action import Action
+from .direction import Direction
 from config import Config
 import logging
 
@@ -10,7 +10,9 @@ logger = logging.getLogger(__name__)
 
 
 class ActionCtrl(object):
-    def __init__(self, parentEntity):
+    def __init__(self, parentEntity, world):
+        self.world = world
+        
         # timer which are used individually for each action
         self.duration = 0
         self.durationLeft = 0

@@ -73,23 +73,32 @@ class ArrSprite(object):
                 else: 
                     self.frameTimeLeft = self.frameTime[ self.frameIndex ]
                     self.frameIndex = (self.frameIndex + 1) % self.frameCount
-       
+    
+
+    def getLocation(self): 
+        if self.parent is None: 
+            pos = { 'x': 0, 'y': 0 }
+        else: 
+            pos = self.parent.getLocation()
+
+        pos['x'] += self.xoffset
+        pos['y'] += self.yoffset
+
+        return pos
+
 
     def draw(self, win):
         if not self.isActive: 
             return
 
-        if self.parent is None: 
-            parentPos = { 'x': 0, 'y': 0 }
-        else: 
-            parentPos = self.parent.getLocation()
+        pos = self.getLocation()
 
         for (y, rows) in enumerate(self.arr[ self.frameIndex ]):
             for (x, column) in enumerate(rows):
                 if column is not '':
                     win.addch(
-                        y + self.yoffset + parentPos['y'], 
-                        x + self.xoffset + parentPos['x'], 
+                        pos['y'] + y, 
+                        pos['x'] + x,
                         column, 
                         curses.color_pair(1))
 

@@ -11,7 +11,12 @@ import random
 logger = logging.getLogger(__name__)
 
 class EnemyActionCtrl(ActionCtrl):
-    """ The Enemy-Character controller. Manage states, like standing->walking """
+    """ The Enemy-Character controller. Manage states and the transfer between them
+    
+        States like standing->walking. 
+        
+        This mostly works on Enemy() class (via parentEntity), and its sprite
+    """
 
     def changeTo(self, newAction, direction):
         self.parentEntity.setActive(True)
@@ -34,11 +39,11 @@ class EnemyActionCtrl(ActionCtrl):
                 durationLeft=Config.secToFrames(1),
             )
             #animationIndex = random.randint(0, 1)
-            animationIndex = 1
+            animationIndex = 2
 
             if animationIndex == 2:
                 logger.info("Death animation deluxe")
-                #world.makeExplode(self.sprite, None)
+                self.world.makeExplode(self.parentEntity.sprite, None)
                 self.parentEntity.sprite.initSprite(newAction, direction, animationIndex)
                 self.parentEntity.isActive = False
             else: 

@@ -13,9 +13,9 @@ logger = logging.getLogger(__name__)
 
 
 class Enemy(Character):
-    def __init__(self, win, parent, coordinates):
-        Character.__init__(self, win, parent, coordinates)
-        self.actionCtrl = EnemyActionCtrl(parentEntity=self)
+    def __init__(self, win, parent, coordinates, world):
+        Character.__init__(self, win, parent, coordinates, world)
+        self.actionCtrl = EnemyActionCtrl(parentEntity=self, world=world)
         self.sprite = CharacterSprite(parentEntity=self)
         
         # make him walk

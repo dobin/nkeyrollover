@@ -5,6 +5,9 @@ from entities.direction import Direction
 
 from .arrsprite import ArrSprite
 
+import curses
+
+
 class SpeechSprite(ArrSprite): 
 
     def initSprite(self, action, direction, animationIndex):
