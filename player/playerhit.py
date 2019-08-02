@@ -13,14 +13,21 @@ logger = logging.getLogger(__name__)
 # - Used for collision detection
 class PlayerHit(object):
     def __init__(self):
-        self.duration = Config.secToFrames(0.7)
-        self.durationLeft = Config.secToFrames(0.7)
         self.sprite = PlayerSprite(Action.hit)
         self.x = 0
         self.y = 0
 
+        # timeframe of this hit animation
+        self.duration = Config.secToFrames(0.7)
+        self.durationLeft = Config.secToFrames(0.7)
+
         # for drawing the hit, and see if the char is "hitting"
         self.isActive = False 
+
+        # as we do collision detection later in the game loop, this item
+        # may exists for multiple frames, and could therefore hit multiple
+        # times. deactivate it after the first collision detection has been
+        # performed
         self.collisionDetectionDone = False
 
 
@@ -36,7 +43,7 @@ class PlayerHit(object):
         self.collisionDetectionDone = False
         self.isActive = True
         self.durationLeft = self.duration
-        self.sprite.initSprite(Action.hit, direction)
+        self.sprite.initSprite(Action.hit, direction, None)
 
 
     def isHitting(self): 

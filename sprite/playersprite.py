@@ -8,11 +8,11 @@ from .sprite import Sprite
 class PlayerSprite(Sprite): 
     def __init__(self, action):
         self.type = action
-        super().__init__(action, Direction.right)
-        self.initSprite(action, Direction.right)
+        super(PlayerSprite, self).__init__(action)
+        self.initSprite(action, Direction.right, None)
         
 
-    def initSprite(self, action, direction):
+    def initSprite(self, action, direction, animationIndex):
         self.xoffset = 0
         self.yoffset = 0
 
@@ -186,10 +186,19 @@ class PlayerSprite(Sprite):
             self.frameTime = None
             self.endless = True
 
-            self.arr = [
-                [
-                    [ ' ', 'x', ' ' ],
-                    [ '/', '|', '\\'],
-                    [ '/', ' ', '\\']
+            if animationIndex == 0:
+                self.arr = [
+                    [
+                        [ ' ', 'x', ' ' ],
+                        [ '/', '|', '\\'],
+                        [ '/', ' ', '\\']
+                    ]
                 ]
-            ]
+            elif animationIndex == 1: 
+                self.arr = [
+                    [
+                        [ ' ', 'X', ' ' ],
+                        [ '/', '|', '\\'],
+                        [ '/', ' ', '\\']
+                    ]
+                ]

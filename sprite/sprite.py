@@ -11,10 +11,10 @@ logger = logging.getLogger(__name__)
 class Sprite(object): 
     def __init__(self, action):
         self.type = action
-        self.initSprite(action, Direction.right)
+        self.initSprite(action, Direction.right, None)
 
 
-    def initSprite(self, action, direction): 
+    def initSprite(self, action, direction, animationIndex):
         self.width = 0
         self.height = 0
         self.frameCount = 0

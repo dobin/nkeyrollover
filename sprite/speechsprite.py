@@ -7,7 +7,7 @@ from .sprite import Sprite
 
 class SpeechSprite(Sprite): 
 
-    def initSprite(self, action, direction):
+    def initSprite(self, action, direction, animationIndex):
         self.action = Action.speech
     
         self.width = 5
