@@ -6,23 +6,23 @@ import logging
 from enum import Enum
 
 from config import Config
-from playeractionctrl import PlayerActionCtrl
-from playerhit import PlayerHit
-from playerstatus import PlayerStatus
+from entities.player.playeractionctrl import PlayerActionCtrl
+from characterweapon import CharacterWeapon
+from characterstatus import CharacterStatus
 from action import Action
 from direction import Direction
-from .entity import Entity
+from entities.entity import Entity
 
 from sprite.speechsprite import SpeechSprite
 
 logger = logging.getLogger(__name__)
 
-class Figure(Entity):
+class Character(Entity):
     def __init__(self, win, parent, coordinates):
-        super(Figure, self).__init__(win, parent, coordinates)
+        super(Character, self).__init__(win, parent, coordinates)
         
-        self.playerStatus = PlayerStatus()
-        self.playerHit = PlayerHit(win=win, parentFigure=self)
+        self.characterStatus = CharacterStatus()
+        self.characterWeapon = CharacterWeapon(win=win, parentCharacter=self)
         self.aSprite = None
         self.actionCtrl = None # filled in children
 
@@ -36,26 +36,26 @@ class Figure(Entity):
 
 
     def draw(self):
-        super(Figure, self).draw(self.win)
-        self.playerHit.draw(self.win)
+        super(Character, self).draw(self.win)
+        self.characterWeapon.draw(self.win)
 
         if self.aSprite is not None: 
             self.aSprite.draw(self.win)
 
 
     def advance(self):
-        super(Figure, self).advance()
+        super(Character, self).advance()
         self.actionCtrl.advance()
-        self.playerHit.advance()
-        self.playerStatus.advance()
+        self.characterWeapon.advance()
+        self.characterStatus.advance()
 
         if self.aSprite is not None: 
             self.aSprite.advance()
 
 
     def getHit(self, damage):
-        self.playerStatus.getHit(damage)
-        if not self.playerStatus.isAlive():
+        self.characterStatus.getHit(damage)
+        if not self.characterStatus.isAlive():
             self.actionCtrl.changeTo(Action.dying, None)
 
 

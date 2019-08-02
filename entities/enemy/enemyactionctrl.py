@@ -1,9 +1,9 @@
 
-from player.action import Action
+from entities.action import Action
 from config import Config
-from player.direction import Direction
+from entities.direction import Direction
 
-from player.baseactionctrl import BaseActionCtrl
+from entities.baseactionctrl import BaseActionCtrl
 
 import logging
 import random

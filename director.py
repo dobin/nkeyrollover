@@ -1,4 +1,4 @@
-from enemy.enemy import Enemy
+from entities.enemy.enemy import Enemy
 import logging
 
 logger = logging.getLogger(__name__)
@@ -61,9 +61,9 @@ class Director(object):
                 self.enemiesAlive.remove(enemy)
 
 
-    def collisionDetection(self, playerHitCoordinates): 
+    def collisionDetection(self, characterWeaponCoordinates): 
         for enemy in self.enemiesAlive: 
-            if enemy.collidesWithPoint(playerHitCoordinates):
+            if enemy.collidesWithPoint(characterWeaponCoordinates):
                 enemy.getHit(50)
 
 

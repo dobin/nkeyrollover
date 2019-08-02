@@ -7,23 +7,23 @@ from enum import Enum
 
 from config import Config
 from playeractionctrl import PlayerActionCtrl
-from playerhit import PlayerHit
-from playerstatus import PlayerStatus
-from action import Action
-from direction import Direction
-from .figure import Figure
+from entities.characterweapon import CharacterWeapon
+from entities.characterstatus import CharacterStatus
+from entities.action import Action
+from entities.direction import Direction
+from entities.character import Character
 
 from sprite.speechsprite import SpeechSprite
-from sprite.figuresprite import FigureSprite
+from sprite.charactersprite import CharacterSprite
 
 
 logger = logging.getLogger(__name__)
 
-class Player(Figure):
+class Player(Character):
     def __init__(self, win, parent, coordinates):
-        Figure.__init__(self, win, parent, coordinates)
+        Character.__init__(self, win, parent, coordinates)
         self.actionCtrl = PlayerActionCtrl(parentEntity=self)
-        self.sprite = FigureSprite(parentEntity=self)
+        self.sprite = CharacterSprite(parentEntity=self)
 
         # first action is standing around
         self.actionCtrl.changeTo(Action.walking, Direction.left)
@@ -37,7 +37,7 @@ class Player(Figure):
         while key != -1:
             if key == ord(' '):
                 self.actionCtrl.changeTo(Action.hitting, self.direction)
-                self.playerHit.doHit(self.x, self.y, self.direction)
+                self.characterWeapon.doHit(self.x, self.y, self.direction)
 
             if key == ord('q'):
                 self.actionCtrl.changeTo(Action.shrugging, self.direction)
@@ -72,9 +72,9 @@ class Player(Figure):
 
 
     def ressurectMe(self): 
-        if self.playerStatus.isAlive(): 
+        if self.characterStatus.isAlive(): 
             return
 
         logger.info("P New player at: " + str(self.x) + " / " + str(self.y))
-        self.playerStatus.init()
+        self.characterStatus.init()
         self.actionCtrl.changeTo(Action.standing, None)

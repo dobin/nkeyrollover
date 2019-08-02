@@ -3,7 +3,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class PlayerStatus(object): 
+class CharacterStatus(object): 
     def __init__(self): 
         self.init()
 

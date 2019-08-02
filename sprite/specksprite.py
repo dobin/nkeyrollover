@@ -1,5 +1,5 @@
 
-from player.action import Action
+from entities.action import Action
 
 class SpeckSprite(object): 
     def __init__(self, char, x, y, movementX, movementY): 

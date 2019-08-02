@@ -1,22 +1,22 @@
-from player.player import Player
+from entities.player.player import Player
 from .enemyactionctrl import EnemyActionCtrl
-from player.direction import Direction
-from player.action import Action
+from entities.direction import Direction
+from entities.action import Action
 
 import random
 from config import Config
-from player.figure import Figure
+from entities.character import Character
 import logging
-from sprite.figuresprite import FigureSprite
+from sprite.charactersprite import CharacterSprite
 
 logger = logging.getLogger(__name__)
 
 
-class Enemy(Figure):
+class Enemy(Character):
     def __init__(self, win, parent, coordinates):
-        Figure.__init__(self, win, parent, coordinates)
+        Character.__init__(self, win, parent, coordinates)
         self.actionCtrl = EnemyActionCtrl(parentEntity=self)
-        self.sprite = FigureSprite(parentEntity=self)
+        self.sprite = CharacterSprite(parentEntity=self)
         
         # make him walk
         self.actionCtrl.changeTo(Action.walking, Direction.left)
@@ -63,12 +63,12 @@ class Enemy(Figure):
 
 
     def ressurectMe(self): 
-        if self.playerStatus.isAlive(): 
+        if self.characterStatus.isAlive(): 
             return
 
         logger.info("E New enemy at: " + str(self.x) + " / " + str(self.y))
         self.init()
-        self.playerStatus.init()
+        self.characterStatus.init()
         self.actionCtrl.changeTo(Action.walking, None)
 
 

@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 import curses, random, time
-from player.player import Player
+from entities.player.player import Player
 from scene.scene import Scene
 import logging
-from player.action import Action
+from entities.action import Action
 from director import Director
 from config import Config
 from world.world import World
@@ -97,9 +97,9 @@ class Keyrollover(object):
         if n > 100: 
             fps = 1000 * (float)(n) / (float)(current_milli_time() - self.startTime)
 
-        s = "Health: " + str(self.player.playerStatus.health)
-        s += "    Mana: " + str(self.player.playerStatus.mana)
-        s += "    Points: " + str(self.player.playerStatus.points)
+        s = "Health: " + str(self.player.characterStatus.health)
+        s += "    Mana: " + str(self.player.characterStatus.mana)
+        s += "    Points: " + str(self.player.characterStatus.points)
         s += "    FPS: %.0f" % (fps)
         self.win.addstr(1, 2, s)
 
@@ -111,14 +111,14 @@ class Keyrollover(object):
 
 
     def collisionDetection(self):
-        if not self.player.playerHit.isHitting():
+        if not self.player.characterWeapon.isHitting():
             return
 
         # player hits enemies
-        if not self.player.playerHit.collisionDetectionDone: 
-            hitCoords = self.player.playerHit.getHitCoordinates()
+        if not self.player.characterWeapon.collisionDetectionDone: 
+            hitCoords = self.player.characterWeapon.getHitCoordinates()
             self.director.collisionDetection(hitCoords)
-            self.player.playerHit.collisionDetectionDone = True
+            self.player.characterWeapon.collisionDetectionDone = True
         
 
         # enemies hit player

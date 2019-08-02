@@ -1,7 +1,7 @@
 
 from enum import Enum
-from player.action import Action
-from player.direction import Direction
+from entities.action import Action
+from entities.direction import Direction
 
 from .arrsprite import ArrSprite
 

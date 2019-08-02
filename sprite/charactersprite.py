@@ -1,13 +1,13 @@
 
 from enum import Enum
-from player.action import Action
-from player.direction import Direction
+from entities.action import Action
+from entities.direction import Direction
 
 from .arrsprite import ArrSprite
 
-class FigureSprite(ArrSprite): 
+class CharacterSprite(ArrSprite): 
     def initSprite(self, action, direction, animationIndex):
-        super(FigureSprite, self).initSprite(action=action, direction=None, animationIndex=None)
+        super(CharacterSprite, self).initSprite(action=action, direction=None, animationIndex=None)
         self.xoffset = 0
         self.yoffset = 0
 

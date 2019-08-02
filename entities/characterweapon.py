@@ -12,10 +12,10 @@ logger = logging.getLogger(__name__)
 # Draws a "hit" at a specific location
 # - Used to indicate where hit landed to the user
 # - Used for collision detection
-class PlayerHit(Entity):
-    def __init__(self, win, parentFigure):
-        super(PlayerHit, self).__init__(win, parentFigure, None)
-        self.parentFigure = parentFigure
+class CharacterWeapon(Entity):
+    def __init__(self, win, parentCharacter):
+        super(CharacterWeapon, self).__init__(win, parentCharacter, None)
+        self.parentCharacter = parentCharacter
         self.sprite = PhenomenaSprite(action=Action.hit, parentEntity=self)
 
         # timeframe of this hit animation

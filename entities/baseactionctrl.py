@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from sprite.figuresprite import FigureSprite
+from sprite.charactersprite import CharacterSprite
 from action import Action
 from direction import Direction
 from config import Config
