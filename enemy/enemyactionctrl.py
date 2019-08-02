@@ -3,14 +3,14 @@ from player.action import Action
 from config import Config
 from player.direction import Direction
 
-from player.baseaction import BaseAction
+from player.baseactionctrl import BaseActionCtrl
 
 import logging
 import random
 
 logger = logging.getLogger(__name__)
 
-class EnemyAction(BaseAction):
+class EnemyActionCtrl(BaseActionCtrl):
     def changeTo(self, newAction, direction):
         self.isActive = True
         
@@ -27,8 +27,17 @@ class EnemyAction(BaseAction):
             logger.info("EE Change action to2: " + str(newAction))
             self.duration = Config.secToFrames(1)
             self.durationLeft = Config.secToFrames(1)
-            animationIndex = random.randint(0, 1)
-            self.sprite.initSprite(newAction, direction, animationIndex)
+            #animationIndex = random.randint(0, 1)
+            animationIndex = 2
+
+            if animationIndex == 2:
+                logger.info("Death animation deluxe")
+                #world.makeExplode(self.sprite)
+                self.sprite.initSprite(newAction, direction, animationIndex)
+                self.isActive = False
+                
+            else: 
+                self.sprite.initSprite(newAction, direction, animationIndex)
         else: 
             logger.info("EE Change action to3: " + str(newAction))
             self.duration = Config.secToFrames(1)

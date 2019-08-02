@@ -6,7 +6,7 @@ import logging
 from enum import Enum
 
 from config import Config
-from playeraction import PlayerAction
+from playeractionctrl import PlayerActionCtrl
 from playerhit import PlayerHit
 from playerstatus import PlayerStatus
 from action import Action
@@ -26,7 +26,7 @@ class Figure(object):
         self.playerStatus = PlayerStatus()
         self.playerHit = PlayerHit()
         self.aSprite = None
-        self.playerAction = None # filled in children
+        self.actionCtrl = None # filled in children
 
 
     def getInput(self, playerLocation): 
@@ -38,7 +38,7 @@ class Figure(object):
 
 
     def draw(self):
-        self.playerAction.draw(self.win, self.x, self.y)
+        self.actionCtrl.draw(self.win, self.x, self.y)
         self.playerHit.draw(self.win)
 
         if self.aSprite is not None: 
@@ -46,7 +46,7 @@ class Figure(object):
 
 
     def advance(self): 
-        self.playerAction.advance()
+        self.actionCtrl.advance()
         self.playerHit.advance()
         self.playerStatus.advance()
 
@@ -57,7 +57,7 @@ class Figure(object):
     def getHit(self, damage):
         self.playerStatus.getHit(damage)
         if not self.playerStatus.isAlive():
-            self.playerAction.changeTo(Action.dying, None)
+            self.actionCtrl.changeTo(Action.dying, None)
 
 
     def addSprite(self, sprite): 

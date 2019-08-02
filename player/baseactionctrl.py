@@ -9,7 +9,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class BaseAction(object):
+class BaseActionCtrl(object):
     def __init__(self):
         self.duration = 0
         self.durationLeft = 0

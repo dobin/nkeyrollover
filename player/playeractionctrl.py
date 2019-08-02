@@ -3,13 +3,13 @@ from .action import Action
 from config import Config
 from direction import Direction
 
-from .baseaction import BaseAction
+from .baseaction import BaseActionCtrl
 
 import logging
 
 logger = logging.getLogger(__name__)
 
-class PlayerAction(BaseAction):
+class PlayerActionCtrl(BaseActionCtrl):
     def changeTo(self, newAction, direction):
         self.isActive = True
 

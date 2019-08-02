@@ -1,5 +1,5 @@
 from player.player import Player
-from .enemyaction import EnemyAction
+from .enemyactionctrl import EnemyActionCtrl
 from player.direction import Direction
 from player.action import Action
 
@@ -16,7 +16,7 @@ class Enemy(Figure):
         Figure.__init__(self, win, coordinates)
         self.coordinates = coordinates
         self.speed = Config.secToFrames(1)
-        self.playerAction = EnemyAction()
+        self.actionCtrl = EnemyActionCtrl()
         self.init()
 
 
@@ -28,16 +28,16 @@ class Enemy(Figure):
 
 
     def getInput(self, playerLocation):
-        if not self.playerAction.type is Action.walking: 
+        if not self.actionCtrl.type is Action.walking: 
             return
         if not self.lastInput > self.speed: 
             return
 
         # to update timers
-        self.playerAction.changeTo(Action.walking, Direction.left)
+        self.actionCtrl.changeTo(Action.walking, Direction.left)
 
         # to make animation run
-        self.playerAction.advanceStep()
+        self.actionCtrl.advanceStep()
 
         if playerLocation['x'] > self.x:
             if self.x < Config.columns - 4:
@@ -63,7 +63,7 @@ class Enemy(Figure):
         logger.info("E New enemy at: " + str(self.x) + " / " + str(self.y))
         self.init()
         self.playerStatus.init()
-        self.playerAction.changeTo(Action.walking, None)
+        self.actionCtrl.changeTo(Action.walking, None)
 
 
     def advance(self): 
