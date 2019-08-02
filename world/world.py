@@ -1,7 +1,7 @@
 from sprite.specksprite import SpeckSprite
 import logging
 from entities.direction import Direction
-
+import random
 logger = logging.getLogger(__name__)
 
 class World(object): 
@@ -14,7 +14,7 @@ class World(object):
         frame = sprite.getCurrentFrameCopy()
         pos = sprite.getLocation()
 
-        effect = 2
+        effect = random.randint(1, 2)
 
         columnCount = len(frame)
         for (y, rows) in enumerate(frame):

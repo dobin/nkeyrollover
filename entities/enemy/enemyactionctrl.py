@@ -38,15 +38,15 @@ class EnemyActionCtrl(ActionCtrl):
                 duration=Config.secToFrames(1),
                 durationLeft=Config.secToFrames(1),
             )
-            #animationIndex = random.randint(0, 1)
-            animationIndex = 2
 
-            if animationIndex == 2:
+            if random.choice([True, False]): 
+                animationIndex = 2
                 logger.info("Death animation deluxe")
                 self.world.makeExplode(self.parentEntity.sprite, self.parentEntity.direction, None)
                 self.parentEntity.sprite.initSprite(newAction, direction, animationIndex)
                 self.parentEntity.isActive = False
             else: 
+                animationIndex = random.randint(0, 1)
                 self.parentEntity.sprite.initSprite(newAction, direction, animationIndex)
         else: 
             logger.info("EE Change action to3: " + str(newAction))
