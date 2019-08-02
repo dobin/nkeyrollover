@@ -6,17 +6,17 @@ from player.direction import Direction
 from .sprite import Sprite
 
 class PlayerSprite(Sprite): 
-    def __init__(self, type):
-        self.type = type
-        #Sprite.__init__(self, type)
-        self.initSprite(type, Direction.right)
+    def __init__(self, action):
+        self.type = action
+        super().__init__(action, Direction.right)
+        self.initSprite(action, Direction.right)
         
 
-    def initSprite(self, type, direction):
+    def initSprite(self, action, direction):
         self.xoffset = 0
         self.yoffset = 0
 
-        if type is Action.standing:
+        if action is Action.standing:
             self.width = 3
             self.height = 3
             self.frameCount = 1
@@ -35,7 +35,7 @@ class PlayerSprite(Sprite):
                 ]
             ]
 
-        if type is Action.walking:
+        if action is Action.walking:
             self.width = 3
             self.height = 3
             self.frameCount = 2
@@ -76,7 +76,7 @@ class PlayerSprite(Sprite):
                     ]
                 ]                
 
-        if type is Action.hitting:
+        if action is Action.hitting:
             self.width = 3
             self.height = 3
             self.endless = False
@@ -117,7 +117,7 @@ class PlayerSprite(Sprite):
                     ]
                 ]
 
-        if type is Action.shrugging:
+        if action is Action.shrugging:
             self.width = 3
             self.height = 3
             self.frameCount = 2
@@ -146,7 +146,7 @@ class PlayerSprite(Sprite):
             ]
 
 
-        if type is Action.hit:
+        if action is Action.hit:
             self.width = 1
             self.height = 1
             self.frameCount = 3
@@ -175,7 +175,7 @@ class PlayerSprite(Sprite):
                 ]                                
             ]
 
-        if type is Action.dying:
+        if action is Action.dying:
             self.width = 3
             self.height = 3
             self.frameCount = 1
