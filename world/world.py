@@ -27,7 +27,7 @@ class World(object):
     def drawWorld(self): 
         self.win.move(8, 1)
         self.win.hline('-', 78)
-        self.drawDiagonal(9, 45, 14)
+        self.drawDiagonal(8, 45, 15)
 
     def drawDiagonal(self, x, y, len):
         n = 0

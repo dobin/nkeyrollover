@@ -1,3 +1,4 @@
+import curses
 
 class Utility(object):
     @staticmethod

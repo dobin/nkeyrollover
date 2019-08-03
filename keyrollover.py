@@ -50,10 +50,10 @@ class Keyrollover(object):
         # Initialize color pairs
         curses.start_color()    
         curses.init_pair(1, curses.COLOR_GREEN, 0)
-        curses.init_pair(2, curses.COLOR_BLUE, 0)
+        curses.init_pair(2, curses.COLOR_MAGENTA, 0)
         curses.init_pair(3, curses.COLOR_RED, 0)
         curses.init_pair(4, curses.COLOR_YELLOW, 0)
-        curses.init_pair(5, curses.COLOR_MAGENTA, 0)
+        curses.init_pair(5, curses.COLOR_BLUE, 0)
         curses.init_pair(6, curses.COLOR_WHITE, curses.COLOR_BLACK)
         curses.init_pair(7, curses.COLOR_WHITE, 0)
 
@@ -71,6 +71,7 @@ class Keyrollover(object):
 
         self.startTime = current_milli_time()
         self.currentTime = self.startTime
+        self.workTime = 0
 
     def loop(self): 
         n = 0
@@ -105,6 +106,7 @@ class Keyrollover(object):
 
             timeEnd = time.time()
             workTime = timeEnd - timeStart
+            self.workTime = workTime
             if workTime > targetFrameTime:
                 logging.warn("Could keep FPS!")
 
@@ -121,13 +123,14 @@ class Keyrollover(object):
     def drawStatusbar(self, n):
         fps = 0
         if n > 100: 
-            fps = 1000 * (float)(n) / (float)(current_milli_time() - self.startTime)
+            #fps = 1000 * (float)(n) / (float)(current_milli_time() - self.startTime)
+            fps = self.workTime * 1000.0
 
         s = "Health: " + str(self.world.player.characterStatus.health)
         s += "    Mana: " + str(self.world.player.characterStatus.mana)
         s += "    Points: " + str(self.world.player.characterStatus.points)
-        s += "    FPS: %.0f" % (fps)
-        self.win.addstr(1, 2, s, curses.color_pair(6))
+        s += "    FPS: %.3f" % (fps)
+        self.win.addstr(1, 2, s, curses.color_pair(6) | curses.A_BOLD)
 
         self.win.border()
 
