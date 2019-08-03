@@ -91,8 +91,16 @@ class ArrSprite(object):
         return pos
 
 
+    def getAnimationTime(self): 
+        n = 0.0
+        for time in self.frameTime: 
+            n += time
+        return n
+
+
     def draw(self, win):
-        if not self.isActive: 
+        if not self.isActive:
+            # logging.debug("Drawing nonactive sprite")
             return
 
         pos = self.getLocation()

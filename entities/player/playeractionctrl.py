@@ -15,7 +15,7 @@ class PlayerActionCtrl(ActionCtrl):
         self.parentEntity.setActive(True)
 
         if newAction is Action.walking:
-            # we start, or continue, walking
+            # we start, or continue, walking, endlessly
             self.durationTimer.setTimer(1.0)
             self.durationTimer.reset()
 
@@ -25,10 +25,12 @@ class PlayerActionCtrl(ActionCtrl):
                 self.parentEntity.sprite.initSprite(newAction, direction, None)
         else: 
             logger.info("PP Change action to2: " + str(newAction))
-            self.durationTimer.setTimer(1.0)
-            self.durationTimer.reset()
-
+            
             self.parentEntity.sprite.initSprite(newAction, direction, None)
+            animationTime = self.parentEntity.sprite.getAnimationTime()
+
+            self.durationTimer.setTimer(animationTime)
+            self.durationTimer.reset()
 
         self.action = newAction
 
