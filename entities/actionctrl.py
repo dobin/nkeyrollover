@@ -12,13 +12,12 @@ logger = logging.getLogger(__name__)
 class ActionCtrl(object):
     def __init__(self, parentEntity, world):
         self.world = world
+        self.parentEntity = parentEntity
         
         # timer which are used individually for each action
         self.duration = 0
         self.durationLeft = 0
         
-        self.parentEntity = parentEntity
-
         # We are new
         self.action = Action.spawning
 
