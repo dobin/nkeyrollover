@@ -1,6 +1,6 @@
 from ai.brain import Brain
 import entities.enemy.aifsm as aifsm
-
+from utilities.timer import Timer
 
 import sys
 import select 
@@ -27,27 +27,50 @@ class Agent:
             'dying': {
                 'state_time': 3.0,
             },
-
-
         }
 
         self.playerClose = False
 
-
-    def attack(self):
-        print("I'm attacking!")
-
-    def wander(self): 
-        print("I'am wandering!")
-
-    def chase(self): 
-        print("I'am chasing")
+        self.attackTimer = Timer(0.5, instant=True)
+        self.wanderTimer = Timer(0.5, instant=True)
+        self.chaseTimer = Timer(0.5, instant=True)
 
 
-    def kill(self): 
+    # called by FSM
+    def sAttackInit(self):
+        self.attackTimer.init()
+
+    def sAttack(self):
+    	if self.attackTimer.timeIsUp(): 
+            print("I'm attacking!")
+            self.attackTimer.reset()
+
+
+    def sWanderInit(self):
+        self.wanderTimer.init()
+
+    def sWander(self): 
+        if self.wanderTimer.timeIsUp(): 
+            print("I'm moving / wander!")
+            self.wanderTimer.reset()
+
+
+    def sChaseInit(self):
+        self.chaseTimer.init()
+
+    def sChase(self): 
+        if self.chaseTimer.timeIsUp(): 
+            print("I'm moving / chasing!")
+            self.chaseTimer.reset()
+
+
+    # Game Mechanics
+    def gmKill(self): 
         a.brain.pop()
         a.brain.push("dying")
-    
+
+
+    # Other
     def setActive(self, isActive): 
         self.isActive = isActive
 
@@ -55,6 +78,9 @@ class Agent:
         return self.playerClose
 
     def update(self, dt):
+        self.attackTimer.advance(dt)
+        self.wanderTimer.advance(dt)
+        self.chaseTimer.advance(dt)
         self.brain.update(dt)
 
     def __repr__(self):
@@ -91,4 +117,4 @@ if __name__ == "__main__":
                 a.playerClose = not a.playerClose
                 print("Playerclose: " + str(a.playerClose))
             if 'k' in i:
-                a.kill()
+                a.gmKill()

@@ -43,10 +43,13 @@ class Chase(State):
 
 
     def on_enter(self):
+        self.brain.owner.sChaseInit()
         self.setTimer( self.brain.owner.stateData[self.name]['state_time'])
 
 
     def process(self, dt):
+        self.brain.owner.sChase()
+
         if self.brain.owner.isPlayerClose():
             self.brain.pop()
             self.brain.push("attack")            
@@ -65,11 +68,12 @@ class Attack(State):
 
 
     def on_enter(self):
+        self.brain.owner.sAttackInit()
         self.setTimer( self.brain.owner.stateData[self.name]['state_time'])
 
 
     def process(self, dt):
-        self.brain.owner.attack()
+        self.brain.owner.sAttack()
 
         if self.timeIsUp():
             # too long attacking. lets switch to chasing
@@ -86,10 +90,13 @@ class Wander(State):
 
 
     def on_enter(self):
+        self.brain.owner.sWanderInit()
         self.setTimer( self.brain.owner.stateData[self.name]['state_time'])
 
 
     def process(self, dt):
+        self.brain.owner.sWander()
+
         if self.timeIsUp():
             print("Too long wandering, chase again a bit")
             self.brain.pop()
