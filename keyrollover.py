@@ -55,6 +55,7 @@ class Keyrollover(object):
         curses.init_pair(4, curses.COLOR_YELLOW, 0)
         curses.init_pair(5, curses.COLOR_MAGENTA, 0)
         curses.init_pair(6, curses.COLOR_WHITE, curses.COLOR_BLACK)
+        curses.init_pair(7, curses.COLOR_WHITE, 0)
 
         # Game variables
         speed = 1

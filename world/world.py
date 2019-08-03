@@ -1,5 +1,6 @@
 import logging
 import random
+import curses 
 
 from sprite.specksprite import SpeckSprite
 from entities.direction import Direction
@@ -23,12 +24,34 @@ class World(object):
         self.director = Director(self.win, self)
 
 
-    def draw(self): 
-            self.director.drawEnemies()
-            self.player.draw()
+    def drawWorld(self): 
+        self.win.move(8, 1)
+        self.win.hline('-', 78)
+        self.drawDiagonal(9, 45, 14)
 
-            for sprite in self.sprites: 
-                sprite.draw(self.win)
+    def drawDiagonal(self, x, y, len):
+        n = 0
+        while n != len: 
+            x += 1
+            y -= 1
+
+            n += 1
+
+            self.win.addstr(
+                x, 
+                y,
+                '/', 
+                curses.color_pair(7))
+
+    def draw(self):
+        # order here is Z axis
+        self.drawWorld()
+        self.director.drawEnemies()
+        self.player.draw()
+
+        for sprite in self.sprites: 
+            sprite.draw(self.win)
+
 
 
     def advance(self, deltaTime):
