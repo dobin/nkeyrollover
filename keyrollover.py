@@ -77,8 +77,13 @@ class Keyrollover(object):
 
     def loop(self): 
         n = 0
-        deltaTime = 0.01
+        targetFrameTime = 1.0 / Config.fps
+        deltaTime = targetFrameTime # we try to keep it...
+        timeStart = 0
+        timeEnd = 0
+        workTime = 0
         while True:
+            timeStart = time.time()
             #logging.debug("Iteration")
             self.win.erase()
             self.win.border()
@@ -100,7 +105,13 @@ class Keyrollover(object):
 
             self.collisionDetection()
             self.director.worldUpdate()
-            time.sleep( 1.0 / Config.fps)
+
+            timeEnd = time.time()
+            workTime = timeEnd - timeStart
+            if workTime > targetFrameTime:
+                logging.warn("Could keep FPS!")
+
+            time.sleep(targetFrameTime - workTime)
             n = n + 1
 
         # Clean up before exiting
