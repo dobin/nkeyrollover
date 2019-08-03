@@ -24,8 +24,20 @@ class Keyrollover(object):
 
 
     def init(self): 
-        logging.basicConfig(filename='app.log', filemode='w', level=logging.DEBUG,
-            format='%(levelname)s %(name)s: %(message)s')
+        if Config.devMode:
+            logging.basicConfig(
+                filename='app.log', 
+                filemode='a', 
+                level=logging.DEBUG,
+                format='%(asctime)s %(levelname)07s %(name)s: %(message)s')
+            logging.warn("Hmm")
+        else: 
+            logging.basicConfig(
+                filename='app.log', 
+                filemode='a', 
+                level=logging.INFO,
+                format='%(asctime)s %(levelname)07s %(name)s: %(message)s')
+            logging.warn("Hmm")
 
         # Create a new Curses window
         #curses.initScr()

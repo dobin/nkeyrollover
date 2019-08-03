@@ -14,10 +14,13 @@ class Director(object):
         self.enemiesDead = []
         self.enemiesAlive = []
         self.lastEnemyResurrectedTimer = Timer(1.0)
-        self.maxEnemies = 1
 
         n = 0
-        while n < 1:
+        self.maxEnemies = 6
+        if Config.devMode: 
+            self.maxEnemies = 1
+
+        while n < 16:
             coordinates = {
                 'min_x': 30, 
                 'min_y': 10,
