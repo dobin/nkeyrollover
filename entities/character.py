@@ -7,12 +7,11 @@ from enum import Enum
 
 from config import Config
 from entities.player.playeractionctrl import PlayerActionCtrl
+from entities.entity import Entity
 from .characterweapon import CharacterWeapon
 from .characterstatus import CharacterStatus
 from .action import Action
 from .direction import Direction
-from entities.entity import Entity
-
 from sprite.speechsprite import SpeechSprite
 
 logger = logging.getLogger(__name__)
@@ -53,6 +52,7 @@ class Character(Entity):
 
     def advance(self, deltaTime):
         super(Character, self).advance(deltaTime) # advance Entity part (duration, sprite)
+
         self.characterWeapon.advance(deltaTime) # update weapon (duration, sprite)
         self.characterStatus.advance(deltaTime) # update health, mana etc.
 

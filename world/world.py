@@ -1,17 +1,52 @@
-from sprite.specksprite import SpeckSprite
 import logging
-from entities.direction import Direction
 import random
+
+from sprite.specksprite import SpeckSprite
+from entities.direction import Direction
+from entities.player.player import Player
+from director import Director
+from config import Config
+
 logger = logging.getLogger(__name__)
 
+
 class World(object): 
-    def __init__(self, win, player): 
+    def __init__(self, win): 
         self.win = win
-        self.player = player
         self.sprites = []
 
-    def getPlayer(self): 
+        self.player = Player(
+            win=self.win, 
+            parent=None, 
+            spawnBoundaries={ 'max_y': Config.columns, 'max_x': Config.rows }, 
+            world=self)
+        self.director = Director(self.win, self)
+
+
+    def draw(self): 
+            self.director.drawEnemies()
+            self.player.draw()
+
+            for sprite in self.sprites: 
+                sprite.draw(self.win)
+
+
+    def advance(self, deltaTime):
+        self.player.advance(deltaTime)
+        self.director.advanceEnemies(deltaTime)
+
+        for sprite in self.sprites: 
+            sprite.advance(deltaTime)
+
+            if not sprite.isActive: 
+                self.sprites.remove(sprite)
+
+        self.director.worldUpdate()
+
+
+    def getPlayer(self):
         return self.player
+
 
     def makeExplode(self, sprite, charDirection, data):
         frame = sprite.getCurrentFrameCopy()
@@ -75,16 +110,3 @@ class World(object):
 
     def addSprite(self, sprite): 
         self.sprites.append(sprite)
-
-
-    def draw(self):
-        for sprite in self.sprites: 
-            sprite.draw(self.win)
-
-
-    def advance(self, deltaTime):
-        for sprite in self.sprites: 
-            sprite.advance(deltaTime)
-
-            if not sprite.isActive: 
-                self.sprites.remove(sprite)

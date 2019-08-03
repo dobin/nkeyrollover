@@ -15,11 +15,11 @@ class Director(object):
         self.enemiesAlive = []
         self.lastEnemyResurrectedTimer = Timer(1.0)
 
-        n = 0
         self.maxEnemies = 6
         if Config.devMode: 
             self.maxEnemies = 1
 
+        n = 0
         while n < 16:
             coordinates = {
                 'min_x': 30, 
@@ -68,5 +68,12 @@ class Director(object):
                 enemy.gmHandleHit(50)
 
 
+    def getEnemiesHit(self, coordinates):
+        enemies = []
+        for enemy in self.enemiesAlive: 
+            if enemy.collidesWithPoint(coordinates):
+                enemies.append(enemy)
+
+        return enemies
 
         

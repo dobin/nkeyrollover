@@ -82,7 +82,7 @@ class Brain:
 					"There's already a state with that name: " + state.name
 				)
 			else:
-				log.info("Registered a new state \"{}\".".format(state.name))
+				# log.info("Registered a new state \"{}\".".format(state.name))
 				self.avail_states[state.name] = state
 
 	def unregister(self, name):

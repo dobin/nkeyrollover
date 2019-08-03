@@ -27,15 +27,12 @@ class CharacterWeapon(Entity):
         # for drawing the hit, and see if the char is "hitting"
         self.isActive = False 
 
-        # as we do collision detection later in the game loop, this item
-        # may exists for multiple frames, and could therefore hit multiple
-        # times. deactivate it after the first collision detection has been
-        # performed
-        self.collisionDetectionDone = False
-
 
     def doHit(self):
-        self.collisionDetectionDone = False
+        hittedEnemies = self.parent.world.director.getEnemiesHit(self.getLocation())
+        for enemy in hittedEnemies: 
+            enemy.gmHandleHit(50)
+
         self.isActive = True
         self.durationTimer.reset()
         self.sprite.initSprite(Action.hit, self.parent.direction, None)

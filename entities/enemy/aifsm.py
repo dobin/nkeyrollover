@@ -102,6 +102,12 @@ class Wander(State):
             self.brain.pop()
             self.brain.push("chase")
 
+        elif self.brain.owner.isPlayerClose():
+            logging.debug("{}: Player is close, chasing".format(self.owner))
+            self.brain.pop()
+            self.brain.push("chase")
+
+
 
 class Dying(State):
     name = "dying"

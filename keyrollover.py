@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
 import curses, random, time
+import logging
+
 from entities.player.player import Player
 from scene.scene import Scene
-import logging
 from entities.action import Action
 from director import Director
 from config import Config
@@ -38,6 +39,7 @@ class Keyrollover(object):
                 level=logging.INFO,
                 format='%(asctime)s %(levelname)07s %(name)s: %(message)s')
             logging.warn("Hmm")
+        logging.info("-----------------------------------------")
 
         # Create a new Curses window
         #curses.initScr()
@@ -63,14 +65,7 @@ class Keyrollover(object):
         self.win.border()
         self.win.nodelay(1) # make getch() nonblocking
 
-        self.player = Player(
-            win=self.win, 
-            parent=None, 
-            spawnBoundaries={ 'max_y': Config.columns, 'max_x': Config.rows }, 
-            world=self.world)
-        self.world = World(win=self.win, player=self.player)
-        self.director = Director(self.win, self.world)
-        
+        self.world = World(win=self.win)
 
         self.startTime = current_milli_time()
         self.currentTime = self.startTime
@@ -88,23 +83,23 @@ class Keyrollover(object):
             self.win.erase()
             self.win.border()
 
-            self.director.drawEnemies()
-            self.director.advanceEnemies(deltaTime)
+            #self.director.drawEnemies()
+            #self.director.advanceEnemies(deltaTime)
             self.drawStatusbar(n)
 
-            self.player.draw()
-            self.player.advance(deltaTime)
+            #self.player.draw()
+            #self.player.advance(deltaTime)
 
             self.world.draw()
             self.world.advance(deltaTime)
 
             # has to be after draw, as getch() does a refresh
             # https://stackoverflow.com/questions/19748685/curses-library-why-does-getch-clear-my-screen
-            self.player.getInput()
+            self.world.player.getInput()
             #win.refresh()
 
-            self.collisionDetection()
-            self.director.worldUpdate()
+            #self.collisionDetection()
+            #self.director.worldUpdate()
 
             timeEnd = time.time()
             workTime = timeEnd - timeStart
@@ -126,15 +121,15 @@ class Keyrollover(object):
         if n > 100: 
             fps = 1000 * (float)(n) / (float)(current_milli_time() - self.startTime)
 
-        s = "Health: " + str(self.player.characterStatus.health)
-        s += "    Mana: " + str(self.player.characterStatus.mana)
-        s += "    Points: " + str(self.player.characterStatus.points)
+        s = "Health: " + str(self.world.player.characterStatus.health)
+        s += "    Mana: " + str(self.world.player.characterStatus.mana)
+        s += "    Points: " + str(self.world.player.characterStatus.points)
         s += "    FPS: %.0f" % (fps)
         self.win.addstr(1, 2, s)
 
         self.win.border()
 
-        # we dont use self.statusBar atm for flickering reasons
+        # TODO we dont use self.statusBar atm for flickering reasons
         #self.statusBarWin.erase()
         #self.statusbarWin.refresh()
 

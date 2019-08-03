@@ -62,7 +62,7 @@ class Enemy(Character):
         self.brain.register(aifsm.Dying)
         self.brain.push("spawn")
         
-        self.attackTimer = Timer(0.5, instant=True)
+        self.attackTimer = Timer(0.5, instant=False) # windup and cooldown
         self.wanderTimer = Timer(0.5, instant=True)
         self.chaseTimer = Timer(0.5, instant=True)
 
@@ -163,6 +163,7 @@ class Enemy(Character):
 
     def isPlayerClose(self):
         distance = Utility.distance(self.player.getLocation(), self.getLocation())
+        logging.debug("Distance: " + str(distance))
         if distance['sum'] < 5:
             return True
         else: 
