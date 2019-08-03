@@ -1,5 +1,5 @@
 from .direction import Direction
-
+from utilities.timer import Timer
 import logging
 
 logger = logging.getLogger(__name__)
@@ -22,8 +22,7 @@ class Entity(object):
         self.direction = Direction.right
 
         # timer for deactivation of this entity
-        self.duration = 0
-        self.durationLeft = 0
+        self.durationTimer = Timer(0.0, active=False)
 
 
     def getLocation(self): 
@@ -40,7 +39,6 @@ class Entity(object):
             return loc
 
 
-
     def advanceStep(self):
         if not self.isActive: 
             return 
@@ -48,16 +46,16 @@ class Entity(object):
         self.sprite.advanceStep()
 
 
-    def advance(self):
+    def advance(self, deltaTime):
         if not self.isActive: 
             return 
 
-        self.sprite.advance()
+        self.sprite.advance(deltaTime)
 
-        if self.durationLeft > 0:
-            self.durationLeft = self.durationLeft - 1
-            if self.durationLeft == 0:
-                self.isActive = False
+        self.durationTimer.advance(deltaTime)
+
+        if self.durationTimer.isActive() and self.durationTimer.timeIsUp():
+            self.setActive(False)
 
 
     def draw(self, win):

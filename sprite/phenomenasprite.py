@@ -20,9 +20,9 @@ class PhenomenaSprite(ArrSprite):
             self.advanceByStep = False
             
             self.frameTime = [
-                10,
-                10,
-                10
+                0.1,
+                0.1,
+                0.1
             ]
             self.frameTimeLeft = self.frameTime[self.frameIndex]
 

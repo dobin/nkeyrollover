@@ -1,11 +1,11 @@
 
 
 class Timer(object): 
-    def __init__(self, timerValue, instant=False): 
+    def __init__(self, timerValue, instant=False, active=True): 
         self.timeLeft = 0.0
         self.timerValue = timerValue
         self.instant = instant
-        self.isActive = True
+        self.active = active
 
         self.init()
 
@@ -16,8 +16,6 @@ class Timer(object):
         else: 
             self.timeLeft = 0.0
         
-        self.isActive = True
-
 
     def setTimer(self, timerValue): 
         self.timerValue = timerValue
@@ -25,16 +23,22 @@ class Timer(object):
 
     def reset(self): 
         self.timeLeft = self.timerValue
-        self.isActive = True
+        self.active = True
 
 
     def timeIsUp(self):
+        if not self.active:
+            return False
+
         if self.timeLeft <= 0.0:
             return True
         else:
             # print("{} ".format(self.timeLeft))
             return False
 
+
+    def isActive(self): 
+        return self.active
 
     def start(self): 
         pass
@@ -44,7 +48,7 @@ class Timer(object):
 
 
     def advance(self, dt):
-        if not self.isActive: 
+        if not self.active: 
             return
 
         if self.timeLeft > 0:

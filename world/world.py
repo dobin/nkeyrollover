@@ -79,9 +79,9 @@ class World(object):
             sprite.draw(self.win)
 
 
-    def advance(self):
+    def advance(self, deltaTime):
         for sprite in self.sprites: 
-            sprite.advance()
+            sprite.advance(deltaTime)
 
             if not sprite.isActive: 
                 self.sprites.remove(sprite)

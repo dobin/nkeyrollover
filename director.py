@@ -1,8 +1,11 @@
-from entities.enemy.enemy import Enemy
 import logging
 
-logger = logging.getLogger(__name__)
+from entities.enemy.enemy import Enemy
+from utilities.timer import Timer
 from config import Config
+
+logger = logging.getLogger(__name__)
+
 
 class Director(object):
     def __init__(self, win, world):
@@ -10,8 +13,7 @@ class Director(object):
         self.world = world
         self.enemiesDead = []
         self.enemiesAlive = []
-        self.lastEnemyResurrectedTime = 0
-        self.enemyRessuractionTime = Config.secToFrames(1)
+        self.lastEnemyResurrectedTimer = Timer(1.0)
         self.maxEnemies = 1
 
         n = 0
@@ -27,11 +29,11 @@ class Director(object):
             n = n + 1
 
 
-    def advanceEnemies(self):
-        self.lastEnemyResurrectedTime += 1
+    def advanceEnemies(self, deltaTime):
+        self.lastEnemyResurrectedTimer.advance(deltaTime)
         
         for enemy in self.enemiesAlive:
-            enemy.advance()
+            enemy.advance(deltaTime)
 
 
     def getInput(self, playerLocation): 
@@ -47,8 +49,8 @@ class Director(object):
     def worldUpdate(self): 
         # make more enemies
         if len(self.enemiesAlive) < self.maxEnemies:
-            if self.lastEnemyResurrectedTime > self.enemyRessuractionTime:
-                self.lastEnemyResurrectedTime = 0
+            if self.lastEnemyResurrectedTimer.timeIsUp():
+                self.lastEnemyResurrectedTimer.reset()
                 logger.info("Ressurect, alive: " + str(len(self.enemiesAlive)))
                 enemy = self.enemiesDead.pop()
                 enemy.ressurectMe()

@@ -4,6 +4,7 @@ from sprite.charactersprite import CharacterSprite
 from .action import Action
 from .direction import Direction
 from config import Config
+from utilities.timer import Timer
 import logging
 
 logger = logging.getLogger(__name__)
@@ -15,8 +16,7 @@ class ActionCtrl(object):
         self.parentEntity = parentEntity
         
         # timer which are used individually for each action
-        self.duration = 0
-        self.durationLeft = 0
+        self.durationTimer = Timer(0.0)
         
         # We are new
         self.action = Action.spawning
@@ -32,21 +32,9 @@ class ActionCtrl(object):
         raise NotImplementedError('subclasses must override this abstract method')
 
 
-    def resetDuration(self, duration, durationLeft):
-        self.duration = duration
-        self.durationLeft = durationLeft
-
-
-    def durationTimeIsUp(self): 
-        if self.durationLeft <= 0:
-            return True
-        else: 
-            return False
-
-
     # advance by time
-    def advance(self): 
-        self.durationLeft = self.durationLeft - 1
+    def advance(self, deltaTime): 
+        self.durationTimer.advance(deltaTime)
 
         # defined by children
         self.specificAdvance()

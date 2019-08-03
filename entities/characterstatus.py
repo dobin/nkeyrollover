@@ -30,5 +30,5 @@ class CharacterStatus(object):
         self.health -= damage
         logger.info("New health: " + str(self.health))
 
-    def advance(self): 
+    def advance(self, deltaTime): 
         pass

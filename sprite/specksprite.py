@@ -18,10 +18,10 @@ class SpeckSprite(object):
         self.isActive = True
 
 
-    def advance(self):
-        self.time += 1
+    def advance(self, deltaTime):
+        self.time += deltaTime
 
-        if not self.time == self.timeArr[ self.idx ]: 
+        if not self.time >= self.timeArr[ self.idx ]: 
             return 
 
         self.time = 0
@@ -32,7 +32,6 @@ class SpeckSprite(object):
 
         if self.idx == len(self.timeArr): 
             self.isActive = False
-
 
     
     def draw(self, win):

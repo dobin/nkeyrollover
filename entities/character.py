@@ -47,14 +47,14 @@ class Character(Entity):
             self.aSprite.draw(self.win)
 
 
-    def advance(self):
-        super(Character, self).advance() # advance Entity part (duration, sprite)
-        self.actionCtrl.advance() # advance actions (duration, Action transfers)
-        self.characterWeapon.advance() # update weapon (duration, sprite)
-        self.characterStatus.advance() # update health, mana etc.
+    def advance(self, deltaTime):
+        super(Character, self).advance(deltaTime) # advance Entity part (duration, sprite)
+        self.actionCtrl.advance(deltaTime) # advance actions (duration, Action transfers)
+        self.characterWeapon.advance(deltaTime) # update weapon (duration, sprite)
+        self.characterStatus.advance(deltaTime) # update health, mana etc.
 
         if self.aSprite is not None: # update additional sprites, if any
-            self.aSprite.advance()
+            self.aSprite.advance(deltaTime)
 
 
     def getHit(self, damage):

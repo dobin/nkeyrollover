@@ -78,3 +78,5 @@ class Player(Character):
         logger.info("P New player at: " + str(self.x) + " / " + str(self.y))
         self.characterStatus.init()
         self.actionCtrl.changeTo(Action.standing, None)
+
+        

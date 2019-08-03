@@ -1,13 +1,14 @@
+import random
+import logging
+
+from sprite.charactersprite import CharacterSprite
 from entities.player.player import Player
-from .enemyactionctrl import EnemyActionCtrl
 from entities.direction import Direction
 from entities.action import Action
-
-import random
-from config import Config
 from entities.character import Character
-import logging
-from sprite.charactersprite import CharacterSprite
+from .enemyactionctrl import EnemyActionCtrl
+from config import Config
+from utilities.timer import Timer
 
 logger = logging.getLogger(__name__)
 
@@ -17,11 +18,10 @@ class Enemy(Character):
         Character.__init__(self, win, parent, spawnBoundaries, world)
         self.actionCtrl = EnemyActionCtrl(parentEntity=self, world=world)
         self.sprite = CharacterSprite(parentEntity=self)
-        
+        self.lastInputTimer = Timer(1.0)
         # make him walk
         self.actionCtrl.changeTo(Action.walking, Direction.left)
 
-        self.speed = Config.secToFrames(1)
         self.init()
 
 
@@ -29,14 +29,16 @@ class Enemy(Character):
         self.x = random.randint(self.spawnBoundaries['min_x'], self.spawnBoundaries['max_x'])
         self.y = random.randint(self.spawnBoundaries['min_y'], self.spawnBoundaries['max_y'])
         self.direction = Direction.left
-        self.lastInput = 0
+        self.lastInputTimer.reset()
 
 
     def getInput(self, playerLocation):
         if not self.actionCtrl.getAction() is Action.walking: 
             return
-        if not self.lastInput > self.speed: 
+
+        if not self.lastInputTimer.timeIsUp():
             return
+        self.lastInputTimer.reset()
 
         # to update timers
         self.actionCtrl.changeTo(Action.walking, Direction.left)
@@ -60,8 +62,6 @@ class Enemy(Character):
             if self.y > 2:
                 self.y -= 1
 
-        self.lastInput = 0
-
 
     def ressurectMe(self): 
         if self.characterStatus.isAlive(): 
@@ -73,7 +73,7 @@ class Enemy(Character):
         self.actionCtrl.changeTo(Action.walking, None)
 
 
-    def advance(self): 
-        super(Enemy, self).advance()
-        self.lastInput += 1
+    def advance(self, deltaTime): 
+        super(Enemy, self).advance(deltaTime)
+        self.lastInputTimer.advance(deltaTime)
         

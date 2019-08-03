@@ -1,8 +1,7 @@
+from config import Config
 
 from entities.action import Action
-from config import Config
 from entities.direction import Direction
-
 from entities.actionctrl import ActionCtrl
 
 import logging
@@ -17,10 +16,8 @@ class PlayerActionCtrl(ActionCtrl):
 
         if newAction is Action.walking:
             # we start, or continue, walking
-            self.resetDuration(
-                duration=Config.secToFrames(1),
-                durationLeft=Config.secToFrames(1),
-            )
+            self.durationTimer.setTimer(1.0)
+            self.durationTimer.reset()
 
             # if we were already walking, dont destroy the animation state
             if self.action is not Action.walking:
@@ -28,10 +25,8 @@ class PlayerActionCtrl(ActionCtrl):
                 self.parentEntity.sprite.initSprite(newAction, direction, None)
         else: 
             logger.info("PP Change action to2: " + str(newAction))
-            self.resetDuration(
-                duration=Config.secToFrames(1),
-                durationLeft=Config.secToFrames(1),
-            )
+            self.durationTimer.setTimer(1.0)
+            self.durationTimer.reset()
 
             self.parentEntity.sprite.initSprite(newAction, direction, None)
 
@@ -41,18 +36,18 @@ class PlayerActionCtrl(ActionCtrl):
     def specificAdvance(self):
         # stand still after some non walking
         if self.action is Action.walking: 
-            if self.durationTimeIsUp():
+            if self.durationTimer.timeIsUp():
                 self.action = Action.standing
                 self.parentEntity.sprite.initSprite(Action.standing, Direction.right, None)
 
         # after hitting is finished, stand still
         if self.action is Action.hitting: 
-            if self.durationTimeIsUp():
+            if self.durationTimer.timeIsUp():
                 self.action = Action.standing
                 self.parentEntity.sprite.initSprite(Action.standing, Direction.right, None)
 
         # when dying, desintegrate
         if self.action is Action.dying: 
-            if self.durationTimeIsUp():
+            if self.durationTimer.timeIsUp():
                 logging.warning("PP Deactivate!")
                 self.isActive = False

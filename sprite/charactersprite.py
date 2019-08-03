@@ -1,8 +1,7 @@
-
 from enum import Enum
+
 from entities.action import Action
 from entities.direction import Direction
-
 from .arrsprite import ArrSprite
 
 class CharacterSprite(ArrSprite): 
@@ -37,8 +36,8 @@ class CharacterSprite(ArrSprite):
             self.frameIndex = 0
             self.isActive = True
             self.frameTime = [
-                10, 
-                10
+                0.01, 
+                0.01
             ]
             self.frameTimeLeft = self.frameTime[self.frameIndex]
             self.endless = True
@@ -78,8 +77,8 @@ class CharacterSprite(ArrSprite):
             self.frameCount = 2
             self.frameIndex = 0
             self.frameTime = [
-                50, 
-                100
+                1.0, 
+                1.0
             ]
             self.frameTimeLeft = self.frameTime[self.frameIndex]
             self.isActive = True
@@ -122,8 +121,8 @@ class CharacterSprite(ArrSprite):
             self.advanceByStep = False
 
             self.frameTime = [
-                100,
-                50
+                0.1,
+                0.5
             ]
             self.frameTimeLeft = self.frameTime[self.frameIndex]
 

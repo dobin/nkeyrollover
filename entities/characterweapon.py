@@ -17,12 +17,12 @@ class CharacterWeapon(Entity):
         super(CharacterWeapon, self).__init__(win, parentCharacter)
         self.sprite = PhenomenaSprite(action=Action.hit, parentEntity=self)
         self.reset()
-        
+
     
     def reset(self):
         # timeframe of this hit animation
-        self.duration = Config.secToFrames(0.7)
-        self.durationLeft = Config.secToFrames(0.7)
+        self.durationTimer.setTimer(0.7)
+        self.durationTimer.reset()
 
         # for drawing the hit, and see if the char is "hitting"
         self.isActive = False 
@@ -37,7 +37,7 @@ class CharacterWeapon(Entity):
     def doHit(self):
         self.collisionDetectionDone = False
         self.isActive = True
-        self.durationLeft = self.duration
+        self.durationTimer.reset()
         self.sprite.initSprite(Action.hit, self.parent.direction, None)
 
 

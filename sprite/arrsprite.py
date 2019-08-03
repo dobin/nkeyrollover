@@ -1,7 +1,7 @@
 import curses
 import logging
-
 from enum import Enum
+
 from entities.action import Action
 from entities.direction import Direction
 
@@ -35,6 +35,7 @@ class ArrSprite(object):
         self.arr = []
         self.xoffset = 0
         self.yoffset = 0
+        self.frameTimeLeft = 0
 
 
     def advanceStep(self): 
@@ -44,7 +45,7 @@ class ArrSprite(object):
         self.frameIndex = (self.frameIndex + 1) % self.frameCount
  
 
-    def advance(self):
+    def advance(self, deltaTime):
         # no need to advance stuff which is forever
         if self.frameTime is None and self.endless == True: 
             return
@@ -57,8 +58,8 @@ class ArrSprite(object):
         if self.advanceByStep: 
             return
 
-        self.frameTimeLeft = self.frameTimeLeft - 1
-        if self.frameTimeLeft == 0:
+        self.frameTimeLeft -= deltaTime
+        if self.frameTimeLeft <= 0:
             # animation ended, check if we need to restart it, 
             # or take the next one
             if self.endless:

@@ -23,10 +23,8 @@ class EnemyActionCtrl(ActionCtrl):
         
         if newAction is Action.walking:
             # we start, or continue, walking
-            self.resetDuration(
-                duration=Config.secToFrames(1),
-                durationLeft=Config.secToFrames(1),
-            )
+            self.durationTimer.setTimer(1.0)
+            self.durationTimer.reset()
 
             # if we were already walking, dont destroy the animation state
             if self.action is not Action.walking:
@@ -34,10 +32,8 @@ class EnemyActionCtrl(ActionCtrl):
                 self.parentEntity.sprite.initSprite(newAction, direction, None)
         elif newAction is Action.dying: 
             logger.info("EE Change action to2: " + str(newAction))
-            self.resetDuration(
-                duration=Config.secToFrames(1),
-                durationLeft=Config.secToFrames(1),
-            )
+            self.durationTimer.setTimer(1.0)
+            self.durationTimer.reset()
 
             if random.choice([True, False]): 
                 animationIndex = 2
@@ -50,10 +46,8 @@ class EnemyActionCtrl(ActionCtrl):
                 self.parentEntity.sprite.initSprite(newAction, direction, animationIndex)
         else: 
             logger.info("EE Change action to3: " + str(newAction))
-            self.resetDuration(
-                duration=Config.secToFrames(1),
-                durationLeft=Config.secToFrames(1),
-            )
+            self.durationTimer.setTimer(1.0)
+            self.durationTimer.reset()
             self.parentEntity.sprite.initSprite(newAction, direction, None)
 
         self.action = newAction
@@ -62,6 +56,6 @@ class EnemyActionCtrl(ActionCtrl):
     def specificAdvance(self):
         # when dying, desintegrate
         if self.action is Action.dying: 
-            if self.durationTimeIsUp():
+            if self.durationTimer.timeIsUp():
                 logging.info("EE Deactivate!")
                 self.parentEntity.setActive(False)

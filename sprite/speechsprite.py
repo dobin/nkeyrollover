@@ -1,8 +1,7 @@
-
 from enum import Enum
+
 from entities.action import Action
 from entities.direction import Direction
-
 from .arrsprite import ArrSprite
 
 import curses
@@ -18,7 +17,7 @@ class SpeechSprite(ArrSprite):
         self.frameCount = 1
         self.frameIndex = 0
         self.frameTime = [
-            50, 
+            0.5,
         ]
         self.frameTimeLeft = self.frameTime[self.frameIndex]
         self.endless = False

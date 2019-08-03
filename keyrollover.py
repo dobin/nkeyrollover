@@ -65,19 +65,21 @@ class Keyrollover(object):
 
     def loop(self): 
         n = 0
-        while True: 
+        deltaTime = 0.01
+        while True:
+            #logging.debug("Iteration")
             self.win.erase()
             self.win.border()
 
             self.director.drawEnemies()
-            self.director.advanceEnemies()
+            self.director.advanceEnemies(deltaTime)
             self.drawStatusbar(n)
 
             self.player.draw()
-            self.player.advance()
+            self.player.advance(deltaTime)
 
             self.world.draw()
-            self.world.advance()
+            self.world.advance(deltaTime)
 
             # has to be after draw, as getch() does a refresh
             # https://stackoverflow.com/questions/19748685/curses-library-why-does-getch-clear-my-screen
