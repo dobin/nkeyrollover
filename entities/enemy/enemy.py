@@ -6,7 +6,6 @@ from entities.player.player import Player
 from entities.direction import Direction
 from entities.action import Action
 from entities.character import Character
-from .enemyactionctrl import EnemyActionCtrl
 from config import Config
 from utilities.timer import Timer
 
