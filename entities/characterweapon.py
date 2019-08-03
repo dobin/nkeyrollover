@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 
+import logging
+
+from config import Config
 from sprite.phenomenasprite import PhenomenaSprite
 from .action import Action
 from .direction import Direction
-import logging
-from config import Config
 from .entity import Entity
 
 logger = logging.getLogger(__name__)
+
 
 # Draws a "hit" at a specific location
 # - Used to indicate where hit landed to the user
@@ -28,14 +30,8 @@ class CharacterWeapon(Entity):
         self.isActive = False 
 
 
-    def doHit(self):
-        hittedEnemies = self.parent.world.director.getEnemiesHit(self.getLocation())
-        for enemy in hittedEnemies: 
-            enemy.gmHandleHit(50)
-
-        self.isActive = True
-        self.durationTimer.reset()
-        self.sprite.initSprite(Action.hit, self.parent.direction, None)
+    def doHit(self): 
+        raise NotImplementedError('subclasses must override this abstract method')
 
 
     def isHitting(self): 

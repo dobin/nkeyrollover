@@ -25,7 +25,7 @@ class Character(Entity):
         self.spawnBoundaries = spawnBoundaries
 
         self.characterStatus = CharacterStatus()
-        self.characterWeapon = CharacterWeapon(win=win, parentCharacter=self)
+        self.characterWeapon = None # by children
         self.aSprite = None
         self.actionCtrl = None # filled in children
 

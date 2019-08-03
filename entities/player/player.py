@@ -7,7 +7,7 @@ from enum import Enum
 
 from config import Config
 from .playeractionctrl import PlayerActionCtrl
-from entities.characterweapon import CharacterWeapon
+from .playerweapon import PlayerWeapon
 from entities.characterstatus import CharacterStatus
 from entities.action import Action
 from entities.direction import Direction
@@ -24,6 +24,7 @@ class Player(Character):
         Character.__init__(self, win, parent, spawnBoundaries, world)
         self.actionCtrl = PlayerActionCtrl(parentEntity=self, world=world)
         self.sprite = CharacterSprite(parentEntity=self)
+        self.characterWeapon = PlayerWeapon(win=win, parentCharacter=self)
 
         # first action is standing around
         self.actionCtrl.changeTo(Action.walking, Direction.left)
@@ -31,6 +32,12 @@ class Player(Character):
         self.x = 10
         self.y = 10
 
+    # game mechanics 
+
+    def gmHandleHit(self, damage):
+        self.characterStatus.getHit(damage)
+
+    # /game mechanics
 
     def getInput(self):
         key = self.win.getch()

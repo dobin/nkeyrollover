@@ -6,6 +6,7 @@ from entities.player.player import Player
 from entities.direction import Direction
 from entities.action import Action
 from entities.character import Character
+from .enemyweapon import EnemyWeapon
 from config import Config
 from utilities.timer import Timer
 from utilities.utilities import Utility
@@ -21,6 +22,7 @@ class Enemy(Character):
         self.player = world.getPlayer()
         self.sprite = CharacterSprite(parentEntity=self)
         self.lastInputTimer = Timer(1.0)
+        self.characterWeapon = EnemyWeapon(win=win, parentCharacter=self)
 
         self.initAi()
         self.init()

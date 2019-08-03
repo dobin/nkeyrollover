@@ -76,4 +76,11 @@ class Director(object):
 
         return enemies
 
-        
+
+    def getPlayersHit(self, coordinates):
+        players = []
+        if self.world.player.collidesWithPoint(coordinates):
+            players.append(self.world.player)
+
+        return players
+
