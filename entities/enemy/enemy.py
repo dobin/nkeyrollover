@@ -10,15 +10,16 @@ from .enemyweapon import EnemyWeapon
 from config import Config
 from utilities.timer import Timer
 from utilities.utilities import Utility
-
-logger = logging.getLogger(__name__)
-
+from entities.entitytype import EntityType
 from ai.brain import Brain
 import entities.enemy.aifsm as aifsm
 
+logger = logging.getLogger(__name__)
+
+
 class Enemy(Character):
     def __init__(self, win, parent, spawnBoundaries, world):
-        Character.__init__(self, win, parent, spawnBoundaries, world)
+        Character.__init__(self, win, parent, spawnBoundaries, world, EntityType.enemy)
         self.player = world.getPlayer()
         self.sprite = CharacterSprite(parentEntity=self)
         self.lastInputTimer = Timer(1.0)
@@ -154,6 +155,7 @@ class Enemy(Character):
 
     def gmHandleHit(self, damage):
         self.characterStatus.getHit(damage)
+        self.setColorFor( 1.0 - 1.0/damage , EntityType.takedamage)
         if not self.characterStatus.isAlive():
             self.brain.pop()
             self.brain.push('dying')
@@ -165,7 +167,6 @@ class Enemy(Character):
 
     def isPlayerClose(self):
         distance = Utility.distance(self.player.getLocation(), self.getLocation())
-        logging.debug("Distance: " + str(distance))
         if distance['sum'] < 5:
             return True
         else: 

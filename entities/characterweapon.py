@@ -7,6 +7,7 @@ from sprite.phenomenasprite import PhenomenaSprite
 from .action import Action
 from .direction import Direction
 from .entity import Entity
+from .entitytype import EntityType
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +17,7 @@ logger = logging.getLogger(__name__)
 # - Used for collision detection
 class CharacterWeapon(Entity):
     def __init__(self, win, parentCharacter):
-        super(CharacterWeapon, self).__init__(win, parentCharacter)
+        super(CharacterWeapon, self).__init__(win, parentCharacter, EntityType.weapon)
         self.sprite = PhenomenaSprite(action=Action.hit, parentEntity=self)
         self.reset()
 

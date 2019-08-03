@@ -41,10 +41,10 @@ class Timer(object):
         return self.active
 
     def start(self): 
-        pass
+        self.active = True
 
     def stop(self): 
-        pass
+        self.active = False
 
 
     def advance(self, dt):

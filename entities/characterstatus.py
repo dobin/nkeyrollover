@@ -17,8 +17,11 @@ class CharacterStatus(object):
         self.healthRegen = 1
         self.manaRegen = 1
 
+        self.damage = 35
+
         self.points = 0
     
+
     def isAlive(self): 
         if self.health > 0:
             return True
@@ -26,9 +29,14 @@ class CharacterStatus(object):
             return False
 
 
+    def getDamage(self): 
+        return self.damage
+
+
     def getHit(self, damage): 
         self.health -= damage
         logger.info("New health: " + str(self.health))
+
 
     def advance(self, deltaTime): 
         pass

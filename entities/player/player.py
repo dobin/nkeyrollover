@@ -12,7 +12,7 @@ from entities.characterstatus import CharacterStatus
 from entities.action import Action
 from entities.direction import Direction
 from entities.character import Character
-
+from entities.entitytype import EntityType
 from sprite.speechsprite import SpeechSprite
 from sprite.charactersprite import CharacterSprite
 
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 class Player(Character):
     def __init__(self, win, parent, spawnBoundaries, world):
-        Character.__init__(self, win, parent, spawnBoundaries, world)
+        Character.__init__(self, win, parent, spawnBoundaries, world, EntityType.player)
         self.actionCtrl = PlayerActionCtrl(parentEntity=self, world=world)
         self.sprite = CharacterSprite(parentEntity=self)
         self.characterWeapon = PlayerWeapon(win=win, parentCharacter=self)
@@ -36,6 +36,7 @@ class Player(Character):
 
     def gmHandleHit(self, damage):
         self.characterStatus.getHit(damage)
+        self.setColorFor( 1.0 - 1.0/damage , EntityType.takedamage)
 
     # /game mechanics
 

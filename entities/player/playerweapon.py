@@ -5,7 +5,7 @@ class PlayerWeapon(CharacterWeapon):
    def doHit(self):
         hittedEnemies = self.parent.world.director.getEnemiesHit(self.getLocation())
         for enemy in hittedEnemies: 
-            enemy.gmHandleHit(50)
+            enemy.gmHandleHit( self.parent.characterStatus.getDamage() )
 
         self.isActive = True
         self.durationTimer.reset()

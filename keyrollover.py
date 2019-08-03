@@ -31,29 +31,30 @@ class Keyrollover(object):
                 filemode='a', 
                 level=logging.DEBUG,
                 format='%(asctime)s %(levelname)07s %(name)s: %(message)s')
-            logging.warn("Hmm")
         else: 
             logging.basicConfig(
                 filename='app.log', 
                 filemode='a', 
                 level=logging.INFO,
                 format='%(asctime)s %(levelname)07s %(name)s: %(message)s')
-            logging.warn("Hmm")
-        logging.info("-----------------------------------------")
+        logging.info("-----------------Start------------------------")
 
         # Create a new Curses window
         #curses.initScr()
         self.win = curses.newwin(Config.rows, Config.columns)
         curses.noecho()
         curses.cbreak()
-        self.win.keypad(1)
+        self.win.keypad(1) 
         curses.curs_set(0)    
 
         # Initialize color pairs
         curses.start_color()    
         curses.init_pair(1, curses.COLOR_GREEN, 0)
-        curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_WHITE)
-        curses.init_pair(3, curses.COLOR_RED, curses.COLOR_CYAN)    
+        curses.init_pair(2, curses.COLOR_BLUE, 0)
+        curses.init_pair(3, curses.COLOR_RED, 0)
+        curses.init_pair(4, curses.COLOR_YELLOW, 0)
+        curses.init_pair(5, curses.COLOR_MAGENTA, 0)
+        curses.init_pair(6, curses.COLOR_WHITE, curses.COLOR_BLACK)
 
         # Game variables
         speed = 1
@@ -125,7 +126,7 @@ class Keyrollover(object):
         s += "    Mana: " + str(self.world.player.characterStatus.mana)
         s += "    Points: " + str(self.world.player.characterStatus.points)
         s += "    FPS: %.0f" % (fps)
-        self.win.addstr(1, 2, s)
+        self.win.addstr(1, 2, s, curses.color_pair(6))
 
         self.win.border()
 

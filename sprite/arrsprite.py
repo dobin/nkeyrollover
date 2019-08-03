@@ -108,11 +108,11 @@ class ArrSprite(object):
         for (y, rows) in enumerate(self.arr[ self.frameIndex ]):
             for (x, column) in enumerate(rows):
                 if column is not '':
-                    win.addch(
+                    win.addstr(
                         pos['y'] + y, 
                         pos['x'] + x,
                         column, 
-                        curses.color_pair(1))
+                        self.parent.currentColor)
 
 
     def getCurrentFrameCopy(self): 
