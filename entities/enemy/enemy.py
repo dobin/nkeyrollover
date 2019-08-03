@@ -38,14 +38,14 @@ class Enemy(Character):
             'spawn': {
                 'state_time': 1.0,
             },
+            'wander': {
+                'state_time': 5,
+            },
             'chase': {
                 'state_time': 5,
             }, 
             'attack': {
                 'state_time': 2.0,
-            },
-            'wander': {
-                'state_time': 5,
             },
             'dying': {
                 'state_time': 2.0,
@@ -91,10 +91,10 @@ class Enemy(Character):
 
     def sWander(self): 
         if self.wanderTimer.timeIsUp(): 
-            logger.warn("I'm moving / wander!")
+            logger.debug("I'm moving / wander!")
             self.wanderTimer.reset()
         
-        self.getInput()
+        self.getInputWander()
 
 
     def sChaseInit(self):
@@ -103,10 +103,10 @@ class Enemy(Character):
 
     def sChase(self): 
         if self.chaseTimer.timeIsUp(): 
-            logger.warn("I'm moving / chasing!")
+            logger.debug("I'm moving / chasing!")
             self.chaseTimer.reset()
         
-        self.getInput()
+        self.getInputChase()
 
 
     def sDyingInit(self): 
@@ -162,15 +162,63 @@ class Enemy(Character):
 
     ### AI
 
-    def getInput(self):
+    def getInputChase(self):
+        # manage speed
         if not self.lastInputTimer.timeIsUp():
             return
         self.lastInputTimer.reset()
 
+        # make run-animation 
+        self.sprite.advanceStep()
+
         playerLocation = self.player.getLocation()
 
-        # to make animation run
+        if playerLocation['x'] > self.x:
+            if self.x < Config.columns - self.sprite.width - 1:
+                self.x += 1
+                self.direction = Direction.right
+        else: 
+            if self.x > 1:
+                self.x -= 1
+                self.direction = Direction.left
+
+        if playerLocation['y'] > self.y:
+            if self.y < Config.rows - self.sprite.height - 1:
+                self.y += 1
+        else: 
+            if self.y > 2:
+                self.y -= 1
+
+
+    def getInputWander(self):
+        # manage speed
+        if not self.lastInputTimer.timeIsUp():
+            return
+        self.lastInputTimer.reset()
+
+        # make run-animation 
         self.sprite.advanceStep()
+
+        playerLocation = self.player.getLocation()
+
+        if playerLocation['y'] > self.y:
+            # newdest is higher
+            playerLocation['y'] -= 6
+            
+            if playerLocation['x'] > self.x:
+                playerLocation['x'] += 9
+            else:
+                playerLocation['x'] -= 9
+
+        else: 
+            # newdest is lower
+            playerLocation['y'] += 6
+            
+            if playerLocation['x'] > self.x:
+                playerLocation['x'] += 9
+            else:
+                playerLocation['x'] -= 9
+
 
         if playerLocation['x'] > self.x:
             if self.x < Config.columns - self.sprite.width - 1:
