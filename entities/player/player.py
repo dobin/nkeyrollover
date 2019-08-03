@@ -71,6 +71,11 @@ class Player(Character):
             key = self.win.getch()
 
 
+    def advance(self, deltaTime):
+        super(Player, self).advance(deltaTime) # advance Character part (duration, sprite)
+        self.actionCtrl.advance(deltaTime) # advance actions (duration, Action transfers)
+
+
     def ressurectMe(self): 
         if self.characterStatus.isAlive(): 
             return

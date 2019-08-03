@@ -47,7 +47,7 @@ class Brain:
 					"({}).".format(self.owner, state)
 				)
 				return
-			log.debug("Pushing state \"{}\" to stack.".format(state))
+			log.debug("{}: Pushing state \"{}\" to stack.".format(self.owner, state))
 			# Initiate a state object, pass it this brain instance as a
 			# parameter, then push it to the top of the stack.
 			self.stack.append(self.avail_states[state](self))

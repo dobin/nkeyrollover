@@ -35,7 +35,11 @@ class Character(Entity):
         raise NotImplementedError('subclasses must override this abstract method')
 
 
-    def ressurectMe(self): 
+    def gmRessurectMe(self): 
+        raise NotImplementedError('subclasses must override this abstract method')
+
+
+    def gmHandleHit(self, damage):
         raise NotImplementedError('subclasses must override this abstract method')
 
 
@@ -49,18 +53,11 @@ class Character(Entity):
 
     def advance(self, deltaTime):
         super(Character, self).advance(deltaTime) # advance Entity part (duration, sprite)
-        self.actionCtrl.advance(deltaTime) # advance actions (duration, Action transfers)
         self.characterWeapon.advance(deltaTime) # update weapon (duration, sprite)
         self.characterStatus.advance(deltaTime) # update health, mana etc.
 
         if self.aSprite is not None: # update additional sprites, if any
             self.aSprite.advance(deltaTime)
-
-
-    def getHit(self, damage):
-        self.characterStatus.getHit(damage)
-        if not self.characterStatus.isAlive():
-            self.actionCtrl.changeTo(Action.dying, None)
 
 
     def addSprite(self, sprite): 

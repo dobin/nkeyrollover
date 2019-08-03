@@ -63,12 +63,12 @@ class Keyrollover(object):
         self.win.border()
         self.win.nodelay(1) # make getch() nonblocking
 
-        self.world = World(self.win)
         self.player = Player(
             win=self.win, 
             parent=None, 
             spawnBoundaries={ 'max_y': Config.columns, 'max_x': Config.rows }, 
             world=self.world)
+        self.world = World(win=self.win, player=self.player)
         self.director = Director(self.win, self.world)
         
 
@@ -96,7 +96,6 @@ class Keyrollover(object):
             # has to be after draw, as getch() does a refresh
             # https://stackoverflow.com/questions/19748685/curses-library-why-does-getch-clear-my-screen
             self.player.getInput()
-            self.director.getInput(self.player.getLocation())
             #win.refresh()
 
             self.collisionDetection()

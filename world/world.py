@@ -5,10 +5,13 @@ import random
 logger = logging.getLogger(__name__)
 
 class World(object): 
-    def __init__(self, win): 
+    def __init__(self, win, player): 
         self.win = win
+        self.player = player
         self.sprites = []
 
+    def getPlayer(self): 
+        return self.player
 
     def makeExplode(self, sprite, charDirection, data):
         frame = sprite.getCurrentFrameCopy()

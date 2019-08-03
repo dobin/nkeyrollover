@@ -41,7 +41,7 @@ class ArrSprite(object):
         self.frameTimeLeft = 0
 
 
-    def advanceStep(self): 
+    def advanceStep(self):
         if not self.advanceByStep: 
             return
 

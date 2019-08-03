@@ -39,11 +39,6 @@ class Director(object):
             enemy.advance(deltaTime)
 
 
-    def getInput(self, playerLocation): 
-        for enemy in self.enemiesAlive: 
-            enemy.getInput(playerLocation)
-
-
     def drawEnemies(self):
         for enemy in self.enemiesAlive: 
             enemy.draw()
@@ -56,7 +51,7 @@ class Director(object):
                 self.lastEnemyResurrectedTimer.reset()
                 logger.info("Ressurect, alive: " + str(len(self.enemiesAlive)))
                 enemy = self.enemiesDead.pop()
-                enemy.ressurectMe()
+                enemy.gmRessurectMe()
                 self.enemiesAlive.append(enemy)
 
         # remove inactive enemies
@@ -70,7 +65,7 @@ class Director(object):
     def collisionDetection(self, characterWeaponCoordinates): 
         for enemy in self.enemiesAlive: 
             if enemy.collidesWithPoint(characterWeaponCoordinates):
-                enemy.getHit(50)
+                enemy.gmHandleHit(50)
 
 
 

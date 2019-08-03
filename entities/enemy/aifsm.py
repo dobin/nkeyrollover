@@ -55,7 +55,7 @@ class Chase(State):
             self.brain.push("attack")            
 
         if self.timeIsUp():
-            print("Too long chasing, switching to wander")
+            logging.debug("{}: Too long chasing, switching to wander".format(self.owner))
             self.brain.pop()
             self.brain.push("wander")
 
@@ -77,7 +77,7 @@ class Attack(State):
 
         if self.timeIsUp():
             # too long attacking. lets switch to chasing
-            print("Too long attacking, switch to chasing")
+            logging.debug("{}: Too long attacking, switch to chasing".format(self.owner))
             self.brain.pop()
             self.brain.push("chase")
 
@@ -98,7 +98,7 @@ class Wander(State):
         self.brain.owner.sWander()
 
         if self.timeIsUp():
-            print("Too long wandering, chase again a bit")
+            logging.debug("{}: Too long wandering, chase again a bit".format(self.owner))
             self.brain.pop()
             self.brain.push("chase")
 
@@ -111,12 +111,13 @@ class Dying(State):
 
 
     def on_enter(self):
+        self.brain.owner.sDyingInit()
         self.setTimer( self.brain.owner.stateData[self.name]['state_time'])
 
 
     def process(self, dt):
         if self.timeIsUp():
-            print("Died enough, set to inactive")
+            logging.debug("{}: Died enough, set to inactive".format(self.owner))
             self.brain.pop()
             self.brain.push("idle")
             self.brain.owner.setActive(False)

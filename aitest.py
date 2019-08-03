@@ -8,9 +8,12 @@ import select
 
 class Agent:
     def __init__(self):
-        self.brain = Brain(self)
         self.isActive = True
+        self.playerClose = False
 
+        ###
+        self.brain = Brain(self)
+        
         self.stateData = {
             'spawn': {
                 'state_time': 1.5,
@@ -28,8 +31,6 @@ class Agent:
                 'state_time': 3.0,
             },
         }
-
-        self.playerClose = False
 
         self.attackTimer = Timer(0.5, instant=True)
         self.wanderTimer = Timer(0.5, instant=True)
@@ -66,8 +67,8 @@ class Agent:
 
     # Game Mechanics
     def gmKill(self): 
-        a.brain.pop()
-        a.brain.push("dying")
+        self.brain.pop()
+        self.brain.push("dying")
 
 
     # Other
@@ -77,7 +78,7 @@ class Agent:
     def isPlayerClose(self):
         return self.playerClose
 
-    def update(self, dt):
+    def advance(self, dt):
         self.attackTimer.advance(dt)
         self.wanderTimer.advance(dt)
         self.chaseTimer.advance(dt)
@@ -108,7 +109,7 @@ if __name__ == "__main__":
     a.brain.push("spawn")
     
     while True:
-        a.update(0.1)
+        a.advance(0.1)
         time.sleep(0.1)
 
         i = getInput()
