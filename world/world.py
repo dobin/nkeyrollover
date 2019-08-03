@@ -47,7 +47,7 @@ class World(object):
                 pos['y'] + y,
                 movementX, 
                 movementY, 
-                [ 10, 10, 10], 
+                [ 0.1, 0.1, 0.1 ], 
                 1)
             self.addSprite(speckSprite)
 
@@ -64,7 +64,7 @@ class World(object):
                 pos['y'] + y,
                 d * 2, 
                 0, 
-                [ 5, 10, 20, 40 ], 
+                [ 0.05, 0.1, 0.2, 0.4 ], 
                 2 )
             self.addSprite(speckSprite)
 
