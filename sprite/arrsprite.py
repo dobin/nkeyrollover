@@ -2,6 +2,7 @@ import curses
 import logging
 from enum import Enum
 
+from entities.entity import Entity
 from entities.action import Action
 from entities.direction import Direction
 
@@ -16,10 +17,12 @@ class ArrSprite(object):
         self.type = action
         self.initSprite(action=None, direction=Direction.right, animationIndex=None)
 
-        # our position is relative to this
-        # if None, its absolute
-        # parent needs to be of type Entity
-        self.parent = parentEntity
+        if not isinstance(parentEntity, Entity):
+            logging.error("Tried to use non-Entity class as parent")
+        else:
+            # our position is relative to this
+            # if None, its absolute
+            self.parent = parentEntity
         
 
     def initSprite(self, action, direction, animationIndex):
