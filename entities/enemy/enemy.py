@@ -8,6 +8,7 @@ from entities.action import Action
 from entities.character import Character
 from config import Config
 from utilities.timer import Timer
+from utilities.utilities import Utility
 
 logger = logging.getLogger(__name__)
 
@@ -82,6 +83,7 @@ class Enemy(Character):
     	if self.attackTimer.timeIsUp(): 
             logger.warn("I'm attacking!")
             self.attackTimer.reset()
+            self.characterWeapon.doHit()
 
 
     def sWanderInit(self):
@@ -155,11 +157,19 @@ class Enemy(Character):
             self.brain.push('dying')
 
 
+    def canReachPlayer(self): 
+        return Utility.pointInSprite(self.getLocation(), self.player.sprite)
+
+
     def isPlayerClose(self):
-        return False
+        distance = Utility.distance(self.player.getLocation(), self.getLocation())
+        if distance['sum'] < 5:
+            return True
+        else: 
+            return False
 
 
-    ### AI
+    ### /AI
 
     def getInputChase(self):
         # manage speed

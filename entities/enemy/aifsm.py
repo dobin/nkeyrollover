@@ -50,9 +50,9 @@ class Chase(State):
     def process(self, dt):
         self.brain.owner.sChase()
 
-        if self.brain.owner.isPlayerClose():
+        if self.brain.owner.canReachPlayer():
             self.brain.pop()
-            self.brain.push("attack")            
+            self.brain.push("attack")
 
         if self.timeIsUp():
             logging.debug("{}: Too long chasing, switching to wander".format(self.owner))
