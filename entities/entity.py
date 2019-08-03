@@ -50,7 +50,7 @@ class Entity(object):
 
     def setColorFor(self, time, type):
         if self.colorTimer.isActive():
-            logging.error("Color already active on new set color")
+            logging.warn("Color already active on new set color")
             return 
 
         newColor = self.getColorByType(type)
@@ -90,7 +90,6 @@ class Entity(object):
 
         # reset color
         if self.colorTimer.timeIsUp():
-            logging.error("Time is up, from color " + str(self.currentColor) + " set color to: "+  str(self.baseColor))
             self.currentColor = self.baseColor
             self.colorTimer.stop()
         self.colorTimer.advance(deltaTime)
