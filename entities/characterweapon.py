@@ -15,9 +15,11 @@ logger = logging.getLogger(__name__)
 class CharacterWeapon(Entity):
     def __init__(self, win, parentCharacter):
         super(CharacterWeapon, self).__init__(win, parentCharacter)
-        self.parentCharacter = parentCharacter
         self.sprite = PhenomenaSprite(action=Action.hit, parentEntity=self)
-
+        self.reset()
+        
+    
+    def reset(self):
         # timeframe of this hit animation
         self.duration = Config.secToFrames(0.7)
         self.durationLeft = Config.secToFrames(0.7)
@@ -32,11 +34,11 @@ class CharacterWeapon(Entity):
         self.collisionDetectionDone = False
 
 
-    def doHit(self, x, y, direction):
+    def doHit(self):
         self.collisionDetectionDone = False
         self.isActive = True
         self.durationLeft = self.duration
-        self.sprite.initSprite(Action.hit, direction, None)
+        self.sprite.initSprite(Action.hit, self.parent.direction, None)
 
 
     def isHitting(self): 

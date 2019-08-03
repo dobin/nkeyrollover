@@ -37,7 +37,7 @@ class Player(Character):
         while key != -1:
             if key == ord(' '):
                 self.actionCtrl.changeTo(Action.hitting, self.direction)
-                self.characterWeapon.doHit(self.x, self.y, self.direction)
+                self.characterWeapon.doHit()
 
             if key == ord('q'):
                 self.actionCtrl.changeTo(Action.shrugging, self.direction)
