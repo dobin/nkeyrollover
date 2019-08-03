@@ -82,17 +82,10 @@ class Keyrollover(object):
         workTime = 0
         while True:
             timeStart = time.time()
-            #logging.debug("Iteration")
             self.win.erase()
             self.win.border()
 
-            #self.director.drawEnemies()
-            #self.director.advanceEnemies(deltaTime)
             self.drawStatusbar(n)
-
-            #self.player.draw()
-            #self.player.advance(deltaTime)
-
             self.world.draw()
             self.world.advance(deltaTime)
 
@@ -101,14 +94,12 @@ class Keyrollover(object):
             self.world.player.getInput()
             #win.refresh()
 
-            #self.collisionDetection()
-            #self.director.worldUpdate()
-
+            # fps logistics
             timeEnd = time.time()
             workTime = timeEnd - timeStart
             self.workTime = workTime
             if workTime > targetFrameTime:
-                logging.warn("Could keep FPS!")
+                logging.warn("Could not keep FPS!")
 
             time.sleep(targetFrameTime - workTime)
             n = n + 1
@@ -123,8 +114,8 @@ class Keyrollover(object):
     def drawStatusbar(self, n):
         fps = 0
         if n > 100: 
-            #fps = 1000 * (float)(n) / (float)(current_milli_time() - self.startTime)
-            fps = self.workTime * 1000.0
+            fps = 1000 * (float)(n) / (float)(current_milli_time() - self.startTime)
+            #fps = self.workTime * 1000.0
 
         s = "Health: " + str(self.world.player.characterStatus.health)
         s += "    Mana: " + str(self.world.player.characterStatus.mana)
