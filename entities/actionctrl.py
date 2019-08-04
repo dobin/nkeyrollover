@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 from sprite.charactersprite import CharacterSprite
-from .action import Action
 from .direction import Direction
 from config import Config
 from utilities.timer import Timer
@@ -17,14 +16,7 @@ class ActionCtrl(object):
         
         # timer which are used individually for each action
         self.durationTimer = Timer(0.0)
-        
-        # We are new
-        self.action = Action.spawning
 
-
-    def getAction(self): 
-        return self.action
-        
 
     # change to another action
     # implemented by children

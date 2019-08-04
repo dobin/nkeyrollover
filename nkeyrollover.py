@@ -5,7 +5,6 @@ import logging
 
 from entities.player.player import Player
 from scene.scene import Scene
-from entities.action import Action
 from director import Director
 from config import Config
 from world.world import World

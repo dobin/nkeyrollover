@@ -3,7 +3,6 @@ import logging
 from enum import Enum
 
 from entities.entity import Entity
-from entities.action import Action
 from entities.direction import Direction
 from config import Config
 from utilities.utilities import Utility
@@ -34,6 +33,13 @@ class ArrSprite(object):
         self.isActive = True
         self.xoffset = 0
         self.yoffset = 0
+
+        # set the initial frametime
+        # therefore, this init() has to be called after changeTexture()
+        if self.texture is not None:
+            if not self.texture.endless and self.texture.frameTime:
+                self.frameTimeLeft = self.texture.frameTime[self.frameIndex]
+
 
 
     def advanceStep(self):
@@ -78,7 +84,7 @@ class ArrSprite(object):
             else:
                 # check if it is the last animation, if yes stop it
                 if self.frameIndex == self.texture.frameCount - 1:
-                    self.isActive = False
+                    self.setActive(False)
                     return
                 else: 
                     self.frameTimeLeft = self.texture.frameTime[ self.frameIndex ]

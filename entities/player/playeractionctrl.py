@@ -1,6 +1,5 @@
 from config import Config
 
-from entities.action import Action
 from entities.direction import Direction
 from entities.actionctrl import ActionCtrl
 from texture.characteranimationtype import CharacterAnimationType

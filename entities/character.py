@@ -11,7 +11,6 @@ from entities.player.playeractionctrl import PlayerActionCtrl
 from entities.entity import Entity
 from .characterweapon import CharacterWeapon
 from .characterstatus import CharacterStatus
-from .action import Action
 from .direction import Direction
 from sprite.speechsprite import SpeechSprite
 
@@ -26,8 +25,9 @@ class Character(Entity):
         self.spawnBoundaries = spawnBoundaries
 
         self.characterStatus = CharacterStatus()
+        self.speechSprite = SpeechSprite(parentEntity=self, displayText='')
+        self.speechSprite.setActive(False)
         self.characterWeapon = None # by children
-        self.aSprite = None
         self.actionCtrl = None # filled in children
 
 
@@ -46,9 +46,7 @@ class Character(Entity):
     def draw(self):
         super(Character, self).draw(self.win)
         self.characterWeapon.draw(self.win)
-
-        if self.aSprite is not None: 
-            self.aSprite.draw(self.win)
+        self.speechSprite.draw(self.win)
 
 
     def advance(self, deltaTime):
@@ -56,17 +54,12 @@ class Character(Entity):
 
         self.characterWeapon.advance(deltaTime) # update weapon (duration, sprite)
         self.characterStatus.advance(deltaTime) # update health, mana etc.
-
-        if self.aSprite is not None: # update additional sprites, if any
-            self.aSprite.advance(deltaTime)
-
-
-    def addSprite(self, sprite): 
-        self.aSprite = sprite
+        self.speechSprite.advance(deltaTime)
 
 
     def getRandomHead(self):
         return random.choice([ '^', 'o', 'O', 'v', 'V'])
+
 
     def getRandomBody(self): 
         return random.choice([ 'X', 'o', 'O', 'v', 'V'])

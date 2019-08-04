@@ -4,7 +4,6 @@ import logging
 
 from config import Config
 from sprite.phenomenasprite import PhenomenaSprite
-from .action import Action
 from .direction import Direction
 from .entity import Entity
 from .entitytype import EntityType

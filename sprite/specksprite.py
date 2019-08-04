@@ -1,7 +1,6 @@
 import curses
 
 from utilities.utilities import Utility
-from entities.action import Action
 
 
 class SpeckSprite(object): 

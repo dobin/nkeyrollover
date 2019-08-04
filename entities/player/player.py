@@ -2,7 +2,6 @@
 
 import curses
 import logging
-
 from enum import Enum
 
 from utilities.utilities import Utility
@@ -17,8 +16,8 @@ from sprite.speechsprite import SpeechSprite
 from sprite.charactersprite import CharacterSprite
 from texture.characteranimationtype import CharacterAnimationType
 
-
 logger = logging.getLogger(__name__)
+
 
 class Player(Character):
     def __init__(self, win, parent, spawnBoundaries, world):
@@ -70,8 +69,7 @@ class Player(Character):
                 self.actionCtrl.changeTo(CharacterAnimationType.shrugging, self.direction)
 
             if key == ord('w'):
-                #self.addSprite( SpeechSprite(None, parentEntity=self) )
-                pass
+                self.speechSprite.changeTexture('hoi')
 
             if key == ord('e'):
                 self.skillSwitchSide()
