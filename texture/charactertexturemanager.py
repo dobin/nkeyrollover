@@ -19,19 +19,22 @@ class CharacterTextureManager(object):
             self.animationsRight[animationType] = self.createTexture(animationType, Direction.right)
 
         if head is not None: 
-            self.updateAllTextures(1, 0, head)
+            self.updateAllTextures(1, 0, head, skip=CharacterAnimationType.dying)
 
         if body is not None:
             self.updateAllTextures(1, 1, body)
 
 
-    def updateAllTextures(self, x, y, char):
-        self.updateAllTexturesIn(x, y, char, self.animationsLeft)
-        self.updateAllTexturesIn(x, y, char, self.animationsRight)
+    def updateAllTextures(self, x, y, char, skip=None):
+        self.updateAllTexturesIn(x, y, char, self.animationsLeft, skip)
+        self.updateAllTexturesIn(x, y, char, self.animationsRight, skip)
 
 
-    def updateAllTexturesIn(self, x, y, char, animations):
+    def updateAllTexturesIn(self, x, y, char, animations, skip=None):
         for key in animations: 
+            if key == skip:
+                continue
+
             for texture in animations[key]: 
                 for animation in texture.arr:
                     animation[y][x] = char
