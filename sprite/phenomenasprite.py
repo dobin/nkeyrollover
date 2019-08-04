@@ -1,9 +1,12 @@
-
 from enum import Enum
+import logging
+
 from entities.action import Action
 from entities.direction import Direction
-
 from .arrsprite import ArrSprite
+
+logger = logging.getLogger(__name__)
+
 
 class PhenomenaSprite(ArrSprite): 
     def initSprite(self, action, direction, animationIndex):
@@ -59,32 +62,36 @@ class PhenomenaSprite(ArrSprite):
             self.height = texture['height']
             self.arr = texture['arr']
 
+
     def readfile(self, filename):
         lineList = [line.rstrip('\n') for line in open('sprite/textures/roflcopter.ascii')]
-
-
         res = []
 
-        max = 0
+        # find longest line to make texture
+        maxWidth = 0
         for line in lineList: 
-            if len(line) > max: 
-                max = len(line)
+            if len(line) > maxWidth: 
+                maxWidth = len(line)
 
 
+        maxHeight = 0
         tmp = []
         for line in lineList: 
             if line == '': 
                 res.append(tmp)
+                if len(tmp) > maxHeight: 
+                    maxHeight = len(tmp)
                 tmp = []
             else: 
-                line += ' ' * (max - len(line))
+                line += ' ' * (maxWidth - len(line))
                 tmp.append(list(line))
         res.append(tmp)
             
         texture = {
             'arr': res,
-            'width': max, 
-            'height': 0,
+            'width': maxWidth, 
+            'height': maxHeight,
         }
 
+        logging.info("Loaded {}: width={} height={} animations={}".format(filename, maxWidth, maxHeight, len(res)))
         return texture

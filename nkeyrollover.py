@@ -46,6 +46,7 @@ class Keyrollover(object):
         curses.cbreak()
         self.win.keypad(1) 
         curses.curs_set(0)    
+        self.win.nodelay(1) # make getch() nonblocking
 
         # Initialize color pairs
         curses.start_color()    
@@ -65,7 +66,6 @@ class Keyrollover(object):
 
         self.win.clear()
         self.win.border()
-        self.win.nodelay(1) # make getch() nonblocking
 
         self.world = World(win=self.win)
 
