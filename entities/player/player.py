@@ -47,6 +47,15 @@ class Player(Character):
                 self.actionCtrl.changeTo(Action.hitting, self.direction)
                 self.characterWeapon.doHit()
 
+            # game related
+            if key == ord('p'):
+                self.world.togglePause()
+
+            if key == 27: # esc
+                self.world.quitGame()
+
+
+            # player related
             if key == ord('q'):
                 self.actionCtrl.changeTo(Action.shrugging, self.direction)
 

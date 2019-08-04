@@ -49,10 +49,15 @@ class Scene(object):
             sprite.advance(deltaTime)
             sprite.draw(self.win)
 
-            timeEnd = time.time()
+            key = self.win.getch()
+            # self.win.refresh()
 
+            if key: 
+                break
+
+            timeEnd = time.time()
             workTime = timeEnd - timeStart
-            self.win.refresh()
+            
 
             time.sleep(targetFrameTime - workTime)
             self.win.addstr(6, 40, "Adventures of ASCIIMAN", curses.color_pair(3))

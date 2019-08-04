@@ -23,11 +23,22 @@ class World(object):
             world=self)
         self.director = Director(self.win, self)
 
+        self.pause = False
+        self.gameRunning = True
+
+
+    def togglePause(self): 
+        self.pause = not self.pause
+
+    def quitGame(self): 
+        self.gameRunning = False
+
 
     def drawWorld(self): 
         self.win.move(8, 1)
         self.win.hline('-', 78)
         self.drawDiagonal(8, 45, 15)
+
 
     def drawDiagonal(self, x, y, len):
         n = 0
@@ -43,6 +54,7 @@ class World(object):
                 '/', 
                 curses.color_pair(7))
 
+
     def draw(self):
         # order here is Z axis
         self.drawWorld()
@@ -52,9 +64,14 @@ class World(object):
         for sprite in self.sprites: 
             sprite.draw(self.win)
 
+        if self.pause: 
+            self.win.addstr(12, 40, "Paused", curses.color_pair(7))
 
 
     def advance(self, deltaTime):
+        if self.pause:
+            return
+
         self.player.advance(deltaTime)
         self.director.advanceEnemies(deltaTime)
 

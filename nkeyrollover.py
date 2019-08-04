@@ -80,7 +80,7 @@ class Keyrollover(object):
         timeStart = 0
         timeEnd = 0
         workTime = 0
-        while True:
+        while self.world.gameRunning:
             timeStart = time.time()
             self.win.erase()
             self.win.border()
@@ -101,8 +101,12 @@ class Keyrollover(object):
             if workTime > targetFrameTime:
                 logging.warn("Could not keep FPS!")
 
-            time.sleep(targetFrameTime - workTime)
-            n = n + 1
+            targetSleepTime = targetFrameTime - workTime
+            if targetSleepTime < 0:
+                logging.error("Sleep for negative amount: " + str(targetSleepTime))
+            else:
+                time.sleep(targetSleepTime)
+            n = n + 1 
 
         # Clean up before exiting
         curses.nocbreak()
@@ -120,7 +124,7 @@ class Keyrollover(object):
         s = "Health: " + str(self.world.player.characterStatus.health)
         s += "    Mana: " + str(self.world.player.characterStatus.mana)
         s += "    Points: " + str(self.world.player.characterStatus.points)
-        s += "    FPS: %.3f" % (fps)
+        s += "    FPS: %.0f" % (fps)
         self.win.addstr(1, 2, s, curses.color_pair(6) | curses.A_BOLD)
 
         self.win.border()
