@@ -61,7 +61,7 @@ class Keyrollover(object):
         speed = 1
 
         self.scene = Scene(self.win)
-        #scene.title()
+        self.scene.title()
 
         self.win.clear()
         self.win.border()

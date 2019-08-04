@@ -13,3 +13,5 @@ class Action(Enum):
     flying = 7
 
     spawning = 10
+
+    roflcopter = 20
