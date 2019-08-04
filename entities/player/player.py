@@ -33,13 +33,23 @@ class Player(Character):
         self.x = Config.playerSpawnPoint['x']
         self.y = Config.playerSpawnPoint['y']
 
+
     # game mechanics 
 
     def gmHandleHit(self, damage):
         self.characterStatus.getHit(damage)
         self.setColorFor( 1.0 - 1.0/damage , EntityType.takedamage)
 
-    # /game mechanics
+
+    # skills
+
+    def skillSwitchSide(self): 
+        if self.x < (Config.rows / 2):
+            self.x = Config.areaMoveable['maxx'] - self.x
+        else: 
+            self.x = (Config.areaMoveable['maxx'] - self.x)
+
+
 
     def getInput(self):
         key = self.win.getch()
@@ -62,6 +72,9 @@ class Player(Character):
 
             if key == ord('w'):
                 self.addSprite( SpeechSprite(None, parentEntity=self) )
+
+            if key == ord('e'):
+                self.skillSwitchSide()
 
             if key == curses.KEY_LEFT:
                 if Utility.isPointMovable(self.x - 1, self.y, self.sprite.width, self.sprite.height):
