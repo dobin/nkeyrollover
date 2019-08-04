@@ -21,11 +21,14 @@ class Director(object):
 
         n = 0
         while n < 16:
+            myx = 1
+            if n % 2 == 0:
+               myx = Config.columns + 1
+
             coordinates = {
-                'min_x': 30, 
-                'min_y': 10,
-                'max_x': Config.columns - 5,
-                'max_y': Config.rows - 5
+                'x': myx, 
+                'min_y': Config.areaMoveable['miny'],
+                'max_y': Config.areaMoveable['maxy'],
             }
             newEnemy = Enemy(win=self.win, parent=None, spawnBoundaries=coordinates, world=world)
             self.enemiesDead.append(newEnemy)

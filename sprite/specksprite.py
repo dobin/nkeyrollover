@@ -1,7 +1,8 @@
+import curses
 
+from utilities.utilities import Utility
 from entities.action import Action
 
-import curses
 
 class SpeckSprite(object): 
     def __init__(self, char, x, y, movementX, movementY, timeArr, effect): 
@@ -38,9 +39,15 @@ class SpeckSprite(object):
         if not self.isActive: 
             return
 
-        win.addch(
-                self.y, 
-                self.x,
-                self.char, 
-                curses.color_pair(1))
+        p = {
+            'x': self.x,
+            'y': self.y,
+        }
+
+        if Utility.isPointDrawable(p):
+            win.addch(
+                    self.y, 
+                    self.x,
+                    self.char, 
+                    curses.color_pair(1))
 
