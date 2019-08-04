@@ -97,11 +97,11 @@ class Player(Character):
                         self.x = self.x - 1
                         self.actionCtrl.changeTo(Action.walking, self.direction)
                         self.advanceStep()
-                    else:
-                        if Utility.isPointMovable(self.x, self.y + 1, self.sprite.width, self.sprite.height):
-                            self.y = self.y + 1
-                            self.actionCtrl.changeTo(Action.walking, self.direction)
-                            self.advanceStep()
+                else:
+                    if Utility.isPointMovable(self.x, self.y + 1, self.sprite.width, self.sprite.height):
+                        self.y = self.y + 1
+                        self.actionCtrl.changeTo(Action.walking, self.direction)
+                        self.advanceStep()
 
 
             key = self.win.getch()
