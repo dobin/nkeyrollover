@@ -35,8 +35,8 @@ class World(object):
 
 
     def drawWorld(self): 
-        self.win.move(8, 1)
-        self.win.hline('-', 78)
+        self.win.move(Config.areaMoveable['miny'], Config.areaMoveable['minx'])
+        self.win.hline('-', Config.columns - 2)
         self.drawDiagonal(8, 45, 15)
 
 

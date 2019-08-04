@@ -18,7 +18,7 @@ class CharacterSprite(ArrSprite):
             self.frameTime = []
             self.isActive = True
             self.advanceByStep = False
-            self.frameTime = None
+            self.frameTime = [ ]
             self.endless = True
 
             self.arr = [

@@ -1,6 +1,7 @@
 import curses
 import time
 import logging 
+from enum import Enum
 
 from config import Config
 from entities.entity import Entity
@@ -9,8 +10,16 @@ from entities.action import Action
 from entities.direction import Direction
 from sprite.charactersprite import CharacterSprite
 from sprite.phenomenasprite import PhenomenaSprite
+from utilities.timer import Timer
 
 logger = logging.getLogger(__name__)
+
+class SceneState(Enum): 
+    wait1 = 0       # wait 1s
+    flydown = 1     # fly heli down
+    drop = 2        # drop asciiman
+    flyup = 3       # fly up
+    done = 4        # start the game
 
 
 class Scene(object):
@@ -22,11 +31,11 @@ class Scene(object):
         self.win.border()
         self.win.refresh()    
 
-        self.loop()        
+        self.loop()
 
 
     def getLocation(self):
-        return { 'x': 15, 'y': 5}
+        return { 'x': 15, 'y': -5}
 
 
     def loop(self):
@@ -37,27 +46,78 @@ class Scene(object):
         targetFrameTime = 1.0 / Config.fps
         deltaTime = targetFrameTime # we try to keep it...
 
-        entity = Entity(self.win, self, EntityType.player)
-        sprite = PhenomenaSprite(Action.roflcopter, entity)
-        sprite.isActive = True
-        sprite.initSprite(Action.roflcopter, Direction.left, 0)
+        entityCopter = Entity(self.win, self, EntityType.player)
+        spriteCopter = PhenomenaSprite(Action.roflcopter, entityCopter)
+        spriteCopter.initSprite(Action.roflcopter, Direction.left, 0)
+        spriteCopter.setActive(False)
+
+        entityPlayer = Entity(self.win, self, EntityType.player)
+        spritePlayer = CharacterSprite(Action.roflcopter, entityPlayer)
+        spritePlayer.initSprite(Action.standing, Direction.left, 0)
+        spritePlayer.setActive(False)
+
+        myTimer = Timer(0.5)
+        state = SceneState.wait1
+        logging.debug("To State: Wait1")
 
         while True:
-            logging.info("Hmm")
             timeStart = time.time()
+            self.win.erase()
+            self.win.border()
 
+            # static
             self.win.addstr(5, 40, "N Key Rollover", curses.color_pair(3))
             self.win.addstr(6, 40, "Adventures of ASCIIMAN", curses.color_pair(3))
 
-            #if n % 50 == 0:
-            #    sprite.advanceStep()
-            sprite.advance(deltaTime)
-            sprite.draw(self.win)
+            # state
+            if state is SceneState.wait1:
+                # for next scene: Flydown
+                if myTimer.timeIsUp():
+                    state = SceneState.flydown
+                    myTimer.setTimer(0.1)
+                    spriteCopter.setActive(True)
+                    logging.debug("To State: Flydown")
+            elif state is SceneState.flydown:
+                if myTimer.timeIsUp():
+                    myTimer.reset()
+                    entityCopter.offsetY += 1
 
+                # for next scene: Drop
+                if entityCopter.offsetY == 12: 
+                    myTimer.setTimer(0.1)
+                    logging.debug("To State: Drop")
+                    state = SceneState.drop
+                    entityPlayer.offsetY = 18
+                    entityPlayer.offsetX = 8
+                    spritePlayer.setActive(True)                    
+
+            elif state is SceneState.drop: 
+                # for next scene: Flyup
+                if myTimer.timeIsUp():
+                    myTimer.reset()
+                    entityCopter.offsetY -= 1
+
+                if entityCopter.offsetY == -5:
+                    state = SceneState.done
+
+            elif state is SceneState.done: 
+                logging.info("A: " + str(entityPlayer.getLocation()))
+                break
+
+            # elements
+            spritePlayer.advance(deltaTime)
+            spritePlayer.draw(self.win)            
+            spriteCopter.advance(deltaTime)
+            spriteCopter.draw(self.win)
+
+
+            # input
             key = self.win.getch()
-            # self.win.refresh()
             if key != -1:
                 break
+
+            # advance
+            myTimer.advance(deltaTime)
 
             timeEnd = time.time()
             workTime = timeEnd - timeStart

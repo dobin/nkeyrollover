@@ -5,6 +5,8 @@ from enum import Enum
 from entities.entity import Entity
 from entities.action import Action
 from entities.direction import Direction
+from config import Config
+from utilities.utilities import Utility
 
 logger = logging.getLogger(__name__)
 
@@ -48,9 +50,17 @@ class ArrSprite(object):
         self.frameIndex = (self.frameIndex + 1) % self.frameCount
  
 
+    def setActive(self, active):
+        self.isActive = active
+        
+
+    def active(self):
+        return self.isActive
+
+
     def advance(self, deltaTime):
         # no need to advance stuff which is forever
-        if self.frameTime is None and self.endless == True: 
+        if (self.frameTime is None or len(self.frameTime) == 0) and self.endless == True: 
             return
 
         # not active, no work
@@ -108,11 +118,17 @@ class ArrSprite(object):
         for (y, rows) in enumerate(self.arr[ self.frameIndex ]):
             for (x, column) in enumerate(rows):
                 if column is not '':
-                    win.addstr(
-                        pos['y'] + y, 
-                        pos['x'] + x,
-                        column, 
-                        self.parent.currentColor)
+                    p = {
+                        'x': pos['x'] + x,
+                        'y': pos['y'] + y,
+                    }
+
+                    if Utility.isPointDrawable(p):
+                        win.addstr(
+                            p['y'],
+                            p['x'],
+                            column, 
+                            self.parent.currentColor)
 
 
     def getCurrentFrameCopy(self): 

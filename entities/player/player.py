@@ -5,6 +5,7 @@ import logging
 
 from enum import Enum
 
+from utilities.utilities import Utility
 from config import Config
 from .playeractionctrl import PlayerActionCtrl
 from .playerweapon import PlayerWeapon
@@ -27,10 +28,10 @@ class Player(Character):
         self.characterWeapon = PlayerWeapon(win=win, parentCharacter=self)
 
         # first action is standing around
-        self.actionCtrl.changeTo(Action.walking, Direction.left)
+        self.actionCtrl.changeTo(Action.standing, Direction.right)
 
-        self.x = 10
-        self.y = 10
+        self.x = Config.playerSpawnPoint['x']
+        self.y = Config.playerSpawnPoint['y']
 
     # game mechanics 
 
@@ -63,27 +64,45 @@ class Player(Character):
                 self.addSprite( SpeechSprite(None, parentEntity=self) )
 
             if key == curses.KEY_LEFT:
-                if self.x > 1:
+                if Utility.isPointMovable(self.x - 1, self.y, self.sprite.width, self.sprite.height):
                     self.x = self.x - 1
                     self.direction = Direction.left
                     self.actionCtrl.changeTo(Action.walking, self.direction)
                     self.advanceStep()
-            if key == curses.KEY_RIGHT: 
-                if self.x < Config.columns - self.sprite.width - 1:
+
+            elif key == curses.KEY_RIGHT: 
+                if Utility.isPointMovable(self.x + 1, self.y, self.sprite.width, self.sprite.height):
                     self.x = self.x + 1
                     self.direction = Direction.right
                     self.actionCtrl.changeTo(Action.walking, self.direction)
                     self.advanceStep()
-            if key == curses.KEY_UP: 
-                if self.y > 2:
-                    self.y = self.y - 1
-                    self.actionCtrl.changeTo(Action.walking, self.direction)
-                    self.advanceStep()
-            if key == curses.KEY_DOWN: 
-                if self.y < Config.rows - self.sprite.height - 1:
-                    self.y = self.y + 1
-                    self.actionCtrl.changeTo(Action.walking, self.direction)
-                    self.advanceStep()
+
+            elif key == curses.KEY_UP:
+                if Config.moveDiagonal:
+                    if Utility.isPointMovable(self.x +1 , self.y - 1, self.sprite.width, self.sprite.height):
+                        self.y = self.y - 1
+                        self.x = self.x + 1
+                        self.actionCtrl.changeTo(Action.walking, self.direction)
+                        self.advanceStep()
+                else: 
+                    if Utility.isPointMovable(self.x, self.y - 1, self.sprite.width, self.sprite.height):
+                        self.y = self.y - 1
+                        self.actionCtrl.changeTo(Action.walking, self.direction)
+                        self.advanceStep()
+
+            elif key == curses.KEY_DOWN: 
+                if Config.moveDiagonal:
+                    if Utility.isPointMovable(self.x - 1, self.y + 1, self.sprite.width, self.sprite.height):
+                        self.y = self.y + 1
+                        self.x = self.x - 1
+                        self.actionCtrl.changeTo(Action.walking, self.direction)
+                        self.advanceStep()
+                    else:
+                        if Utility.isPointMovable(self.x, self.y + 1, self.sprite.width, self.sprite.height):
+                            self.y = self.y + 1
+                            self.actionCtrl.changeTo(Action.walking, self.direction)
+                            self.advanceStep()
+
 
             key = self.win.getch()
 
