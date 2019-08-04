@@ -19,8 +19,8 @@ logger = logging.getLogger(__name__)
 class Character(Entity):
     """ A character is either a player or an enemy"""
 
-    def __init__(self, win, parent, spawnBoundaries, world, type):
-        super(Character, self).__init__(win, parent, type)
+    def __init__(self, win, parent, spawnBoundaries, world, entityType):
+        super(Character, self).__init__(win, parent, entityType)
         self.world = world
         self.spawnBoundaries = spawnBoundaries
 

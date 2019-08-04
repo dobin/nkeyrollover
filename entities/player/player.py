@@ -50,7 +50,6 @@ class Player(Character):
             self.x = (Config.areaMoveable['maxx'] - self.x)
 
 
-
     def getInput(self):
         key = self.win.getch()
         while key != -1:
