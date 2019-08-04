@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import random
 import curses
 import logging
 
@@ -62,3 +63,10 @@ class Character(Entity):
 
     def addSprite(self, sprite): 
         self.aSprite = sprite
+
+
+    def getRandomHead(self):
+        return random.choice([ '^', 'o', 'O', 'v', 'V'])
+
+    def getRandomBody(self): 
+        return random.choice([ 'X', 'o', 'O', 'v', 'V'])

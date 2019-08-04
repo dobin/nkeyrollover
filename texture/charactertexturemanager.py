@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class CharacterTextureManager(object): 
-    def __init__(self):
+    def __init__(self, head=None, body=None):
         self.animationsLeft = {}
         self.animationsRight = {}
 
@@ -17,6 +17,24 @@ class CharacterTextureManager(object):
 
         for animationType in CharacterAnimationType:
             self.animationsRight[animationType] = self.createTexture(animationType, Direction.right)
+
+        if head is not None: 
+            self.updateAllTextures(1, 0, head)
+
+        if body is not None:
+            self.updateAllTextures(1, 1, body)
+
+
+    def updateAllTextures(self, x, y, char):
+        self.updateAllTexturesIn(x, y, char, self.animationsLeft)
+        self.updateAllTexturesIn(x, y, char, self.animationsRight)
+
+
+    def updateAllTexturesIn(self, x, y, char, animations):
+        for key in animations: 
+            for texture in animations[key]: 
+                for animation in texture.arr:
+                    animation[y][x] = char
 
 
     def getTexture(self, characterAnimationType, direction, subtype=0):

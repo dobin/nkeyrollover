@@ -10,11 +10,10 @@ logger = logging.getLogger(__name__)
 
 
 class CharacterSprite(ArrSprite):
-    def __init__(self, parentEntity=None, characterAnimationType=None, direction=None):
+    def __init__(self, parentEntity=None, characterAnimationType=None, direction=None, head=None, body=None):
         super(CharacterSprite, self).__init__(parentEntity)
-        self.init()
 
-        self.characterTextureManager = CharacterTextureManager()
+        self.characterTextureManager = CharacterTextureManager(head, body)
         if characterAnimationType is not None: 
             self.changeTexture(characterAnimationType, direction)
 

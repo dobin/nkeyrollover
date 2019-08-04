@@ -21,7 +21,11 @@ class Enemy(Character):
     def __init__(self, win, parent, spawnBoundaries, world):
         Character.__init__(self, win, parent, spawnBoundaries, world, EntityType.enemy)
         self.player = world.getPlayer()
-        self.sprite = CharacterSprite(parentEntity=self, characterAnimationType=CharacterAnimationType.standing)
+        self.sprite = CharacterSprite(
+            parentEntity=self, 
+            characterAnimationType=CharacterAnimationType.standing,
+            head=self.getRandomHead(), 
+            body=self.getRandomBody())
         self.lastInputTimer = Timer(1.0)
         self.characterWeapon = EnemyWeapon(win=win, parentCharacter=self)
 
