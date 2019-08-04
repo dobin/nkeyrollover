@@ -8,6 +8,7 @@ from .action import Action
 from .direction import Direction
 from .entity import Entity
 from .entitytype import EntityType
+from texture.phenomenatype import PhenomenaType
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +19,7 @@ logger = logging.getLogger(__name__)
 class CharacterWeapon(Entity):
     def __init__(self, win, parentCharacter):
         super(CharacterWeapon, self).__init__(win, parentCharacter, EntityType.weapon)
-        self.sprite = PhenomenaSprite(action=Action.hit, parentEntity=self)
+        self.sprite = PhenomenaSprite(phenomenaType=PhenomenaType.hit, parentEntity=self)
         self.reset()
 
     

@@ -15,39 +15,32 @@ class ArrSprite(object):
     # abstract class
     # cant be used really as no animation is stored in arr
     # initSprite needs to be overwritten to make it work
-    def __init__(self, action=None, parentEntity=None):
-        self.type = action
-        self.initSprite(action=None, direction=Direction.right, animationIndex=None)
+    def __init__(self, parentEntity=None):
+        self.texture = None
 
         if not isinstance(parentEntity, Entity):
-            logging.error("Tried to use non-Entity class as parent")
+            logging.error("ArrSprite: Tried to use non-Entity class as parent: " + str(parentEntity))
         else:
             # our position is relative to this
             # if None, its absolute
             self.parent = parentEntity
-        
 
-    def initSprite(self, action, direction, animationIndex):
-        self.width = 0
-        self.height = 0
-        self.frameCount = 0
+        self.init()
+
+    
+    def init(self):
         self.frameIndex = 0
-        self.frameTime = 0
-        self.isActive = False
-        self.advanceByStep = False
-        self.endless = False
-        self.frameTime = []
-        self.arr = []
+        self.frameTimeLeft = 0        
+        self.isActive = True
         self.xoffset = 0
         self.yoffset = 0
-        self.frameTimeLeft = 0
 
 
     def advanceStep(self):
-        if not self.advanceByStep: 
+        if not self.texture.advanceByStep:
             return
 
-        self.frameIndex = (self.frameIndex + 1) % self.frameCount
+        self.frameIndex = (self.frameIndex + 1) % self.texture.frameCount
  
 
     def setActive(self, active):
@@ -59,8 +52,11 @@ class ArrSprite(object):
 
 
     def advance(self, deltaTime):
+        if self.texture is None: 
+            return
+
         # no need to advance stuff which is forever
-        if (self.frameTime is None or len(self.frameTime) == 0) and self.endless == True: 
+        if (self.texture.frameTime is None or len(self.texture.frameTime) == 0) and self.texture.endless == True: 
             return
 
         # not active, no work
@@ -68,25 +64,25 @@ class ArrSprite(object):
             return
 
         # done in advanceStep()
-        if self.advanceByStep: 
+        if self.texture.advanceByStep: 
             return
 
         self.frameTimeLeft -= deltaTime
         if self.frameTimeLeft <= 0:
             # animation ended, check if we need to restart it, 
             # or take the next one
-            if self.endless:
+            if self.texture.endless:
                 # endless, just advance
-                self.frameIndex = (self.frameIndex + 1) % self.frameCount
-                self.frameTimeLeft = self.frameTime[ self.frameIndex ]
+                self.frameIndex = (self.frameIndex + 1) % self.texture.frameCount
+                self.frameTimeLeft = self.texture.frameTime[ self.frameIndex ]
             else:
                 # check if it is the last animation, if yes stop it
-                if self.frameIndex == self.frameCount - 1:
+                if self.frameIndex == self.texture.frameCount - 1:
                     self.isActive = False
                     return
                 else: 
-                    self.frameTimeLeft = self.frameTime[ self.frameIndex ]
-                    self.frameIndex = (self.frameIndex + 1) % self.frameCount
+                    self.frameTimeLeft = self.texture.frameTime[ self.frameIndex ]
+                    self.frameIndex = (self.frameIndex + 1) % self.texture.frameCount
     
 
     def getLocation(self): 
@@ -103,7 +99,7 @@ class ArrSprite(object):
 
     def getAnimationTime(self): 
         n = 0.0
-        for time in self.frameTime: 
+        for time in self.texture.frameTime: 
             n += time
         return n
 
@@ -115,7 +111,7 @@ class ArrSprite(object):
 
         pos = self.getLocation()
 
-        for (y, rows) in enumerate(self.arr[ self.frameIndex ]):
+        for (y, rows) in enumerate(self.texture.arr[ self.frameIndex ]):
             for (x, column) in enumerate(rows):
                 if column is not '':
                     p = {
@@ -132,4 +128,4 @@ class ArrSprite(object):
 
 
     def getCurrentFrameCopy(self): 
-        return self.arr[self.frameIndex].copy()
+        return self.texture.arr[self.frameIndex].copy()

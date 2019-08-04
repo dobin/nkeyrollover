@@ -1,5 +1,5 @@
 from entities.characterweapon import CharacterWeapon 
-from entities.action import Action
+from texture.phenomenatype import PhenomenaType
 
 class PlayerWeapon(CharacterWeapon): 
    def doHit(self):
@@ -9,4 +9,4 @@ class PlayerWeapon(CharacterWeapon):
 
         self.isActive = True
         self.durationTimer.reset()
-        self.sprite.initSprite(Action.hit, self.parent.direction, None)
+        self.sprite.changeTexture(PhenomenaType.hit, self.parent.direction)

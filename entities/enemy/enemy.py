@@ -4,7 +4,6 @@ import logging
 from sprite.charactersprite import CharacterSprite
 from entities.player.player import Player
 from entities.direction import Direction
-from entities.action import Action
 from entities.character import Character
 from .enemyweapon import EnemyWeapon
 from config import Config
@@ -13,6 +12,7 @@ from utilities.utilities import Utility
 from entities.entitytype import EntityType
 from ai.brain import Brain
 import entities.enemy.aifsm as aifsm
+from texture.characteranimationtype import CharacterAnimationType
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ class Enemy(Character):
     def __init__(self, win, parent, spawnBoundaries, world):
         Character.__init__(self, win, parent, spawnBoundaries, world, EntityType.enemy)
         self.player = world.getPlayer()
-        self.sprite = CharacterSprite(parentEntity=self)
+        self.sprite = CharacterSprite(parentEntity=self, characterAnimationType=CharacterAnimationType.standing)
         self.lastInputTimer = Timer(1.0)
         self.characterWeapon = EnemyWeapon(win=win, parentCharacter=self)
 
@@ -80,13 +80,13 @@ class Enemy(Character):
     ### AI
 
     def sSpawnInit(self): 
-        self.sprite.initSprite(Action.standing, self.direction, None)
+        self.sprite.changeTexture(CharacterAnimationType.standing, self.direction)
         self.setActive(True)
     
     
     def sAttackInit(self):
         self.attackTimer.init()
-        self.sprite.initSprite(Action.hitting, self.direction, None)
+        self.sprite.changeTexture(CharacterAnimationType.hitting, self.direction)
 
 
     def sAttack(self):
@@ -98,7 +98,7 @@ class Enemy(Character):
 
     def sWanderInit(self):
         self.wanderTimer.init()
-        self.sprite.initSprite(Action.walking, self.direction, None)
+        self.sprite.changeTexture(CharacterAnimationType.walking, self.direction)
 
     def sWander(self): 
         if self.wanderTimer.timeIsUp(): 
@@ -110,7 +110,7 @@ class Enemy(Character):
 
     def sChaseInit(self):
         self.chaseTimer.init()
-        self.sprite.initSprite(Action.walking, self.direction, None)
+        self.sprite.changeTexture(CharacterAnimationType.walking, self.direction)
 
     def sChase(self): 
         if self.chaseTimer.timeIsUp(): 
@@ -122,14 +122,14 @@ class Enemy(Character):
 
     def sDyingInit(self): 
         if random.choice([True, False]): 
-            animationIndex = 2
             logger.info("Death animation deluxe")
+            animationIndex = random.randint(0, 1)
             self.world.makeExplode(self.sprite, self.direction, None)
-            self.sprite.initSprite(Action.dying, self.direction, animationIndex)
+            self.sprite.changeTexture(CharacterAnimationType.dying, self.direction, animationIndex)
             self.setActive(False)
         else: 
             animationIndex = random.randint(0, 1)
-            self.sprite.initSprite(Action.dying, self.direction, animationIndex)
+            self.sprite.changeTexture(CharacterAnimationType.dying, self.direction, animationIndex)
 
 
     def sDying(self): 
@@ -153,7 +153,7 @@ class Enemy(Character):
         # if death animation was deluxe, there is no frame in the sprite
         # upon spawning, and an exception is thrown
         # change following two when fixed TODO
-        self.sprite.initSprite(Action.standing, self.direction, None)
+        self.sprite.changeTexture(CharacterAnimationType.standing, self.direction)
         self.setActive(True)
 
         self.brain.pop()
@@ -194,7 +194,7 @@ class Enemy(Character):
         playerLocation = self.player.getLocation()
 
         if playerLocation['x'] > self.x:
-            if self.x < Config.columns - self.sprite.width - 1:
+            if self.x < Config.columns - self.sprite.texture.width - 1:
                 self.x += 1
                 self.direction = Direction.right
         else: 
@@ -203,7 +203,7 @@ class Enemy(Character):
                 self.direction = Direction.left
 
         if playerLocation['y'] > self.y:
-            if self.y < Config.rows - self.sprite.height - 1:
+            if self.y < Config.rows - self.sprite.texture.height - 1:
                 self.y += 1
         else: 
             if self.y > 2:
@@ -241,7 +241,7 @@ class Enemy(Character):
 
 
         if playerLocation['x'] > self.x:
-            if self.x < Config.columns - self.sprite.width - 1:
+            if self.x < Config.columns - self.sprite.texture.width - 1:
                 self.x += 1
                 self.direction = Direction.right
         else: 
@@ -250,7 +250,7 @@ class Enemy(Character):
                 self.direction = Direction.left
 
         if playerLocation['y'] > self.y:
-            if self.y < Config.rows - self.sprite.height - 1:
+            if self.y < Config.rows - self.sprite.texture.height - 1:
                 self.y += 1
         else: 
             if self.y > 2:

@@ -25,7 +25,7 @@ class Utility(object):
     @staticmethod
     def pointInSprite(coord1, sprite2):
         coord2 = sprite2.getLocation()
-        if coord1['x'] >= coord2['x'] and coord1['x'] < coord2['x'] + sprite2.width and coord1['y'] >= coord2['y'] and coord1['y'] < coord2['y'] + sprite2.height:
+        if coord1['x'] >= coord2['x'] and coord1['x'] < coord2['x'] + sprite2.texture.width and coord1['y'] >= coord2['y'] and coord1['y'] < coord2['y'] + sprite2.texture.height:
             return True
         else: 
             return False

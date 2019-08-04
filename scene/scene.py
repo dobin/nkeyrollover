@@ -6,8 +6,9 @@ from enum import Enum
 from config import Config
 from entities.entity import Entity
 from entities.entitytype import EntityType
-from entities.action import Action
+from texture.phenomenatype import PhenomenaType
 from entities.direction import Direction
+from texture.characteranimationtype import CharacterAnimationType
 from sprite.charactersprite import CharacterSprite
 from sprite.phenomenasprite import PhenomenaSprite
 from utilities.timer import Timer
@@ -47,13 +48,11 @@ class Scene(object):
         deltaTime = targetFrameTime # we try to keep it...
 
         entityCopter = Entity(self.win, self, EntityType.player)
-        spriteCopter = PhenomenaSprite(Action.roflcopter, entityCopter)
-        spriteCopter.initSprite(Action.roflcopter, Direction.left, 0)
+        spriteCopter = PhenomenaSprite(phenomenaType=PhenomenaType.roflcopter, parentEntity=entityCopter)
         spriteCopter.setActive(False)
 
         entityPlayer = Entity(self.win, self, EntityType.player)
-        spritePlayer = CharacterSprite(Action.roflcopter, entityPlayer)
-        spritePlayer.initSprite(Action.standing, Direction.left, 0)
+        spritePlayer = CharacterSprite(characterAnimationType=CharacterAnimationType.standing, parentEntity=entityPlayer)
         spritePlayer.setActive(False)
 
         myTimer = Timer(0.5)

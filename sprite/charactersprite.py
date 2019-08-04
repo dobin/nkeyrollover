@@ -1,171 +1,32 @@
 from enum import Enum
+import logging
 
 from entities.action import Action
 from entities.direction import Direction
 from .arrsprite import ArrSprite
+from texture.charactertexturemanager import CharacterTextureManager
 
-class CharacterSprite(ArrSprite): 
-    def initSprite(self, action, direction, animationIndex):
-        super(CharacterSprite, self).initSprite(action=action, direction=None, animationIndex=None)
+logger = logging.getLogger(__name__)
+
+
+class CharacterSprite(ArrSprite):
+    def __init__(self, parentEntity=None, characterAnimationType=None, direction=None):
+        super(CharacterSprite, self).__init__(parentEntity)
+        self.init()
+
+        self.characterTextureManager = CharacterTextureManager()
+        if characterAnimationType is not None: 
+            self.changeTexture(characterAnimationType, direction)
+
+
+    def changeTexture(self, characterAnimationType, direction, subtype=0):
+        self.init()
+        self.texture = self.characterTextureManager.getTexture(characterAnimationType, direction, subtype)
         self.xoffset = 0
         self.yoffset = 0
 
-        if action is Action.standing:
-            self.width = 3
-            self.height = 3
-            self.frameCount = 1
-            self.frameIndex = 0
-            self.frameTime = []
-            self.isActive = True
-            self.advanceByStep = False
-            self.frameTime = [ ]
-            self.endless = True
+        if not self.texture.endless and self.texture.frameTime:
+            self.frameTimeLeft = self.texture.frameTime[self.frameIndex]
 
-            self.arr = [
-                [
-                    [ '', 'o', '' ],
-                    [ '/', '|', '\\'],
-                    [ '/', '', '\\']
-                ]
-            ]
+        
 
-        if action is Action.walking:
-            self.width = 3
-            self.height = 3
-            self.frameCount = 2
-            self.frameIndex = 0
-            self.isActive = True
-            self.frameTime = [
-                0.01, 
-                0.01
-            ]
-            self.frameTimeLeft = self.frameTime[self.frameIndex]
-            self.endless = True
-            self.advanceByStep = True
-
-            if direction is Direction.right:
-                self.arr = [
-                    [
-                        [ '', 'O', '' ],
-                        [ '/', '|', '\\'],
-                        [ '', '|', '\\']
-                    ],
-                    [
-                        [ '', 'o', '' ],
-                        [ '/', '|', '\\'],
-                        [ '/', '|', '']
-                    ]                
-                ]
-            else: 
-                self.arr = [
-                    [
-                        [ '', 'o', '' ],
-                        [ '/', '|', '\\'],
-                        [ '/', '|', '']
-                    ],
-                    [
-                        [ '', 'O', '' ],
-                        [ '/', '|', '\\'],
-                        [ '', '|', '\\']
-                    ]
-                ]                
-
-        if action is Action.hitting:
-            self.width = 3
-            self.height = 3
-            self.endless = False
-            self.frameCount = 2
-            self.frameIndex = 0
-            self.frameTime = [
-                1.0, 
-                1.0
-            ]
-            self.frameTimeLeft = self.frameTime[self.frameIndex]
-            self.isActive = True
-            self.advanceByStep = False
-
-            if direction is Direction.right:
-                self.arr = [
-                    [
-                        [ '', 'o', '' ],
-                        [ '/', '|', '-'],
-                        [ '/', '', '\\']
-                    ],
-                    [
-                        [ '', 'o', '' ],
-                        [ '/', '|', '+'],
-                        [ '/', '', '\\']
-                    ]
-                ]
-            else: 
-                self.arr = [
-                    [
-                        [ '', 'o', '' ],
-                        [ '-', '|', '\\'],
-                        [ '/', '', '\\']
-                    ],
-                    [
-                        [ '', 'o', '' ],
-                        [ '+', '|', '\\'],
-                        [ '/', '', '\\']
-                    ]
-                ]
-
-        if action is Action.shrugging:
-            self.width = 3
-            self.height = 3
-            self.frameCount = 2
-            self.frameIndex = 1
-            self.endless = True
-            self.isActive = True
-            self.advanceByStep = False
-
-            self.frameTime = [
-                0.1,
-                0.5
-            ]
-            self.frameTimeLeft = self.frameTime[self.frameIndex]
-
-            self.arr = [
-                [
-                    [ '', 'o', '' ],
-                    [ '/', '|', '\\'],
-                    [ '/', '', '\\']
-                ],
-                [
-                    [ '', 'o', '' ],
-                    [ '^', '|', '^'],
-                    [ '/', '', '\\']
-                ]                
-            ]
-
-
-        if action is Action.dying:
-            self.width = 3
-            self.height = 3
-            self.frameCount = 1
-            self.frameIndex = 0
-            self.frameTime = []
-            self.isActive = True
-            self.advanceByStep = False
-            self.frameTime = None
-            self.endless = True
-
-            if animationIndex == 0:
-                self.arr = [
-                    [
-                        [ '', 'x', '' ],
-                        [ '/', '|', '\\'],
-                        [ '/', '', '\\']
-                    ]
-                ]
-            elif animationIndex == 1: 
-                self.arr = [
-                    [
-                        [ '', 'X', '' ],
-                        [ '/', '|', '\\'],
-                        [ '/', '', '\\']
-                    ]
-                ]
-            elif animationIndex == 2:
-                pass

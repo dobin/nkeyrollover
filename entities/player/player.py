@@ -10,12 +10,12 @@ from config import Config
 from .playeractionctrl import PlayerActionCtrl
 from .playerweapon import PlayerWeapon
 from entities.characterstatus import CharacterStatus
-from entities.action import Action
 from entities.direction import Direction
 from entities.character import Character
 from entities.entitytype import EntityType
 from sprite.speechsprite import SpeechSprite
 from sprite.charactersprite import CharacterSprite
+from texture.characteranimationtype import CharacterAnimationType
 
 
 logger = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ class Player(Character):
         self.characterWeapon = PlayerWeapon(win=win, parentCharacter=self)
 
         # first action is standing around
-        self.actionCtrl.changeTo(Action.standing, Direction.right)
+        self.actionCtrl.changeTo(CharacterAnimationType.standing, Direction.right)
 
         self.x = Config.playerSpawnPoint['x']
         self.y = Config.playerSpawnPoint['y']
@@ -54,7 +54,7 @@ class Player(Character):
         key = self.win.getch()
         while key != -1:
             if key == ord(' '):
-                self.actionCtrl.changeTo(Action.hitting, self.direction)
+                self.actionCtrl.changeTo(CharacterAnimationType.hitting, self.direction)
                 self.characterWeapon.doHit()
 
             # game related
@@ -67,52 +67,53 @@ class Player(Character):
 
             # player related
             if key == ord('q'):
-                self.actionCtrl.changeTo(Action.shrugging, self.direction)
+                self.actionCtrl.changeTo(CharacterAnimationType.shrugging, self.direction)
 
             if key == ord('w'):
-                self.addSprite( SpeechSprite(None, parentEntity=self) )
+                #self.addSprite( SpeechSprite(None, parentEntity=self) )
+                pass
 
             if key == ord('e'):
                 self.skillSwitchSide()
 
             if key == curses.KEY_LEFT:
-                if Utility.isPointMovable(self.x - 1, self.y, self.sprite.width, self.sprite.height):
+                if Utility.isPointMovable(self.x - 1, self.y, self.sprite.texture.width, self.sprite.texture.height):
                     self.x = self.x - 1
                     self.direction = Direction.left
-                    self.actionCtrl.changeTo(Action.walking, self.direction)
+                    self.actionCtrl.changeTo(CharacterAnimationType.walking, self.direction)
                     self.advanceStep()
 
             elif key == curses.KEY_RIGHT: 
-                if Utility.isPointMovable(self.x + 1, self.y, self.sprite.width, self.sprite.height):
+                if Utility.isPointMovable(self.x + 1, self.y, self.sprite.texture.width, self.sprite.texture.height):
                     self.x = self.x + 1
                     self.direction = Direction.right
-                    self.actionCtrl.changeTo(Action.walking, self.direction)
+                    self.actionCtrl.changeTo(CharacterAnimationType.walking, self.direction)
                     self.advanceStep()
 
             elif key == curses.KEY_UP:
                 if Config.moveDiagonal:
-                    if Utility.isPointMovable(self.x +1 , self.y - 1, self.sprite.width, self.sprite.height):
+                    if Utility.isPointMovable(self.x +1 , self.y - 1, self.sprite.texture.width, self.sprite.texture.height):
                         self.y = self.y - 1
                         self.x = self.x + 1
-                        self.actionCtrl.changeTo(Action.walking, self.direction)
+                        self.actionCtrl.changeTo(CharacterAnimationType.walking, self.direction)
                         self.advanceStep()
                 else: 
-                    if Utility.isPointMovable(self.x, self.y - 1, self.sprite.width, self.sprite.height):
+                    if Utility.isPointMovable(self.x, self.y - 1, self.sprite.texture.width, self.sprite.texture.height):
                         self.y = self.y - 1
-                        self.actionCtrl.changeTo(Action.walking, self.direction)
+                        self.actionCtrl.changeTo(CharacterAnimationType.walking, self.direction)
                         self.advanceStep()
 
             elif key == curses.KEY_DOWN: 
                 if Config.moveDiagonal:
-                    if Utility.isPointMovable(self.x - 1, self.y + 1, self.sprite.width, self.sprite.height):
+                    if Utility.isPointMovable(self.x - 1, self.y + 1, self.sprite.texture.width, self.sprite.texture.height):
                         self.y = self.y + 1
                         self.x = self.x - 1
-                        self.actionCtrl.changeTo(Action.walking, self.direction)
+                        self.actionCtrl.changeTo(CharacterAnimationType.walking, self.direction)
                         self.advanceStep()
                 else:
-                    if Utility.isPointMovable(self.x, self.y + 1, self.sprite.width, self.sprite.height):
+                    if Utility.isPointMovable(self.x, self.y + 1, self.sprite.texture.width, self.sprite.texture.height):
                         self.y = self.y + 1
-                        self.actionCtrl.changeTo(Action.walking, self.direction)
+                        self.actionCtrl.changeTo(CharacterAnimationType.walking, self.direction)
                         self.advanceStep()
 
 
@@ -130,6 +131,6 @@ class Player(Character):
 
         logger.info("P New player at: " + str(self.x) + " / " + str(self.y))
         self.characterStatus.init()
-        self.actionCtrl.changeTo(Action.standing, None)
+        self.actionCtrl.changeTo(CharacterAnimationType.standing, None)
 
         
