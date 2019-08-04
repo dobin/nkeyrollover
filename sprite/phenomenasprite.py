@@ -19,6 +19,4 @@ class PhenomenaSprite(ArrSprite):
 
     def changeTexture(self, phenomenaType, direction):
         self.texture = self.phenomenaTextureManager.getTexture(phenomenaType, direction)
-        self.xoffset = 0
-        self.yoffset = 0
-
+        self.init()
