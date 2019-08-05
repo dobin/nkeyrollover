@@ -9,7 +9,6 @@ from enum import Enum
 from config import Config
 from entities.player.playeractionctrl import PlayerActionCtrl
 from entities.entity import Entity
-from .characterweapon import CharacterWeapon
 from .characterstatus import CharacterStatus
 from .direction import Direction
 from sprite.speechsprite import SpeechSprite
@@ -19,8 +18,8 @@ logger = logging.getLogger(__name__)
 class Character(Entity):
     """ A character is either a player or an enemy"""
 
-    def __init__(self, win, parent, spawnBoundaries, world, entityType):
-        super(Character, self).__init__(win, parent, entityType)
+    def __init__(self, win, parentEntity, spawnBoundaries, world, entityType):
+        super(Character, self).__init__(win, parentEntity, entityType)
         self.world = world
         self.spawnBoundaries = spawnBoundaries
 

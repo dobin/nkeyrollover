@@ -20,8 +20,9 @@ logger = logging.getLogger(__name__)
 
 
 class Player(Character):
-    def __init__(self, win, parent, spawnBoundaries, world):
-        Character.__init__(self, win, parent, spawnBoundaries, world, EntityType.player)
+    def __init__(self, win, parentEntity, spawnBoundaries, world):
+        Character.__init__(self, win, parentEntity, spawnBoundaries, world, EntityType.player)
+        
         self.actionCtrl = PlayerActionCtrl(parentEntity=self, world=world)
         self.sprite = CharacterSprite(parentEntity=self)
         self.characterWeapon = PlayerWeapon(win=win, parentCharacter=self)

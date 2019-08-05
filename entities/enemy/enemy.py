@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 class Enemy(Character):
     def __init__(self, win, parent, spawnBoundaries, world, name):
         Character.__init__(self, win, parent, spawnBoundaries, world, EntityType.enemy)
+        
         self.player = world.getPlayer()
         self.sprite = CharacterSprite(
             parentEntity=self, 

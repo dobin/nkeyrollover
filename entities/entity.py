@@ -9,10 +9,17 @@ logger = logging.getLogger(__name__)
 
 
 class Entity(object):
-    def __init__(self, win, parent, entityType):
+    def __init__(self, win, parentEntity, entityType):
         self.win = win
-        self.parent = parent
         self.sprite = None
+
+        self.parentEntity = None
+        self.parentEntity = parentEntity
+        #if parentEntity is not None:
+        #    if not isinstance(parentEntity, Entity):
+        #        raise ValueError("Entity: Tried to use non-Entity class as parent: " + str(parentEntity))
+        #    else: 
+        #        self.parentEntity = parentEntity
         self.entityType = entityType
 
         # the director will remove figure from the Alive list if this is false
@@ -64,14 +71,14 @@ class Entity(object):
 
 
     def getLocation(self): 
-        if self.parent is None: 
+        if self.parentEntity is None: 
             loc = {
                 'x': self.x,
                 'y': self.y,
             }
             return loc
         else: 
-            loc = self.parent.getLocation()
+            loc = self.parentEntity.getLocation()
             loc['x'] += self.offsetX
             loc['y'] += self.offsetY
             return loc

@@ -9,6 +9,8 @@ from .entity import Entity
 from .entitytype import EntityType
 from texture.phenomenatype import PhenomenaType
 from utilities.timer import Timer
+from .character import Character
+
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +20,14 @@ logger = logging.getLogger(__name__)
 # - Used for collision detection
 class CharacterWeapon(Entity):
     def __init__(self, win, parentCharacter):
-        super(CharacterWeapon, self).__init__(win, parentCharacter, EntityType.weapon)
+        # note that ParentCharacter is also an Entity, as required by Entity
+        super(CharacterWeapon, self).__init__(win=win, parentEntity=parentCharacter, entityType=EntityType.weapon)
+
+        if not isinstance(parentCharacter, Character):
+            raise ValueError("PlayerWeapon: Tried to use non-Character class as parent: " + str(parentCharacter))
+        else: 
+            self.parentCharacter = parentCharacter
+
         self.sprite = PhenomenaSprite(phenomenaType=PhenomenaType.hit, parentEntity=self)
 
         # the duration of the hitting animation
@@ -48,9 +57,9 @@ class CharacterWeapon(Entity):
     # we overwrite getLocation for now
     # should be fixed with mirroring implemented TODO
     def getLocation(self): 
-        loc = self.parent.getLocation()
+        loc = self.parentEntity.getLocation()
 
-        if self.parent.direction is Direction.right: 
+        if self.parentEntity.direction is Direction.right: 
             loc['x'] += 3
             loc['y'] += 1
         else: 

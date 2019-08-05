@@ -6,16 +6,20 @@ from texture.phenomenatype import PhenomenaType
 logger = logging.getLogger(__name__)
 
 
-class EnemyWeapon(CharacterWeapon): 
-   def doHit(self):
+class EnemyWeapon(CharacterWeapon):
+    def __init__(self, win, parentCharacter):
+        super(EnemyWeapon, self).__init__(win=win, parentCharacter=parentCharacter)
+
+
+    def doHit(self):
         if not self.cooldownTimer.timeIsUp():
             return
         self.cooldownTimer.reset() # activate cooldown
 
-        hittedPlayer = self.parent.world.director.getPlayersHit(self.getHitCoordinates())
+        hittedPlayer = self.parentCharacter.world.director.getPlayersHit(self.getHitCoordinates())
         for player in hittedPlayer: 
-            player.gmHandleHit( self.parent.characterStatus.getDamage() )
+            player.gmHandleHit( self.parentCharacter.characterStatus.getDamage() )
 
         self.isActive = True
         self.durationTimer.reset() # entity will setActive(false) when time is up
-        self.sprite.changeTexture(PhenomenaType.hit, self.parent.direction)
+        self.sprite.changeTexture(PhenomenaType.hit, self.parentEntity.direction)

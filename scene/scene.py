@@ -47,11 +47,11 @@ class Scene(object):
         targetFrameTime = 1.0 / Config.fps
         deltaTime = targetFrameTime # we try to keep it...
 
-        entityCopter = Entity(self.win, self, EntityType.player)
+        entityCopter = Entity(win=self.win, parentEntity=self, entityType=EntityType.player)
         spriteCopter = PhenomenaSprite(phenomenaType=PhenomenaType.roflcopter, parentEntity=entityCopter)
         spriteCopter.setActive(False)
 
-        entityPlayer = Entity(self.win, self, EntityType.player)
+        entityPlayer = Entity(win=self.win, parentEntity=self, entityType=EntityType.player)
         spritePlayer = CharacterSprite(characterAnimationType=CharacterAnimationType.standing, parentEntity=entityPlayer)
         spritePlayer.setActive(False)
 
