@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class Enemy(Character):
-    def __init__(self, win, parent, spawnBoundaries, world):
+    def __init__(self, win, parent, spawnBoundaries, world, name):
         Character.__init__(self, win, parent, spawnBoundaries, world, EntityType.enemy)
         self.player = world.getPlayer()
         self.sprite = CharacterSprite(
@@ -28,6 +28,7 @@ class Enemy(Character):
             body=self.getRandomBody())
         self.lastInputTimer = Timer(1.0)
         self.characterWeapon = EnemyWeapon(win=win, parentCharacter=self)
+        self.name = 'Bot' + name
 
         self.initAi()
         self.init()
@@ -95,7 +96,7 @@ class Enemy(Character):
 
     def sAttack(self):
     	if self.attackTimer.timeIsUp(): 
-            logger.warn("I'm attacking!")
+            logger.warn(self.name + " I'm attacking!")
             self.attackTimer.reset()
             self.characterWeapon.doHit()
 
@@ -106,7 +107,7 @@ class Enemy(Character):
 
     def sWander(self): 
         if self.wanderTimer.timeIsUp(): 
-            logger.debug("I'm moving / wander!")
+            #logger.debug("I'm moving / wander!")
             self.wanderTimer.reset()
         
         self.getInputWander()
@@ -118,7 +119,7 @@ class Enemy(Character):
 
     def sChase(self): 
         if self.chaseTimer.timeIsUp(): 
-            logger.debug("I'm moving / chasing!")
+            #logger.debug("I'm moving / chasing!")
             self.chaseTimer.reset()
         
         self.getInputChase()
@@ -126,7 +127,7 @@ class Enemy(Character):
 
     def sDyingInit(self): 
         if random.choice([True, False]): 
-            logger.info("Death animation deluxe")
+            logger.info(self.name + " Death animation deluxe")
             animationIndex = random.randint(0, 1)
             self.world.makeExplode(self.sprite, self.direction, None)
             self.sprite.changeTexture(CharacterAnimationType.dying, self.direction, animationIndex)
@@ -147,10 +148,10 @@ class Enemy(Character):
 
     def gmRessurectMe(self): 
         if self.characterStatus.isAlive():
-            logging.warn("Trying to ressurect enemy which is still alive")
+            logging.warn(self.name + " Trying to ressurect enemy which is still alive")
             return
 
-        logger.info("E New enemy at: " + str(self.x) + " / " + str(self.y))
+        logger.info(self.name + " Ressurect at: " + str(self.x) + " / " + str(self.y))
         self.init()
         self.characterStatus.init()
 
@@ -272,4 +273,4 @@ class Enemy(Character):
         self.brain.update(deltaTime)
         
     def __repr__(self):
-        return 'E0x01'
+        return self.name

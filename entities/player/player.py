@@ -127,7 +127,7 @@ class Player(Character):
         if self.characterStatus.isAlive(): 
             return
 
-        logger.info("P New player at: " + str(self.x) + " / " + str(self.y))
+        logger.info("Ressurect player at: " + str(self.x) + " / " + str(self.y))
         self.characterStatus.init()
         self.actionCtrl.changeTo(CharacterAnimationType.standing, None)
 

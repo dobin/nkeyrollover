@@ -21,10 +21,10 @@ class PlayerActionCtrl(ActionCtrl):
 
             # if we were already walking, dont destroy the animation state
             if self.action is not CharacterAnimationType.walking:
-                logger.info("PP Change action to1: " + str(newCharacterAnimationType))
+                logger.debug("Player Change action to: " + str(newCharacterAnimationType))
                 self.parentEntity.sprite.changeTexture(newCharacterAnimationType, direction)
         else: 
-            logger.info("PP Change action to2: " + str(newCharacterAnimationType))
+            logger.debug("Player Change action to: " + str(newCharacterAnimationType))
             
             self.parentEntity.sprite.changeTexture(newCharacterAnimationType, direction)
             animationTime = self.parentEntity.sprite.getAnimationTime()
@@ -51,5 +51,5 @@ class PlayerActionCtrl(ActionCtrl):
         # when dying, desintegrate
         if self.action is CharacterAnimationType.dying: 
             if self.durationTimer.timeIsUp():
-                logging.warning("PP Deactivate!")
+                logging.info("Player Deactivate!")
                 self.isActive = False

@@ -30,7 +30,7 @@ class Director(object):
                 'min_y': Config.areaMoveable['miny'],
                 'max_y': Config.areaMoveable['maxy'],
             }
-            newEnemy = Enemy(win=self.win, parent=None, spawnBoundaries=coordinates, world=world)
+            newEnemy = Enemy(win=self.win, parent=None, spawnBoundaries=coordinates, world=world, name=str(n))
             self.enemiesDead.append(newEnemy)
             n = n + 1
 
