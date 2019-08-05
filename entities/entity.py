@@ -37,6 +37,10 @@ class Entity(object):
 
 
     def getColorByType(self, type):
+        if self.win is None:
+            # for unittests
+            return
+
         if type is EntityType.player: 
             return curses.color_pair(1)
         elif type is EntityType.enemy:

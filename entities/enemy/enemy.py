@@ -36,8 +36,10 @@ class Enemy(Character):
 
 
     def init(self):
-        #self.x = random.randint(self.spawnBoundaries['min_x'], self.spawnBoundaries['max_x'])
-        #self.y = random.randint(self.spawnBoundaries['min_y'], self.spawnBoundaries['max_y'])
+        self.lastInputTimer.reset()
+        if self.spawnBoundaries is None: 
+            return
+
         self.x = self.spawnBoundaries['x']
         self.y = random.randint(self.spawnBoundaries['min_y'], self.spawnBoundaries['max_y'])
 
@@ -45,8 +47,6 @@ class Enemy(Character):
             self.direction = Direction.right
         else: 
             self.direction = Direction.left
-
-        self.lastInputTimer.reset()
 
 
     def initAi(self): 
