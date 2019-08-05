@@ -35,10 +35,6 @@ class CharacterWeapon(Entity):
         raise NotImplementedError('subclasses must override this abstract method')
 
 
-    def isHitting(self): 
-        return self.isActive
-
-
     def getHitCoordinates(self): 
         return self.getLocation()
 

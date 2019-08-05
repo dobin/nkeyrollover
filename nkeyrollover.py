@@ -133,20 +133,6 @@ class Keyrollover(object):
         #self.statusbarWin.refresh()
 
 
-    def collisionDetection(self):
-        if not self.player.characterWeapon.isHitting():
-            return
-
-        # player hits enemies
-        if not self.player.characterWeapon.collisionDetectionDone: 
-            hitCoords = self.player.characterWeapon.getHitCoordinates()
-            self.director.collisionDetection(hitCoords)
-            self.player.characterWeapon.collisionDetectionDone = True
-        
-
-        # enemies hit player
-
-
 def main(stdscr):
     keyrollover = Keyrollover()
     keyrollover.loop()
