@@ -54,6 +54,56 @@ class PhenomenaTextureManager(object):
                 ]                                
             ]
 
+        if phenomenaType is PhenomenaType.hitSquare:
+            texture.width = 2
+            texture.height = 2
+            texture.frameCount = 3
+            texture.endless = False
+            texture.advanceByStep = False
+            
+            texture.frameTime = [
+                0.1,
+                0.1,
+                0.1
+            ]
+
+            texture.arr = [
+                [
+                    [ 'O', 'O' ],
+                ],
+                [
+                    [ 'O', 'O' ],
+                ],
+                [
+                    [ 'O', 'O' ],
+                ]                                
+            ]
+
+        if phenomenaType is PhenomenaType.hitLine:
+            texture.width = 2
+            texture.height = 2
+            texture.frameCount = 3
+            texture.endless = False
+            texture.advanceByStep = False
+            
+            texture.frameTime = [
+                0.1,
+                0.1,
+                0.1
+            ]
+
+            texture.arr = [
+                [
+                    [ '.', '', ''],
+                ],
+                [
+                    [ '.', 'o', ''],
+                ],
+                [
+                    [ '.', 'o', 'O'],
+                ]                                
+            ]
+
         if phenomenaType is PhenomenaType.roflcopter: 
             texture.width = 3
             texture.height = 3

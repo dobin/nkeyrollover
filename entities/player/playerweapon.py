@@ -13,7 +13,7 @@ class PlayerWeapon(CharacterWeapon):
             return
         self.cooldownTimer.reset() # activate cooldown
 
-        hittedEnemies = self.parent.world.director.getEnemiesHit(self.getLocation())
+        hittedEnemies = self.parent.world.director.getEnemiesHit(self.getHitCoordinates())
         for enemy in hittedEnemies: 
             enemy.gmHandleHit( self.parent.characterStatus.getDamage() )
 
