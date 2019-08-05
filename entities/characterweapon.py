@@ -24,7 +24,7 @@ class CharacterWeapon(Entity):
         super(CharacterWeapon, self).__init__(win=win, parentEntity=parentCharacter, entityType=EntityType.weapon)
 
         if not isinstance(parentCharacter, Character):
-            raise ValueError("PlayerWeapon: Tried to use non-Character class as parent: " + str(parentCharacter))
+            raise ValueError("Character: Tried to use non-Character class as parent: " + str(parentCharacter))
         else: 
             self.parentCharacter = parentCharacter
 

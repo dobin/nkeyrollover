@@ -18,7 +18,7 @@ class ArrSprite(object):
         self.texture = None
 
         if not isinstance(parentEntity, Entity):
-            logging.error("ArrSprite: Tried to use non-Entity class as parent: " + str(parentEntity))
+            raise ValueError("ArrSprite: Tried to use non-Entity class as parent: " + str(parentEntity))
         else:
             # our position is relative to this
             # if None, its absolute
