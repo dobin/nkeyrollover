@@ -53,11 +53,12 @@ class Player(Character):
 
     def getInput(self):
         key = self.win.getch()
-        self.handleInput(key)
+        while key != -1:
+            self.handleInput(key)
+            key = self.win.getch()
 
 
     def handleInput(self, key):
-        while key != -1:
             if key == ord(' '):
                 self.actionCtrl.changeTo(CharacterAnimationType.hitting, self.direction)
                 self.characterAttack.attack()
@@ -131,9 +132,6 @@ class Player(Character):
                         self.y = self.y + 1
                         self.actionCtrl.changeTo(CharacterAnimationType.walking, self.direction)
                         self.advanceStep()
-
-
-            key = self.win.getch()
 
 
     def advance(self, deltaTime):
