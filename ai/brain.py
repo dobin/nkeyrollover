@@ -74,9 +74,7 @@ class Brain:
 			args = args[0]
 		for state in args:
 			if not issubclass(state, BaseState):
-				log.error(
-                    raise ValueError("Not a valid state object, needs to inherit from BaseState")
-				)
+				raise ValueError("Not a valid state object, needs to inherit from BaseState")
 			elif state.name in self.avail_states:
 				log.error(
 					"There's already a state with that name: " + state.name
