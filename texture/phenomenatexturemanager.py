@@ -96,17 +96,30 @@ class PhenomenaTextureManager(object):
                 0.1
             ]
 
-            texture.arr = [
-                [
-                    [ '.', '', '', ''],
-                ],
-                [
-                    [ '.', 'o', '', ''],
-                ],
-                [
-                    [ '.', 'o', 'O', 'O'],
-                ]                                
-            ]
+            if direction is Direction.right:
+                texture.arr = [
+                    [
+                        [ '.', '', '', ''],
+                    ],
+                    [
+                        [ '.', 'o', '', ''],
+                    ],
+                    [
+                        [ '.', 'o', 'O', 'O'],
+                    ]                                
+                ]
+            else:
+                texture.arr = [
+                    [
+                        [ '', '', '', '.'],
+                    ],
+                    [
+                        [ '', '', 'o', '.'],
+                    ],
+                    [
+                        [ 'O', 'O', 'o', '.'],
+                    ]                                
+                ]
 
         if phenomenaType is PhenomenaType.roflcopter: 
             texture.width = 3
