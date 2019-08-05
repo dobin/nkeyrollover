@@ -44,13 +44,13 @@ class PhenomenaTextureManager(object):
 
             texture.arr = [
                 [
-                    [ '.', ],
+                    [ 'O', ],
                 ],
                 [
                     [ 'o', ],
                 ],
                 [
-                    [ 'O', ],
+                    [ '.', ],
                 ]                                
             ]
 

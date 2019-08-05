@@ -8,6 +8,7 @@ from .direction import Direction
 from .entity import Entity
 from .entitytype import EntityType
 from texture.phenomenatype import PhenomenaType
+from utilities.timer import Timer
 
 logger = logging.getLogger(__name__)
 
@@ -19,16 +20,21 @@ class CharacterWeapon(Entity):
     def __init__(self, win, parentCharacter):
         super(CharacterWeapon, self).__init__(win, parentCharacter, EntityType.weapon)
         self.sprite = PhenomenaSprite(phenomenaType=PhenomenaType.hit, parentEntity=self)
-        self.reset()
 
-    
-    def reset(self):
-        # timeframe of this hit animation
-        self.durationTimer.setTimer(0.7)
+        # the duration of the hitting animation
+        self.durationTimer.setTimer( self.sprite.getAnimationTime() )
         self.durationTimer.reset()
+
+        # cooldown. 0.2 is actually lower than whats possible, even with 100fps
+        self.cooldownTimer = Timer(0.2, instant=True)
 
         # for drawing the hit, and see if the char is "hitting"
         self.isActive = False 
+
+
+    def advance(self, deltaTime):
+        super(CharacterWeapon, self).advance(deltaTime)
+        self.cooldownTimer.advance(deltaTime)
 
 
     def doHit(self): 
