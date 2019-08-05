@@ -53,6 +53,10 @@ class Player(Character):
 
     def getInput(self):
         key = self.win.getch()
+        self.handleInput(key)
+
+
+    def handleInput(self, key):
         while key != -1:
             if key == ord(' '):
                 self.actionCtrl.changeTo(CharacterAnimationType.hitting, self.direction)
