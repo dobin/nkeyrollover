@@ -19,6 +19,9 @@ class Director(object):
         if Config.devMode: 
             self.maxEnemies = 1
 
+    # we split this from the constructor, so we can initialize a Director 
+    # without enemies in the unit test
+    def init(self):
         n = 0
         maxN = 16
         if Config.devMode:
@@ -33,7 +36,11 @@ class Director(object):
                 'min_y': Config.areaMoveable['miny'],
                 'max_y': Config.areaMoveable['maxy'],
             }
-            newEnemy = Enemy(win=self.win, parent=world.worldEntity, spawnBoundaries=coordinates, world=world, name=str(n))
+            newEnemy = Enemy(win=self.win, 
+                parent=self.world.worldEntity, 
+                spawnBoundaries=coordinates, 
+                world=self.world, 
+                name=str(n))
             self.enemiesDead.append(newEnemy)
             n = n + 1
 
