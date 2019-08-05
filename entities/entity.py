@@ -12,18 +12,15 @@ class Entity(object):
     def __init__(self, win, parentEntity, entityType):
         self.win = win
         self.sprite = None
-
+        self.entityType = entityType
         self.parentEntity = None
-        self.parentEntity = parentEntity
+
         if parentEntity is not None:
             if not isinstance(parentEntity, Entity):
                 raise ValueError("Entity: Tried to use non-Entity class as parent: " + str(parentEntity))
             else: 
                 self.parentEntity = parentEntity
-        self.entityType = entityType
 
-        # the director will remove figure from the Alive list if this is false
-        # making us unrenderable, and unadvancable (aka when truly dead)
         self.isActive = True
         self.isRendered = True
 

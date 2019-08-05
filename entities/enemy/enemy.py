@@ -5,7 +5,6 @@ from sprite.charactersprite import CharacterSprite
 from entities.player.player import Player
 from entities.direction import Direction
 from entities.character import Character
-from .enemyweapon import EnemyWeapon
 from config import Config
 from utilities.timer import Timer
 from utilities.utilities import Utility
@@ -13,6 +12,7 @@ from entities.entitytype import EntityType
 from ai.brain import Brain
 import entities.enemy.aifsm as aifsm
 from texture.characteranimationtype import CharacterAnimationType
+from entities.characterattack import CharacterAttack
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +28,7 @@ class Enemy(Character):
             head=self.getRandomHead(), 
             body=self.getRandomBody())
         self.lastInputTimer = Timer(1.0)
-        self.characterWeapon = EnemyWeapon(win=win, parentCharacter=self)
+        self.characterAttack = CharacterAttack(win=win, parentCharacter=self, isPlayer=False)
         self.name = 'Bot' + name
 
         self.initAi()
@@ -99,7 +99,7 @@ class Enemy(Character):
     	if self.attackTimer.timeIsUp(): 
             logger.warn(self.name + " I'm attacking!")
             self.attackTimer.reset()
-            self.characterWeapon.doHit()
+            self.characterAttack.attack()
 
 
     def sWanderInit(self):

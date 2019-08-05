@@ -7,7 +7,6 @@ from enum import Enum
 from utilities.utilities import Utility
 from config import Config
 from .playeractionctrl import PlayerActionCtrl
-from .playerweapon import PlayerWeapon
 from entities.characterstatus import CharacterStatus
 from entities.direction import Direction
 from entities.character import Character
@@ -15,6 +14,7 @@ from entities.entitytype import EntityType
 from sprite.speechsprite import SpeechSprite
 from sprite.charactersprite import CharacterSprite
 from texture.characteranimationtype import CharacterAnimationType
+from entities.characterattack import CharacterAttack
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ class Player(Character):
         
         self.actionCtrl = PlayerActionCtrl(parentEntity=self, world=world)
         self.sprite = CharacterSprite(parentEntity=self)
-        self.characterWeapon = PlayerWeapon(win=win, parentCharacter=self)
+        self.characterAttack = CharacterAttack(win=win, parentCharacter=self, isPlayer=True)
 
         # first action is standing around
         self.actionCtrl.changeTo(CharacterAnimationType.standing, Direction.right)
@@ -55,7 +55,7 @@ class Player(Character):
         while key != -1:
             if key == ord(' '):
                 self.actionCtrl.changeTo(CharacterAnimationType.hitting, self.direction)
-                self.characterWeapon.doHit()
+                self.characterAttack.attack()
 
             # game related
             if key == ord('p'):

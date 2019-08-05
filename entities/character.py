@@ -26,7 +26,7 @@ class Character(Entity):
         self.characterStatus = CharacterStatus()
         self.speechSprite = SpeechSprite(parentEntity=self, displayText='')
         self.speechSprite.setActive(False)
-        self.characterWeapon = None # by children
+        self.characterAttack = None # by children
         self.actionCtrl = None # filled in children
 
 
@@ -44,14 +44,14 @@ class Character(Entity):
 
     def draw(self):
         super(Character, self).draw(self.win)
-        self.characterWeapon.draw(self.win)
+        self.characterAttack.draw(self.win)
         self.speechSprite.draw(self.win)
 
 
     def advance(self, deltaTime):
         super(Character, self).advance(deltaTime) # advance Entity part (duration, sprite)
 
-        self.characterWeapon.advance(deltaTime) # update weapon (duration, sprite)
+        self.characterAttack.advance(deltaTime) # update weapon (duration, sprite)
         self.characterStatus.advance(deltaTime) # update health, mana etc.
         self.speechSprite.advance(deltaTime)
 
