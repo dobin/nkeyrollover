@@ -97,7 +97,7 @@ class CharacterAttack(Entity):
             self.x = 3
             self.y = 1
         else: 
-            self.x = -1
+            self.x = -4
             self.y = 1
 
         self.sprite.changeTexture(PhenomenaType.hitLine, self.parentEntity.direction)
@@ -161,22 +161,6 @@ class CharacterAttack(Entity):
                     player.gmHandleHit( self.parentCharacter.characterStatus.getDamage() )
 
 
-
-    # we overwrite getLocation for now, as we need to know
-    # the direction parent is facing
-    #def getLocation(self): 
-    #    loc = self.parentEntity.getLocation()
-    #
-    #    if self.parentEntity.direction is Direction.right: 
-    #        loc['x'] += 3
-    #        loc['y'] += 1
-    #    else: 
-    #        loc['x'] -= 1
-    #        loc['y'] += 1
-    #
-    #    return loc
-
-    
     def advance(self, deltaTime):
         super(CharacterAttack, self).advance(deltaTime)
         self.cooldownTimer.advance(deltaTime)
