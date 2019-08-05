@@ -15,11 +15,11 @@ class Entity(object):
 
         self.parentEntity = None
         self.parentEntity = parentEntity
-        #if parentEntity is not None:
-        #    if not isinstance(parentEntity, Entity):
-        #        raise ValueError("Entity: Tried to use non-Entity class as parent: " + str(parentEntity))
-        #    else: 
-        #        self.parentEntity = parentEntity
+        if parentEntity is not None:
+            if not isinstance(parentEntity, Entity):
+                raise ValueError("Entity: Tried to use non-Entity class as parent: " + str(parentEntity))
+            else: 
+                self.parentEntity = parentEntity
         self.entityType = entityType
 
         # the director will remove figure from the Alive list if this is false
