@@ -35,10 +35,6 @@ class Scene(object):
         self.loop()
 
 
-    def getLocation(self):
-        return { 'x': 15, 'y': -5}
-
-
     def loop(self):
         timeStart = 0
         timeEnd = 0
@@ -47,11 +43,14 @@ class Scene(object):
         targetFrameTime = 1.0 / Config.fps
         deltaTime = targetFrameTime # we try to keep it...
 
-        entityCopter = Entity(win=self.win, parentEntity=self, entityType=EntityType.player)
+        worldEntity = Entity(win=self.win, parentEntity=None, entityType=EntityType.world)
+        worldEntity.setLocation(15, -5)
+
+        entityCopter = Entity(win=self.win, parentEntity=worldEntity, entityType=EntityType.player)
         spriteCopter = PhenomenaSprite(phenomenaType=PhenomenaType.roflcopter, parentEntity=entityCopter)
         spriteCopter.setActive(False)
 
-        entityPlayer = Entity(win=self.win, parentEntity=self, entityType=EntityType.player)
+        entityPlayer = Entity(win=self.win, parentEntity=worldEntity, entityType=EntityType.player)
         spritePlayer = CharacterSprite(characterAnimationType=CharacterAnimationType.standing, parentEntity=entityPlayer)
         spritePlayer.setActive(False)
 
@@ -79,24 +78,24 @@ class Scene(object):
             elif state is SceneState.flydown:
                 if myTimer.timeIsUp():
                     myTimer.reset()
-                    entityCopter.offsetY += 1
+                    entityCopter.y += 1
 
                 # for next scene: Drop
-                if entityCopter.offsetY == 12: 
+                if entityCopter.y == 12: 
                     myTimer.setTimer(0.1)
                     logging.debug("To State: Drop")
                     state = SceneState.drop
-                    entityPlayer.offsetY = 18
-                    entityPlayer.offsetX = 8
+                    entityPlayer.y = 18
+                    entityPlayer.x = 8
                     spritePlayer.setActive(True)                    
 
             elif state is SceneState.drop: 
                 # for next scene: Flyup
                 if myTimer.timeIsUp():
                     myTimer.reset()
-                    entityCopter.offsetY -= 1
+                    entityCopter.y -= 1
 
-                if entityCopter.offsetY == -5:
+                if entityCopter.y == -5:
                     state = SceneState.done
 
             elif state is SceneState.done: 

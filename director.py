@@ -20,7 +20,10 @@ class Director(object):
             self.maxEnemies = 1
 
         n = 0
-        while n < 16:
+        maxN = 16
+        if Config.devMode:
+            maxN = 1
+        while n < maxN:
             myx = 1
             if n % 2 == 0:
                myx = Config.columns + 1
@@ -30,7 +33,7 @@ class Director(object):
                 'min_y': Config.areaMoveable['miny'],
                 'max_y': Config.areaMoveable['maxy'],
             }
-            newEnemy = Enemy(win=self.win, parent=None, spawnBoundaries=coordinates, world=world, name=str(n))
+            newEnemy = Enemy(win=self.win, parent=world.worldEntity, spawnBoundaries=coordinates, world=world, name=str(n))
             self.enemiesDead.append(newEnemy)
             n = n + 1
 

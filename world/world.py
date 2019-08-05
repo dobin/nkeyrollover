@@ -7,6 +7,8 @@ from entities.direction import Direction
 from entities.player.player import Player
 from director import Director
 from config import Config
+from entities.entity import Entity
+from entities.entitytype import EntityType
 
 logger = logging.getLogger(__name__)
 
@@ -16,9 +18,10 @@ class World(object):
         self.win = win
         self.sprites = []
 
+        self.worldEntity = Entity(win=self.win, parentEntity=None, entityType=EntityType.world)
         self.player = Player(
             win=self.win, 
-            parent=None, 
+            parentEntity=self.worldEntity, 
             spawnBoundaries={ 'max_y': Config.columns, 'max_x': Config.rows }, 
             world=self)
         self.director = Director(self.win, self)

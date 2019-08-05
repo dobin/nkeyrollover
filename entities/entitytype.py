@@ -7,3 +7,4 @@ class EntityType(Enum):
     takedamage = 2
     weapon = 3
     
+    world = 4

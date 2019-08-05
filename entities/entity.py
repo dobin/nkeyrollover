@@ -29,8 +29,6 @@ class Entity(object):
 
         self.x = 0
         self.y = 0
-        self.offsetX = 0
-        self.offsetY = 0
         self.direction = Direction.right
 
         self.baseColor = self.getColorByType(self.entityType)
@@ -79,9 +77,14 @@ class Entity(object):
             return loc
         else: 
             loc = self.parentEntity.getLocation()
-            loc['x'] += self.offsetX
-            loc['y'] += self.offsetY
+            loc['x'] += self.x
+            loc['y'] += self.y
             return loc
+
+
+    def setLocation(self, x, y):
+        self.x = x
+        self.y = y
 
 
     def advanceStep(self):
