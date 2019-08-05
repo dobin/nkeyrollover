@@ -15,6 +15,7 @@ from sprite.speechsprite import SpeechSprite
 from sprite.charactersprite import CharacterSprite
 from texture.characteranimationtype import CharacterAnimationType
 from entities.characterattack import CharacterAttack
+from entities.weapontype import WeaponType
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +67,18 @@ class Player(Character):
 
 
             # player related
+            if key == ord('1'):
+                self.characterAttack.switchWeapon(WeaponType.hit)
+
+            if key == ord('2'):
+                self.characterAttack.switchWeapon(WeaponType.hitSquare)
+
+            if key == ord('3'):
+                self.characterAttack.switchWeapon(WeaponType.hitLine)
+
+            if key == ord('4'):
+                self.characterAttack.switchWeapon(WeaponType.jumpKick)
+
             if key == ord('q'):
                 self.actionCtrl.changeTo(CharacterAnimationType.shrugging, self.direction)
 

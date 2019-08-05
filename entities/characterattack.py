@@ -10,15 +10,10 @@ from .entitytype import EntityType
 from .character import Character
 from .direction import Direction
 from .character import Character
+from .weapontype import WeaponType
 
 logger = logging.getLogger(__name__)
 
-
-class WeaponType(Enum): 
-    hit = 0
-    hitSquare = 1
-    hitLine = 2
-    jumpKick = 3
 
 
 class CharacterAttack(Entity): 
@@ -48,20 +43,86 @@ class CharacterAttack(Entity):
         
 
     def switchWeapon(self, weaponType):
+        logging.info("Switch to weaopn: " + str(weaponType))
         self.weaponType = weaponType
 
    
     def attackWeaponHit(self):
+        if self.parentEntity.direction is Direction.right: 
+            self.x = 3
+            self.y = 1
+        else: 
+            self.x = -1
+            self.y = 1
+    
         self.sprite.changeTexture(PhenomenaType.hit, self.parentEntity.direction)
-        self.hitCollisionDetection(self.getLocation())
+        self.hitCollisionDetection( [ self.getLocation()] )
 
 
     def attackWeaponHitSquare(self):
+        if self.parentEntity.direction is Direction.right: 
+            self.x = 3
+            self.y = 0
+        else: 
+            self.x = -2
+            self.y = 0
+
         self.sprite.changeTexture(PhenomenaType.hitSquare, self.parentEntity.direction)
+        hitLocations = []
+        hitLocationsBase = self.getLocation()
+        
+        hl2 = { 
+            'x': hitLocationsBase['x'] + 1,
+            'y': hitLocationsBase['y'],
+        }
+        hl3 = { 
+            'x': hitLocationsBase['x'],
+            'y': hitLocationsBase['y'] + 1,
+        }
+        hl4 = { 
+            'x': hitLocationsBase['x'] + 1,
+            'y': hitLocationsBase['y'] + 1,
+        }
+
+        hitLocations.append(hitLocationsBase)
+        hitLocations.append(hl2)
+        hitLocations.append(hl3)
+        hitLocations.append(hl4)
+
+        self.hitCollisionDetection( hitLocations )
 
 
     def attackWeaponHitLine(self): 
+        if self.parentEntity.direction is Direction.right: 
+            self.x = 3
+            self.y = 1
+        else: 
+            self.x = -1
+            self.y = 1
+
         self.sprite.changeTexture(PhenomenaType.hitLine, self.parentEntity.direction)
+        hitLocations = []
+        hitLocationsBase = self.getLocation()
+        
+        hl2 = { 
+            'x': hitLocationsBase['x'] + 1,
+            'y': hitLocationsBase['y'],
+        }
+        hl3 = { 
+            'x': hitLocationsBase['x'] + 2,
+            'y': hitLocationsBase['y'],
+        }
+        hl4 = { 
+            'x': hitLocationsBase['x'] + 3,
+            'y': hitLocationsBase['y'],
+        }
+
+        hitLocations.append(hitLocationsBase)
+        hitLocations.append(hl2)
+        hitLocations.append(hl3)
+        hitLocations.append(hl4)
+
+        self.hitCollisionDetection( hitLocations )
 
 
     def attackWeaponJumpKick(self): 
@@ -80,7 +141,7 @@ class CharacterAttack(Entity):
         if self.weaponType is WeaponType.hit:
             self.attackWeaponHit()
         elif self.weaponType is WeaponType.hitSquare:
-            self.attackWeaponHitSquare
+            self.attackWeaponHitSquare()
         elif self.weaponType is WeaponType.hitLine: 
             self.attackWeaponHitLine()
         elif self.weaponType is WeaponType.jumpKick: 
@@ -89,29 +150,31 @@ class CharacterAttack(Entity):
 
     def hitCollisionDetection(self, hitLocations):
         if self.isPlayer:
-            hittedEnemies = self.parentCharacter.world.director.getEnemiesHit(hitLocations)
-            for enemy in hittedEnemies: 
-                enemy.gmHandleHit( self.parentCharacter.characterStatus.getDamage() )
+            for hitLocation in hitLocations:
+                hittedEnemies = self.parentCharacter.world.director.getEnemiesHit(hitLocation)
+                for enemy in hittedEnemies: 
+                    enemy.gmHandleHit( self.parentCharacter.characterStatus.getDamage() )
         else: 
-            hittedPlayer = self.parentCharacter.world.director.getPlayersHit(hitLocations)
-            for player in hittedPlayer: 
-                player.gmHandleHit( self.parentCharacter.characterStatus.getDamage() )
+            for hitLocation in hitLocations:
+                hittedPlayer = self.parentCharacter.world.director.getPlayersHit(hitLocation)
+                for player in hittedPlayer: 
+                    player.gmHandleHit( self.parentCharacter.characterStatus.getDamage() )
 
 
 
-    # we overwrite getLocation for now
-    # should be fixed with mirroring implemented TODO
-    def getLocation(self): 
-        loc = self.parentEntity.getLocation()
-
-        if self.parentEntity.direction is Direction.right: 
-            loc['x'] += 3
-            loc['y'] += 1
-        else: 
-            loc['x'] -= 1
-            loc['y'] += 1
-
-        return loc
+    # we overwrite getLocation for now, as we need to know
+    # the direction parent is facing
+    #def getLocation(self): 
+    #    loc = self.parentEntity.getLocation()
+    #
+    #    if self.parentEntity.direction is Direction.right: 
+    #        loc['x'] += 3
+    #        loc['y'] += 1
+    #    else: 
+    #        loc['x'] -= 1
+    #        loc['y'] += 1
+    #
+    #    return loc
 
     
     def advance(self, deltaTime):

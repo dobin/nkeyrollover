@@ -70,18 +70,21 @@ class PhenomenaTextureManager(object):
             texture.arr = [
                 [
                     [ 'O', 'O' ],
+                    [ 'O', 'O' ],                    
                 ],
                 [
                     [ 'O', 'O' ],
+                    [ 'O', 'O' ],
                 ],
                 [
+                    [ 'O', 'O' ],
                     [ 'O', 'O' ],
                 ]                                
             ]
 
         if phenomenaType is PhenomenaType.hitLine:
-            texture.width = 2
-            texture.height = 2
+            texture.width = 4
+            texture.height = 1
             texture.frameCount = 3
             texture.endless = False
             texture.advanceByStep = False
@@ -89,18 +92,19 @@ class PhenomenaTextureManager(object):
             texture.frameTime = [
                 0.1,
                 0.1,
+                0.1, 
                 0.1
             ]
 
             texture.arr = [
                 [
-                    [ '.', '', ''],
+                    [ '.', '', '', ''],
                 ],
                 [
-                    [ '.', 'o', ''],
+                    [ '.', 'o', '', ''],
                 ],
                 [
-                    [ '.', 'o', 'O'],
+                    [ '.', 'o', 'O', 'O'],
                 ]                                
             ]
 
