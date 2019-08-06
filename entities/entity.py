@@ -1,6 +1,5 @@
 import logging
 import curses 
-
 from .entitytype import EntityType
 from .direction import Direction
 from utilities.timer import Timer
@@ -38,8 +37,14 @@ class Entity(object):
 
     def getColorByType(self, type):
         if self.win is None:
-            # for unittests
+            # for simple unittests
             return
+
+        # for unittests using MockWin
+        # we always import 'curses', and dont know if we are being unittested
+        # in the unittest, we use MockWin, which has method isUnitTest
+        if hasattr(self.win, 'isUnitTest'):
+            return 0
 
         if type is EntityType.player: 
             return curses.color_pair(1)

@@ -25,6 +25,7 @@ class World(object):
             spawnBoundaries={ 'max_y': Config.columns, 'max_x': Config.rows }, 
             world=self)
         self.director = Director(self.win, self)
+        self.director.init()
 
         self.pause = False
         self.gameRunning = True
