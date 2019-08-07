@@ -57,6 +57,11 @@ class Director(object):
             enemy.draw()
 
 
+    def drawEnemyAttacks(self): 
+        for enemy in self.enemiesAlive: 
+            enemy.drawCharacterAttack()
+
+
     def worldUpdate(self): 
         # make more enemies
         if len(self.enemiesAlive) < self.maxEnemies:

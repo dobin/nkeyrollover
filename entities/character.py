@@ -45,8 +45,11 @@ class Character(Entity):
 
     def draw(self):
         super(Character, self).draw(self.win)
-        self.characterAttack.draw(self.win)
         self.speechSprite.draw(self.win)
+
+
+    def drawCharacterAttack(self): 
+        self.characterAttack.draw(self.win)
 
 
     def advance(self, deltaTime):
