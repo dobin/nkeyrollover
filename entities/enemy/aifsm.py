@@ -88,7 +88,7 @@ class Chase(State):
             if me.x < Config.columns - me.sprite.texture.width - 1:
                 me.x += 1
                 me.direction = Direction.right
-        else: 
+        elif playerLocation['x'] < me.x: 
             if me.x > 1:
                 me.x -= 1
                 me.direction = Direction.left
@@ -96,7 +96,7 @@ class Chase(State):
         if playerLocation['y'] > me.y:
             if me.y < Config.rows - me.sprite.texture.height - 1:
                 me.y += 1
-        else: 
+        elif playerLocation['y'] < me.y:
             if me.y > 2:
                 me.y -= 1
 
