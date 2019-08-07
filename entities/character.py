@@ -28,6 +28,7 @@ class Character(Entity):
         self.speechSprite.setActive(False)
         self.characterAttack = None # by children
         self.actionCtrl = None # filled in children
+        self.characterInfo = None # filled by children
 
 
     def getInput(self, playerLocation): 

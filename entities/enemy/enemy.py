@@ -13,6 +13,7 @@ from ai.brain import Brain
 import entities.enemy.aifsm as aifsm
 from texture.characteranimationtype import CharacterAnimationType
 from entities.characterattack import CharacterAttack
+from .enemyinfo import EnemyInfo
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +31,7 @@ class Enemy(Character):
         self.lastInputTimer = Timer(1.0)
         self.characterAttack = CharacterAttack(win=win, parentCharacter=self, isPlayer=False)
         self.name = 'Bot' + name
+        self.enemyInfo = EnemyInfo()
 
         self.initAi()
         self.init()
@@ -50,24 +52,6 @@ class Enemy(Character):
 
 
     def initAi(self): 
-        self.stateData = {
-            'spawn': {
-                'state_time': 1.0,
-            },
-            'wander': {
-                'state_time': 5,
-            },
-            'chase': {
-                'state_time': 5,
-            }, 
-            'attack': {
-                'state_time': 2.0,
-            },
-            'dying': {
-                'state_time': 2.0,
-            },
-        }
-
         self.brain = Brain(self)
 
         self.brain.register(aifsm.Idle)
@@ -76,70 +60,8 @@ class Enemy(Character):
         self.brain.register(aifsm.Chase)
         self.brain.register(aifsm.Wander)
         self.brain.register(aifsm.Dying)
+        self.brain.register(aifsm.AttackWindup)
         self.brain.push("spawn")
-        
-        self.attackTimer = Timer(0.5, instant=False) # windup and cooldown
-        self.wanderTimer = Timer(0.5, instant=True)
-        self.chaseTimer = Timer(0.5, instant=True)
-
-
-    ### AI
-
-    def sSpawnInit(self): 
-        self.sprite.changeTexture(CharacterAnimationType.standing, self.direction)
-        self.setActive(True)
-    
-    
-    def sAttackInit(self):
-        self.attackTimer.init()
-        self.sprite.changeTexture(CharacterAnimationType.hitting, self.direction)
-
-
-    def sAttack(self):
-    	if self.attackTimer.timeIsUp(): 
-            logger.warn(self.name + " I'm attacking!")
-            self.attackTimer.reset()
-            self.characterAttack.attack()
-
-
-    def sWanderInit(self):
-        self.wanderTimer.init()
-        self.sprite.changeTexture(CharacterAnimationType.walking, self.direction)
-
-    def sWander(self): 
-        if self.wanderTimer.timeIsUp(): 
-            #logger.debug("I'm moving / wander!")
-            self.wanderTimer.reset()
-        
-        self.getInputWander()
-
-
-    def sChaseInit(self):
-        self.chaseTimer.init()
-        self.sprite.changeTexture(CharacterAnimationType.walking, self.direction)
-
-    def sChase(self): 
-        if self.chaseTimer.timeIsUp(): 
-            #logger.debug("I'm moving / chasing!")
-            self.chaseTimer.reset()
-        
-        self.getInputChase()
-
-
-    def sDyingInit(self): 
-        if random.choice([True, False]): 
-            logger.info(self.name + " Death animation deluxe")
-            animationIndex = random.randint(0, 1)
-            self.world.makeExplode(self.sprite, self.direction, None)
-            self.sprite.changeTexture(CharacterAnimationType.dying, self.direction, animationIndex)
-            self.setActive(False)
-        else: 
-            animationIndex = random.randint(0, 1)
-            self.sprite.changeTexture(CharacterAnimationType.dying, self.direction, animationIndex)
-
-
-    def sDying(self): 
-        pass
 
 
     # Game Mechanics
@@ -268,9 +190,6 @@ class Enemy(Character):
         self.lastInputTimer.advance(deltaTime)
 
         ### AI
-        self.attackTimer.advance(deltaTime)
-        self.wanderTimer.advance(deltaTime)
-        self.chaseTimer.advance(deltaTime)
         self.brain.update(deltaTime)
         
     def __repr__(self):

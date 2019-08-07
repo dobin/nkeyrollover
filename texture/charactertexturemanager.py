@@ -213,4 +213,32 @@ class CharacterTextureManager(object):
                 n += 1
 
 
+        if animationType is CharacterAnimationType.hitwindup:
+            texture = Texture()
+            texture.width = 3
+            texture.height = 3
+            texture.frameCount = 1
+            texture.frameTime = []
+            texture.advanceByStep = False
+            texture.endless = True
+
+            if direction is direction.right:
+                texture.arr = [
+                    [
+                        [ '\\', 'o', '' ],
+                        [ '', '|', '\\'],
+                        [ '/', '', '\\']
+                    ]
+                ]
+            else: 
+                texture.arr = [
+                    [
+                        [ '', 'o', '/' ],
+                        [ '/', '|', ''],
+                        [ '/', '', '\\']
+                    ]
+                ]
+
+            textures.append(texture)
+
         return textures
