@@ -160,11 +160,13 @@ class CharacterAttack(Entity):
                 hittedEnemies = self.parentCharacter.world.director.getEnemiesHit(hitLocation)
                 for enemy in hittedEnemies: 
                     enemy.gmHandleHit( self.parentCharacter.characterStatus.getDamage() )
+                    self.parentCharacter.gmHandleEnemyHit( self.parentCharacter.characterStatus.getDamage() ) 
         else: 
             for hitLocation in hitLocations:
                 hittedPlayer = self.parentCharacter.world.director.getPlayersHit(hitLocation)
                 for player in hittedPlayer: 
                     player.gmHandleHit( self.parentCharacter.characterStatus.getDamage() )
+                    self.parentCharacter.gmHandleEnemyHit( self.parentCharacter.characterStatus.getDamage() ) 
 
 
     def advance(self, deltaTime):

@@ -1,4 +1,5 @@
 import logging
+import math 
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +37,17 @@ class CharacterStatus(object):
     def getHit(self, damage): 
         self.health -= damage
         logger.info("New health: " + str(self.health))
+
+
+    def enemyHit(self, damage): 
+        # implement lifesteal, 10% of damage taken by the enemy
+        inc = int(damage * 0.1)
+        self.health += inc
+
+
+    def increaseHealthBy(self, hp): 
+        if self.health <= self.healthMax: 
+            self.health += hp
 
 
     def advance(self, deltaTime): 
