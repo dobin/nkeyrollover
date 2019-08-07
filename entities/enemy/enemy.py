@@ -28,7 +28,6 @@ class Enemy(Character):
             characterAnimationType=CharacterAnimationType.standing,
             head=self.getRandomHead(), 
             body=self.getRandomBody())
-        self.lastInputTimer = Timer(1.0)
         self.characterAttack = CharacterAttack(win=win, parentCharacter=self, isPlayer=False)
         self.name = 'Bot' + name
         self.enemyInfo = EnemyInfo()
@@ -38,7 +37,6 @@ class Enemy(Character):
 
 
     def init(self):
-        self.lastInputTimer.reset()
         if self.spawnBoundaries is None: 
             return
 
@@ -107,89 +105,8 @@ class Enemy(Character):
         else: 
             return False
 
-
-    ### /AI
-
-    def getInputChase(self):
-        # manage speed
-        if not self.lastInputTimer.timeIsUp():
-            return
-        self.lastInputTimer.reset()
-
-        # make run-animation 
-        self.sprite.advanceStep()
-
-        playerLocation = self.player.getLocation()
-
-        if playerLocation['x'] > self.x:
-            if self.x < Config.columns - self.sprite.texture.width - 1:
-                self.x += 1
-                self.direction = Direction.right
-        else: 
-            if self.x > 1:
-                self.x -= 1
-                self.direction = Direction.left
-
-        if playerLocation['y'] > self.y:
-            if self.y < Config.rows - self.sprite.texture.height - 1:
-                self.y += 1
-        else: 
-            if self.y > 2:
-                self.y -= 1
-
-
-    def getInputWander(self):
-        # manage speed
-        if not self.lastInputTimer.timeIsUp():
-            return
-        self.lastInputTimer.reset()
-
-        # make run-animation 
-        self.sprite.advanceStep()
-
-        playerLocation = self.player.getLocation()
-
-        if playerLocation['y'] > self.y:
-            # newdest is higher
-            playerLocation['y'] -= 6
-            
-            if playerLocation['x'] > self.x:
-                playerLocation['x'] += 9
-            else:
-                playerLocation['x'] -= 9
-
-        else: 
-            # newdest is lower
-            playerLocation['y'] += 6
-            
-            if playerLocation['x'] > self.x:
-                playerLocation['x'] += 9
-            else:
-                playerLocation['x'] -= 9
-
-
-        if playerLocation['x'] > self.x:
-            if self.x < Config.columns - self.sprite.texture.width - 1:
-                self.x += 1
-                self.direction = Direction.right
-        else: 
-            if self.x > 1:
-                self.x -= 1
-                self.direction = Direction.left
-
-        if playerLocation['y'] > self.y:
-            if self.y < Config.rows - self.sprite.texture.height - 1:
-                self.y += 1
-        else: 
-            if self.y > 2:
-                self.y -= 1
-
-
     def advance(self, deltaTime): 
         super(Enemy, self).advance(deltaTime)
-        self.lastInputTimer.advance(deltaTime)
-
-        ### AI
         self.brain.update(deltaTime)
         
     def __repr__(self):

@@ -1,14 +1,15 @@
 import random
-
+import logging
 
 from ai.brain import Brain
 from ai.states import BaseState as State
 from texture.characteranimationtype import CharacterAnimationType
 from utilities.timer import Timer
+from entities.direction import Direction
+from config import Config
 
-
-import logging
 logger = logging.getLogger(__name__)
+
 
 class Idle(State):
     name = "idle"
@@ -48,27 +49,24 @@ class Chase(State):
 
     def __init__(self, brain):
         State.__init__(self, brain)
-        self.chaseTimer = Timer(0.5, instant=True)
-
+        self.lastInputTimer = Timer( self.brain.owner.enemyInfo.chaseStepDelay, instant=True )
 
     def on_enter(self):
         me = self.brain.owner
         self.setTimer( me.enemyInfo.chaseTime )
-        self.chaseTimer.init()
         me.sprite.changeTexture(CharacterAnimationType.walking, me.direction)
 
 
     def process(self, dt):
-        self.chaseTimer.advance(dt)
-
-        if self.chaseTimer.timeIsUp(): 
-            #logger.debug("I'm moving / chasing!")
-            self.chaseTimer.reset()
-        
         me = self.brain.owner
-        me.getInputChase()  # TODO move here?
+        self.lastInputTimer.advance(dt)
 
-        if self.brain.owner.canReachPlayer():
+        # manage speed
+        if self.lastInputTimer.timeIsUp():
+            self.getInputChase()
+            self.lastInputTimer.reset()
+        
+        if me.canReachPlayer():
             self.brain.pop()
             self.brain.push("attackwindup")
 
@@ -78,16 +76,39 @@ class Chase(State):
             self.brain.push("wander")
 
 
+    def getInputChase(self):
+        me = self.brain.owner
+
+        # make run-animation 
+        me.sprite.advanceStep()
+
+        playerLocation = me.player.getLocation()
+
+        if playerLocation['x'] > me.x:
+            if me.x < Config.columns - me.sprite.texture.width - 1:
+                me.x += 1
+                me.direction = Direction.right
+        else: 
+            if me.x > 1:
+                me.x -= 1
+                me.direction = Direction.left
+
+        if playerLocation['y'] > me.y:
+            if me.y < Config.rows - me.sprite.texture.height - 1:
+                me.y += 1
+        else: 
+            if me.y > 2:
+                me.y -= 1
+
+
 class AttackWindup(State): 
     name = 'attackwindup'
-
 
     def on_enter(self):
         me = self.brain.owner
         me.sprite.changeTexture(CharacterAnimationType.hitwindup, me.direction)
 
-        self.setTimer( self.brain.owner.enemyInfo.windupTime )
-
+        self.setTimer( me.enemyInfo.windupTime )
 
     def process(self, dt):
         if self.timeIsUp():
@@ -113,7 +134,6 @@ class Attack(State):
 
     def process(self, dt):
         self.attackTimer.advance(dt)
-
         me = self.brain.owner
 
         if self.attackTimer.timeIsUp(): 
@@ -133,37 +153,76 @@ class Wander(State):
 
     def __init__(self, brain):
         State.__init__(self, brain)
-        self.wanderTimer = Timer(0.5, instant=True)
+        self.lastInputTimer = Timer( self.brain.owner.enemyInfo.wanderStepDelay, instant=True )
 
 
     def on_enter(self):
         me = self.brain.owner
-
-        self.wanderTimer.init()
         me.sprite.changeTexture(CharacterAnimationType.walking, me.direction)
         self.setTimer( me.enemyInfo.wanderTime )
 
 
     def process(self, dt):
-        self.wanderTimer.advance(dt)
         me = self.brain.owner
+        self.lastInputTimer.advance(dt)
 
-        if self.wanderTimer.timeIsUp(): 
-            #logger.debug("I'm moving / wander!")
-            self.wanderTimer.reset()
-        
-        me.getInputWander() # TODO move this here?
+        if self.lastInputTimer.timeIsUp(): 
+            self.getInputWander()
+            self.lastInputTimer.reset()
 
         if self.timeIsUp():
             logging.debug("{}: Too long wandering, chase again a bit".format(self.owner))
             self.brain.pop()
             self.brain.push("chase")
 
-        elif self.brain.owner.isPlayerClose():
+        elif me.isPlayerClose():
             logging.debug("{}: Player is close, chasing".format(self.owner))
             self.brain.pop()
             self.brain.push("chase")
 
+
+    def getInputWander(self):
+        me = self.brain.owner
+
+        # make run-animation 
+        me.sprite.advanceStep()
+
+        playerLocation = me.player.getLocation()
+
+        if playerLocation['y'] > me.y:
+            # newdest is higher
+            playerLocation['y'] -= 6
+            
+            if playerLocation['x'] > me.x:
+                playerLocation['x'] += 9
+            else:
+                playerLocation['x'] -= 9
+
+        else: 
+            # newdest is lower
+            playerLocation['y'] += 6
+            
+            if playerLocation['x'] > me.x:
+                playerLocation['x'] += 9
+            else:
+                playerLocation['x'] -= 9
+
+
+        if playerLocation['x'] > me.x:
+            if me.x < Config.columns - me.sprite.texture.width - 1:
+                me.x += 1
+                me.direction = Direction.right
+        else: 
+            if me.x > 1:
+                me.x -= 1
+                self.direction = Direction.left
+
+        if playerLocation['y'] > me.y:
+            if me.y < Config.rows - me.sprite.texture.height - 1:
+                me.y += 1
+        else: 
+            if me.y > 2:
+                me.y -= 1
 
 
 class Dying(State):
@@ -191,11 +250,13 @@ class Dying(State):
 
 
     def process(self, dt):
+        me = self.brain.owner
+
         if self.timeIsUp():
             logging.debug("{}: Died enough, set to inactive".format(self.owner))
             self.brain.pop()
             self.brain.push("idle")
-            self.brain.owner.setActive(False)
+            me.setActive(False)
 
 
 
