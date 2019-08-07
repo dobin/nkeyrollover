@@ -95,7 +95,7 @@ class Enemy(Character):
 
 
     def canReachPlayer(self): 
-        return Utility.pointInSprite(self.getLocation(), self.player.sprite)
+        return Utility.pointInSprite(self.characterAttack.getLocation(), self.player.sprite)
 
 
     def isPlayerClose(self):

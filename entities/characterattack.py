@@ -48,25 +48,38 @@ class CharacterAttack(Entity):
 
    
     def attackWeaponHit(self):
-        if self.parentEntity.direction is Direction.right: 
-            self.x = 3
-            self.y = 1
-        else: 
-            self.x = -1
-            self.y = 1
-    
         self.sprite.changeTexture(PhenomenaType.hit, self.parentEntity.direction)
         self.hitCollisionDetection( [ self.getLocation()] )
 
 
-    def attackWeaponHitSquare(self):
-        if self.parentEntity.direction is Direction.right: 
-            self.x = 3
-            self.y = 0
-        else: 
-            self.x = -2
-            self.y = 0
+    def getLocation(self): 
+        baselocation = super(CharacterAttack, self).getLocation()
 
+        if self.weaponType is WeaponType.hit: 
+            if self.parentEntity.direction is Direction.right: 
+                baselocation['x'] += 3
+                baselocation['y'] += 1
+            else: 
+                baselocation['x'] -= 1
+                baselocation['y'] += 1
+        elif self.weaponType is WeaponType.hitSquare: 
+            if self.parentEntity.direction is Direction.right: 
+                baselocation['x'] += 3
+                #baselocation['y'] = 0
+            else: 
+                baselocation['x'] -= 2
+                #baselocation['y'] = 0
+        elif self.weaponType is WeaponType.hitLine: 
+            if self.parentEntity.direction is Direction.right: 
+                baselocation['x'] += 3
+                baselocation['y'] += 1
+            else: 
+                baselocation['x'] -= 4
+                baselocation['y'] += 1
+
+        return baselocation
+
+    def attackWeaponHitSquare(self):
         self.sprite.changeTexture(PhenomenaType.hitSquare, self.parentEntity.direction)
         hitLocations = []
         hitLocationsBase = self.getLocation()
@@ -93,13 +106,6 @@ class CharacterAttack(Entity):
 
 
     def attackWeaponHitLine(self): 
-        if self.parentEntity.direction is Direction.right: 
-            self.x = 3
-            self.y = 1
-        else: 
-            self.x = -4
-            self.y = 1
-
         self.sprite.changeTexture(PhenomenaType.hitLine, self.parentEntity.direction)
         hitLocations = []
         hitLocationsBase = self.getLocation()
