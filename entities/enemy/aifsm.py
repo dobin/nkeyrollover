@@ -246,7 +246,7 @@ class Dying(State):
             me.sprite.changeTexture(CharacterAnimationType.dying, me.direction, animationIndex)
 
 
-        self.setTimer( me.dyingTime )
+        self.setTimer( me.enemyInfo.dyingTime )
 
 
     def process(self, dt):
