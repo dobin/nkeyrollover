@@ -23,16 +23,33 @@ class MockWin(object):
 
     def border(self): 
         y = self.space
-        while y <= self.initialRows + self.space:
 
-            x = self.space
-            while x <= self.initialColumns + self.space: 
-                self.win[y][x] = '.'
+        if True: 
+            # make border
+            while y <= self.initialRows + self.space:
+                x = self.space
 
-                x += 1
-            y+= 1
+                while x <= self.initialColumns + self.space: 
 
-        pass
+                    if y == self.space or y == self.space + self.initialRows: 
+                        self.win[y][x] = '.'
+                    elif x == self.space or x == self.space + self.initialColumns:
+                        self.win[y][x] = '.'
+
+                    x += 1
+
+                y += 1
+        else:
+            # fill whole content
+            while y <= self.initialRows + self.space:
+
+                x = self.space
+                while x <= self.initialColumns + self.space: 
+                    self.win[y][x] = '.'
+
+                    x += 1
+                y+= 1
+
 
 
     def addCh(self, y, x, char, color=None): 
