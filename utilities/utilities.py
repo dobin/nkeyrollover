@@ -18,10 +18,11 @@ class Utility(object):
 
         res['x'] = abs(coord1['x'] - coord2['x'])
         res['y'] = abs(coord1['y'] - coord2['y'])
-        res['sum'] = res['x'] +res['y']
+        res['sum'] = res['x'] + res['y']
 
         return res
 
+    
     @staticmethod
     def pointInSprite(coord1, sprite2):
         coord2 = sprite2.getLocation()
