@@ -2,6 +2,8 @@
 
 import unittest
 import time
+import logging
+import curses
 
 from entities.characterattack import CharacterAttack
 from entities.entity import Entity
@@ -11,26 +13,10 @@ from entities.enemy.enemy import Enemy
 from config import Config
 from director import Director
 from entities.direction import Direction
-
-import logging
-import curses
-
-class FakeWorld(object): 
-    def __init__(self, win): 
-        self.win = win
-        self.worldEntity = Entity(win=win, parentEntity=None, entityType=EntityType.world)
-        self.player = Player(win, self.worldEntity, None, self)
-        self.director = Director(win, self) # real director
-
-    def getPlayer(self):
-        return self.player
-
-
+from tests.fakeworld import FakeWorld
 
 
 class PlayerWeaponTest(unittest.TestCase):
-    def test_weaponAnimation(self):
-        pass
 
     def test_weaponHit(self):
         # Simple hitting an enemy right of the player with
@@ -76,8 +62,6 @@ class PlayerWeaponTest(unittest.TestCase):
         life2 = enemy.characterStatus.health
         
         self.assertLess(life2, life1)
-
-
 
 
 if __name__ == '__main__':

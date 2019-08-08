@@ -26,8 +26,6 @@ class FakeWorld(object):
         return self.player
 
 
-
-
 def test_weaponHit():
     logging.basicConfig(
         filename='app.log', 

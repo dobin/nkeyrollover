@@ -6,7 +6,6 @@ from .particleeffecttype import ParticleEffectType
 logger = logging.getLogger(__name__)
 
 
-
 class ParticleEmiter(object): 
     def __init__(
         self,
@@ -17,7 +16,7 @@ class ParticleEmiter(object):
         self.particleActive = []
         n = 0
         while n < 32:
-            self.particlePool.append( Particle() )
+            self.particlePool.append( Particle(win=win) )
             n += 1
 
     

@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 class Particle(object):
     def __init__(
         self,
+        win =None,
         x :int =0,
         y :int =0, 
         life :int =0,
@@ -21,6 +22,7 @@ class Particle(object):
         byStep :bool =False,
         active :bool =False
     ):
+        self.win = win
         self.movementTimer = Timer()
         self.init(
             x=x, y=y, life=life, angle=angle, speed=speed, fadeout=fadeout, 
@@ -55,7 +57,7 @@ class Particle(object):
             'y': -speed * math.sin(self.angleInRadians)
         }
 
-        self.color = curses.color_pair(7)
+        self.color = None
         self.colorOpt = 0
         self.setColor()
         self.setChar()
@@ -93,6 +95,18 @@ class Particle(object):
 
 
     def setColor(self): 
+        if self.win is None:
+            # for simple unittests
+            return
+
+        # for unittests using MockWin
+        # we always import 'curses', and dont know if we are being unittested
+        # in the unittest, we use MockWin, which has method isUnitTest
+        if hasattr(self.win, 'isUnitTest'):
+            return 0
+
+        self.color = curses.color_pair(7)
+
         if self.life > (self.originalLife / 2):
             self.colorOpt = curses.A_BOLD
         else: 
@@ -144,13 +158,13 @@ class Particle(object):
         self.life -= 1
 
 
-    def draw(self, win):
+    def draw(self):
         p = {
             'x': self.x, 
             'y': self.y,
         }
         if Utility.isPointDrawable(p):
-            win.addstr(self.y, self.x, self.char, self.color | self.colorOpt)
+            self.win.addstr(self.y, self.x, self.char, self.color | self.colorOpt)
 
     def isActive(self): 
         return self.active
