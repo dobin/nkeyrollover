@@ -15,6 +15,7 @@ from entities.direction import Direction
 from sprite.charactersprite import CharacterSprite
 from texture.characteranimationtype import CharacterAnimationType
 from utilities.timer import Timer
+from sprite.particle import Particle
 
 import logging
 #import tests.mockcurses as curses
@@ -59,6 +60,7 @@ def testPlayAnimation():
         curses.init_pair(5, curses.COLOR_BLUE, 0)
         curses.init_pair(6, curses.COLOR_WHITE, curses.COLOR_BLACK)
         curses.init_pair(7, curses.COLOR_WHITE, 0)
+
         win.clear()
         win.border()
         # end curses
@@ -67,7 +69,7 @@ def testPlayAnimation():
 
     world = FakeWorld(win)
 
-    args = 'all'
+    args = 'particle'
 
     sprites = []
 
@@ -85,6 +87,11 @@ def testPlayAnimation():
             sprites.append(characterSprite)
 
             n += 1
+
+    if args == 'particle':
+        p = Particle(x=20, y=20, life=40, angle=10, speed=0.2, active=True)
+        sprites.append(p)
+
 
     stepTimer = Timer(0.5)
     while True:

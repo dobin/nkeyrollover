@@ -1,7 +1,7 @@
 
 
 class Timer(object): 
-    def __init__(self, timerValue, instant=False, active=True): 
+    def __init__(self, timerValue=0.0, instant=False, active=True): 
         self.timeLeft = 0.0
         self.timerValue = timerValue
         self.instant = instant
