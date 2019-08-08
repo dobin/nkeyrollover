@@ -34,8 +34,10 @@ class Character(Entity):
     def getInput(self, playerLocation): 
         raise NotImplementedError('subclasses must override this abstract method')
 
-    def gmHandleEnemyHit(self, damage): 
-        self.characterStatus.enemyHit(damage)
+
+    def gmHandleEnemyHit(self, damage, isAttack=True): 
+        self.characterStatus.enemyHit(damage, isAttack)
+
 
     def gmRessurectMe(self): 
         raise NotImplementedError('subclasses must override this abstract method')

@@ -2,6 +2,7 @@
 
 import unittest
 import time
+import logging
 
 from entities.characterattack import CharacterAttack
 from entities.entity import Entity
@@ -11,10 +12,8 @@ from entities.enemy.enemy import Enemy
 from config import Config
 from director import Director
 from entities.direction import Direction
-
-import logging
 import tests.mockcurses as curses
-
+from utilities.utilities import Utility
 
 class FakeWorld(object): 
     def __init__(self, win): 
@@ -25,6 +24,7 @@ class FakeWorld(object):
 
     def getPlayer(self):
         return self.player
+
 
 
 
@@ -81,11 +81,19 @@ def test_weaponHit():
     life3 = enemy.characterStatus.health
     logging.info("LIFE3: " + str(enemy.characterStatus.health))
 
+    locs = Utility.getBorder(world.player.getLocationCenter(), distance=2, width=1)
+
     if doCurses:
         enemy.draw()
         world.player.draw()
+        for loc in locs: 
+            win.addstr(loc['y'], loc['x'], ',') 
+
         win.refresh()
         time.sleep(2)
+
+
+
 
 if __name__ == '__main__':
     test_weaponHit()

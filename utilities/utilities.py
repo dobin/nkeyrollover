@@ -61,3 +61,34 @@ class Utility(object):
             return False
 
         return True
+
+
+    @staticmethod
+    def getBorder(loc, distance :int =1, width :int =1):
+        locs = []
+
+        basex = loc['x'] - distance 
+        basey = loc['y'] - distance
+
+        dd = distance * 2
+
+        y = basey
+        x = basex
+
+        while y <= basey + dd:
+            x = basex
+            while x <= basex + dd:
+                if y == basey or y == basey + dd: 
+                    locs.append({
+                        'x': x,
+                        'y': y
+                    })
+                elif x == basex or x == basex + dd:
+                    locs.append({
+                        'x': x,
+                        'y': y
+                    })
+                x += 1
+            y += 1
+
+        return locs

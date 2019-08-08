@@ -94,6 +94,7 @@ class CharacterAttack(Entity):
                 baselocation['y'] += 1
 
         return baselocation
+        
 
     def attackWeaponHitSquare(self):
         self.sprite.changeTexture(PhenomenaType.hitSquare, self.parentEntity.direction)

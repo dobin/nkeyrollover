@@ -2,6 +2,8 @@ from config import Config
 from world.particleeffecttype import ParticleEffectType
 from texture.characteranimationtype import CharacterAnimationType
 from utilities.timer import Timer
+from utilities.utilities import Utility
+
 
 class PlayerSkills(object): 
     def __init__(self, player): 
@@ -12,8 +14,8 @@ class PlayerSkills(object):
         self.cooldownTimers = {
             'q': Timer(1.0, instant=True),
             'w': Timer(1.0, instant=True),
-            'e': Timer(3.0, instant=True),
-            'r': Timer(5.0, instant=True),
+            'e': Timer(5.0, instant=True),
+            'r': Timer(3.0, instant=True),
         }
 
 
@@ -56,6 +58,18 @@ class PlayerSkills(object):
         self.player.world.particleEmiter.emit(
             self.player.getLocationCenter(), 
             ParticleEffectType.explosion)
+
+        locCenter = self.player.getLocationCenter()
+        hitLocations = Utility.getBorder(locCenter)
+        self.hitCollisionDetection(hitLocations)
+
+
+    def hitCollisionDetection(self, hitLocations): 
+        for hitLocation in hitLocations:
+            hittedEnemies = self.player.world.director.getEnemiesHit(hitLocation)
+            for enemy in hittedEnemies: 
+                enemy.gmHandleHit( self.player.characterStatus.getDamage() )
+                self.player.gmHandleEnemyHit( self.player.characterStatus.getDamage(), isAttack=False ) 
 
 
     def advance(self, dt):

@@ -39,10 +39,11 @@ class CharacterStatus(object):
         logger.info("New health: " + str(self.health))
 
 
-    def enemyHit(self, damage): 
-        # implement lifesteal, 10% of damage taken by the enemy
-        inc = int(damage * 0.1)
-        self.health += inc
+    def enemyHit(self, damage, isAttack): 
+        if isAttack:
+            # implement lifesteal, 10% of damage taken by the enemy
+            inc = int(damage * 0.1)
+            self.health += inc
 
 
     def increaseHealthBy(self, hp): 
