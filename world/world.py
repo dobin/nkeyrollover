@@ -65,6 +65,9 @@ class World(object):
         self.director.drawEnemies()
         self.player.draw()
 
+        self.player.drawCharacterAttack()
+        self.director.drawEnemyAttacks()
+
         for sprite in self.sprites: 
             sprite.draw(self.win)
 
