@@ -16,6 +16,7 @@ from sprite.charactersprite import CharacterSprite
 from texture.characteranimationtype import CharacterAnimationType
 from entities.characterattack import CharacterAttack
 from entities.weapontype import WeaponType
+from world.particleeffecttype import ParticleEffectType
 
 logger = logging.getLogger(__name__)
 
@@ -49,6 +50,9 @@ class Player(Character):
             self.x = Config.areaMoveable['maxx'] - self.x
         else: 
             self.x = (Config.areaMoveable['maxx'] - self.x)
+
+    def skillExplosion(self): 
+        self.world.particleEmiter.emit(self.getLocationCenter(), ParticleEffectType.explosion)
 
 
     def getInput(self):
@@ -92,6 +96,9 @@ class Player(Character):
 
             if key == ord('e'):
                 self.skillSwitchSide()
+
+            if key == ord('r'):
+                self.skillExplosion()
 
             if key == curses.KEY_LEFT:
                 if Utility.isPointMovable(self.x - 1, self.y, self.sprite.texture.width, self.sprite.texture.height):

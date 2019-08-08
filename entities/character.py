@@ -68,3 +68,10 @@ class Character(Entity):
 
     def getRandomBody(self): 
         return random.choice([ 'X', 'o', 'O', 'v', 'V'])
+
+    
+    def getLocationCenter(self): 
+        loc = self.getLocation()
+        loc['x'] += 1
+        loc['y'] += 1
+        return loc

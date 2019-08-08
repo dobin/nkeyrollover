@@ -3,6 +3,7 @@ import logging
 import curses
 
 from utilities.timer import Timer
+from utilities.utilities import Utility
 
 logger = logging.getLogger(__name__)
 
@@ -143,8 +144,13 @@ class Particle(object):
         self.life -= 1
 
 
-    def draw(self, win): 
-        win.addstr(self.y, self.x, self.char, self.color | self.colorOpt)
+    def draw(self, win):
+        p = {
+            'x': self.x, 
+            'y': self.y,
+        }
+        if Utility.isPointDrawable(p):
+            win.addstr(self.y, self.x, self.char, self.color | self.colorOpt)
 
     def isActive(self): 
         return self.active

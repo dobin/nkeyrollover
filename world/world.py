@@ -9,6 +9,7 @@ from director import Director
 from config import Config
 from entities.entity import Entity
 from entities.entitytype import EntityType
+from world.particleemiter import ParticleEmiter
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +27,7 @@ class World(object):
             world=self)
         self.director = Director(self.win, self)
         self.director.init()
+        self.particleEmiter = ParticleEmiter(self.win)
 
         self.pause = False
         self.gameRunning = True
@@ -67,6 +69,7 @@ class World(object):
 
         self.player.drawCharacterAttack()
         self.director.drawEnemyAttacks()
+        self.particleEmiter.draw()
 
         for sprite in self.sprites: 
             sprite.draw(self.win)
@@ -81,6 +84,7 @@ class World(object):
 
         self.player.advance(deltaTime)
         self.director.advanceEnemies(deltaTime)
+        self.particleEmiter.advance(deltaTime)
 
         for sprite in self.sprites: 
             sprite.advance(deltaTime)
