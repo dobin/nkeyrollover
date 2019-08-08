@@ -79,19 +79,6 @@ class Particle(object):
         self.movementTimer.advance(dt)
 
         self.makeStep(dt)
-        #if self.movementTimer.timeIsUp():
-        #    self.makeStep()
-        #    self.movementTimer.reset()
-
-
-    def advanceStep(self):
-        if self.active is False: 
-            return
-
-        if not self.byStep: 
-            return
-
-        self.makeStep()
 
 
     def setColor(self): 
@@ -168,6 +155,7 @@ class Particle(object):
         }
         if Utility.isPointDrawable(p):
             self.win.addstr(self.y, self.x, self.char, self.color | self.colorOpt)
+
 
     def isActive(self): 
         return self.active
