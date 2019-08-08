@@ -28,18 +28,23 @@ class ArrSprite(object):
 
     
     def init(self):
-        self.frameIndex = 0
-        self.frameTimeLeft = 0        
         self.isActive = True
         self.xoffset = 0
         self.yoffset = 0
 
+        self.resetAnimation()
+
+
+    def resetAnimation(self): 
+        """Start animation from the beginning"""
+        self.frameIndex = 0
+
+        self.frameTimeLeft = 0
         # set the initial frametime
         # therefore, this init() has to be called after changeTexture()
         if self.texture is not None:
             if not self.texture.endless and self.texture.frameTime:
                 self.frameTimeLeft = self.texture.frameTime[self.frameIndex]
-
 
 
     def advanceStep(self):
@@ -101,6 +106,10 @@ class ArrSprite(object):
         pos['y'] += self.yoffset
 
         return pos
+
+    def setLocation(self, x, y):
+        self.xoffset = x
+        self.yoffset = y
 
 
     def getAnimationTime(self): 
