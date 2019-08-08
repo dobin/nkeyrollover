@@ -163,15 +163,19 @@ class AnimationTest(object):
 
 
     def playParticles(self): 
-        particleEmiter = ParticleEmiter(world=None)
-        particleEmiter.emit(10, 10, ParticleEffectType.explosion)
+        particleEmiter = ParticleEmiter(self.win)
+        loc = {
+            'x': 10,
+            'y': 10,
+        }
+        particleEmiter.emit(loc, ParticleEffectType.explosion)
 
         dt = 0.01
         while True:
             self.win.erase()
 
             particleEmiter.advance(dt)
-            particleEmiter.draw(self.win)
+            particleEmiter.draw()
 
             key = self.win.getch()
             if key != -1:
@@ -179,7 +183,7 @@ class AnimationTest(object):
                     break
 
             if key == ord('r'): 
-                particleEmiter.emit(10, 10, ParticleEffectType.explosion)
+                particleEmiter.emit(loc, ParticleEffectType.explosion)
 
             self.win.refresh()
             time.sleep(dt) 
