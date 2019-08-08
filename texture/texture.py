@@ -9,3 +9,11 @@ class Texture(object):
 
         self.frameTime = []
         self.arr = []
+
+
+    def getAnimationTime(self) -> float:
+        """Return sum of all animation times in current sprite"""
+        n = 0.0
+        for time in self.frameTime: 
+            n += time
+        return n

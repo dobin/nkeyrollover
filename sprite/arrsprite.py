@@ -48,6 +48,7 @@ class ArrSprite(object):
 
 
     def advanceStep(self):
+        """Advance entity animation when it has moved one square"""
         if not self.texture.advanceByStep:
             return
 
@@ -107,16 +108,10 @@ class ArrSprite(object):
 
         return pos
 
+
     def setLocation(self, x, y):
         self.xoffset = x
         self.yoffset = y
-
-
-    def getAnimationTime(self): 
-        n = 0.0
-        for time in self.texture.frameTime: 
-            n += time
-        return n
 
 
     def draw(self, win):

@@ -27,7 +27,7 @@ class PlayerActionCtrl(ActionCtrl):
             logger.debug("Player Change action to: " + str(newCharacterAnimationType))
             
             self.parentEntity.sprite.changeTexture(newCharacterAnimationType, direction)
-            animationTime = self.parentEntity.sprite.getAnimationTime()
+            animationTime = self.parentEntity.sprite.texture.getAnimationTime()
 
             self.durationTimer.setTimer(animationTime)
             self.durationTimer.reset()

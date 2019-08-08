@@ -30,7 +30,7 @@ class CharacterAttack(Entity):
         self.sprite = PhenomenaSprite(phenomenaType=PhenomenaType.hit, parentEntity=self)
 
         # the duration of the hitting animation
-        self.durationTimer.setTimer( self.sprite.getAnimationTime() )
+        self.durationTimer.setTimer( self.sprite.texture.getAnimationTime() )
         self.durationTimer.reset()
 
         # cooldown. 0.2 is actually lower than whats possible, even with 100fps
