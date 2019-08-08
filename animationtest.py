@@ -142,7 +142,8 @@ class AnimationTest(object):
     def playParticle(self): 
         sprites = []
 
-        p = Particle(x=20, y=20, life=10, angle=10, speed=0.2, active=True)
+        p = Particle(win=self.win, x=20, y=20, life=10, 
+            angle=10, speed=1.2, active=True)
         sprites.append(p)
 
         while True:
@@ -150,13 +151,17 @@ class AnimationTest(object):
 
             # enemy.draw()
             for sprite in sprites:
-                sprite.draw(self.win)
+                sprite.draw()
                 sprite.advance(0.01)
                 
             key = self.win.getch()
             if key != -1:
                 if key == 27: # esc
                     break
+
+                if key == ord('r'): 
+                    p.init(x=20, y=20, life=10, 
+                            angle=10, speed=1.2, active=True)
 
             self.win.refresh()
             time.sleep(0.01)
@@ -190,7 +195,11 @@ class AnimationTest(object):
 
 
 if __name__ == '__main__':
+    if len(sys.argv) == 1: 
+        print("Give argument.")
+        sys.exit(1)
+
     animationTest = AnimationTest()
     animationTest.init()
-    animationTest.play('particles')
+    animationTest.play(sys.argv[1])
     animationTest.cleanup()

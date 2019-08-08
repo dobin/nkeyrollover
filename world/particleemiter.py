@@ -30,8 +30,9 @@ class ParticleEmiter(object):
                 angle = (360.0 / particleCount) * n
 
                 particle.init(
-                    x=loc['x'], y=loc['y'], life=life, angle=angle, speed=0.1, 
-                    fadeout=True, byStep=False, charType=0, active=True)
+                    x=loc['x'], y=loc['y'], life=life, angle=angle, 
+                    speed=0.1, fadeout=True, byStep=False, charType=0, 
+                    active=True)
 
                 self.particleActive.append(particle)
                 n += 1
@@ -48,4 +49,4 @@ class ParticleEmiter(object):
 
     def draw(self):
         for particle in self.particleActive: 
-            particle.draw(self.win)
+            particle.draw()

@@ -14,7 +14,7 @@ class MockWin(object):
     def addstr(self, y, x, string, color=None):
         for i, ch in enumerate(string): 
             self.addChInternal(y, x+i, ch, color)
-        print("addStr")
+        #print("addStr")
     
 
     def getCh(self): 
@@ -51,6 +51,9 @@ class MockWin(object):
                 y+= 1
 
 
+    def peek(self, x, y):
+        pos = self.getInternalPosFor(x, y)
+        return self.win[ pos['y'] ][ pos['x'] ]
 
     def addCh(self, y, x, char, color=None): 
         self.addChInternal(y, x, char, color)
@@ -68,11 +71,12 @@ class MockWin(object):
         return pos
 
     def draw(self): 
-        print("Draw")
+        self.internalPrint()
+
 
     def refresh(self): 
         print("Refresh")
-        self.internalPrint()
+
 
     def internalPrint(self):
         print("")
@@ -93,6 +97,11 @@ class MockWin(object):
 
     def clear(self): 
         print("Clear")
+        for y, yrow in enumerate(self.win): 
+            for x, char in enumerate(yrow):
+                self.win[y][x] = ''
+                 #print("X: " + str(x))
+
 
 
     # used by hasttr() to check if unit test is being run

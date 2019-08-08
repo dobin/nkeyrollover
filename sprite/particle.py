@@ -78,7 +78,7 @@ class Particle(object):
 
         self.movementTimer.advance(dt)
 
-        self.makeStep()
+        self.makeStep(dt)
         #if self.movementTimer.timeIsUp():
         #    self.makeStep()
         #    self.movementTimer.reset()
@@ -103,7 +103,8 @@ class Particle(object):
         # we always import 'curses', and dont know if we are being unittested
         # in the unittest, we use MockWin, which has method isUnitTest
         if hasattr(self.win, 'isUnitTest'):
-            return 0
+            self.color = 0
+            return
 
         self.color = curses.color_pair(7)
 
@@ -123,7 +124,7 @@ class Particle(object):
                 self.char = '.'
 
 
-    def makeStep(self):
+    def makeStep(self, dt):
         if self.life <= 0:
             self.active = False
             return
@@ -132,8 +133,8 @@ class Particle(object):
             self.setColor()
         self.setChar()
 
-        xFloat = self.velocity['x'] + self.rx
-        yFloat = self.velocity['y'] + self.ry
+        xFloat = self.velocity['x'] * (dt * 100) + self.rx
+        yFloat = self.velocity['y'] * (dt * 100) + self.ry
 
         xChange = int(round(xFloat))
         yChange = int(round(yFloat))
@@ -149,12 +150,14 @@ class Particle(object):
         self.x += xChange
         self.y += yChange
 
-        #logging.info("Real change:  X: {}  Y: {}".format(xFloat, yFloat))
-        #logging.info("Round change: X: {}  Y: {}".format(xChange, yChange))
-        #logging.info("Change Rest:  X: {}  Y: {}".format(changeRestX, changeRestY))
-        #logging.info("New    Rest:  X: {}  Y: {}".format(self.rx, self.ry))
-        #logging.info("New    Pos:   X: {}  Y: {}".format(self.x, self.y))
-        #logging.info("")
+        if False:
+            print("")
+            print("Real change:  X: {}  Y: {}".format(xFloat, yFloat))
+            print("Round change: X: {}  Y: {}".format(xChange, yChange))
+            print("Change Rest:  X: {}  Y: {}".format(changeRestX, changeRestY))
+            print("New    Rest:  X: {}  Y: {}".format(self.rx, self.ry))
+            print("New    Pos:   X: {}  Y: {}".format(self.x, self.y))
+            print("")
         self.life -= 1
 
 
