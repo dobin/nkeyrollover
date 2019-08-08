@@ -12,22 +12,28 @@ class PlayerSkills(object):
         self.cooldownTimers = {
             'q': Timer(1.0, instant=True),
             'w': Timer(1.0, instant=True),
-            'e': Timer(1.0, instant=True),
-            'r': Timer(1.0, instant=True),
+            'e': Timer(3.0, instant=True),
+            'r': Timer(5.0, instant=True),
         }
 
 
     def doSkill(self, key): 
         if key == 'q': 
-            self.player.actionCtrl.changeTo(
-                CharacterAnimationType.shrugging, 
-                self.player.direction)
+            if self.isRdy(key): 
+                self.player.actionCtrl.changeTo(
+                    CharacterAnimationType.shrugging, 
+                    self.player.direction)
+                self.cooldownTimers[key].reset()
         
         if key == 'w':
-            self.player.speechSprite.changeTexture('hoi')
+            if self.isRdy(key): 
+                self.player.speechSprite.changeTexture('hoi')
+                self.cooldownTimers[key].reset()
 
         if key == 'e':
-            self.skillSwitchSide()
+            if self.isRdy(key): 
+                self.skillSwitchSide()
+                self.cooldownTimers[key].reset()
 
         if key == 'r':
             if self.isRdy(key): 

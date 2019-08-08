@@ -121,16 +121,40 @@ class Keyrollover(object):
             #fps = self.workTime * 1000.0
 
         s = "Health: " + str(self.world.player.characterStatus.health)
-        s += "    Mana: " + str(self.world.player.characterStatus.mana)
-        s += "    Points: " + str(self.world.player.characterStatus.points)
-        s += "    FPS: %.0f" % (fps)
+        s += "  Mana: " + str(self.world.player.characterStatus.mana)
+        s += "  Points: " + str(self.world.player.characterStatus.points)
+
+        #s += "  FPS: %.0f" % (fps)
         self.win.addstr(1, 2, s, curses.color_pair(6) | curses.A_BOLD)
 
-        self.win.border()
+        self.printSkillbar()
+        #self.win.border()
 
         # TODO we dont use self.statusBar atm for flickering reasons
         #self.statusBarWin.erase()
         #self.statusbarWin.refresh()
+
+
+    def printSkillbar(self): 
+        skills = self.world.player.skills
+
+        basex = 60
+        n = 0
+        for skill in skills.skillStatus: 
+            if skills.isRdy(skill): 
+                self.win.addstr(1, basex + n, skill, curses.color_pair(6) | curses.A_BOLD)
+            else: 
+                self.win.addstr(1, basex + n, skill, curses.color_pair(6))
+
+            n += 2
+
+        weaponIdx = 70
+        self.win.addstr(1, 
+            weaponIdx, 
+            'W: ' + self.world.player.characterAttack.getWeaponStr(), 
+            curses.color_pair(6))
+
+
 
 
 def main(stdscr):
