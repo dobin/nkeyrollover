@@ -4,7 +4,6 @@ import curses
 
 from utilities.timer import Timer
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -17,11 +16,14 @@ class Particle(object):
         angle :float =0, 
         speed :int =1,
         fadeout :bool =True,
+        charType :int =0,
         byStep :bool =False,
         active :bool =False
     ):
         self.movementTimer = Timer()
-        self.init(x=x, y=y, life=life, angle=angle, speed=speed, fadeout=fadeout, byStep=byStep, active=active)
+        self.init(
+            x=x, y=y, life=life, angle=angle, speed=speed, fadeout=fadeout, 
+            byStep=byStep, charType=charType, active=active)
         
 
     def init(
@@ -33,6 +35,7 @@ class Particle(object):
         speed :int =1,
         fadeout :bool =True,
         byStep :bool =False,
+        charType :int =0,
         active :bool =False
     ):
         self.x = x
@@ -43,6 +46,7 @@ class Particle(object):
         self.speed = speed
         self.fadeout = fadeout
         self.byStep = byStep
+        self.charType = charType
 
         self.angleInRadians = angle * math.pi / 180
         self.velocity = {
@@ -53,12 +57,12 @@ class Particle(object):
         self.color = curses.color_pair(7)
         self.colorOpt = 0
         self.setColor()
+        self.setChar()
 
         self.rx = 0.0
         self.ry = 0.0
 
         self.movementTimer.setTimer(self.speed)
-
         self.active = active
 
 
@@ -71,9 +75,10 @@ class Particle(object):
 
         self.movementTimer.advance(dt)
 
-        if self.movementTimer.timeIsUp():
-            self.makeStep()
-            self.movementTimer.reset()
+        self.makeStep()
+        #if self.movementTimer.timeIsUp():
+        #    self.makeStep()
+        #    self.movementTimer.reset()
 
 
     def advanceStep(self):
@@ -92,25 +97,31 @@ class Particle(object):
         else: 
             self.colorOpt = 0
 
+
+    def setChar(self): 
+        if self.charType == 0: 
+            if self.life > ((self.originalLife / 3) * 1):
+                self.char = 'O'
+            elif self.life > ((self.originalLife / 3) * 2):
+                self.char = 'o'
+            else: 
+                self.char = '.'
+
+
     def makeStep(self):
-        if self.life <= 0: 
+        if self.life <= 0:
             self.active = False
             return
 
-
         if self.fadeout:
             self.setColor()
-
+        self.setChar()
 
         xFloat = self.velocity['x'] + self.rx
         yFloat = self.velocity['y'] + self.ry
 
         xChange = int(round(xFloat))
         yChange = int(round(yFloat))
-
-        # change pos
-        self.x += xChange
-        self.y += yChange
 
         # accumulate pos we could not handle yet
         changeRestX = xFloat - xChange - self.rx
@@ -119,14 +130,21 @@ class Particle(object):
         self.rx += changeRestX
         self.ry += changeRestY
 
+        # change pos
+        self.x += xChange
+        self.y += yChange
+
         #logging.info("Real change:  X: {}  Y: {}".format(xFloat, yFloat))
         #logging.info("Round change: X: {}  Y: {}".format(xChange, yChange))
-
         #logging.info("Change Rest:  X: {}  Y: {}".format(changeRestX, changeRestY))
         #logging.info("New    Rest:  X: {}  Y: {}".format(self.rx, self.ry))
+        #logging.info("New    Pos:   X: {}  Y: {}".format(self.x, self.y))
         #logging.info("")
         self.life -= 1
 
 
     def draw(self, win): 
-        win.addstr(self.y, self.x, 'O', self.color | self.colorOpt)
+        win.addstr(self.y, self.x, self.char, self.color | self.colorOpt)
+
+    def isActive(self): 
+        return self.active

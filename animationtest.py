@@ -16,6 +16,8 @@ from sprite.charactersprite import CharacterSprite
 from texture.characteranimationtype import CharacterAnimationType
 from utilities.timer import Timer
 from sprite.particle import Particle
+from world.particleemiter import ParticleEmiter
+from world.particleeffecttype import ParticleEffectType
 
 import logging
 #import tests.mockcurses as curses
@@ -33,48 +35,68 @@ class FakeWorld(object):
         return self.player
 
 
+class AnimationTest(object):
+    def __init__(self): 
+        self.win = None
 
-def testPlayAnimation():
-    logging.basicConfig(
-        filename='app.log', 
-        filemode='a', 
-        level=logging.DEBUG,
-        format='%(asctime)s %(levelname)07s %(name)32s: %(message)s')
+    def init(self): 
+        logging.basicConfig(
+            filename='app.log', 
+            filemode='a', 
+            level=logging.DEBUG,
+            format='%(asctime)s %(levelname)07s %(name)32s: %(message)s')
 
-    # curses
-    doCurses = True
-    if doCurses:
-        curses.initscr()
-        win = curses.newwin(Config.rows, Config.columns)
-        curses.noecho()
-        curses.cbreak()
-        win.keypad(1) 
-        curses.curs_set(0)    
-        win.nodelay(1) # make getch() nonblocking
-        # Initialize color pairs
-        curses.start_color()    
-        curses.init_pair(1, curses.COLOR_GREEN, 0)
-        curses.init_pair(2, curses.COLOR_MAGENTA, 0)
-        curses.init_pair(3, curses.COLOR_RED, 0)
-        curses.init_pair(4, curses.COLOR_YELLOW, 0)
-        curses.init_pair(5, curses.COLOR_BLUE, 0)
-        curses.init_pair(6, curses.COLOR_WHITE, curses.COLOR_BLACK)
-        curses.init_pair(7, curses.COLOR_WHITE, 0)
+        # curses
+        doCurses = True
+        if doCurses:
+            curses.initscr()
+            win = curses.newwin(Config.rows, Config.columns)
+            curses.noecho()
+            curses.cbreak()
+            win.keypad(1) 
+            curses.curs_set(0)    
+            win.nodelay(1) # make getch() nonblocking
+            # Initialize color pairs
+            curses.start_color()    
+            curses.init_pair(1, curses.COLOR_GREEN, 0)
+            curses.init_pair(2, curses.COLOR_MAGENTA, 0)
+            curses.init_pair(3, curses.COLOR_RED, 0)
+            curses.init_pair(4, curses.COLOR_YELLOW, 0)
+            curses.init_pair(5, curses.COLOR_BLUE, 0)
+            curses.init_pair(6, curses.COLOR_WHITE, curses.COLOR_BLACK)
+            curses.init_pair(7, curses.COLOR_WHITE, 0)
 
-        win.clear()
-        win.border()
-        # end curses
-    else: 
-        win = None
+            win.clear()
+            win.border()
+            # end curses
+        else: 
+            win = None
 
-    world = FakeWorld(win)
+        self.win = win
 
-    args = 'particle'
 
-    sprites = []
+    def cleanup(self): 
+        # Clean up before exiting
+        curses.nocbreak()
+        self.win.keypad(0)
+        curses.echo()
+        curses.endwin()
 
-    n = 0
-    if args == 'all':
+
+    def play(self, type):
+        if type == 'all':
+            self.playAllAnimations()
+        elif type == 'particle':
+            self.playParticle()
+        elif type == 'particles':
+            self.playParticles()
+
+
+    def playAllAnimations(self):
+        world = FakeWorld(self.win)
+        sprites = []
+
+        n = 0
         for animationType in CharacterAnimationType:
             characterSprite = CharacterSprite(
                 parentEntity=world.worldEntity, 
@@ -88,45 +110,83 @@ def testPlayAnimation():
 
             n += 1
 
-    if args == 'particle':
-        p = Particle(x=20, y=20, life=40, angle=10, speed=0.2, active=True)
+        stepTimer = Timer(0.5)
+        while True:
+            self.win.erase()
+            stepTimer.advance(0.01)
+
+            # enemy.draw()
+            for sprite in sprites:
+                sprite.draw(self.win)
+                sprite.advance(0.01)
+                
+            if stepTimer.timeIsUp():
+                for sprite in sprites:
+                    sprite.advanceStep()
+                stepTimer.reset()
+
+            key = self.win.getch()
+            if key != -1:
+                if key == 27: # esc
+                    break
+
+                if key == ord('r'): 
+                    for sprite in sprites: 
+                        sprite.resetAnimation()
+                        sprite.setActive(True)
+
+            self.win.refresh()
+            time.sleep(0.01)
+
+
+    def playParticle(self): 
+        sprites = []
+
+        p = Particle(x=20, y=20, life=10, angle=10, speed=0.2, active=True)
         sprites.append(p)
 
+        while True:
+            self.win.erase()
 
-    stepTimer = Timer(0.5)
-    while True:
-        win.erase()
-        stepTimer.advance(0.01)
-
-        # enemy.draw()
-        for sprite in sprites:
-            sprite.draw(win)
-            sprite.advance(0.01)
-            
-        if stepTimer.timeIsUp():
+            # enemy.draw()
             for sprite in sprites:
-                sprite.advanceStep()
-            stepTimer.reset()
+                sprite.draw(self.win)
+                sprite.advance(0.01)
+                
+            key = self.win.getch()
+            if key != -1:
+                if key == 27: # esc
+                    break
 
-        key = win.getch()
-        if key != -1:
-            if key == 27: # esc
-                break
+            self.win.refresh()
+            time.sleep(0.01)
+
+
+    def playParticles(self): 
+        particleEmiter = ParticleEmiter(world=None)
+        particleEmiter.emit(10, 10, ParticleEffectType.explosion)
+
+        dt = 0.01
+        while True:
+            self.win.erase()
+
+            particleEmiter.advance(dt)
+            particleEmiter.draw(self.win)
+
+            key = self.win.getch()
+            if key != -1:
+                if key == 27: # esc
+                    break
 
             if key == ord('r'): 
-                for sprite in sprites: 
-                    sprite.resetAnimation()
-                    sprite.setActive(True)
+                particleEmiter.emit(10, 10, ParticleEffectType.explosion)
 
-        win.refresh()
-        time.sleep(0.01)
-
-    # Clean up before exiting
-    curses.nocbreak()
-    win.keypad(0)
-    curses.echo()
-    curses.endwin()
+            self.win.refresh()
+            time.sleep(dt) 
 
 
 if __name__ == '__main__':
-    testPlayAnimation()
+    animationTest = AnimationTest()
+    animationTest.init()
+    animationTest.play('particles')
+    animationTest.cleanup()
