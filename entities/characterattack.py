@@ -40,7 +40,23 @@ class CharacterAttack(Entity):
         self.isActive = False
 
         self.weaponType = WeaponType.hit
+        self.selectedWeaponKey = '1'
         
+
+    def switchWeaponByKey(self, key):
+        self.selectedWeaponKey = key
+        if key == '1':
+            self.switchWeapon(WeaponType.hit)
+
+        if key == '2':
+            self.switchWeapon(WeaponType.hitSquare)
+
+        if key == '3':
+            self.switchWeapon(WeaponType.hitLine)
+
+        if key == '4':
+            self.switchWeapon(WeaponType.jumpKick)
+
 
     def switchWeapon(self, weaponType):
         logging.info("Switch to weaopn: " + str(weaponType))
@@ -172,3 +188,7 @@ class CharacterAttack(Entity):
     def advance(self, deltaTime):
         super(CharacterAttack, self).advance(deltaTime)
         self.cooldownTimer.advance(deltaTime)
+
+
+    def getWeaponStr(self): 
+        return self.selectedWeaponKey

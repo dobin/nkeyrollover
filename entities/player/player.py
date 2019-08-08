@@ -16,7 +16,7 @@ from sprite.charactersprite import CharacterSprite
 from texture.characteranimationtype import CharacterAnimationType
 from entities.characterattack import CharacterAttack
 from entities.weapontype import WeaponType
-from world.particleeffecttype import ParticleEffectType
+from .playerskills import PlayerSkills
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +28,7 @@ class Player(Character):
         self.actionCtrl = PlayerActionCtrl(parentEntity=self, world=world)
         self.sprite = CharacterSprite(parentEntity=self)
         self.characterAttack = CharacterAttack(win=win, parentCharacter=self, isPlayer=True)
+        self.skills = PlayerSkills(player=self)
 
         # first action is standing around
         self.actionCtrl.changeTo(CharacterAnimationType.standing, Direction.right)
@@ -41,18 +42,6 @@ class Player(Character):
     def gmHandleHit(self, damage):
         self.characterStatus.getHit(damage)
         self.setColorFor( 1.0 - 1.0/damage , EntityType.takedamage)
-
-
-    # skills
-
-    def skillSwitchSide(self): 
-        if self.x < (Config.rows / 2):
-            self.x = Config.areaMoveable['maxx'] - self.x
-        else: 
-            self.x = (Config.areaMoveable['maxx'] - self.x)
-
-    def skillExplosion(self): 
-        self.world.particleEmiter.emit(self.getLocationCenter(), ParticleEffectType.explosion)
 
 
     def getInput(self):
@@ -77,28 +66,28 @@ class Player(Character):
 
             # player related
             if key == ord('1'):
-                self.characterAttack.switchWeapon(WeaponType.hit)
+                self.characterAttack.switchWeaponByKey('1')
 
             if key == ord('2'):
-                self.characterAttack.switchWeapon(WeaponType.hitSquare)
+                self.characterAttack.switchWeaponByKey('2')
 
             if key == ord('3'):
-                self.characterAttack.switchWeapon(WeaponType.hitLine)
+                self.characterAttack.switchWeaponByKey('3')
 
             if key == ord('4'):
-                self.characterAttack.switchWeapon(WeaponType.jumpKick)
+                self.characterAttack.switchWeaponByKey('4')
 
             if key == ord('q'):
-                self.actionCtrl.changeTo(CharacterAnimationType.shrugging, self.direction)
+                self.skills.doSkill('q')
 
             if key == ord('w'):
-                self.speechSprite.changeTexture('hoi')
+                self.skills.doSkill('w')
 
             if key == ord('e'):
-                self.skillSwitchSide()
+                self.skills.doSkill('e')
 
             if key == ord('r'):
-                self.skillExplosion()
+                self.skills.doSkill('r')
 
             if key == curses.KEY_LEFT:
                 if Utility.isPointMovable(self.x - 1, self.y, self.sprite.texture.width, self.sprite.texture.height):
@@ -144,7 +133,7 @@ class Player(Character):
     def advance(self, deltaTime):
         super(Player, self).advance(deltaTime) # advance Character part (duration, sprite)
         self.actionCtrl.advance(deltaTime) # advance actions (duration, Action transfers)
-
+        self.skills.advance(deltaTime)
 
     def ressurectMe(self): 
         if self.characterStatus.isAlive(): 
