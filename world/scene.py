@@ -46,10 +46,11 @@ class Scene(object):
         deltaTime = targetFrameTime # we try to keep it...
 
         worldSprite = Sprite(win=self.win, parentSprite=None)
-        worldSprite.setLocation(Coordinates(15, -5))
+     
 
         entityCopter = Entity(win=self.win, parentSprite=worldSprite, entityType=EntityType.player)
         textureCopter = PhenomenaTexture(phenomenaType=PhenomenaType.roflcopter, parentSprite=entityCopter)
+        entityCopter.setLocation(Coordinates(13, -5))        
         textureCopter.setActive(False)
 
         entityPlayer = Entity(win=self.win, parentSprite=worldSprite, entityType=EntityType.player)
@@ -83,12 +84,12 @@ class Scene(object):
                     entityCopter.coordinates.y += 1
 
                 # for next scene: Drop
-                if entityCopter.coordinates.y == 12: 
+                if entityCopter.coordinates.y == 8: 
                     myTimer.setTimer(0.1)
                     logging.debug("Scene: Go to State: Drop")
                     state = SceneState.drop
-                    entityPlayer.coordinates.y = 18
-                    entityPlayer.coordinates.x = 8
+                    entityPlayer.coordinates.x = 24
+                    entityPlayer.coordinates.y = 13
                     texturePlayer.setActive(True)                    
 
             elif state is SceneState.drop: 

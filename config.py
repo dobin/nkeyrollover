@@ -21,8 +21,8 @@ class Config:
     }
 
     playerSpawnPoint = {
-        'x': 8,
-        'y': 18,
+        'x': 24,
+        'y': 13,
     }
 
     devMode = True
