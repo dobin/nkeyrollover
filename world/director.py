@@ -43,20 +43,20 @@ class Director(object):
                 maxN = 1
             while n < maxN:
                 myx = 1
-                if n % 2 == 1:
+                if n % 2 == 0:
                     myx = Config.columns + 1
 
-                    coordinates = {
-                        'x': myx, 
-                        'min_y': Config.areaMoveable['miny'],
-                        'max_y': Config.areaMoveable['maxy'],
-                    }
-                    newEnemy = Enemy(win=self.win, 
-                        parent=self.world.worldSprite, 
-                        spawnBoundaries=coordinates, 
-                        world=self.world, 
-                        name=str(n))
-                    self.enemiesDead.append(newEnemy)
+                coordinates = {
+                    'x': myx, 
+                    'min_y': Config.areaMoveable['miny'],
+                    'max_y': Config.areaMoveable['maxy'],
+                }
+                newEnemy = Enemy(win=self.win, 
+                    parent=self.world.worldSprite, 
+                    spawnBoundaries=coordinates, 
+                    world=self.world, 
+                    name=str(n))
+                self.enemiesDead.append(newEnemy)
                 n = n + 1
 
 
