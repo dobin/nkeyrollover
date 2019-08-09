@@ -3,7 +3,7 @@ import curses
 import logging
 
 from .coordinates import Coordinates
-from entities.direction import Direction
+from sprite.direction import Direction
 
 logger = logging.getLogger(__name__)
 

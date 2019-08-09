@@ -10,10 +10,10 @@ from entities.entitytype import EntityType
 from entities.player.player import Player
 from entities.enemy.enemy import Enemy
 from config import Config
-from director import Director
-from entities.direction import Direction
-from sprite.charactertexture import CharacterTexture
-from texture.characteranimationtype import CharacterAnimationType
+from world.director import Director
+from sprite.direction import Direction
+from texture.character.charactertexture import CharacterTexture
+from texture.character.characteranimationtype import CharacterAnimationType
 from utilities.timer import Timer
 from sprite.particle import Particle
 from world.particleemiter import ParticleEmiter

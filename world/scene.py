@@ -6,11 +6,11 @@ from enum import Enum
 from config import Config
 from entities.entity import Entity
 from entities.entitytype import EntityType
-from texture.phenomenatype import PhenomenaType
-from entities.direction import Direction
-from texture.characteranimationtype import CharacterAnimationType
-from sprite.charactertexture import CharacterTexture
-from sprite.phenomenatexture import PhenomenaTexture
+from texture.phenomena.phenomenatype import PhenomenaType
+from sprite.direction import Direction
+from texture.character.characteranimationtype import CharacterAnimationType
+from texture.character.charactertexture import CharacterTexture
+from texture.phenomena.phenomenatexture import PhenomenaTexture
 from sprite.sprite import Sprite
 from utilities.timer import Timer
 from sprite.coordinates import Coordinates

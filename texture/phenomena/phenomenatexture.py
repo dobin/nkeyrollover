@@ -1,9 +1,9 @@
 from enum import Enum
 import logging
 
-from texture.phenomenaanimationmanager import PhenomenaAnimationManager
-from entities.direction import Direction
-from .animationtexture import AnimationTexture
+from texture.phenomena.phenomenaanimationmanager import PhenomenaAnimationManager
+from sprite.direction import Direction
+from texture.animationtexture import AnimationTexture
 
 logger = logging.getLogger(__name__)
 

@@ -4,8 +4,8 @@ import curses, random, time
 import logging
 
 from entities.player.player import Player
-from scene.scene import Scene
-from director import Director
+from world.scene import Scene
+from world.director import Director
 from config import Config
 from world.world import World
 

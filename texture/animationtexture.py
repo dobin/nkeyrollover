@@ -4,7 +4,7 @@ from enum import Enum
 
 from sprite.coordinates import Coordinates
 from entities.entity import Entity
-from entities.direction import Direction
+from sprite.direction import Direction
 from config import Config
 from utilities.utilities import Utility
 from texture.texture import Texture

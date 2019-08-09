@@ -10,8 +10,8 @@ from config import Config
 from entities.player.playeractionctrl import PlayerActionCtrl
 from entities.entity import Entity
 from .characterstatus import CharacterStatus
-from .direction import Direction
-from sprite.speechtexture import SpeechTexture
+from sprite.direction import Direction
+from texture.speechtexture import SpeechTexture
 
 logger = logging.getLogger(__name__)
 

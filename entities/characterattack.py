@@ -3,13 +3,13 @@ import logging
 
 from sprite.coordinates import Coordinates
 from utilities.timer import Timer
-from sprite.phenomenatexture import PhenomenaTexture
-from texture.phenomenatype import PhenomenaType
+from texture.phenomena.phenomenatexture import PhenomenaTexture
+from texture.phenomena.phenomenatype import PhenomenaType
 from config import Config
 from .entity import Entity
 from .entitytype import EntityType
 from .character import Character
-from .direction import Direction
+from sprite.direction import Direction
 from .character import Character
 from .weapontype import WeaponType
 

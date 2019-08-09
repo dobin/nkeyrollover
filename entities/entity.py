@@ -1,7 +1,7 @@
 import logging
 import curses 
 from .entitytype import EntityType
-from .direction import Direction
+from sprite.direction import Direction
 from utilities.timer import Timer
 from sprite.sprite import Sprite
 from sprite.coordinates import Coordinates

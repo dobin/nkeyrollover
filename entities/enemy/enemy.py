@@ -1,9 +1,9 @@
 import random
 import logging
 
-from sprite.charactertexture import CharacterTexture
+from texture.character.charactertexture import CharacterTexture
 from entities.player.player import Player
-from entities.direction import Direction
+from sprite.direction import Direction
 from entities.character import Character
 from config import Config
 from utilities.timer import Timer
@@ -11,7 +11,7 @@ from utilities.utilities import Utility
 from entities.entitytype import EntityType
 from ai.brain import Brain
 import entities.enemy.aifsm as aifsm
-from texture.characteranimationtype import CharacterAnimationType
+from texture.character.characteranimationtype import CharacterAnimationType
 from entities.characterattack import CharacterAttack
 from .enemyinfo import EnemyInfo
 from sprite.coordinates import Coordinates

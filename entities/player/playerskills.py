@@ -1,6 +1,6 @@
 from config import Config
 from world.particleeffecttype import ParticleEffectType
-from texture.characteranimationtype import CharacterAnimationType
+from texture.character.characteranimationtype import CharacterAnimationType
 from utilities.timer import Timer
 from utilities.utilities import Utility
 

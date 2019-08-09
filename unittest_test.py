@@ -10,8 +10,8 @@ from entities.entitytype import EntityType
 from entities.player.player import Player
 from entities.enemy.enemy import Enemy
 from config import Config
-from director import Director
-from entities.direction import Direction
+from world.director import Director
+from sprite.direction import Direction
 import tests.mockcurses as curses
 from utilities.utilities import Utility
 

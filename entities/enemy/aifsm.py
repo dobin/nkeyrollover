@@ -3,9 +3,9 @@ import logging
 
 from ai.brain import Brain
 from ai.states import BaseState as State
-from texture.characteranimationtype import CharacterAnimationType
+from texture.character.characteranimationtype import CharacterAnimationType
 from utilities.timer import Timer
-from entities.direction import Direction
+from sprite.direction import Direction
 from config import Config
 
 logger = logging.getLogger(__name__)

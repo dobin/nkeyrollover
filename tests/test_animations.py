@@ -2,7 +2,7 @@ import unittest
 import logging 
 
 from tests.fakeworld import FakeWorld
-from entities.direction import Direction
+from sprite.direction import Direction
 from entities.enemy.enemy import Enemy
 from sprite.particle import Particle
 import tests.mockcurses as curses

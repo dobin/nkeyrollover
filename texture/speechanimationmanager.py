@@ -1,5 +1,5 @@
-from entities.direction import Direction
-from .animation import Animation
+from sprite.direction import Direction
+from texture.animation import Animation
 
 
 class SpeechAnimationManager(object):

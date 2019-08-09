@@ -1,9 +1,9 @@
 import logging
 
 from config import Config
-from entities.direction import Direction
+from sprite.direction import Direction
 from entities.actionctrl import ActionCtrl
-from texture.characteranimationtype import CharacterAnimationType
+from texture.character.characteranimationtype import CharacterAnimationType
 
 logger = logging.getLogger(__name__)
 

@@ -4,10 +4,10 @@ import curses
 
 
 from sprite.coordinates import Coordinates
-from sprite.specktexture import SpeckTexture
-from entities.direction import Direction
+from texture.specktexture import SpeckTexture
+from sprite.direction import Direction
 from entities.player.player import Player
-from director import Director
+from world.director import Director
 from config import Config
 from entities.entity import Entity
 from entities.entitytype import EntityType

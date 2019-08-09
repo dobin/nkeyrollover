@@ -8,11 +8,11 @@ from utilities.utilities import Utility
 from config import Config
 from .playeractionctrl import PlayerActionCtrl
 from entities.characterstatus import CharacterStatus
-from entities.direction import Direction
+from sprite.direction import Direction
 from entities.character import Character
 from entities.entitytype import EntityType
-from sprite.charactertexture import CharacterTexture
-from texture.characteranimationtype import CharacterAnimationType
+from texture.character.charactertexture import CharacterTexture
+from texture.character.characteranimationtype import CharacterAnimationType
 from entities.characterattack import CharacterAttack
 from entities.weapontype import WeaponType
 from .playerskills import PlayerSkills

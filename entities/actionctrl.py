@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from .direction import Direction
+from sprite.direction import Direction
 from config import Config
 from utilities.timer import Timer
 import logging

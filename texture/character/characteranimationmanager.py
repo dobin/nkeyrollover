@@ -1,8 +1,8 @@
 import logging
 
-from entities.direction import Direction
-from .characteranimationtype import CharacterAnimationType
-from .animation import Animation
+from sprite.direction import Direction
+from texture.character.characteranimationtype import CharacterAnimationType
+from texture.animation import Animation
 
 logger = logging.getLogger(__name__)
 

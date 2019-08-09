@@ -1,12 +1,12 @@
 from enum import Enum
 import logging
 
-from entities.direction import Direction
-from .animationtexture import AnimationTexture
+from sprite.direction import Direction
+from texture.animationtexture import AnimationTexture
 from sprite.sprite import Sprite
-from texture.characteranimationmanager import CharacterAnimationManager
+from texture.character.characteranimationmanager import CharacterAnimationManager
 from entities.entity import Entity
-from texture.characteranimationtype import CharacterAnimationType
+from texture.character.characteranimationtype import CharacterAnimationType
 
 logger = logging.getLogger(__name__)
 
