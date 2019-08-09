@@ -25,6 +25,8 @@ class Config:
         'y': 13,
     }
 
-    devMode = True
+    devMode = False
 
     moveDiagonal = False
+
+    announceDamage = 350

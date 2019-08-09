@@ -4,6 +4,7 @@ import curses
 import logging
 from enum import Enum
 
+from world.particleeffecttype import ParticleEffectType
 from utilities.utilities import Utility
 from config import Config
 from .playeractionctrl import PlayerActionCtrl
@@ -52,6 +53,22 @@ class Player(Character):
         while key != -1:
             self.handleInput(key)
             key = self.win.getch()
+
+
+    def announce(self, damage, particleEffectType): 
+        text = ''
+        if particleEffectType is ParticleEffectType.laser:
+            text = 'Cowabunga!'
+
+        if particleEffectType is ParticleEffectType.cleave:
+            text = 'I\'ll be back!'
+
+        if particleEffectType is ParticleEffectType.explosion:
+            text = 'Boom baby!'
+
+
+        if damage > Config.announceDamage: 
+            self.speechTexture.changeAnimation(text)
 
 
     def handleInput(self, key):

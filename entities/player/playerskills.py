@@ -67,6 +67,8 @@ class PlayerSkills(object):
         hitLocations = Utility.getBorder(locCenter)
         self.hitCollisionDetection(hitLocations)
 
+        damage = self.hitCollisionDetection(hitLocations)
+        self.player.announce(damage=damage, particleEffectType=ParticleEffectType.explosion)
 
     def skillLaser(self): 
         hitLocations = self.player.world.particleEmiter.emit(
@@ -74,7 +76,8 @@ class PlayerSkills(object):
             ParticleEffectType.laser, 
             direction=self.player.direction)
 
-        self.hitCollisionDetection(hitLocations)
+        damage = self.hitCollisionDetection(hitLocations)
+        self.player.announce(damage=damage, particleEffectType=ParticleEffectType.laser)
 
 
     def skillCleave(self): 
@@ -83,7 +86,8 @@ class PlayerSkills(object):
             ParticleEffectType.cleave, 
             direction=self.player.direction)
 
-        self.hitCollisionDetection(hitLocations)
+        damage = self.hitCollisionDetection(hitLocations)
+        self.player.announce(damage=damage, particleEffectType=ParticleEffectType.cleave)
 
 
     def hitCollisionDetection(self, hitLocations):

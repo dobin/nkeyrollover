@@ -9,7 +9,7 @@ class SpeechAnimationManager(object):
     def getAnimation(self, displayText=None, direction=Direction.right): 
         animation = Animation()
 
-        animation.width = 5
+        animation.width = len(displayText) + 2
         animation.height = 4
         animation.frameCount = 1
         animation.frameTime = [
@@ -18,13 +18,38 @@ class SpeechAnimationManager(object):
         animation.endless = False
         animation.advanceByStep = False
 
-        animation.arr = [
-            [
-                [ '.', '-', '-', '-', '.' ],
-                [ '|', 'h', 'o', 'i', '|' ],
-                [ '`', '^', '-', '-', '\'' ],
-                [ '/', ' ', ' ', ' ', ' ' ],                        
-            ]
-        ]
+        l = animation.width
+
+        animation.arr = [[]]
+        l1 = []
+        l1.append('.')
+        l1.extend(list('-' * (l - 2)))
+        l1.append('.')
+        animation.arr[0].append(l1)
+
+        l2 = []
+        l2.append('|')
+        l2.extend(list(displayText))
+        l2.append('|')
+        animation.arr[0].append(l2)
+
+        l3 = []
+        l3.append('`')
+        l3.append(',')
+        l3.extend(list('-' * (l - 3)))
+        l3.append('\'')
+        animation.arr[0].append(l3)
+
+        l4 = []
+        l4.append('/')
+        l4.extend(list(' ' * (l - 1)))
+        animation.arr[0].append(l4)
+
+        #        [ '.', list('-' * (l - 2)), '.' ],
+        #        [ '|', 'h', 'o', 'i', '|' ],
+        #        [ '`', '^', list('-' * (l - 3)), '\'' ],
+       #         [ '/', list('-' * (l - 1)), ],                        
+        #    ]
+        #]
 
         return animation
