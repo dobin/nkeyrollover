@@ -57,11 +57,8 @@ class Keyrollover(object):
         curses.init_pair(6, curses.COLOR_WHITE, curses.COLOR_BLACK)
         curses.init_pair(7, curses.COLOR_WHITE, 0)
 
-        # Game variables
-        speed = 1
-
         self.scene = Scene(self.win)
-        # self.scene.title()
+        self.scene.title()
 
         self.win.clear()
         self.win.border()
@@ -115,10 +112,10 @@ class Keyrollover(object):
 
 
     def drawStatusbar(self, n):
-        fps = 0
-        if n > 100: 
-            fps = 1000 * (float)(n) / (float)(current_milli_time() - self.startTime)
-            #fps = self.workTime * 1000.0
+        # fps = 0
+        # if n > 100: 
+        #    fps = 1000 * (float)(n) / (float)(current_milli_time() - self.startTime)
+        #    #fps = self.workTime * 1000.0
 
         s = "Health: " + str(self.world.player.characterStatus.health)
         s += "  Mana: " + str(self.world.player.characterStatus.mana)

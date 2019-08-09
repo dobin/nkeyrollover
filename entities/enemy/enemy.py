@@ -41,7 +41,6 @@ class Enemy(Character):
         if self.spawnBoundaries is None: 
             return
 
-
         self.setLocation( Coordinates(
                 self.spawnBoundaries['x'],
                 random.randint(self.spawnBoundaries['min_y'], self.spawnBoundaries['max_y'])

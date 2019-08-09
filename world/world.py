@@ -21,20 +21,19 @@ class World(object):
     def __init__(self, win): 
         self.win = win
         self.textures = []
-
-        self.worldSprite = Sprite(win=self.win, parentSprite=None)
-        self.player = Player(
+        self.worldSprite :Sprite = Sprite(win=self.win, parentSprite=None)
+        self.player :Player = Player(
             win=self.win, 
             parentEntity=self.worldSprite, 
             spawnBoundaries={ 'max_y': Config.columns, 'max_x': Config.rows }, 
             world=self)
 
-        self.director = Director(self.win, self)
+        self.director :Director = Director(self.win, self)
         self.director.init()
-        self.particleEmiter = ParticleEmiter(self.win)
+        self.particleEmiter :ParticleEmiter = ParticleEmiter(self.win)
 
-        self.pause = False
-        self.gameRunning = True
+        self.pause :bool = False
+        self.gameRunning :bool = True
 
 
     def togglePause(self): 

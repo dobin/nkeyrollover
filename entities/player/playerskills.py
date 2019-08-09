@@ -73,5 +73,5 @@ class PlayerSkills(object):
 
 
     def advance(self, dt):
-        for skill, timer in self.cooldownTimers.items():
+        for _, timer in self.cooldownTimers.items():
             timer.advance(dt)
