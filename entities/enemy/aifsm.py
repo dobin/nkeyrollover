@@ -234,6 +234,7 @@ class Wander(State):
             return
 
         if not self.destIsPoint:
+            pass
             # TODO
 
         playerLocation = self.destCoord       

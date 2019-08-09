@@ -20,16 +20,19 @@ class PlayerSkills(object):
 
 
     def doSkill(self, key): 
+        if key == 'f': 
+            self.player.actionCtrl.changeTo(
+                CharacterAnimationType.shrugging, 
+                self.player.direction)
+
         if key == 'q': 
             if self.isRdy(key): 
-                self.player.actionCtrl.changeTo(
-                    CharacterAnimationType.shrugging, 
-                    self.player.direction)
+                self.skillCleave()
                 self.cooldownTimers[key].reset()
         
         if key == 'w':
             if self.isRdy(key): 
-                self.player.speechTexture.changeAnimation('hoi')
+                #self.player.speechTexture.changeAnimation('hoi')
                 self.skillLaser()
                 self.cooldownTimers[key].reset()
 
@@ -74,12 +77,26 @@ class PlayerSkills(object):
         self.hitCollisionDetection(hitLocations)
 
 
-    def hitCollisionDetection(self, hitLocations): 
+    def skillCleave(self): 
+        hitLocations = self.player.world.particleEmiter.emit(
+            self.player.characterAttack.getLocation(), 
+            ParticleEffectType.cleave, 
+            direction=self.player.direction)
+
+        self.hitCollisionDetection(hitLocations)
+
+
+    def hitCollisionDetection(self, hitLocations):
+        damage = 0
         for hitLocation in hitLocations:
             hittedEnemies = self.player.world.director.getEnemiesHit(hitLocation)
             for enemy in hittedEnemies: 
                 enemy.gmHandleHit( self.player.characterStatus.getDamage() )
-                self.player.gmHandleEnemyHit( self.player.characterStatus.getDamage(), isAttack=False ) 
+                self.player.gmHandleEnemyHit( self.player.characterStatus.getDamage(), isAttack=False )
+                damage += self.player.characterStatus.getDamage()
+
+        return damage
+
 
 
     def advance(self, dt):

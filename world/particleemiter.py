@@ -53,8 +53,9 @@ class ParticleEmiter(object):
                     angle = 180 
                     xinv = -1
 
+                basex = loc.x + xinv + xinv # distance from char
                 particle.init(
-                    x=loc.x + n * xinv, y=loc.y, life=life, angle=angle, 
+                    x=basex + n * xinv, y=loc.y, life=life, angle=angle, 
                     speed=0.0, fadeout=True, byStep=False, charType=0, 
                     active=True)
 
@@ -62,7 +63,29 @@ class ParticleEmiter(object):
                 particleList.append(particle)
                 n += 1
 
-            return particleList
+        if effectType is ParticleEffectType.cleave: 
+            particleCount = 8
+            life = 60
+            n = 0
+            while n < particleCount: 
+                particle = self.particlePool.pop()
+                if direction is Direction.right: 
+                    angle = 0.0
+                    xinv = 4
+                else: 
+                    angle = 180 
+                    xinv = -5
+
+                particle.init(
+                    x=loc.x + xinv, y=loc.y-4+n, life=life, angle=angle, 
+                    speed=0.0, fadeout=True, byStep=False, charType=0, 
+                    active=True)
+
+                self.particleActive.append(particle)
+                particleList.append(particle)
+                n += 1                
+
+        return particleList
 
 
     def advance(self, dt): 
