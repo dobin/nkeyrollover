@@ -14,6 +14,7 @@ from config import Config
 from world.director import Director
 from sprite.direction import Direction
 from tests.fakeworld import FakeWorld
+from sprite.coordinates import Coordinates
 
 
 class PlayerWeaponTest(unittest.TestCase):
@@ -23,10 +24,10 @@ class PlayerWeaponTest(unittest.TestCase):
         # standard weapon
         win = None
         world = FakeWorld(win)
-        world.player.setLocation(10, 10)
+        world.player.setLocation( Coordinates(10, 10))
 
-        enemy = Enemy(win, world.worldEntity, None, world, 'bot')
-        enemy.setLocation(13, 10)
+        enemy = Enemy(win, world.worldSprite, None, world, 'bot')
+        enemy.setLocation(Coordinates(13, 10))
         world.director.enemiesAlive.append(enemy)
 
         life1 = enemy.characterStatus.health
@@ -45,11 +46,11 @@ class PlayerWeaponTest(unittest.TestCase):
         # hitting an enemy left of the player with the line gun
         win = None
         world = FakeWorld(win)
-        world.player.setLocation(10, 10)
+        world.player.setLocation(Coordinates(10, 10))
         world.player.direction = Direction.left
 
-        enemy = Enemy(win, world.worldEntity, None, world, 'bot')
-        enemy.setLocation(4, 10)
+        enemy = Enemy(win, world.worldSprite, None, world, 'bot')
+        enemy.setLocation(Coordinates(4, 10))
         world.director.enemiesAlive.append(enemy)
 
         life1 = enemy.characterStatus.health
