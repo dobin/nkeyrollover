@@ -9,9 +9,11 @@ from entities.entitytype import EntityType
 from texture.phenomenatype import PhenomenaType
 from entities.direction import Direction
 from texture.characteranimationtype import CharacterAnimationType
-from sprite.charactersprite import CharacterSprite
-from sprite.phenomenasprite import PhenomenaSprite
+from sprite.charactertexture import CharacterTexture
+from sprite.phenomenatexture import PhenomenaTexture
+from sprite.sprite import Sprite
 from utilities.timer import Timer
+from sprite.coordinates import Coordinates
 
 logger = logging.getLogger(__name__)
 
@@ -43,16 +45,16 @@ class Scene(object):
         targetFrameTime = 1.0 / Config.fps
         deltaTime = targetFrameTime # we try to keep it...
 
-        worldEntity = Entity(win=self.win, parentEntity=None, entityType=EntityType.world)
-        worldEntity.setLocation(15, -5)
+        worldSprite = Sprite(win=self.win, parentSprite=None)
+        worldSprite.setLocation(Coordinates(15, -5))
 
-        entityCopter = Entity(win=self.win, parentEntity=worldEntity, entityType=EntityType.player)
-        spriteCopter = PhenomenaSprite(phenomenaType=PhenomenaType.roflcopter, parentEntity=entityCopter)
-        spriteCopter.setActive(False)
+        entityCopter = Entity(win=self.win, parentSprite=worldSprite, entityType=EntityType.player)
+        textureCopter = PhenomenaTexture(phenomenaType=PhenomenaType.roflcopter, parentSprite=entityCopter)
+        textureCopter.setActive(False)
 
-        entityPlayer = Entity(win=self.win, parentEntity=worldEntity, entityType=EntityType.player)
-        spritePlayer = CharacterSprite(characterAnimationType=CharacterAnimationType.standing, parentEntity=entityPlayer)
-        spritePlayer.setActive(False)
+        entityPlayer = Entity(win=self.win, parentSprite=worldSprite, entityType=EntityType.player)
+        texturePlayer = CharacterTexture(characterAnimationType=CharacterAnimationType.standing, parentSprite=entityPlayer)
+        texturePlayer.setActive(False)
 
         myTimer = Timer(0.5)
         state = SceneState.wait1
@@ -73,29 +75,29 @@ class Scene(object):
                 if myTimer.timeIsUp():
                     state = SceneState.flydown
                     myTimer.setTimer(0.1)
-                    spriteCopter.setActive(True)
-                    logging.debug("To State: Flydown")
+                    textureCopter.setActive(True)
+                    logging.debug("Scene: Go to State: Flydown")
             elif state is SceneState.flydown:
                 if myTimer.timeIsUp():
                     myTimer.reset()
-                    entityCopter.y += 1
+                    entityCopter.coordinates.y += 1
 
                 # for next scene: Drop
-                if entityCopter.y == 12: 
+                if entityCopter.coordinates.y == 12: 
                     myTimer.setTimer(0.1)
-                    logging.debug("To State: Drop")
+                    logging.debug("Scene: Go to State: Drop")
                     state = SceneState.drop
-                    entityPlayer.y = 18
-                    entityPlayer.x = 8
-                    spritePlayer.setActive(True)                    
+                    entityPlayer.coordinates.y = 18
+                    entityPlayer.coordinates.x = 8
+                    texturePlayer.setActive(True)                    
 
             elif state is SceneState.drop: 
                 # for next scene: Flyup
                 if myTimer.timeIsUp():
                     myTimer.reset()
-                    entityCopter.y -= 1
+                    entityCopter.coordinates.y -= 1
 
-                if entityCopter.y == -5:
+                if entityCopter.coordinates.y == -5:
                     state = SceneState.done
 
             elif state is SceneState.done: 
@@ -103,10 +105,10 @@ class Scene(object):
                 break
 
             # elements
-            spritePlayer.advance(deltaTime)
-            spritePlayer.draw(self.win)            
-            spriteCopter.advance(deltaTime)
-            spriteCopter.draw(self.win)
+            texturePlayer.advance(deltaTime)
+            texturePlayer.draw(self.win)            
+            textureCopter.advance(deltaTime)
+            textureCopter.draw(self.win)
 
 
             # input

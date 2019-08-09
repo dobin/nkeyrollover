@@ -1,7 +1,7 @@
 import random
 import logging
 
-from sprite.charactersprite import CharacterSprite
+from sprite.charactertexture import CharacterTexture
 from entities.player.player import Player
 from entities.direction import Direction
 from entities.character import Character
@@ -14,6 +14,7 @@ import entities.enemy.aifsm as aifsm
 from texture.characteranimationtype import CharacterAnimationType
 from entities.characterattack import CharacterAttack
 from .enemyinfo import EnemyInfo
+from sprite.coordinates import Coordinates
 
 logger = logging.getLogger(__name__)
 
@@ -23,8 +24,8 @@ class Enemy(Character):
         Character.__init__(self, win, parent, spawnBoundaries, world, EntityType.enemy)
         
         self.player = world.getPlayer()
-        self.sprite = CharacterSprite(
-            parentEntity=self, 
+        self.texture = CharacterTexture(
+            parentSprite=self, 
             characterAnimationType=CharacterAnimationType.standing,
             head=self.getRandomHead(), 
             body=self.getRandomBody())
@@ -40,10 +41,14 @@ class Enemy(Character):
         if self.spawnBoundaries is None: 
             return
 
-        self.x = self.spawnBoundaries['x']
-        self.y = random.randint(self.spawnBoundaries['min_y'], self.spawnBoundaries['max_y'])
 
-        if self.x < 0:
+        self.setLocation( Coordinates(
+                self.spawnBoundaries['x'],
+                random.randint(self.spawnBoundaries['min_y'], self.spawnBoundaries['max_y'])
+            )
+        )
+
+        if self.coordinates.x < 0:
             self.direction = Direction.right
         else: 
             self.direction = Direction.left
@@ -67,19 +72,20 @@ class Enemy(Character):
         self.brain.pop()
         self.brain.push("dying")
 
+
     def gmRessurectMe(self): 
         if self.characterStatus.isAlive():
             logging.warn(self.name + " Trying to ressurect enemy which is still alive")
             return
 
-        logger.info(self.name + " Ressurect at: " + str(self.x) + " / " + str(self.y))
+        logger.info(self.name + " Ressurect at: " + str(self.coordinates))
         self.init()
         self.characterStatus.init()
 
         # if death animation was deluxe, there is no frame in the sprite
         # upon spawning, and an exception is thrown
         # change following two when fixed TODO
-        self.sprite.changeTexture(CharacterAnimationType.standing, self.direction)
+        self.texture.changeAnimation(CharacterAnimationType.standing, self.direction)
         self.setActive(True)
 
         self.brain.pop()
@@ -95,7 +101,7 @@ class Enemy(Character):
 
 
     def canReachPlayer(self): 
-        return Utility.pointInSprite(self.characterAttack.getLocation(), self.player.sprite)
+        return Utility.pointInSprite(self.characterAttack.getLocation(), self.player)
 
 
     def isPlayerClose(self):
@@ -105,9 +111,11 @@ class Enemy(Character):
         else: 
             return False
 
+
     def advance(self, deltaTime): 
         super(Enemy, self).advance(deltaTime)
         self.brain.update(deltaTime)
         
+
     def __repr__(self):
         return self.name

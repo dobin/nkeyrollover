@@ -1,8 +1,9 @@
 from enum import Enum 
 import logging
 
+from sprite.coordinates import Coordinates
 from utilities.timer import Timer
-from sprite.phenomenasprite import PhenomenaSprite
+from sprite.phenomenatexture import PhenomenaTexture
 from texture.phenomenatype import PhenomenaType
 from config import Config
 from .entity import Entity
@@ -15,29 +16,23 @@ from .weapontype import WeaponType
 logger = logging.getLogger(__name__)
 
 
-
 class CharacterAttack(Entity): 
-    def __init__(self, win, parentCharacter, isPlayer):
-        # note that ParentCharacter(Character) is also an Entity, as required by Entity
-        super(CharacterAttack, self).__init__(win=win, parentEntity=parentCharacter, entityType=EntityType.weapon)
-
-        if not isinstance(parentCharacter, Character):
-            raise ValueError("Character: Tried to use non-Character class as parent: " + str(parentCharacter))
-        else: 
-            self.parentCharacter = parentCharacter
+    def __init__(self, win, parentCharacter :Character, isPlayer :bool):
+        super(CharacterAttack, self).__init__(win=win, parentSprite=parentCharacter, entityType=EntityType.weapon)
 
         self.isPlayer = isPlayer
-        self.sprite = PhenomenaSprite(phenomenaType=PhenomenaType.hit, parentEntity=self)
+        self.texture = PhenomenaTexture(phenomenaType=PhenomenaType.hit, parentSprite=self)
+        self.parentCharacter = parentCharacter
 
         # the duration of the hitting animation
-        self.durationTimer.setTimer( self.sprite.texture.getAnimationTime() )
+        self.durationTimer.setTimer( self.texture.getAnimationTime() )
         self.durationTimer.reset()
 
         # cooldown. 0.2 is actually lower than whats possible, even with 100fps
         self.cooldownTimer = Timer(0.2, instant=True)
 
         # for drawing the hit, and see if the char is "hitting"
-        self.isActive = False
+        self.setActive(False)
 
         self.weaponType = WeaponType.hit
         self.selectedWeaponKey = '1'
@@ -64,7 +59,7 @@ class CharacterAttack(Entity):
 
    
     def attackWeaponHit(self):
-        self.sprite.changeTexture(PhenomenaType.hit, self.parentEntity.direction)
+        self.texture.changeAnimation(PhenomenaType.hit, self.parentSprite.direction)
         self.hitCollisionDetection( [ self.getLocation()] )
 
 
@@ -72,47 +67,47 @@ class CharacterAttack(Entity):
         baselocation = super(CharacterAttack, self).getLocation()
 
         if self.weaponType is WeaponType.hit: 
-            if self.parentEntity.direction is Direction.right: 
-                baselocation['x'] += 3
-                baselocation['y'] += 1
+            if self.parentSprite.direction is Direction.right: 
+                baselocation.x += 3
+                baselocation.y += 1
             else: 
-                baselocation['x'] -= 1
-                baselocation['y'] += 1
+                baselocation.x -= 1
+                baselocation.y += 1
         elif self.weaponType is WeaponType.hitSquare: 
-            if self.parentEntity.direction is Direction.right: 
-                baselocation['x'] += 3
-                #baselocation['y'] = 0
+            if self.parentSprite.direction is Direction.right: 
+                baselocation.x += 3
+                #baselocation.y = 0
             else: 
-                baselocation['x'] -= 2
-                #baselocation['y'] = 0
+                baselocation.x -= 2
+                #baselocation.y = 0
         elif self.weaponType is WeaponType.hitLine: 
-            if self.parentEntity.direction is Direction.right: 
-                baselocation['x'] += 3
-                baselocation['y'] += 1
+            if self.parentSprite.direction is Direction.right: 
+                baselocation.x += 3
+                baselocation.y += 1
             else: 
-                baselocation['x'] -= 4
-                baselocation['y'] += 1
+                baselocation.x -= 4
+                baselocation.y += 1
 
         return baselocation
         
 
     def attackWeaponHitSquare(self):
-        self.sprite.changeTexture(PhenomenaType.hitSquare, self.parentEntity.direction)
+        self.texture.changeAnimation(PhenomenaType.hitSquare, self.parentSprite.direction)
         hitLocations = []
         hitLocationsBase = self.getLocation()
         
-        hl2 = { 
-            'x': hitLocationsBase['x'] + 1,
-            'y': hitLocationsBase['y'],
-        }
-        hl3 = { 
-            'x': hitLocationsBase['x'],
-            'y': hitLocationsBase['y'] + 1,
-        }
-        hl4 = { 
-            'x': hitLocationsBase['x'] + 1,
-            'y': hitLocationsBase['y'] + 1,
-        }
+        hl2 = Coordinates( 
+            x = hitLocationsBase.x + 1,
+            y = hitLocationsBase.y,
+        )
+        hl3 = Coordinates( 
+            x = hitLocationsBase.x,
+            y = hitLocationsBase.y + 1,
+        )
+        hl4 = Coordinates( 
+            x = hitLocationsBase.x + 1,
+            y = hitLocationsBase.y + 1,
+        )
 
         hitLocations.append(hitLocationsBase)
         hitLocations.append(hl2)
@@ -123,22 +118,22 @@ class CharacterAttack(Entity):
 
 
     def attackWeaponHitLine(self): 
-        self.sprite.changeTexture(PhenomenaType.hitLine, self.parentEntity.direction)
+        self.texture.changeAnimation(PhenomenaType.hitLine, self.parentSprite.direction)
         hitLocations = []
         hitLocationsBase = self.getLocation()
         
-        hl2 = { 
-            'x': hitLocationsBase['x'] + 1,
-            'y': hitLocationsBase['y'],
-        }
-        hl3 = { 
-            'x': hitLocationsBase['x'] + 2,
-            'y': hitLocationsBase['y'],
-        }
-        hl4 = { 
-            'x': hitLocationsBase['x'] + 3,
-            'y': hitLocationsBase['y'],
-        }
+        hl2 = Coordinates( 
+            x = hitLocationsBase.x + 1,
+            y = hitLocationsBase.y,
+        )
+        hl3 = Coordinates( 
+            x = hitLocationsBase.x + 2,
+            y = hitLocationsBase.y,
+        )
+        hl4 = Coordinates( 
+            x = hitLocationsBase.x + 3,
+            y = hitLocationsBase.y,
+        )
 
         hitLocations.append(hitLocationsBase)
         hitLocations.append(hl2)
@@ -149,7 +144,7 @@ class CharacterAttack(Entity):
 
 
     def attackWeaponJumpKick(self): 
-        self.sprite.changeTexture(PhenomenaType.hit, self.parentEntity.direction)
+        self.texture.changeAnimation(PhenomenaType.hit, self.parentSprite.direction)
 
 
     def attack(self):
@@ -158,7 +153,7 @@ class CharacterAttack(Entity):
             return
         self.cooldownTimer.reset() # activate cooldown
 
-        self.isActive = True
+        self.setActive(True)
         self.durationTimer.reset() # entity will setActive(false) when time is up
 
         if self.weaponType is WeaponType.hit:
@@ -175,7 +170,7 @@ class CharacterAttack(Entity):
         if self.isPlayer:
             for hitLocation in hitLocations:
                 hittedEnemies = self.parentCharacter.world.director.getEnemiesHit(hitLocation)
-                for enemy in hittedEnemies: 
+                for enemy in hittedEnemies:
                     enemy.gmHandleHit( self.parentCharacter.characterStatus.getDamage() )
                     self.parentCharacter.gmHandleEnemyHit( self.parentCharacter.characterStatus.getDamage() ) 
         else: 

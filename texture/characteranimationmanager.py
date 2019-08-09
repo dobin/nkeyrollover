@@ -2,45 +2,45 @@ import logging
 
 from entities.direction import Direction
 from .characteranimationtype import CharacterAnimationType
-from .texture import Texture
+from .animation import Animation
 
 logger = logging.getLogger(__name__)
 
 
-class CharacterTextureManager(object): 
+class CharacterAnimationManager(object): 
     def __init__(self, head=None, body=None):
         self.animationsLeft = {}
         self.animationsRight = {}
 
         for animationType in CharacterAnimationType:
-            self.animationsLeft[animationType] = self.createTexture(animationType, Direction.left)
+            self.animationsLeft[animationType] = self.createAnimation(animationType, Direction.left)
 
         for animationType in CharacterAnimationType:
-            self.animationsRight[animationType] = self.createTexture(animationType, Direction.right)
+            self.animationsRight[animationType] = self.createAnimation(animationType, Direction.right)
 
         if head is not None: 
-            self.updateAllTextures(1, 0, head, skip=CharacterAnimationType.dying)
+            self.updateAllAnimations(1, 0, head, skip=CharacterAnimationType.dying)
 
         if body is not None:
-            self.updateAllTextures(1, 1, body)
+            self.updateAllAnimations(1, 1, body)
 
 
-    def updateAllTextures(self, x, y, char, skip=None):
-        self.updateAllTexturesIn(x, y, char, self.animationsLeft, skip)
-        self.updateAllTexturesIn(x, y, char, self.animationsRight, skip)
+    def updateAllAnimations(self, x, y, char, skip=None):
+        self.updateAllAnimationsIn(x, y, char, self.animationsLeft, skip)
+        self.updateAllAnimationsIn(x, y, char, self.animationsRight, skip)
 
 
-    def updateAllTexturesIn(self, x, y, char, animations, skip=None):
+    def updateAllAnimationsIn(self, x, y, char, animations, skip=None):
         for key in animations: 
             if key == skip:
                 continue
 
-            for texture in animations[key]: 
-                for animation in texture.arr:
+            for animation in animations[key]: 
+                for animation in animation.arr:
                     animation[y][x] = char
 
 
-    def getTexture(self, characterAnimationType, direction, subtype=0):
+    def getAnimation(self, characterAnimationType, direction, subtype=0):
         if direction is Direction.left:
             if subtype >= len(self.animationsLeft[characterAnimationType]):
                 logging.error("Tried to access subtype no {} of animation with len {}".format(subtype, len(self.animationsLeft[characterAnimationType])))
@@ -51,41 +51,41 @@ class CharacterTextureManager(object):
             return self.animationsRight[characterAnimationType][subtype]
 
 
-    def createTexture(self, animationType, direction):
-        textures = []
+    def createAnimation(self, animationType, direction):
+        animations = []
         
         if animationType is CharacterAnimationType.standing:
-            texture = Texture()
-            texture.width = 3
-            texture.height = 3
-            texture.frameCount = 1
-            texture.frameTime = []
-            texture.advanceByStep = False
-            texture.endless = True
+            animation = Animation()
+            animation.width = 3
+            animation.height = 3
+            animation.frameCount = 1
+            animation.frameTime = []
+            animation.advanceByStep = False
+            animation.endless = True
 
-            texture.arr = [
+            animation.arr = [
                 [
                     [ '', 'o', '' ],
                     [ '/', '|', '\\'],
                     [ '/', '', '\\']
                 ]
             ]
-            textures.append(texture)
+            animations.append(animation)
 
         if animationType is CharacterAnimationType.walking:
-            texture = Texture()
-            texture.width = 3
-            texture.height = 3
-            texture.frameCount = 2
-            texture.frameTime = [
+            animation = Animation()
+            animation.width = 3
+            animation.height = 3
+            animation.frameCount = 2
+            animation.frameTime = [
                 0.01, 
                 0.01
             ]
-            texture.endless = True
-            texture.advanceByStep = True
+            animation.endless = True
+            animation.advanceByStep = True
 
             if direction is Direction.right:
-                texture.arr = [
+                animation.arr = [
                     [
                         [ '', 'O', '' ],
                         [ '/', '|', '\\'],
@@ -98,7 +98,7 @@ class CharacterTextureManager(object):
                     ]                
                 ]
             else: 
-                texture.arr = [
+                animation.arr = [
                     [
                         [ '', 'o', '' ],
                         [ '/', '|', '\\'],
@@ -110,22 +110,22 @@ class CharacterTextureManager(object):
                         [ '', '|', '\\']
                     ]
                 ]
-            textures.append(texture)            
+            animations.append(animation)            
 
         if animationType is CharacterAnimationType.hitting:
-            texture = Texture()
-            texture.width = 3
-            texture.height = 3
-            texture.endless = False
-            texture.frameCount = 2
-            texture.frameTime = [
+            animation = Animation()
+            animation.width = 3
+            animation.height = 3
+            animation.endless = False
+            animation.frameCount = 2
+            animation.frameTime = [
                 1.0, 
                 1.0
             ]
-            texture.advanceByStep = False
+            animation.advanceByStep = False
 
             if direction is Direction.right:
-                texture.arr = [
+                animation.arr = [
                     [
                         [ '', 'o', '' ],
                         [ '/', '|', '-'],
@@ -138,7 +138,7 @@ class CharacterTextureManager(object):
                     ]
                 ]
             else: 
-                texture.arr = [
+                animation.arr = [
                     [
                         [ '', 'o', '' ],
                         [ '-', '|', '\\'],
@@ -150,22 +150,22 @@ class CharacterTextureManager(object):
                         [ '/', '', '\\']
                     ]
                 ]
-            textures.append(texture)
+            animations.append(animation)
 
         if animationType is CharacterAnimationType.shrugging:
-            texture = Texture()
-            texture.width = 3
-            texture.height = 3
-            texture.frameCount = 2
-            texture.endless = True
-            texture.advanceByStep = False
+            animation = Animation()
+            animation.width = 3
+            animation.height = 3
+            animation.frameCount = 2
+            animation.endless = True
+            animation.advanceByStep = False
 
-            texture.frameTime = [
+            animation.frameTime = [
                 0.1,
                 0.5
             ]
 
-            texture.arr = [
+            animation.arr = [
                 [
                     [ '', 'o', '' ],
                     [ '/', '|', '\\'],
@@ -177,23 +177,23 @@ class CharacterTextureManager(object):
                     [ '/', '', '\\']
                 ]                
             ]
-            textures.append(texture)
+            animations.append(animation)
 
 
         if animationType is CharacterAnimationType.dying:
             n = 0
             while n < 2:
-                texture = Texture()
-                texture.width = 3
-                texture.height = 3
-                texture.frameCount = 1
-                texture.frameTime = []
-                texture.advanceByStep = False
-                texture.frameTime = None
-                texture.endless = True
+                animation = Animation()
+                animation.width = 3
+                animation.height = 3
+                animation.frameCount = 1
+                animation.frameTime = []
+                animation.advanceByStep = False
+                animation.frameTime = None
+                animation.endless = True
 
                 if n == 0:
-                    texture.arr = [
+                    animation.arr = [
                         [
                             [ '', 'x', '' ],
                             [ '/', '|', '\\'],
@@ -201,7 +201,7 @@ class CharacterTextureManager(object):
                         ]
                     ]
                 elif n == 1: 
-                    texture.arr = [
+                    animation.arr = [
                         [
                             [ '', 'X', '' ],
                             [ '/', '|', '\\'],
@@ -209,21 +209,21 @@ class CharacterTextureManager(object):
                         ]
                     ]
                     
-                textures.append(texture)
+                animations.append(animation)
                 n += 1
 
 
         if animationType is CharacterAnimationType.hitwindup:
-            texture = Texture()
-            texture.width = 3
-            texture.height = 3
-            texture.frameCount = 1
-            texture.frameTime = []
-            texture.advanceByStep = False
-            texture.endless = True
+            animation = Animation()
+            animation.width = 3
+            animation.height = 3
+            animation.frameCount = 1
+            animation.frameTime = []
+            animation.advanceByStep = False
+            animation.endless = True
 
             if direction is direction.right:
-                texture.arr = [
+                animation.arr = [
                     [
                         [ '\\', 'o', '' ],
                         [ '', '|', '\\'],
@@ -231,7 +231,7 @@ class CharacterTextureManager(object):
                     ]
                 ]
             else: 
-                texture.arr = [
+                animation.arr = [
                     [
                         [ '', 'o', '/' ],
                         [ '/', '|', ''],
@@ -239,6 +239,6 @@ class CharacterTextureManager(object):
                     ]
                 ]
 
-            textures.append(texture)
+            animations.append(animation)
 
-        return textures
+        return animations

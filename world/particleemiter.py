@@ -30,7 +30,7 @@ class ParticleEmiter(object):
                 angle = (360.0 / particleCount) * n
 
                 particle.init(
-                    x=loc['x'], y=loc['y'], life=life, angle=angle, 
+                    x=loc.x, y=loc.y, life=life, angle=angle, 
                     speed=0.1, fadeout=True, byStep=False, charType=0, 
                     active=True)
 

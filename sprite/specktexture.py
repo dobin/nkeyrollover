@@ -1,16 +1,16 @@
 import curses
 
+from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 
 
-class SpeckSprite(object): 
-    def __init__(self, char, x, y, movementX, movementY, timeArr, effect): 
+class SpeckTexture(object): 
+    def __init__(self, char, coordinate, movementX, movementY, timeArr, effect): 
         self.char = char
         self.effect = effect
         self.movementX = movementX
         self.movementY = movementY
-        self.x = x
-        self.y = y
+        self.coordinate = coordinate
         
         self.idx = 0
         self.timeArr = timeArr
@@ -26,8 +26,8 @@ class SpeckSprite(object):
 
         self.time = 0
 
-        self.x += self.movementX
-        self.y += self.movementY
+        self.coordinate.x += self.movementX
+        self.coordinate.y += self.movementY
         self.idx += 1
 
         if self.idx == len(self.timeArr): 
@@ -38,15 +38,15 @@ class SpeckSprite(object):
         if not self.isActive: 
             return
 
-        p = {
-            'x': self.x,
-            'y': self.y,
-        }
+        c = Coordinates(
+            x = self.coordinate.x,
+            y = self.coordinate.y,
+        )
 
-        if Utility.isPointDrawable(p):
+        if Utility.isPointDrawable(c):
             win.addch(
-                    self.y, 
-                    self.x,
+                    self.coordinate.y, 
+                    self.coordinate.x,
                     self.char, 
                     curses.color_pair(1))
 

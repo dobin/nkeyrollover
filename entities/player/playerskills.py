@@ -29,7 +29,7 @@ class PlayerSkills(object):
         
         if key == 'w':
             if self.isRdy(key): 
-                self.player.speechSprite.changeTexture('hoi')
+                self.player.speechTexture.changeAnimation('hoi')
                 self.cooldownTimers[key].reset()
 
         if key == 'e':
@@ -48,10 +48,10 @@ class PlayerSkills(object):
 
 
     def skillSwitchSide(self): 
-        if self.player.x < (Config.rows / 2):
-            self.player.x = Config.areaMoveable['maxx'] - self.player.x
+        if self.player.coordinates.x < (Config.rows / 2):
+            self.player.coordinates.x = Config.areaMoveable['maxx'] - self.player.coordinates.x
         else: 
-            self.player.x = (Config.areaMoveable['maxx'] - self.player.x)
+            self.player.coordinates.x = (Config.areaMoveable['maxx'] - self.player.coordinates.x)
 
 
     def skillExplosion(self): 

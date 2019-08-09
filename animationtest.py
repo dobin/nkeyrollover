@@ -12,12 +12,13 @@ from entities.enemy.enemy import Enemy
 from config import Config
 from director import Director
 from entities.direction import Direction
-from sprite.charactersprite import CharacterSprite
+from sprite.charactertexture import CharacterTexture
 from texture.characteranimationtype import CharacterAnimationType
 from utilities.timer import Timer
 from sprite.particle import Particle
 from world.particleemiter import ParticleEmiter
 from world.particleeffecttype import ParticleEffectType
+from sprite.sprite import Sprite
 
 import logging
 #import tests.mockcurses as curses
@@ -27,8 +28,8 @@ import curses
 class FakeWorld(object): 
     def __init__(self, win): 
         self.win = win
-        self.worldEntity = Entity(win=win, parentEntity=None, entityType=EntityType.world)
-        self.player = Player(win, self.worldEntity, None, self)
+        self.worldSprite = Sprite(win=win, parentSprite=None)
+        self.player = Player(win, self.worldSprite, None, self)
         self.director = Director(win, self) # real director
 
     def getPlayer(self):
@@ -98,15 +99,15 @@ class AnimationTest(object):
 
         n = 0
         for animationType in CharacterAnimationType:
-            characterSprite = CharacterSprite(
-                parentEntity=world.worldEntity, 
+            characterTexture = CharacterTexture(
+                parentSprite=world.worldSprite, 
                 characterAnimationType=animationType,
                 direction=Direction.right)
 
-            characterSprite.setLocation(2 + (n * 5), 1)
-            characterSprite.setActive(True)
+            characterTexture.setLocation(2 + (n * 5), 1)
+            characterTexture.setActive(True)
 
-            sprites.append(characterSprite)
+            sprites.append(characterTexture)
 
             n += 1
 

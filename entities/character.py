@@ -11,7 +11,7 @@ from entities.player.playeractionctrl import PlayerActionCtrl
 from entities.entity import Entity
 from .characterstatus import CharacterStatus
 from .direction import Direction
-from sprite.speechsprite import SpeechSprite
+from sprite.speechtexture import SpeechTexture
 
 logger = logging.getLogger(__name__)
 
@@ -24,8 +24,8 @@ class Character(Entity):
         self.spawnBoundaries = spawnBoundaries
 
         self.characterStatus = CharacterStatus()
-        self.speechSprite = SpeechSprite(parentEntity=self, displayText='')
-        self.speechSprite.setActive(False)
+        self.speechTexture = SpeechTexture(parentSprite=self, displayText='')
+        self.speechTexture.setActive(False)
         self.characterAttack = None # by children
         self.actionCtrl = None # filled in children
         self.characterInfo = None # filled by children
@@ -48,12 +48,12 @@ class Character(Entity):
 
 
     def draw(self):
-        super(Character, self).draw(self.win)
-        self.speechSprite.draw(self.win)
+        super(Character, self).draw()
+        self.speechTexture.draw(self.win)
 
 
     def drawCharacterAttack(self): 
-        self.characterAttack.draw(self.win)
+        self.characterAttack.draw()
 
 
     def advance(self, deltaTime):
@@ -61,7 +61,7 @@ class Character(Entity):
 
         self.characterAttack.advance(deltaTime) # update weapon (duration, sprite)
         self.characterStatus.advance(deltaTime) # update health, mana etc.
-        self.speechSprite.advance(deltaTime)
+        self.speechTexture.advance(deltaTime)
 
 
     def getRandomHead(self):
@@ -74,6 +74,6 @@ class Character(Entity):
     
     def getLocationCenter(self): 
         loc = self.getLocation()
-        loc['x'] += 1
-        loc['y'] += 1
+        loc.x += 1
+        loc.y += 1
         return loc

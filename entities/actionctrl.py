@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from sprite.charactersprite import CharacterSprite
 from .direction import Direction
 from config import Config
 from utilities.timer import Timer

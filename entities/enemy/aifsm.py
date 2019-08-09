@@ -34,7 +34,7 @@ class Spawn(State):
     def on_enter(self):
         me = self.brain.owner
         self.setTimer( me.enemyInfo.spawnTime )
-        me.sprite.changeTexture(CharacterAnimationType.standing, me.direction)
+        me.texture.changeAnimation(CharacterAnimationType.standing, me.direction)
         me.setActive(True)
 
 
@@ -54,7 +54,7 @@ class Chase(State):
     def on_enter(self):
         me = self.brain.owner
         self.setTimer( me.enemyInfo.chaseTime )
-        me.sprite.changeTexture(CharacterAnimationType.walking, me.direction)
+        me.texture.changeAnimation(CharacterAnimationType.walking, me.direction)
 
 
     def process(self, dt):
@@ -80,25 +80,25 @@ class Chase(State):
         me = self.brain.owner
 
         # make run-animation 
-        me.sprite.advanceStep()
+        me.texture.advanceStep()
 
         playerLocation = me.player.getLocation()
 
-        if playerLocation['x'] > me.x:
-            if me.x < Config.columns - me.sprite.texture.width - 1:
-                me.x += 1
+        if playerLocation.x > me.coordinates.x:
+            if me.coordinates.x < Config.columns - me.texture.width - 1:
+                me.coordinates.x += 1
                 me.direction = Direction.right
-        elif playerLocation['x'] < me.x: 
-            if me.x > 1:
-                me.x -= 1
+        elif playerLocation.x < me.coordinates.x: 
+            if me.coordinates.x > 1:
+                me.coordinates.x -= 1
                 me.direction = Direction.left
 
-        if playerLocation['y'] > me.y:
-            if me.y < Config.rows - me.sprite.texture.height - 1:
-                me.y += 1
-        elif playerLocation['y'] < me.y:
-            if me.y > 2:
-                me.y -= 1
+        if playerLocation.y > me.coordinates.y:
+            if me.coordinates.y < Config.rows - me.texture.height - 1:
+                me.coordinates.y += 1
+        elif playerLocation.y < me.coordinates.y:
+            if me.coordinates.y > 2:
+                me.coordinates.y -= 1
 
 
 class AttackWindup(State): 
@@ -106,7 +106,7 @@ class AttackWindup(State):
 
     def on_enter(self):
         me = self.brain.owner
-        me.sprite.changeTexture(CharacterAnimationType.hitwindup, me.direction)
+        me.texture.changeAnimation(CharacterAnimationType.hitwindup, me.direction)
 
         self.setTimer( me.enemyInfo.windupTime )
 
@@ -128,7 +128,7 @@ class Attack(State):
     def on_enter(self):
         me = self.brain.owner
         self.attackTimer.init()
-        me.sprite.changeTexture(CharacterAnimationType.hitting, me.direction)
+        me.texture.changeAnimation(CharacterAnimationType.hitting, me.direction)
         self.setTimer( me.enemyInfo.attackTime )
 
 
@@ -158,7 +158,7 @@ class Wander(State):
 
     def on_enter(self):
         me = self.brain.owner
-        me.sprite.changeTexture(CharacterAnimationType.walking, me.direction)
+        me.texture.changeAnimation(CharacterAnimationType.walking, me.direction)
         self.setTimer( me.enemyInfo.wanderTime )
 
 
@@ -185,44 +185,44 @@ class Wander(State):
         me = self.brain.owner
 
         # make run-animation 
-        me.sprite.advanceStep()
+        me.texture.advanceStep()
 
         playerLocation = me.player.getLocation()
 
-        if playerLocation['y'] > me.y:
+        if playerLocation.y > me.coordinates.y:
             # newdest is higher
-            playerLocation['y'] -= 6
+            playerLocation.y -= 6
             
-            if playerLocation['x'] > me.x:
-                playerLocation['x'] += 9
+            if playerLocation.x > me.coordinates.x:
+                playerLocation.x += 9
             else:
-                playerLocation['x'] -= 9
+                playerLocation.x -= 9
 
         else: 
             # newdest is lower
-            playerLocation['y'] += 6
+            playerLocation.y += 6
             
-            if playerLocation['x'] > me.x:
-                playerLocation['x'] += 9
+            if playerLocation.x > me.coordinates.x:
+                playerLocation.x += 9
             else:
-                playerLocation['x'] -= 9
+                playerLocation.x -= 9
 
 
-        if playerLocation['x'] > me.x:
-            if me.x < Config.columns - me.sprite.texture.width - 1:
-                me.x += 1
+        if playerLocation.x > me.coordinates.x:
+            if me.coordinates.x < Config.columns - me.texture.width - 1:
+                me.coordinates.x += 1
                 me.direction = Direction.right
         else: 
-            if me.x > 1:
-                me.x -= 1
+            if me.coordinates.x > 1:
+                me.coordinates.x -= 1
                 self.direction = Direction.left
 
-        if playerLocation['y'] > me.y:
-            if me.y < Config.rows - me.sprite.texture.height - 1:
-                me.y += 1
+        if playerLocation.y > me.coordinates.y:
+            if me.coordinates.y < Config.rows - me.texture.height - 1:
+                me.coordinates.y += 1
         else: 
-            if me.y > 2:
-                me.y -= 1
+            if me.coordinates.y > 2:
+                me.coordinates.y -= 1
 
 
 class Dying(State):
@@ -238,12 +238,12 @@ class Dying(State):
         if random.choice([True, False]): 
             logger.info(self.name + " Death animation deluxe")
             animationIndex = random.randint(0, 1)
-            me.world.makeExplode(me.sprite, me.direction, None)
-            me.sprite.changeTexture(CharacterAnimationType.dying, me.direction, animationIndex)
+            me.world.makeExplode(me.texture, me.direction, None)
+            me.texture.changeAnimation(CharacterAnimationType.dying, me.direction, animationIndex)
             me.setActive(False)
         else: 
             animationIndex = random.randint(0, 1)
-            me.sprite.changeTexture(CharacterAnimationType.dying, me.direction, animationIndex)
+            me.texture.changeAnimation(CharacterAnimationType.dying, me.direction, animationIndex)
 
 
         self.setTimer( me.enemyInfo.dyingTime )

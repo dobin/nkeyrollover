@@ -2,47 +2,47 @@ import logging
 
 from entities.direction import Direction
 from .phenomenatype import PhenomenaType
-from .texture import Texture
+from .animation import Animation
 
 logger = logging.getLogger(__name__)
 
 
-class PhenomenaTextureManager(object): 
+class PhenomenaAnimationManager(object): 
     def __init__(self):
         self.animationsLeft = {}
         self.animationsRight = {}
 
         for phenomenatype in PhenomenaType:
-            self.animationsLeft[phenomenatype] = self.createTexture(phenomenatype, Direction.left)
+            self.animationsLeft[phenomenatype] = self.createAnimation(phenomenatype, Direction.left)
 
         for phenomenatype in PhenomenaType:
-            self.animationsRight[phenomenatype] = self.createTexture(phenomenatype, Direction.right)
+            self.animationsRight[phenomenatype] = self.createAnimation(phenomenatype, Direction.right)
 
 
-    def getTexture(self, phenomenaType, direction): 
+    def getAnimation(self, phenomenaType, direction): 
         if direction is Direction.left:
             return self.animationsLeft[phenomenaType]
         else: 
             return self.animationsRight[phenomenaType]
 
 
-    def createTexture(self, phenomenaType, direction):
-        texture = Texture()
+    def createAnimation(self, phenomenaType, direction):
+        animation = Animation()
 
         if phenomenaType is PhenomenaType.hit:
-            texture.width = 1
-            texture.height = 1
-            texture.frameCount = 3
-            texture.endless = False
-            texture.advanceByStep = False
+            animation.width = 1
+            animation.height = 1
+            animation.frameCount = 3
+            animation.endless = False
+            animation.advanceByStep = False
             
-            texture.frameTime = [
+            animation.frameTime = [
                 0.1,
                 0.1,
                 0.1
             ]
 
-            texture.arr = [
+            animation.arr = [
                 [
                     [ 'O', ],
                 ],
@@ -55,19 +55,19 @@ class PhenomenaTextureManager(object):
             ]
 
         if phenomenaType is PhenomenaType.hitSquare:
-            texture.width = 2
-            texture.height = 2
-            texture.frameCount = 3
-            texture.endless = False
-            texture.advanceByStep = False
+            animation.width = 2
+            animation.height = 2
+            animation.frameCount = 3
+            animation.endless = False
+            animation.advanceByStep = False
             
-            texture.frameTime = [
+            animation.frameTime = [
                 0.1,
                 0.1,
                 0.1
             ]
 
-            texture.arr = [
+            animation.arr = [
                 [
                     [ 'O', 'O' ],
                     [ 'O', 'O' ],                    
@@ -83,13 +83,13 @@ class PhenomenaTextureManager(object):
             ]
 
         if phenomenaType is PhenomenaType.hitLine:
-            texture.width = 4
-            texture.height = 1
-            texture.frameCount = 3
-            texture.endless = False
-            texture.advanceByStep = False
+            animation.width = 4
+            animation.height = 1
+            animation.frameCount = 3
+            animation.endless = False
+            animation.advanceByStep = False
             
-            texture.frameTime = [
+            animation.frameTime = [
                 0.1,
                 0.1,
                 0.1, 
@@ -97,7 +97,7 @@ class PhenomenaTextureManager(object):
             ]
 
             if direction is Direction.right:
-                texture.arr = [
+                animation.arr = [
                     [
                         [ '.', '', '', ''],
                     ],
@@ -109,7 +109,7 @@ class PhenomenaTextureManager(object):
                     ]                                
                 ]
             else:
-                texture.arr = [
+                animation.arr = [
                     [
                         [ '', '', '', '.'],
                     ],
@@ -122,30 +122,30 @@ class PhenomenaTextureManager(object):
                 ]
 
         if phenomenaType is PhenomenaType.roflcopter: 
-            texture.width = 3
-            texture.height = 3
-            texture.frameCount = 2
-            texture.endless = True
-            texture.advanceByStep = False
+            animation.width = 3
+            animation.height = 3
+            animation.frameCount = 2
+            animation.endless = True
+            animation.advanceByStep = False
 
-            texture.frameTime = [
+            animation.frameTime = [
                 0.2,
                 0.2
             ]
 
-            t = self.readfile('textures/roflcopter.ascii')
-            texture.width = t['width']
-            texture.height = t['height']
-            texture.arr = t['arr']
+            t = self.readfile('animations/roflcopter.ascii')
+            animation.width = t['width']
+            animation.height = t['height']
+            animation.arr = t['arr']
 
-        return texture
+        return animation
 
 
     def readfile(self, filename):
         lineList = [line.rstrip('\n') for line in open('texture/textures/roflcopter.ascii')]
         res = []
 
-        # find longest line to make texture
+        # find longest line to make animation
         maxWidth = 0
         for line in lineList: 
             if len(line) > maxWidth: 
@@ -165,11 +165,11 @@ class PhenomenaTextureManager(object):
                 tmp.append(list(line))
         res.append(tmp)
             
-        texture = {
+        d = {
             'arr': res,
             'width': maxWidth, 
             'height': maxHeight,
         }
 
         logging.info("Loaded {}: width={} height={} animations={}".format(filename, maxWidth, maxHeight, len(res)))
-        return texture
+        return d

@@ -2,7 +2,9 @@ import logging
 import random
 import curses 
 
-from sprite.specksprite import SpeckSprite
+
+from sprite.coordinates import Coordinates
+from sprite.specktexture import SpeckTexture
 from entities.direction import Direction
 from entities.player.player import Player
 from director import Director
@@ -10,6 +12,7 @@ from config import Config
 from entities.entity import Entity
 from entities.entitytype import EntityType
 from world.particleemiter import ParticleEmiter
+from sprite.sprite import Sprite
 
 logger = logging.getLogger(__name__)
 
@@ -17,14 +20,15 @@ logger = logging.getLogger(__name__)
 class World(object): 
     def __init__(self, win): 
         self.win = win
-        self.sprites = []
+        self.textures = []
 
-        self.worldEntity = Entity(win=self.win, parentEntity=None, entityType=EntityType.world)
+        self.worldSprite = Sprite(win=self.win, parentSprite=None)
         self.player = Player(
             win=self.win, 
-            parentEntity=self.worldEntity, 
+            parentEntity=self.worldSprite, 
             spawnBoundaries={ 'max_y': Config.columns, 'max_x': Config.rows }, 
             world=self)
+
         self.director = Director(self.win, self)
         self.director.init()
         self.particleEmiter = ParticleEmiter(self.win)
@@ -71,8 +75,8 @@ class World(object):
         self.director.drawEnemyAttacks()
         self.particleEmiter.draw()
 
-        for sprite in self.sprites: 
-            sprite.draw(self.win)
+        for texture in self.textures: 
+            texture.draw(self.win)
 
         if self.pause: 
             self.win.addstr(12, 40, "Paused", curses.color_pair(7))
@@ -86,11 +90,11 @@ class World(object):
         self.director.advanceEnemies(deltaTime)
         self.particleEmiter.advance(deltaTime)
 
-        for sprite in self.sprites: 
-            sprite.advance(deltaTime)
+        for texture in self.textures: 
+            texture.advance(deltaTime)
 
-            if not sprite.isActive: 
-                self.sprites.remove(sprite)
+            if not texture.isActive: 
+                self.textures.remove(texture)
 
         self.director.worldUpdate()
 
@@ -130,15 +134,19 @@ class World(object):
             if x == rowCnt - 1: 
                 movementX = 1
 
-            speckSprite = SpeckSprite(
+            c = Coordinates(
+                x = pos.x + x,
+                y = pos.y + y,
+            )
+
+            speckTexture = SpeckTexture(
                 char, 
-                pos['x'] + x,
-                pos['y'] + y,
+                c,
                 movementX, 
                 movementY, 
                 [ 0.1, 0.1, 0.1 ], 
                 1)
-            self.addSprite(speckSprite)
+            self.addTexture(speckTexture)
 
         # push away
         if effect == 2:
@@ -147,17 +155,21 @@ class World(object):
             else: 
                 d = 1
 
-            speckSprite = SpeckSprite(
+            c = Coordinates(
+                x = pos.x + x,
+                y = pos.y + y,
+            )
+
+            speckTexture = SpeckTexture(
                 char, 
-                pos['x'] + x,
-                pos['y'] + y,
+                c,
                 d * 2, 
                 0, 
                 [ 0.05, 0.1, 0.2, 0.4 ], 
                 2 )
-            self.addSprite(speckSprite)
+            self.addTexture(speckTexture)
 
 
 
-    def addSprite(self, sprite): 
-        self.sprites.append(sprite)
+    def addTexture(self, sprite): 
+        self.textures.append(sprite)

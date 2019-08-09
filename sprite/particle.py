@@ -2,6 +2,7 @@ import math
 import logging
 import curses
 
+from sprite.coordinates import Coordinates
 from utilities.timer import Timer
 from utilities.utilities import Utility
 
@@ -149,11 +150,11 @@ class Particle(object):
 
 
     def draw(self):
-        p = {
-            'x': self.x, 
-            'y': self.y,
-        }
-        if Utility.isPointDrawable(p):
+        c = Coordinates(
+            x = self.x, 
+            y = self.y,
+        )
+        if Utility.isPointDrawable(c):
             self.win.addstr(self.y, self.x, self.char, self.color | self.colorOpt)
 
 

@@ -1,12 +1,12 @@
-from config import Config
+import logging
 
+from config import Config
 from entities.direction import Direction
 from entities.actionctrl import ActionCtrl
 from texture.characteranimationtype import CharacterAnimationType
 
-import logging
-
 logger = logging.getLogger(__name__)
+
 
 class PlayerActionCtrl(ActionCtrl):
     """ The Player-Character controller. Manage states, like standing->walking """
@@ -22,12 +22,12 @@ class PlayerActionCtrl(ActionCtrl):
             # if we were already walking, dont destroy the animation state
             if self.action is not CharacterAnimationType.walking:
                 logger.debug("Player Change action to: " + str(newCharacterAnimationType))
-                self.parentEntity.sprite.changeTexture(newCharacterAnimationType, direction)
+                self.parentEntity.texture.changeAnimation(newCharacterAnimationType, direction)
         else: 
             logger.debug("Player Change action to: " + str(newCharacterAnimationType))
             
-            self.parentEntity.sprite.changeTexture(newCharacterAnimationType, direction)
-            animationTime = self.parentEntity.sprite.texture.getAnimationTime()
+            self.parentEntity.texture.changeAnimation(newCharacterAnimationType, direction)
+            animationTime = self.parentEntity.texture.getAnimationTime()
 
             self.durationTimer.setTimer(animationTime)
             self.durationTimer.reset()
@@ -40,13 +40,13 @@ class PlayerActionCtrl(ActionCtrl):
         if self.action is CharacterAnimationType.walking: 
             if self.durationTimer.timeIsUp():
                 self.action = CharacterAnimationType.standing
-                self.parentEntity.sprite.changeTexture(CharacterAnimationType.standing, Direction.right)
+                self.parentEntity.texture.changeAnimation(CharacterAnimationType.standing, Direction.right)
 
         # after hitting is finished, stand still
         if self.action is CharacterAnimationType.hitting: 
             if self.durationTimer.timeIsUp():
                 self.action = CharacterAnimationType.standing
-                self.parentEntity.sprite.changeTexture(CharacterAnimationType.standing, Direction.right)
+                self.parentEntity.texture.changeAnimation(CharacterAnimationType.standing, Direction.right)
 
         # when dying, desintegrate
         if self.action is CharacterAnimationType.dying: 

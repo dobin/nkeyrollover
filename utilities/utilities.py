@@ -2,41 +2,44 @@ import curses
 import logging
 
 from config import Config
-
+from sprite.coordinates import Coordinates
+from sprite.sprite import Sprite
 
 logger = logging.getLogger(__name__)
 
 
 class Utility(object):
     @staticmethod
-    def distance(coord1, coord2):
+    def distance(coord1 :Coordinates, coord2 :Coordinates):
         res = {
             'x': 0,
             'y': 0,
             'sum': 0,
         }
 
-        res['x'] = abs(coord1['x'] - coord2['x'])
-        res['y'] = abs(coord1['y'] - coord2['y'])
+        res['x'] = abs(coord1.x - coord2.x)
+        res['y'] = abs(coord1.y - coord2.y)
         res['sum'] = res['x'] + res['y']
 
         return res
 
     
     @staticmethod
-    def pointInSprite(coord1, sprite2):
+    def pointInSprite(coord1 :Coordinates, sprite2 :Sprite):
         coord2 = sprite2.getLocation()
-        if coord1['x'] >= coord2['x'] and coord1['x'] < coord2['x'] + sprite2.texture.width and coord1['y'] >= coord2['y'] and coord1['y'] < coord2['y'] + sprite2.texture.height:
+        if coord1.x >= coord2.x and coord1.x < coord2.x + sprite2.texture.width and coord1.y >= coord2.y and coord1.y < coord2.y + sprite2.texture.height:
             return True
         else: 
             return False
 
+
     @staticmethod
-    def isPointDrawable(pos): 
-        if pos['x'] > Config.areaDrawable['minx'] and pos['y'] > Config.areaDrawable['miny'] and pos['x'] < Config.areaDrawable['maxx'] and pos['y'] < Config.areaDrawable['maxy']:
+    def isPointDrawable(coord :Coordinates): 
+        if coord.x > Config.areaDrawable['minx'] and coord.y > Config.areaDrawable['miny'] and coord.x < Config.areaDrawable['maxx'] and coord.y < Config.areaDrawable['maxy']:
             return True
         else:
             return False
+
 
     @staticmethod
     def isPointMovable(x, y, width, height): 
@@ -64,11 +67,11 @@ class Utility(object):
 
 
     @staticmethod
-    def getBorder(loc, distance :int =1, width :int =1):
+    def getBorder(loc :Coordinates, distance :int =1, width :int =1):
         locs = []
 
-        basex = loc['x'] - distance 
-        basey = loc['y'] - distance
+        basex = loc.x - distance 
+        basey = loc.y - distance
 
         dd = distance * 2
 
@@ -79,15 +82,15 @@ class Utility(object):
             x = basex
             while x <= basex + dd:
                 if y == basey or y == basey + dd: 
-                    locs.append({
-                        'x': x,
-                        'y': y
-                    })
+                    locs.append( Coordinates(
+                        x = x,
+                        y = y
+                    ))
                 elif x == basex or x == basex + dd:
-                    locs.append({
-                        'x': x,
-                        'y': y
-                    })
+                    locs.append( Coordinates(
+                        x = x,
+                        y = y
+                    ))
                 x += 1
             y += 1
 
