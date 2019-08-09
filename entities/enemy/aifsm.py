@@ -7,6 +7,7 @@ from texture.character.characteranimationtype import CharacterAnimationType
 from utilities.timer import Timer
 from sprite.direction import Direction
 from config import Config
+from sprite.coordinates import Coordinates
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +42,12 @@ class Spawn(State):
     def process(self, dt):
         if self.timeIsUp():
             self.brain.pop()
-            self.brain.push("chase")
+
+            if Config.devMode: 
+                # make him come straight at us, sucker
+                self.brain.push("chase")
+            else: 
+                self.brain.push("wander")
 
 
 class Chase(State):
@@ -167,14 +173,37 @@ class Wander(State):
     def __init__(self, brain):
         State.__init__(self, brain)
         self.lastInputTimer = Timer( self.brain.owner.enemyInfo.wanderStepDelay, instant=True )
-
+        self.destCoords = Coordinates()
+        self.destIsPoint = False
 
     def on_enter(self):
         me = self.brain.owner
         me.texture.changeAnimation(CharacterAnimationType.walking, me.direction)
         stateTimeRnd = random.randrange(-100 * me.enemyInfo.wanderTimeRnd, 100 * me.enemyInfo.wanderTimeRnd)
         self.setTimer( me.enemyInfo.wanderTime + (stateTimeRnd / 100) )        
-        
+
+        # if true:  go to a static point close to the current enemy position
+        # if false: go to a point relative to the enemy
+        self.destIsPoint = random.choice([True, False])
+        self.destCoord = self.pickDestAroundPlayer( me.player.getLocation() )
+
+
+    def pickDestAroundPlayer(self, coord :Coordinates):
+        ptRight = random.choice([True, False])
+        ptDown = random.choice([True, False])
+
+        if ptRight: 
+            coord.x += 6
+        else: 
+            coord.x -= 6
+
+        if ptDown: 
+            coord.y += 4
+        else: 
+            coord.y -= 4
+
+        return coord
+
 
     def process(self, dt):
         me = self.brain.owner
@@ -204,26 +233,10 @@ class Wander(State):
         if not me.enemyMovement: 
             return
 
-        playerLocation = me.player.getLocation()
+        if not self.destIsPoint:
+            # TODO
 
-        if playerLocation.y > me.coordinates.y:
-            # newdest is higher
-            playerLocation.y -= 6
-            
-            if playerLocation.x > me.coordinates.x:
-                playerLocation.x += 9
-            else:
-                playerLocation.x -= 9
-
-        else: 
-            # newdest is lower
-            playerLocation.y += 6
-            
-            if playerLocation.x > me.coordinates.x:
-                playerLocation.x += 9
-            else:
-                playerLocation.x -= 9
-
+        playerLocation = self.destCoord       
         if playerLocation.x > me.coordinates.x:
             if me.coordinates.x < Config.columns - me.texture.width - 1:
                 me.coordinates.x += 1

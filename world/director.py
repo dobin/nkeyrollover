@@ -15,7 +15,7 @@ class Director(object):
         self.enemiesAlive = []
         self.lastEnemyResurrectedTimer = Timer(1.0)
 
-        self.maxEnemies = 16
+        self.maxEnemies = 12
 
     # we split this from the constructor, so we can initialize a Director 
     # without enemies in the unit test
