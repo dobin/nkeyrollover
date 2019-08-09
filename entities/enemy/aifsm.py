@@ -55,11 +55,12 @@ class Chase(State):
 
     def on_enter(self):
         me = self.brain.owner
-        self.setTimer( me.enemyInfo.chaseTime )
+        stateTimeRnd = random.randrange(-100 * me.enemyInfo.chaseTimeRnd, 100 * me.enemyInfo.chaseTimeRnd)
+        self.setTimer( me.enemyInfo.chaseTime + (stateTimeRnd / 100) )
         me.texture.changeAnimation(
             CharacterAnimationType.walking, 
             me.direction)
-
+        logging.info("AAAA: " + str(self.timer))
 
     def process(self, dt):
         me = self.brain.owner
@@ -171,8 +172,9 @@ class Wander(State):
     def on_enter(self):
         me = self.brain.owner
         me.texture.changeAnimation(CharacterAnimationType.walking, me.direction)
-        self.setTimer( me.enemyInfo.wanderTime )
-
+        stateTimeRnd = random.randrange(-100 * me.enemyInfo.wanderTimeRnd, 100 * me.enemyInfo.wanderTimeRnd)
+        self.setTimer( me.enemyInfo.wanderTime + (stateTimeRnd / 100) )        
+        
 
     def process(self, dt):
         me = self.brain.owner

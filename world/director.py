@@ -15,9 +15,7 @@ class Director(object):
         self.enemiesAlive = []
         self.lastEnemyResurrectedTimer = Timer(1.0)
 
-        self.maxEnemies = 6
-        if Config.devMode: 
-            self.maxEnemies = 1
+        self.maxEnemies = 16
 
     # we split this from the constructor, so we can initialize a Director 
     # without enemies in the unit test
@@ -38,7 +36,7 @@ class Director(object):
             self.enemiesDead.append(newEnemy)
         else:
             n = 0
-            maxN = 16
+            maxN = self.maxEnemies
             if Config.devMode:
                 maxN = 1
             while n < maxN:
