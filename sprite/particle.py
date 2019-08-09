@@ -104,12 +104,12 @@ class Particle(object):
 
     def setChar(self): 
         if self.charType == 0: 
-            if self.life > ((self.originalLife / 3) * 1):
+            if self.life > ((self.originalLife / 3) * 2):
                 self.char = 'O'
-            elif self.life > ((self.originalLife / 3) * 2):
-                self.char = 'o'
-            else: 
+            elif self.life < ((self.originalLife / 3) * 1):
                 self.char = '.'
+            else: 
+                self.char = 'o'
 
 
     def makeStep(self, dt):
@@ -121,31 +121,33 @@ class Particle(object):
             self.setColor()
         self.setChar()
 
-        xFloat = self.velocity['x'] * (dt * 100) + self.rx
-        yFloat = self.velocity['y'] * (dt * 100) + self.ry
+        if self.speed > 0:
+            xFloat = self.velocity['x'] * (dt * 100) + self.rx
+            yFloat = self.velocity['y'] * (dt * 100) + self.ry
 
-        xChange = int(round(xFloat))
-        yChange = int(round(yFloat))
+            xChange = int(round(xFloat))
+            yChange = int(round(yFloat))
 
-        # accumulate pos we could not handle yet
-        changeRestX = xFloat - xChange - self.rx
-        changeRestY = yFloat - yChange - self.ry 
+            # accumulate pos we could not handle yet
+            changeRestX = xFloat - xChange - self.rx
+            changeRestY = yFloat - yChange - self.ry 
 
-        self.rx += changeRestX
-        self.ry += changeRestY
+            self.rx += changeRestX
+            self.ry += changeRestY
 
-        # change pos
-        self.x += xChange
-        self.y += yChange
+            # change pos
+            self.x += xChange
+            self.y += yChange
 
-        if False:
-            print("")
-            print("Real change:  X: {}  Y: {}".format(xFloat, yFloat))
-            print("Round change: X: {}  Y: {}".format(xChange, yChange))
-            print("Change Rest:  X: {}  Y: {}".format(changeRestX, changeRestY))
-            print("New    Rest:  X: {}  Y: {}".format(self.rx, self.ry))
-            print("New    Pos:   X: {}  Y: {}".format(self.x, self.y))
-            print("")
+            if False:
+                print("")
+                print("Real change:  X: {}  Y: {}".format(xFloat, yFloat))
+                print("Round change: X: {}  Y: {}".format(xChange, yChange))
+                print("Change Rest:  X: {}  Y: {}".format(changeRestX, changeRestY))
+                print("New    Rest:  X: {}  Y: {}".format(self.rx, self.ry))
+                print("New    Pos:   X: {}  Y: {}".format(self.x, self.y))
+                print("")
+                
         self.life -= 1
 
 

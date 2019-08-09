@@ -30,6 +30,7 @@ class PlayerSkills(object):
         if key == 'w':
             if self.isRdy(key): 
                 self.player.speechTexture.changeAnimation('hoi')
+                self.skillLaser()
                 self.cooldownTimers[key].reset()
 
         if key == 'e':
@@ -61,6 +62,15 @@ class PlayerSkills(object):
 
         locCenter = self.player.getLocationCenter()
         hitLocations = Utility.getBorder(locCenter)
+        self.hitCollisionDetection(hitLocations)
+
+
+    def skillLaser(self): 
+        hitLocations = self.player.world.particleEmiter.emit(
+            self.player.characterAttack.getLocation(), 
+            ParticleEffectType.laser, 
+            direction=self.player.direction)
+
         self.hitCollisionDetection(hitLocations)
 
 
