@@ -12,14 +12,18 @@ class Sprite(object):
     def __init__(
             self, win, 
             parentSprite, 
-            coordinates :Coordinates =Coordinates(),
+            coordinates :Coordinates =None,
             direction :Direction =Direction.none
     ):
         self.win = win
         self.parentSprite = parentSprite
-        self.coordinates = coordinates
         self.direction = direction
         self.texture = None
+
+        self.coordinates = Coordinates(0, 0)
+        if coordinates is not None:
+            self.coordinates.x = coordinates.x
+            self.coordinates.y = coordinates.y
 
         self.active = True
         self.rendered = True
