@@ -22,27 +22,42 @@ class Director(object):
     # we split this from the constructor, so we can initialize a Director 
     # without enemies in the unit test
     def init(self):
-        n = 0
-        maxN = 16
-        if Config.devMode:
-            maxN = 1
-        while n < maxN:
-            myx = 1
-            if n % 2 == 1:
-               myx = Config.columns + 1
 
+        if Config.devMode: 
             coordinates = {
-                'x': myx, 
-                'min_y': Config.areaMoveable['miny'],
-                'max_y': Config.areaMoveable['maxy'],
+                'x': 30, 
+                'min_y': 13,
+                'max_y': 13,
             }
             newEnemy = Enemy(win=self.win, 
                 parent=self.world.worldSprite, 
                 spawnBoundaries=coordinates, 
                 world=self.world, 
-                name=str(n))
+                name="Enym")
+            newEnemy.enemyMovement = False
             self.enemiesDead.append(newEnemy)
-            n = n + 1
+        else:
+            n = 0
+            maxN = 16
+            if Config.devMode:
+                maxN = 1
+            while n < maxN:
+                myx = 1
+                if n % 2 == 1:
+                    myx = Config.columns + 1
+
+                    coordinates = {
+                        'x': myx, 
+                        'min_y': Config.areaMoveable['miny'],
+                        'max_y': Config.areaMoveable['maxy'],
+                    }
+                    newEnemy = Enemy(win=self.win, 
+                        parent=self.world.worldSprite, 
+                        spawnBoundaries=coordinates, 
+                        world=self.world, 
+                        name=str(n))
+                    self.enemiesDead.append(newEnemy)
+                n = n + 1
 
 
     def advanceEnemies(self, deltaTime):

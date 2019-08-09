@@ -49,12 +49,16 @@ class Chase(State):
 
     def __init__(self, brain):
         State.__init__(self, brain)
-        self.lastInputTimer = Timer( self.brain.owner.enemyInfo.chaseStepDelay, instant=True )
+        self.lastInputTimer = Timer( 
+            self.brain.owner.enemyInfo.chaseStepDelay, 
+            instant=True )
 
     def on_enter(self):
         me = self.brain.owner
         self.setTimer( me.enemyInfo.chaseTime )
-        me.texture.changeAnimation(CharacterAnimationType.walking, me.direction)
+        me.texture.changeAnimation(
+            CharacterAnimationType.walking, 
+            me.direction)
 
 
     def process(self, dt):
@@ -81,6 +85,9 @@ class Chase(State):
 
         # make run-animation 
         me.texture.advanceStep()
+
+        if not me.enemyMovement: 
+            return
 
         playerLocation = me.player.getLocation()
 
@@ -122,14 +129,19 @@ class Attack(State):
 
     def __init__(self, brain):
         State.__init__(self, brain)
-        self.attackTimer = Timer(0.5, instant=False) # windup and cooldown
+        self.attackTimer = Timer() # Timer(0.5, instant=False) # windup and cooldown
 
 
     def on_enter(self):
         me = self.brain.owner
         self.attackTimer.init()
         me.texture.changeAnimation(CharacterAnimationType.hitting, me.direction)
-        self.setTimer( me.enemyInfo.attackTime )
+        
+        self.attackTimer.setTimer(me.texture.getAnimationTime())
+        self.setTimer( me.texture.getAnimationTime() )
+
+        logging.info("AttackTimer: " + str(me.texture.getAnimationTime()))
+        logging.info("Attack State Timer: " + str(me.texture.getAnimationTime()))
 
 
     def process(self, dt):
@@ -187,6 +199,9 @@ class Wander(State):
         # make run-animation 
         me.texture.advanceStep()
 
+        if not me.enemyMovement: 
+            return
+
         playerLocation = me.player.getLocation()
 
         if playerLocation.y > me.coordinates.y:
@@ -206,7 +221,6 @@ class Wander(State):
                 playerLocation.x += 9
             else:
                 playerLocation.x -= 9
-
 
         if playerLocation.x > me.coordinates.x:
             if me.coordinates.x < Config.columns - me.texture.width - 1:

@@ -23,6 +23,7 @@ class Enemy(Character):
     def __init__(self, win, parent, spawnBoundaries, world, name):
         Character.__init__(self, win, parent, spawnBoundaries, world, EntityType.enemy)
         
+        self.enemyMovement = True
         self.player = world.getPlayer()
         self.texture = CharacterTexture(
             parentSprite=self, 

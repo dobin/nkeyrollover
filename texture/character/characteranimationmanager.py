@@ -119,8 +119,8 @@ class CharacterAnimationManager(object):
             animation.endless = False
             animation.frameCount = 2
             animation.frameTime = [
-                1.0, 
-                1.0
+                0.8, 
+                0.2
             ]
             animation.advanceByStep = False
 
@@ -128,12 +128,12 @@ class CharacterAnimationManager(object):
                 animation.arr = [
                     [
                         [ '', 'o', '' ],
-                        [ '/', '|', '-'],
+                        [ '/', '|', '+'],
                         [ '/', '', '\\']
                     ],
                     [
                         [ '', 'o', '' ],
-                        [ '/', '|', '+'],
+                        [ '/', '|', '-'],
                         [ '/', '', '\\']
                     ]
                 ]
@@ -141,12 +141,12 @@ class CharacterAnimationManager(object):
                 animation.arr = [
                     [
                         [ '', 'o', '' ],
-                        [ '-', '|', '\\'],
+                        [ '+', '|', '\\'],
                         [ '/', '', '\\']
                     ],
                     [
                         [ '', 'o', '' ],
-                        [ '+', '|', '\\'],
+                        [ '-', '|', '\\'],
                         [ '/', '', '\\']
                     ]
                 ]

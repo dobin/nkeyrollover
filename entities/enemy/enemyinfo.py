@@ -7,7 +7,7 @@ class EnemyInfo(object):
         self.spawnTime = 1.0
         self.wanderTime = 0.5 # 5.0
         self.chaseTime = 5.0 # 5.0
-        self.attackTime = 2.0
+        self.attackTime = 1.0
         self.dyingTime = 2.0
 
         self.wanderStepDelay = 0.5

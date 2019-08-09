@@ -36,9 +36,10 @@ class CharacterTexture(AnimationTexture):
             direction :Direction, 
             subtype :int =0
         ):
-        self.init()
+
         self.animation = self.characterAnimationManager.getAnimation(
             characterAnimationType, direction, subtype)
+        self.init()            
         self.width = self.animation.width
         self.height = self.animation.height
         
