@@ -1,11 +1,13 @@
 
 
 class Timer(object): 
-    def __init__(self, timerValue=0.0, instant=False, active=True): 
-        self.timeLeft = 0.0
-        self.timerValue = timerValue
-        self.instant = instant
-        self.active = active
+    def __init__(
+        self, timerValue :float =0.0, instant :bool =False, active :bool =True
+    ): 
+        self.timeLeft :float = 0.0
+        self.timerValue :float = timerValue
+        self.instant :bool = instant
+        self.active :bool = active
 
         self.init()
 
@@ -17,7 +19,7 @@ class Timer(object):
             self.timeLeft = 0.0
         
 
-    def setTimer(self, timerValue): 
+    def setTimer(self, timerValue: float): 
         self.timerValue = timerValue
 
 
@@ -26,7 +28,7 @@ class Timer(object):
         self.active = True
 
 
-    def timeIsUp(self):
+    def timeIsUp(self) -> bool:
         if not self.active:
             return False
 
@@ -37,7 +39,7 @@ class Timer(object):
             return False
 
 
-    def isActive(self): 
+    def isActive(self) -> bool:
         return self.active
 
     def start(self): 
@@ -47,7 +49,7 @@ class Timer(object):
         self.active = False
 
 
-    def advance(self, dt):
+    def advance(self, dt: float):
         if not self.active: 
             return
 
