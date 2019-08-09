@@ -74,7 +74,7 @@ class Director(object):
 
         # remove inactive enemies
         for enemy in self.enemiesAlive:
-            if not enemy.isActive:
+            if not enemy.isActive():
                 logger.info("Move newly dead enemy to dead queue")
                 self.enemiesDead.append(enemy)
                 self.enemiesAlive.remove(enemy)

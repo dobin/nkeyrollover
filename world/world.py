@@ -92,7 +92,7 @@ class World(object):
         for texture in self.textures: 
             texture.advance(deltaTime)
 
-            if not texture.isActive: 
+            if not texture.isActive(): 
                 self.textures.remove(texture)
 
         self.director.worldUpdate()

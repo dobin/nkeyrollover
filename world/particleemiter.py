@@ -42,7 +42,7 @@ class ParticleEmiter(object):
         for particle in self.particleActive: 
             particle.advance(dt) 
 
-            if particle.isActive() == False: 
+            if not particle.isActive(): 
                 self.particleActive.remove( particle )
                 self.particlePool.append(particle)
 

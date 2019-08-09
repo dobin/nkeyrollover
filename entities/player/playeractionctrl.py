@@ -52,4 +52,4 @@ class PlayerActionCtrl(ActionCtrl):
         if self.action is CharacterAnimationType.dying: 
             if self.durationTimer.timeIsUp():
                 logging.info("Player Deactivate!")
-                self.isActive = False
+                self.parentEntity.setActive(False)
