@@ -12,13 +12,16 @@ from entities.enemy.enemy import Enemy
 from config import Config
 from world.director import Director
 from sprite.direction import Direction
-import tests.mockcurses as curses
+#import tests.mockcurses as curses
+import curses
 from utilities.utilities import Utility
+from sprite.sprite import Sprite
+from sprite.coordinates import Coordinates
 
 class FakeWorld(object): 
     def __init__(self, win): 
         self.win = win
-        self.worldEntity = Entity(win=win, parentEntity=None, entityType=EntityType.world)
+        self.worldEntity = Sprite(win=win, parentSprite=None)
         self.player = Player(win, self.worldEntity, None, self)
         self.director = Director(win, self) # real director
 
@@ -59,11 +62,11 @@ def test_weaponHit():
         win = None
 
     world = FakeWorld(win)
-    world.player.setLocation(10, 10)
+    world.player.setLocation( Coordinates(10, 10))
     world.player.direction = Direction.left
 
     enemy = Enemy(win, world.worldEntity, None, world, 'bot')
-    enemy.setLocation(4, 10)
+    enemy.setLocation(Coordinates(4, 10))
     world.director.enemiesAlive.append(enemy)
 
     logging.info("LIFE1: " + str(enemy.characterStatus.health))
@@ -85,7 +88,7 @@ def test_weaponHit():
         enemy.draw()
         world.player.draw()
         for loc in locs: 
-            win.addstr(loc['y'], loc['x'], ',') 
+            win.addstr(loc.y, loc.x, ',') 
 
         win.refresh()
         time.sleep(2)
