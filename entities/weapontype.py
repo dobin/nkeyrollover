@@ -1,7 +1,12 @@
 from enum import Enum
 
 class WeaponType(Enum): 
-    hit = 0
-    hitSquare = 1
-    hitLine = 2
-    jumpKick = 3
+    default = 0
+    hit = 1
+    hitSquare = 2
+    hitLine = 3
+    jumpKick = 4
+
+    explosion = 5
+    laser = 6
+    cleave = 7

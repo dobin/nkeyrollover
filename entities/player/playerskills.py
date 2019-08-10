@@ -3,7 +3,7 @@ from world.particleeffecttype import ParticleEffectType
 from texture.character.characteranimationtype import CharacterAnimationType
 from utilities.timer import Timer
 from utilities.utilities import Utility
-
+from entities.weapontype import WeaponType
 
 class PlayerSkills(object): 
     def __init__(self, player): 
@@ -20,7 +20,8 @@ class PlayerSkills(object):
 
 
     def doSkill(self, key): 
-        if key == 'f': 
+        if key == 'c': 
+            self.player.speechTexture.changeAnimation('hoi')
             self.player.actionCtrl.changeTo(
                 CharacterAnimationType.shrugging, 
                 self.player.direction)
@@ -32,7 +33,6 @@ class PlayerSkills(object):
         
         if key == 'w':
             if self.isRdy(key): 
-                #self.player.speechTexture.changeAnimation('hoi')
                 self.skillLaser()
                 self.cooldownTimers[key].reset()
 
@@ -65,9 +65,8 @@ class PlayerSkills(object):
 
         locCenter = self.player.getLocationCenter()
         hitLocations = Utility.getBorder(locCenter)
-        self.hitCollisionDetection(hitLocations)
 
-        damage = self.hitCollisionDetection(hitLocations)
+        damage = self.hitCollisionDetection(hitLocations, weaponType=WeaponType.explosion)
         self.player.announce(damage=damage, particleEffectType=ParticleEffectType.explosion)
 
 
@@ -77,7 +76,7 @@ class PlayerSkills(object):
             ParticleEffectType.laser, 
             direction=self.player.direction)
 
-        damage = self.hitCollisionDetection(hitLocations)
+        damage = self.hitCollisionDetection(hitLocations, weaponType=WeaponType.laser)
         self.player.announce(damage=damage, particleEffectType=ParticleEffectType.laser)
 
 
@@ -87,18 +86,21 @@ class PlayerSkills(object):
             ParticleEffectType.cleave, 
             direction=self.player.direction)
 
-        damage = self.hitCollisionDetection(hitLocations)
+        damage = self.hitCollisionDetection(hitLocations, weaponType=WeaponType.cleave)
         self.player.announce(damage=damage, particleEffectType=ParticleEffectType.cleave)
 
 
-    def hitCollisionDetection(self, hitLocations):
+    def hitCollisionDetection(self, hitLocations, weaponType):
         damage = 0
         for hitLocation in hitLocations:
             hittedEnemies = self.player.world.director.getEnemiesHit(hitLocation)
             for enemy in hittedEnemies: 
-                enemy.gmHandleHit( self.player.characterStatus.getDamage() )
-                self.player.gmHandleEnemyHit( self.player.characterStatus.getDamage(), isAttack=False )
-                damage += self.player.characterStatus.getDamage()
+                enemy.gmHandleHit( 
+                    self.player.characterStatus.getDamage(weaponType=weaponType) )
+                self.player.gmHandleEnemyHit( 
+                    self.player.characterStatus.getDamage(weaponType=weaponType), 
+                    isAttack=False )
+                damage += self.player.characterStatus.getDamage(weaponType=weaponType)
 
         return damage
 
