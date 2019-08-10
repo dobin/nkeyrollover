@@ -1,6 +1,7 @@
 from enum import Enum 
 import logging
 
+from utilities.recordholder import RecordHolder
 from sprite.coordinates import Coordinates
 from utilities.timer import Timer
 from texture.phenomena.phenomenatexture import PhenomenaTexture
@@ -61,7 +62,8 @@ class CharacterAttack(Entity):
    
     def attackWeaponHit(self):
         self.texture.changeAnimation(PhenomenaType.hit, self.parentSprite.direction)
-        self.hitCollisionDetection( [ self.getLocation()] )
+        damage = self.hitCollisionDetection( [ self.getLocation()] )
+        return damage
 
 
     def getLocation(self): 
@@ -115,7 +117,8 @@ class CharacterAttack(Entity):
         hitLocations.append(hl3)
         hitLocations.append(hl4)
 
-        self.hitCollisionDetection( hitLocations )
+        damage = self.hitCollisionDetection( hitLocations )
+        return damage
 
 
     def attackWeaponHitLine(self): 
@@ -141,11 +144,13 @@ class CharacterAttack(Entity):
         hitLocations.append(hl3)
         hitLocations.append(hl4)
 
-        self.hitCollisionDetection( hitLocations )
+        damage = self.hitCollisionDetection( hitLocations )
+        return damage
 
 
     def attackWeaponJumpKick(self): 
         self.texture.changeAnimation(PhenomenaType.hit, self.parentSprite.direction)
+        return 0
 
 
     def attack(self):
@@ -157,34 +162,40 @@ class CharacterAttack(Entity):
         self.setActive(True)
         self.durationTimer.reset() # entity will setActive(false) when time is up
 
+        damage = 0
         if self.weaponType is WeaponType.hit:
-            self.attackWeaponHit()
+            damage = self.attackWeaponHit()
         elif self.weaponType is WeaponType.hitSquare:
-            self.attackWeaponHitSquare()
+            damage = self.attackWeaponHitSquare()
         elif self.weaponType is WeaponType.hitLine: 
-            self.attackWeaponHitLine()
+            damage = self.attackWeaponHitLine()
         elif self.weaponType is WeaponType.jumpKick: 
-            self.attackWeaponJumpKick()
+            damage = self.attackWeaponJumpKick()
+
+        RecordHolder.recordPlayerAttack(weaponType=self.weaponType, damage=damage)
+
 
 
     def hitCollisionDetection(self, hitLocations):
+        damageSum = 0
         if self.isPlayer:
             for hitLocation in hitLocations:
                 hittedEnemies = self.parentCharacter.world.director.getEnemiesHit(hitLocation)
                 for enemy in hittedEnemies:
-                    enemy.gmHandleHit( 
-                        self.parentCharacter.characterStatus.getDamage(weaponType=self.weaponType) )
-                    self.parentCharacter.gmHandleEnemyHit( 
-                        self.parentCharacter.characterStatus.getDamage(weaponType=self.weaponType) ) 
+                    damage = self.parentCharacter.characterStatus.getDamage(weaponType=self.weaponType)
+                    enemy.gmHandleHit(damage)
+                    self.parentCharacter.gmHandleEnemyHit(damage)
+                    damageSum += damage
         else: 
             for hitLocation in hitLocations:
                 hittedPlayer = self.parentCharacter.world.director.getPlayersHit(hitLocation)
                 for player in hittedPlayer: 
-                    player.gmHandleHit( 
-                        self.parentCharacter.characterStatus.getDamage(weaponType=self.weaponType) )
-                    self.parentCharacter.gmHandleEnemyHit( 
-                        self.parentCharacter.characterStatus.getDamage(weaponType=self.weaponType) ) 
+                    damage = self.parentCharacter.characterStatus.getDamage(weaponType=self.weaponType) 
+                    player.gmHandleHit(damage)
+                    self.parentCharacter.gmHandleEnemyHit(damage)
+                    damageSum += damage
 
+        return damageSum
 
     def advance(self, deltaTime):
         super(CharacterAttack, self).advance(deltaTime)

@@ -52,7 +52,7 @@ class Entity(Sprite):
 
     def setColorFor(self, time, type):
         if self.colorTimer.isActive():
-            logger.warn("Color already active on new set color")
+            logger.debug("Color already active on new set color")
             return 
 
         newColor = self.getColorByType(type)

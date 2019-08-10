@@ -24,7 +24,6 @@ class Keyrollover(object):
 
 
     def init(self): 
-
         DEBUG_LEVELV_NUM = logging.WARN + 1 
         logging.addLevelName(DEBUG_LEVELV_NUM, "RECORD")
         def __record(self, message, *args, **kws):

@@ -10,3 +10,7 @@ class WeaponType(Enum):
     explosion = 5
     laser = 6
     cleave = 7
+
+    heal = 8
+    switchside = 9
+    
