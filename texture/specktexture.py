@@ -4,6 +4,8 @@ from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 from .texture import Texture
 from world.viewport import Viewport
+from utilities.colorpalette import ColorPalette
+from utilities.colortype import ColorType
 
 
 class SpeckTexture(Texture): 
@@ -47,5 +49,5 @@ class SpeckTexture(Texture):
                 c.y, 
                 c.x,
                 self.char, 
-                curses.color_pair(1))
+                ColorPalette.getColorByColorType(ColorType.specktexture, None))
 

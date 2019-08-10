@@ -7,6 +7,8 @@ from entities.player.player import Player
 from world.scene import Scene
 from config import Config
 from world.world import World
+from utilities.colorpalette import ColorPalette
+from utilities.colortype import ColorType
 
 current_milli_time = lambda: int(round(time.time() * 1000))
 
@@ -135,17 +137,13 @@ class Keyrollover(object):
         s += "  Points: " + str(self.world.player.characterStatus.points)
 
         #s += "  FPS: %.0f" % (fps)
-        self.win.addstr(1, 2, s, curses.color_pair(6) | curses.A_BOLD)
+        color = ColorPalette.getColorByColorType(ColorType.menu, None)
+        self.win.addstr(1, 2, s, color )
 
-        self.printSkillbar()
-        #self.win.border()
-
-        # TODO we dont use self.statusBar atm for flickering reasons
-        #self.statusBarWin.erase()
-        #self.statusbarWin.refresh()
+        self.printSkillbar(color)
 
 
-    def printSkillbar(self): 
+    def printSkillbar(self, color): 
         skills = self.world.player.skills
 
         basex = 54
@@ -162,13 +160,13 @@ class Keyrollover(object):
         self.win.addstr(1, 
             weaponIdx, 
             'W:' + self.world.player.characterAttack.getWeaponStr(), 
-            curses.color_pair(6))
+            color)
 
         weaponIdx = 62
         self.win.addstr(1, 
             weaponIdx, 
             'APS:' + str(int(self.world.player.characterStatus.getApm().getApm())), 
-            curses.color_pair(6))
+            color)
 
 
 def signal_handler(sig, frame):

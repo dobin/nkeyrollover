@@ -5,6 +5,8 @@ import logging
 from .coordinates import Coordinates
 from sprite.direction import Direction
 from world.viewport import Viewport
+from utilities.colorpalette import ColorPalette
+from utilities.colortype import ColorType
 
 logger = logging.getLogger(__name__)
 
@@ -38,19 +40,7 @@ class Sprite(object):
 
 
     def initColor(self): 
-        if self.viewport is None:
-            # for simple unittests
-            self.currentColor = 0
-            return
-
-        # for unittests using MockWin
-        # we always import 'curses', and dont know if we are being unittested
-        # in the unittest, we use MockWin, which has method isUnitTest
-        if hasattr(self.viewport, 'isUnitTest'):
-            self.currentColor = 0
-            return 
-
-        self.setColor(curses.color_pair(1))
+        self.setColor(ColorPalette.getColorByColorType(ColorType.sprite, self.viewport))
 
 
     def getLocation(self): 

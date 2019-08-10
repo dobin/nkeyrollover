@@ -6,6 +6,8 @@ from utilities.timer import Timer
 from sprite.sprite import Sprite
 from sprite.coordinates import Coordinates
 from world.viewport import Viewport
+from utilities.colorpalette import ColorPalette
+from utilities.colortype import ColorType
 
 logger = logging.getLogger(__name__)
 
@@ -27,27 +29,7 @@ class Entity(Sprite):
 
 
     def getColorByType(self, type):
-        if self.viewport is None:
-            # for simple unittests
-            return
-
-        # for unittests using MockWin
-        # we always import 'curses', and dont know if we are being unittested
-        # in the unittest, we use MockWin, which has method isUnitTest
-        if hasattr(self.viewport, 'isUnitTest'):
-            return 0
-
-        if type is EntityType.player: 
-            return curses.color_pair(1)
-        elif type is EntityType.enemy:
-            return curses.color_pair(2)
-        elif type is EntityType.takedamage:
-            return curses.color_pair(3)
-        elif type is EntityType.weapon:
-            return curses.color_pair(4)
-        else: 
-            logging.error("unknown color type: " + str(type))
-            return curses.color_pair(1)
+        return ColorPalette.getColorByEntityType(type, self.viewport)
 
 
     def setColorFor(self, time, type):

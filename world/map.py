@@ -1,6 +1,8 @@
 import curses
 
 from config import Config
+from utilities.colorpalette import ColorPalette
+from utilities.colortype import ColorType
 
 
 class Map(object): 
@@ -39,4 +41,4 @@ class Map(object):
                 x, 
                 y,
                 '/', 
-                curses.color_pair(7))
+                ColorPalette.getColorByColorType(ColorType.worldmap, None))

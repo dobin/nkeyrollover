@@ -5,6 +5,8 @@ import curses
 from sprite.coordinates import Coordinates
 from utilities.timer import Timer
 from utilities.utilities import Utility
+from utilities.colorpalette import ColorPalette
+from utilities.colortype import ColorType
 
 logger = logging.getLogger(__name__)
 
@@ -83,18 +85,7 @@ class Particle(object):
 
 
     def setColor(self): 
-        if self.viewport is None:
-            # for simple unittests
-            return
-
-        # for unittests using MockWin
-        # we always import 'curses', and dont know if we are being unittested
-        # in the unittest, we use MockWin, which has method isUnitTest
-        if hasattr(self.viewport, 'isUnitTest'):
-            self.color = 0
-            return
-
-        self.color = curses.color_pair(7)
+        self.color = ColorPalette.getColorByColorType(ColorType.particle, self.viewport)
 
         if self.life > (self.originalLife / 2):
             self.colorOpt = curses.A_BOLD
