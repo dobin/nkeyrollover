@@ -142,7 +142,7 @@ class PhenomenaAnimationManager(object):
             animation.advanceByStep = False
 
             animation.frameTime = [
-                2.5,
+                0.1,
                 0.5,
             ]
 
