@@ -5,4 +5,4 @@ class PhenomenaType(Enum):
     roflcopter = 1
     hitSquare = 2
     hitLine = 3
-
+    intro = 4

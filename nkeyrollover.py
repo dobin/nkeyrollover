@@ -58,7 +58,10 @@ class Keyrollover(object):
         curses.init_pair(7, curses.COLOR_WHITE, 0)
 
         self.scene = Scene(self.win)
-        self.scene.title()
+
+        if not Config.devMode:
+            self.scene.titleScene()
+            self.scene.introScene()
 
         self.win.clear()
         self.win.border()

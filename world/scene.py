@@ -19,13 +19,14 @@ from world.viewport import Viewport
 logger = logging.getLogger(__name__)
 
 
-class SceneState(Enum): 
-    wait1 = 0       # wait 1s
-    flydown = 1     # fly heli down
-    drop = 2        # drop asciiman
-    flyup = 3       # fly up
-    done = 4        # start the game
+class IntroSceneState(Enum):
+    wait1 = 1       # wait 1s
+    flydown = 2     # fly heli down
+    drop = 3        # drop asciiman
+    flyup = 4       # fly up
+    done = 5        # start the game
 
+            
 
 class Scene(object):
     """Play predefined scripts on the screen"""
@@ -34,15 +35,45 @@ class Scene(object):
         self.win = win
         self.viewport = Viewport(win=win, world=None)
 
-    def title(self):
+
+    def titleScene(self):
+        targetFrameTime = 1.0 / Config.fps
+        deltaTime = targetFrameTime # we try to keep it..
+        
+        worldSprite = Sprite(viewport=self.viewport, parentSprite=None)
+
+        entityCopter = Entity(viewport=self.viewport, parentSprite=worldSprite, entityType=EntityType.player)
+        textureCopter = PhenomenaTexture(phenomenaType=PhenomenaType.intro, parentSprite=entityCopter)
+        entityCopter.setLocation(Coordinates(2, 5))
+        textureCopter.setActive(True)
+
+        myTimer = Timer(3)
+            
+        while True:
+            self.win.erase()
+            #self.win.border()
+
+            if myTimer.timeIsUp(): 
+                break
+
+            # advance
+            myTimer.advance(deltaTime)
+            textureCopter.advance(deltaTime)
+            textureCopter.draw(self.viewport)
+
+            # input
+            key = self.win.getch()
+            if key != -1:
+                break
+
+            time.sleep(targetFrameTime)
+
+
+    def introScene(self):
         self.win.clear()
         self.win.border()
         self.win.refresh()    
 
-        self.loop()
-
-
-    def loop(self):
         timeStart = 0
         timeEnd = 0
         workTime = 0
@@ -62,8 +93,7 @@ class Scene(object):
         texturePlayer.setActive(False)
 
         myTimer = Timer(0.5)
-        state = SceneState.wait1
-        logging.debug("To State: Wait1")
+        state = IntroSceneState.wait1
 
         while True:
             timeStart = time.time()
@@ -71,18 +101,22 @@ class Scene(object):
             self.win.border()
 
             # static
-            self.win.addstr(5, 40, "N Key Rollover", curses.color_pair(3))
-            self.win.addstr(6, 40, "Adventures of ASCIIMAN", curses.color_pair(3))
+            if state is IntroSceneState.wait1 or state is IntroSceneState.flydown or state is IntroSceneState.drop or state is IntroSceneState.flyup:
+                self.win.addstr(5, 40, "N Key Rollover", curses.color_pair(3))
+                self.win.addstr(6, 40, "Adventures of ASCIIMAN", curses.color_pair(3))
+                self.win.addstr(8, 40, "Select attack: 1 2 3 4", curses.color_pair(4))
+                self.win.addstr(9, 40, "Attack       : space", curses.color_pair(4))
+                self.win.addstr(10, 40, "Skills       : q w e r", curses.color_pair(4))
 
             # state
-            if state is SceneState.wait1:
+            if state is IntroSceneState.wait1:
                 # for next scene: Flydown
                 if myTimer.timeIsUp():
-                    state = SceneState.flydown
+                    state = IntroSceneState.flydown
                     myTimer.setTimer(0.1)
                     textureCopter.setActive(True)
                     logging.debug("Scene: Go to State: Flydown")
-            elif state is SceneState.flydown:
+            elif state is IntroSceneState.flydown:
                 if myTimer.timeIsUp():
                     myTimer.reset()
                     entityCopter.coordinates.y += 1
@@ -91,22 +125,21 @@ class Scene(object):
                 if entityCopter.coordinates.y == 8: 
                     myTimer.setTimer(0.1)
                     logging.debug("Scene: Go to State: Drop")
-                    state = SceneState.drop
+                    state = IntroSceneState.drop
                     entityPlayer.coordinates.x = 24
                     entityPlayer.coordinates.y = 13
                     texturePlayer.setActive(True)                    
 
-            elif state is SceneState.drop: 
+            elif state is IntroSceneState.drop: 
                 # for next scene: Flyup
                 if myTimer.timeIsUp():
                     myTimer.reset()
                     entityCopter.coordinates.y -= 1
 
                 if entityCopter.coordinates.y == -5:
-                    state = SceneState.done
+                    state = IntroSceneState.done
 
-            elif state is SceneState.done: 
-                logging.info("A: " + str(entityPlayer.getLocation()))
+            elif state is IntroSceneState.done: 
                 break
 
             # elements

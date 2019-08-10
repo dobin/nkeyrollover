@@ -122,8 +122,6 @@ class PhenomenaAnimationManager(object):
                 ]
 
         if phenomenaType is PhenomenaType.roflcopter: 
-            animation.width = 3
-            animation.height = 3
             animation.frameCount = 2
             animation.endless = True
             animation.advanceByStep = False
@@ -133,7 +131,22 @@ class PhenomenaAnimationManager(object):
                 0.2
             ]
 
-            t = self.readfile('animations/roflcopter.ascii')
+            t = self.readfile('texture/textures/roflcopter.ascii')
+            animation.width = t['width']
+            animation.height = t['height']
+            animation.arr = t['arr']
+
+        if phenomenaType is PhenomenaType.intro: 
+            animation.frameCount = 2
+            animation.endless = True
+            animation.advanceByStep = False
+
+            animation.frameTime = [
+                2.5,
+                0.5,
+            ]
+
+            t = self.readfile('texture/textures/intro.ascii')
             animation.width = t['width']
             animation.height = t['height']
             animation.arr = t['arr']
@@ -142,7 +155,7 @@ class PhenomenaAnimationManager(object):
 
 
     def readfile(self, filename):
-        lineList = [line.rstrip('\n') for line in open('texture/textures/roflcopter.ascii')]
+        lineList = [line.rstrip('\n') for line in open(filename)]
         res = []
 
         # find longest line to make animation
