@@ -4,10 +4,11 @@ import curses
 import logging
 from enum import Enum
 
+from ai.brain import Brain
+import entities.player.playerfsm as playerfsm
 from world.particleeffecttype import ParticleEffectType
 from utilities.utilities import Utility
 from config import Config
-from .playeractionctrl import PlayerActionCtrl
 from entities.characterstatus import CharacterStatus
 from sprite.direction import Direction
 from entities.character import Character
@@ -26,19 +27,27 @@ class Player(Character):
     def __init__(self, win, parentEntity, spawnBoundaries, world):
         Character.__init__(self, win, parentEntity, spawnBoundaries, world, EntityType.player)
         
-        self.actionCtrl = PlayerActionCtrl(parentEntity=self, world=world)
         self.texture = CharacterTexture(parentSprite=self)
         self.characterAttack = CharacterAttack(win=win, parentCharacter=self, isPlayer=True)
         self.skills = PlayerSkills(player=self)
 
-        # first action is standing around
-        self.actionCtrl.changeTo(CharacterAnimationType.standing, Direction.right)
+        self.initAi()
 
         self.setLocation( Coordinates(
                 Config.playerSpawnPoint['x'],
                 Config.playerSpawnPoint['y']
             )
         )
+
+
+    def initAi(self):
+        self.brain = Brain(self)
+
+        self.brain.register(playerfsm.Idle)
+        self.brain.register(playerfsm.Spawn)
+        self.brain.register(playerfsm.Attack)
+        self.brain.register(playerfsm.Walking)
+        self.brain.push("spawn")
 
 
     # game mechanics 
@@ -71,9 +80,23 @@ class Player(Character):
             self.speechTexture.changeAnimation(text)
 
 
+    def movePlayer(self): 
+        self.advanceStep()
+
+        currentState = self.brain.state
+        
+        if currentState.name == 'walking': 
+            # keep him walking a bit more
+            currentState.setTimer(1.0)
+        else: 
+            self.brain.pop()
+            self.brain.push('walking')
+
+
     def handleInput(self, key):
             if key == ord(' '):
-                self.actionCtrl.changeTo(CharacterAnimationType.hitting, self.direction)
+                self.brain.pop()
+                self.brain.push('attack')
                 self.characterAttack.attack()
 
             # game related
@@ -82,7 +105,6 @@ class Player(Character):
 
             if key == 27: # esc
                 self.world.quitGame()
-
 
             # player related
             if key == ord('1'):
@@ -113,46 +135,41 @@ class Player(Character):
                 if Utility.isPointMovable(self.coordinates.x - 1, self.coordinates.y, self.texture.width, self.texture.height):
                     self.coordinates.x = self.coordinates.x - 1
                     self.direction = Direction.left
-                    self.actionCtrl.changeTo(CharacterAnimationType.walking, self.direction)
-                    self.advanceStep()
-
+                    self.movePlayer()
+                    
             elif key == curses.KEY_RIGHT: 
                 if Utility.isPointMovable(self.coordinates.x + 1, self.coordinates.y, self.texture.width, self.texture.height):
                     self.coordinates.x = self.coordinates.x + 1
                     self.direction = Direction.right
-                    self.actionCtrl.changeTo(CharacterAnimationType.walking, self.direction)
-                    self.advanceStep()
+                    self.movePlayer()
 
             elif key == curses.KEY_UP:
                 if Config.moveDiagonal:
                     if Utility.isPointMovable(self.coordinates.x +1 , self.coordinates.y - 1, self.texture.width, self.texture.height):
                         self.coordinates.y = self.coordinates.y - 1
                         self.coordinates.x = self.coordinates.x + 1
-                        self.actionCtrl.changeTo(CharacterAnimationType.walking, self.direction)
-                        self.advanceStep()
+                        self.movePlayer()
+
                 else: 
                     if Utility.isPointMovable(self.coordinates.x, self.coordinates.y - 1, self.texture.width, self.texture.height):
                         self.coordinates.y = self.coordinates.y - 1
-                        self.actionCtrl.changeTo(CharacterAnimationType.walking, self.direction)
-                        self.advanceStep()
+                        self.movePlayer()
 
             elif key == curses.KEY_DOWN: 
                 if Config.moveDiagonal:
                     if Utility.isPointMovable(self.coordinates.x - 1, self.coordinates.y + 1, self.texture.width, self.texture.height):
                         self.coordinates.y = self.coordinates.y + 1
                         self.coordinates.x = self.coordinates.x - 1
-                        self.actionCtrl.changeTo(CharacterAnimationType.walking, self.direction)
-                        self.advanceStep()
+                        self.movePlayer()
                 else:
                     if Utility.isPointMovable(self.coordinates.x, self.coordinates.y + 1, self.texture.width, self.texture.height):
                         self.coordinates.y = self.coordinates.y + 1
-                        self.actionCtrl.changeTo(CharacterAnimationType.walking, self.direction)
-                        self.advanceStep()
+                        self.movePlayer()
 
 
     def advance(self, deltaTime):
         super(Player, self).advance(deltaTime) # advance Character part (duration, sprite)
-        self.actionCtrl.advance(deltaTime) # advance actions (duration, Action transfers)
+        self.brain.update(deltaTime)
         self.skills.advance(deltaTime)
 
 
@@ -162,6 +179,9 @@ class Player(Character):
 
         logger.info("Ressurect player at: " + str(self.coordinates.x) + " / " + str(self.coordinates.y))
         self.characterStatus.init()
-        self.actionCtrl.changeTo(CharacterAnimationType.standing, None)
+        self.brain.pop()
+        self.brain.push('spawn')
 
-        
+
+    def __repr__(self): 
+        return "Player"        

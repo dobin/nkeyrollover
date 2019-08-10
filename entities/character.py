@@ -3,17 +3,16 @@
 import random
 import curses
 import logging
-
 from enum import Enum
 
 from config import Config
-from entities.player.playeractionctrl import PlayerActionCtrl
 from entities.entity import Entity
 from .characterstatus import CharacterStatus
 from sprite.direction import Direction
 from texture.speechtexture import SpeechTexture
 
 logger = logging.getLogger(__name__)
+
 
 class Character(Entity):
     """ A character is either a player or an enemy"""

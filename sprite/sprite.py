@@ -39,12 +39,14 @@ class Sprite(object):
         if self.win is None:
             # for simple unittests
             self.currentColor = 0
+            return
 
         # for unittests using MockWin
         # we always import 'curses', and dont know if we are being unittested
         # in the unittest, we use MockWin, which has method isUnitTest
         if hasattr(self.win, 'isUnitTest'):
             self.currentColor = 0
+            return 
 
         self.setColor(curses.color_pair(1))
 
