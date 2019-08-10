@@ -13,7 +13,7 @@ class AnimationTest(unittest.TestCase):
     def test_animationParticle(self): 
         # check if area skill hits enemy 
         win = curses.newwin(Config.rows, Config.columns)
-        # world = FakeWorld(win)
+        world = FakeWorld(win)
 
         logging.basicConfig(
             filename='app.log', 
@@ -24,7 +24,7 @@ class AnimationTest(unittest.TestCase):
         basex = 20
         basey = 20
 
-        p = Particle(win=win, x=basex, y=basey, life=30, 
+        p = Particle(viewport=world.viewport, x=basex, y=basey, life=30, 
             angle=180, speed=0.2, active=True)
         win.border()
 
