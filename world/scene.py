@@ -107,7 +107,7 @@ class Scene(object):
                 self.win.addstr(8, 40,  "Select attack: 1 2 3 4", curses.color_pair(4))
                 self.win.addstr(9, 40,  "Attack       : space", curses.color_pair(4))
                 self.win.addstr(10, 40, "Skills       : q w e r", curses.color_pair(4))
-                self.win.addstr(10, 40, "Heal, Port   : f g", curses.color_pair(4))
+                self.win.addstr(11, 40, "Heal, Port   : f g", curses.color_pair(4))
 
             # state
             if state is IntroSceneState.wait1:

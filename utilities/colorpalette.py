@@ -29,7 +29,7 @@ class ColorPalette(object):
 
         # for unittests using MockWin
         # we always import 'curses', and dont know if we are being unittested
-        # in the unittest, we use MockWin, which has method isUnitTest
+        # in the unittest, we use Viewport, which has method isUnitTest
         if hasattr(viewport, 'isUnitTest'):
             return color
 
