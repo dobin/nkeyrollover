@@ -156,7 +156,7 @@ class CharacterAttack(Entity):
 
     def attack(self):
         if not self.cooldownTimer.timeIsUp():
-            logger.record("Hitting {} on cooldown {}".format(self.weaponType, self.cooldownTimer.getTimeLeft()))
+            RecordHolder.recordPlayerAttackCooldown(self.weaponType, time=self.cooldownTimer.getTimeLeft())
             return
         self.cooldownTimer.reset() # activate cooldown
 

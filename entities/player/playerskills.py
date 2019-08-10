@@ -48,6 +48,7 @@ class PlayerSkills(object):
 
 
     def doSkill(self, key): 
+        weaponType = None
         if key == 'c': 
             self.player.speechTexture.changeAnimation('hoi')
             #self.player.actionCtrl.changeTo(
@@ -55,59 +56,58 @@ class PlayerSkills(object):
             #    self.player.direction)
 
         if key == 'f':
+            weaponType = WeaponType.heal
             if self.isRdy(key): 
-                # self.skillHeal()
-                self.doSkillType(WeaponType.heal)
+                self.doSkillType(weaponType)
                 self.cooldownTimers[key].reset()
             else: 
-                logger.record("Hitting {} on cooldown {}".format(
-                    WeaponType.heal, self.cooldownTimers[key].getTimeLeft()))
-
+                RecordHolder.recordPlayerAttackCooldown(
+                    weaponType, self.cooldownTimers[key].getTimeLeft())
 
         if key == 'g':
+            weaponType = WeaponType.switchside
             if self.isRdy(key): 
-                #self.skillSwitchSide()
-                self.doSkillType(WeaponType.switchside)
+                self.doSkillType(weaponType)
                 self.cooldownTimers[key].reset()
             else: 
-                logger.record("Hitting {} on cooldown {}".format(
-                    WeaponType.switchside, self.cooldownTimers[key].getTimeLeft()))
+                RecordHolder.recordPlayerAttackCooldown(
+                    weaponType, self.cooldownTimers[key].getTimeLeft())
 
         if key == 'q': 
+            weaponType = WeaponType.cleave            
             if self.isRdy(key): 
-                #self.skillCleave()
-                self.doSkillType(WeaponType.cleave)
+                self.doSkillType(weaponType)
                 self.cooldownTimers[key].reset()
             else: 
-                logger.record("Hitting {} on cooldown {}".format(
-                    WeaponType.cleave, self.cooldownTimers[key].getTimeLeft()))        
+                RecordHolder.recordPlayerAttackCooldown(
+                    weaponType, self.cooldownTimers[key].getTimeLeft())
 
         if key == 'w':
+            weaponType = WeaponType.laser            
             if self.isRdy(key): 
-                #self.skillLaser()
-                self.doSkillType(WeaponType.laser)
+                self.doSkillType(weaponType)
                 self.cooldownTimers[key].reset()
             else: 
-                logger.record("Hitting {} on cooldown {}".format(
-                    WeaponType.laser, self.cooldownTimers[key].getTimeLeft()))
+                RecordHolder.recordPlayerAttackCooldown(
+                    weaponType, self.cooldownTimers[key].getTimeLeft())
 
         if key == 'e':
+            weaponType = WeaponType.switchside
             if self.isRdy(key): 
-                #self.skillSwitchSide()
-                self.doSkillType(WeaponType.switchside)
+                self.doSkillType(weaponType)
                 self.cooldownTimers[key].reset()
             else: 
-                logger.record("Hitting {} on cooldown {}".format(
-                    WeaponType.switchside, self.cooldownTimers[key].getTimeLeft()))
+                RecordHolder.recordPlayerAttackCooldown(
+                    weaponType, self.cooldownTimers[key].getTimeLeft())
 
         if key == 'r':
+            weaponType = WeaponType.explosion
             if self.isRdy(key): 
-                #self.skillExplosion()
-                self.doSkillType(WeaponType.explosion)
+                self.doSkillType(weaponType)
                 self.cooldownTimers[key].reset()
             else: 
-                logger.record("Hitting {} on cooldown {}".format(
-                    WeaponType.explosion, self.cooldownTimers[key].getTimeLeft()))
+                RecordHolder.recordPlayerAttackCooldown(
+                    weaponType, self.cooldownTimers[key].getTimeLeft())
 
     def isRdy(self, skill):
         return self.cooldownTimers[skill].timeIsUp()
