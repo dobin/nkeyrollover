@@ -8,9 +8,9 @@ class RecordHolder(object):
     @staticmethod
     def recordPlayerAttack(weaponType :WeaponType, damage :int):
         l = "attack {} damage {}".format(weaponType, damage)
-        logger.warn(l)
+        logger.record(l)
 
     @staticmethod
     def recordPlayerAttackCooldown(weaponType :WeaponType, time :float):
         l = "attack {} on cooldown {}".format(weaponType, time)
-        logger.warn(l)
+        logger.record(l)
