@@ -68,23 +68,33 @@ class ParticleEmiter(object):
                 n += 1
 
         if effectType is ParticleEffectType.cleave: 
-            particleCount = 8
+            particleCount = 7
             life = 60
             n = 0
+
+            if direction is Direction.right: 
+                xinv = 2
+            else: 
+                xinv = -1
+
+            # for debug, source
+            # particle = self.particlePool.pop()
+            # particle.init(
+            #         x=loc.x, y=loc.y, life=life, angle=0, 
+            #         speed=0.0, fadeout=True, byStep=False, charType=0, 
+            #         active=True)
+            # particleList.append(particle)
+            # self.particleActive.append(particle)
+
             while n < particleCount: 
                 particle = self.particlePool.pop()
-                if direction is Direction.right: 
-                    xinv = 4
-                else: 
-                    xinv = -1
 
-                    c = Utility.getBorderHalf(loc, 2, 1, partRight=False)
-                    for h in c:
-                        particle.init(
-                            x=h.x, y=h.y, life=life, angle=0, 
-                            speed=0.0, fadeout=True, byStep=False, charType=0, 
-                            active=True)
-
+                basex = loc.x + xinv # distance from char
+                logging.info("New at: {}/{}".format(basex + xinv, loc.y + n))
+                particle.init(
+                    x=basex + xinv, y=loc.y + n - int(particleCount / 2) + 1, life=life, angle=0, 
+                    speed=0.0, fadeout=True, byStep=False, charType=0, 
+                    active=True)
 
                 self.particleActive.append(particle)
                 particleList.append(particle)

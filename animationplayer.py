@@ -24,12 +24,14 @@ from world.particleemiter import ParticleEmiter
 from world.particleeffecttype import ParticleEffectType
 from sprite.sprite import Sprite
 from sprite.coordinates import Coordinates
+from world.viewport import Viewport
 
 
 class FakeWorld(object): 
     def __init__(self, win): 
         self.win = win
-        self.worldSprite = Sprite(win=win, parentSprite=None)
+        self.viewport = Viewport(win=win, world=self)
+        self.worldSprite = Sprite(viewport=self.viewport, parentSprite=None)
         self.player = Player(win, self.worldSprite, None, self)
         self.director = Director(win, self) # real director
 
@@ -39,7 +41,7 @@ class FakeWorld(object):
 
 class AnimationTest(object):
     def __init__(self): 
-        self.win = None
+        self.viewport = None
 
     def init(self): 
         logging.basicConfig(
@@ -75,6 +77,7 @@ class AnimationTest(object):
             win = None
 
         self.win = win
+        self.viewport = Viewport(win=win, world=None)
 
 
     def cleanup(self): 
@@ -146,7 +149,7 @@ class AnimationTest(object):
     def playParticle(self): 
         sprites = []
 
-        p = Particle(win=self.win, x=20, y=20, life=10, 
+        p = Particle(viewport=self.viewport, x=20, y=20, life=10, 
             angle=10, speed=1.2, active=True)
         sprites.append(p)
 
@@ -174,10 +177,10 @@ class AnimationTest(object):
     def playParticleExplosion(self): 
         particleEmiter = ParticleEmiter(self.win)
         loc = Coordinates(
-            x = 10,
-            y = 10,
+            x = 15,
+            y = 15,
         )
-        particleEmiter.emit(loc, ParticleEffectType.explosion)
+        particleEmiter.emit(loc, ParticleEffectType.cleave, direction=Direction.right)
 
         dt = 0.01
         while True:
@@ -192,7 +195,7 @@ class AnimationTest(object):
                     break
 
             if key == ord('r'): 
-                particleEmiter.emit(loc, ParticleEffectType.explosion)
+                particleEmiter.emit(loc, ParticleEffectType.cleave, direction=Direction.right)
 
             self.win.refresh()
             time.sleep(dt) 
@@ -202,6 +205,7 @@ class AnimationTest(object):
         n = 0
         for effect in ParticleEffectType: 
             loc.x += n
+            loc.y += 1
             particleEmiter.emit(loc, effect)
             n += 10
 
@@ -215,10 +219,14 @@ class AnimationTest(object):
         )
         self.playAllParticles(copy.copy(loc), particleEmiter)
 
-
         dt = 0.01
         while True:
             self.win.erase()
+
+            n = 0
+            while n < 3: 
+                self.viewport.addstr(16, 10 + (n*10), str(n))
+                n += 1
 
             particleEmiter.advance(dt)
             particleEmiter.draw()
@@ -237,7 +245,7 @@ class AnimationTest(object):
 
 if __name__ == '__main__':
     if len(sys.argv) == 1: 
-        print("Give argument.")
+        print("Give argument: animations,particles,explosion,particle")
         sys.exit(1)
 
     animationTest = AnimationTest()
