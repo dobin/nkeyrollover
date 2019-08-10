@@ -1,9 +1,14 @@
+import logging 
+
 from config import Config
 from world.particleeffecttype import ParticleEffectType
 from texture.character.characteranimationtype import CharacterAnimationType
 from utilities.timer import Timer
 from utilities.utilities import Utility
 from entities.weapontype import WeaponType
+
+logger = logging.getLogger(__name__)
+
 
 class PlayerSkills(object): 
     def __init__(self, player): 
@@ -70,10 +75,14 @@ class PlayerSkills(object):
 
 
     def skillSwitchSide(self): 
-        if self.player.coordinates.x < (Config.rows / 2):
-            self.player.coordinates.x = Config.areaMoveable['maxx'] - self.player.coordinates.x
+        screenCoordinates = self.player.viewport.getScreenCoords(self.player.coordinates)
+
+        if screenCoordinates.x < (Config.columns / 2):
+            diff = 80 - 2 * screenCoordinates.x
+            self.player.coordinates.x += diff
         else: 
-            self.player.coordinates.x = (Config.areaMoveable['maxx'] - self.player.coordinates.x)
+            diff = Config.areaMoveable['maxx'] - 2 * (Config.areaMoveable['maxx'] - screenCoordinates.x)
+            self.player.coordinates.x -= diff
 
 
     def skillExplosion(self): 
