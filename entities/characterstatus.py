@@ -65,5 +65,9 @@ class CharacterStatus(object):
             self.health += hp
 
 
+    def heal(self, hp :int): 
+        self.health += hp
+
+
     def advance(self, deltaTime): 
         pass

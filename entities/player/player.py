@@ -130,6 +130,15 @@ class Player(Character):
             if key == ord('4'):
                 self.characterAttack.switchWeaponByKey('4')
 
+            if key == ord('c'):
+                self.skills.doSkill('c')
+
+            if key == ord('f'):
+                self.skills.doSkill('f')
+
+            if key == ord('g'):
+                self.skills.doSkill('g')
+
             if key == ord('q'):
                 self.skills.doSkill('q')
 

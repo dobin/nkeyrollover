@@ -9,22 +9,36 @@ class PlayerSkills(object):
     def __init__(self, player): 
         self.player = player
         self.skillStatus = [
-            'q', 'w', 'e', 'r'
+            'q', 'w', 'e', 'r', 'f', 'g'
         ]
         self.cooldownTimers = {
             'q': Timer(1.0, instant=True),
             'w': Timer(1.0, instant=True),
             'e': Timer(5.0, instant=True),
             'r': Timer(3.0, instant=True),
+
+            'c': Timer(1.0, instant=True),
+            'f': Timer(30.0, instant=True),
+            'g': Timer(5.0, instant=True),
         }
 
 
     def doSkill(self, key): 
         if key == 'c': 
             self.player.speechTexture.changeAnimation('hoi')
-            self.player.actionCtrl.changeTo(
-                CharacterAnimationType.shrugging, 
-                self.player.direction)
+            #self.player.actionCtrl.changeTo(
+            #    CharacterAnimationType.shrugging, 
+            #    self.player.direction)
+
+        if key == 'f':
+            if self.isRdy(key): 
+                self.skillHeal()
+                self.cooldownTimers[key].reset()
+
+        if key == 'g':
+            if self.isRdy(key): 
+                self.skillSwitchSide()
+                self.cooldownTimers[key].reset()
 
         if key == 'q': 
             if self.isRdy(key): 
@@ -49,6 +63,10 @@ class PlayerSkills(object):
 
     def isRdy(self, skill):
         return self.cooldownTimers[skill].timeIsUp()
+
+
+    def skillHeal(self): 
+        self.player.characterStatus.heal(100)
 
 
     def skillSwitchSide(self): 

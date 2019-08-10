@@ -57,6 +57,9 @@ class Keyrollover(object):
         curses.init_pair(6, curses.COLOR_WHITE, curses.COLOR_BLACK)
         curses.init_pair(7, curses.COLOR_WHITE, 0)
 
+        curses.init_pair(8, curses.COLOR_WHITE, curses.COLOR_GREEN)
+        curses.init_pair(9, curses.COLOR_WHITE, curses.COLOR_RED)
+
         self.scene = Scene(self.win)
 
         if not Config.devMode:
@@ -138,15 +141,15 @@ class Keyrollover(object):
     def printSkillbar(self): 
         skills = self.world.player.skills
 
-        basex = 60
+        basex = 54
         n = 0
         for skill in skills.skillStatus: 
             if skills.isRdy(skill): 
-                self.win.addstr(1, basex + n, skill, curses.color_pair(6) | curses.A_BOLD)
+                self.win.addstr(1, basex + n, skill, curses.color_pair(8) | curses.A_BOLD)
             else: 
-                self.win.addstr(1, basex + n, skill, curses.color_pair(6))
+                self.win.addstr(1, basex + n, skill, curses.color_pair(9))
 
-            n += 2
+            n += 1
 
         weaponIdx = 70
         self.win.addstr(1, 
