@@ -26,7 +26,6 @@ class Character(Entity):
         self.speechTexture = SpeechTexture(parentSprite=self, displayText='')
         self.speechTexture.setActive(False)
         self.characterAttack = None # by children
-        self.actionCtrl = None # filled in children
         self.characterInfo = None # filled by children
 
 
