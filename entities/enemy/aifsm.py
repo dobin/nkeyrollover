@@ -83,7 +83,7 @@ class Chase(State):
             self.brain.push("attackwindup")
 
         if self.timeIsUp():
-            logging.debug("{}: Too long chasing, switching to wander".format(self.owner))
+            logger.debug("{}: Too long chasing, switching to wander".format(self.owner))
             self.brain.pop()
             self.brain.push("wander")
 
@@ -160,7 +160,7 @@ class Attack(State):
 
         if self.timeIsUp():
             # too long attacking. lets switch to chasing
-            logging.debug("{}: Too long attacking, switch to chasing".format(self.owner))
+            logger.debug("{}: Too long attacking, switch to chasing".format(self.owner))
             self.brain.pop()
             self.brain.push("chase")
 
@@ -213,12 +213,12 @@ class Wander(State):
             self.lastInputTimer.reset()
 
         if self.timeIsUp():
-            logging.debug("{}: Too long wandering, chase again a bit".format(self.owner))
+            logger.debug("{}: Too long wandering, chase again a bit".format(self.owner))
             self.brain.pop()
             self.brain.push("chase")
 
         elif me.isPlayerClose():
-            logging.debug("{}: Player is close, chasing".format(self.owner))
+            logger.debug("{}: Player is close, chasing".format(self.owner))
             self.brain.pop()
             self.brain.push("chase")
 
@@ -282,7 +282,7 @@ class Dying(State):
         me = self.brain.owner
 
         if self.timeIsUp():
-            logging.debug("{}: Died enough, set to inactive".format(self.owner))
+            logger.debug("{}: Died enough, set to inactive".format(self.owner))
             self.brain.pop()
             self.brain.push("idle")
             me.setActive(False)

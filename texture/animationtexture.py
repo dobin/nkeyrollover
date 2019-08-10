@@ -89,7 +89,7 @@ class AnimationTexture(Texture):
 
     def draw(self, viewport):
         if not self.isActive():
-            # logging.debug("Drawing nonactive sprite")
+            # logger.debug("Drawing nonactive sprite")
             return
 
         pos = self.getLocation()

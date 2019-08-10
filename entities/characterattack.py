@@ -55,7 +55,7 @@ class CharacterAttack(Entity):
 
 
     def switchWeapon(self, weaponType):
-        logging.info("Switch to weaopn: " + str(weaponType))
+        logger.info("Switch to weaopn: " + str(weaponType))
         self.weaponType = weaponType
 
    
@@ -150,7 +150,7 @@ class CharacterAttack(Entity):
 
     def attack(self):
         if not self.cooldownTimer.timeIsUp():
-            logging.debug("Hitting on cooldown")
+            logger.debug("Hitting on cooldown")
             return
         self.cooldownTimer.reset() # activate cooldown
 

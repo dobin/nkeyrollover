@@ -118,7 +118,7 @@ class Dying(State):
         me = self.brain.owner
 
         if self.timeIsUp():
-            logging.info("Player died enough. deactive")
+            logger.info("Player died enough. deactive")
             me.setActive(False)
 
 

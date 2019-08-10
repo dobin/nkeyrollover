@@ -4,7 +4,7 @@ from sprite.direction import Direction
 from texture.phenomena.phenomenatype import PhenomenaType
 from texture.animation import Animation
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("phenomentaanimationmanager")
 
 
 class PhenomenaAnimationManager(object): 
@@ -184,5 +184,5 @@ class PhenomenaAnimationManager(object):
             'height': maxHeight,
         }
 
-        logging.info("Loaded {}: width={} height={} animations={}".format(filename, maxWidth, maxHeight, len(res)))
+        logger.info("Loaded {}: width={} height={} animations={}".format(filename, maxWidth, maxHeight, len(res)))
         return d

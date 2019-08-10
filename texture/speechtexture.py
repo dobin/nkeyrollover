@@ -24,7 +24,7 @@ class SpeechTexture(AnimationTexture):
 
 
     def changeAnimation(self, displayText=None, direction=Direction.right):
-        logging.info("Speechsprite change!")
+        logger.info("Speechsprite change!")
         self.init()
         self.animation = self.speechAnimationManager.getAnimation(displayText, direction)
         self.offset.x = 1

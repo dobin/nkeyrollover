@@ -116,7 +116,7 @@ class Scene(object):
                     state = IntroSceneState.flydown
                     myTimer.setTimer(0.1)
                     textureCopter.setActive(True)
-                    logging.debug("Scene: Go to State: Flydown")
+                    logger.debug("Scene: Go to State: Flydown")
             elif state is IntroSceneState.flydown:
                 if myTimer.timeIsUp():
                     myTimer.reset()
@@ -125,7 +125,7 @@ class Scene(object):
                 # for next scene: Drop
                 if entityCopter.coordinates.y == 8: 
                     myTimer.setTimer(0.1)
-                    logging.debug("Scene: Go to State: Drop")
+                    logger.debug("Scene: Go to State: Drop")
                     state = IntroSceneState.drop
                     entityPlayer.coordinates.x = 24
                     entityPlayer.coordinates.y = 13

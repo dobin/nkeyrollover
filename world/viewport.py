@@ -43,5 +43,4 @@ class Viewport(object):
             return False
 
     def adjustViewport(self, x): 
-        logging.info("-------- Adjust: " + str(x))
         self.x += x

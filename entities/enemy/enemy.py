@@ -75,7 +75,7 @@ class Enemy(Character):
 
     def gmRessurectMe(self): 
         if self.characterStatus.isAlive():
-            logging.warn(self.name + " Trying to ressurect enemy which is still alive")
+            logger.warn(self.name + " Trying to ressurect enemy which is still alive")
             return
 
         logger.info(self.name + " Ressurect at: " + str(self.coordinates))

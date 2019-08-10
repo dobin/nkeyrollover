@@ -19,6 +19,8 @@ from sprite.sprite import Sprite
 from sprite.coordinates import Coordinates
 from tests.fakeworld import FakeWorld
 
+logger = logging.getLogger(__name__)
+
 
 def test_weaponHit():
     logging.basicConfig(
@@ -60,18 +62,18 @@ def test_weaponHit():
     enemy.setLocation(Coordinates(4, 10))
     world.director.enemiesAlive.append(enemy)
 
-    logging.info("LIFE1: " + str(enemy.characterStatus.health))
+    logger.info("LIFE1: " + str(enemy.characterStatus.health))
     life1 = enemy.characterStatus.health
     world.player.handleInput(ord('3')) # select first weapon
     world.player.advance(0.1)
     enemy.advance(0.1)
     world.player.handleInput(ord(' ')) # fire
-    logging.info("LIFE2: " + str(enemy.characterStatus.health))
+    logger.info("LIFE2: " + str(enemy.characterStatus.health))
     life2 = enemy.characterStatus.health
     world.player.advance(0.1)
     enemy.advance(0.1)
     life3 = enemy.characterStatus.health
-    logging.info("LIFE3: " + str(enemy.characterStatus.health))
+    logger.info("LIFE3: " + str(enemy.characterStatus.health))
 
     locs = Utility.getBorderHalf(world.player.getLocationCenter(), distance=2, width=1)
 
