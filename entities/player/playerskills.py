@@ -49,6 +49,8 @@ class PlayerSkills(object):
 
     def doSkill(self, key): 
         weaponType = None
+        isCooldown = False
+
         if key == 'c': 
             self.player.speechTexture.changeAnimation('hoi')
             #self.player.actionCtrl.changeTo(
@@ -60,54 +62,54 @@ class PlayerSkills(object):
             if self.isRdy(key): 
                 self.doSkillType(weaponType)
                 self.cooldownTimers[key].reset()
-            else: 
-                RecordHolder.recordPlayerAttackCooldown(
-                    weaponType, self.cooldownTimers[key].getTimeLeft())
+            else:
+                isCooldown = True
+
 
         if key == 'g':
             weaponType = WeaponType.switchside
             if self.isRdy(key): 
                 self.doSkillType(weaponType)
                 self.cooldownTimers[key].reset()
-            else: 
-                RecordHolder.recordPlayerAttackCooldown(
-                    weaponType, self.cooldownTimers[key].getTimeLeft())
+            else:
+                isCooldown = True
 
         if key == 'q': 
             weaponType = WeaponType.cleave            
             if self.isRdy(key): 
                 self.doSkillType(weaponType)
                 self.cooldownTimers[key].reset()
-            else: 
-                RecordHolder.recordPlayerAttackCooldown(
-                    weaponType, self.cooldownTimers[key].getTimeLeft())
+            else:
+                isCooldown = True
 
         if key == 'w':
             weaponType = WeaponType.laser            
             if self.isRdy(key): 
                 self.doSkillType(weaponType)
                 self.cooldownTimers[key].reset()
-            else: 
-                RecordHolder.recordPlayerAttackCooldown(
-                    weaponType, self.cooldownTimers[key].getTimeLeft())
+            else:
+                isCooldown = True
 
         if key == 'e':
             weaponType = WeaponType.switchside
             if self.isRdy(key): 
                 self.doSkillType(weaponType)
                 self.cooldownTimers[key].reset()
-            else: 
-                RecordHolder.recordPlayerAttackCooldown(
-                    weaponType, self.cooldownTimers[key].getTimeLeft())
+            else:
+                isCooldown = True
 
         if key == 'r':
             weaponType = WeaponType.explosion
             if self.isRdy(key): 
                 self.doSkillType(weaponType)
                 self.cooldownTimers[key].reset()
-            else: 
-                RecordHolder.recordPlayerAttackCooldown(
-                    weaponType, self.cooldownTimers[key].getTimeLeft())
+            else:
+                isCooldown = True
+
+        if isCooldown:
+            RecordHolder.recordPlayerAttackCooldown(
+                weaponType, self.cooldownTimers[key].getTimeLeft())
+
 
     def isRdy(self, skill):
         return self.cooldownTimers[skill].timeIsUp()
