@@ -12,13 +12,14 @@ from .character import Character
 from sprite.direction import Direction
 from .character import Character
 from .weapontype import WeaponType
+from world.viewport import Viewport
 
 logger = logging.getLogger(__name__)
 
 
 class CharacterAttack(Entity): 
-    def __init__(self, win, parentCharacter :Character, isPlayer :bool):
-        super(CharacterAttack, self).__init__(win=win, parentSprite=parentCharacter, entityType=EntityType.weapon)
+    def __init__(self, viewport, parentCharacter :Character, isPlayer :bool):
+        super(CharacterAttack, self).__init__(viewport=viewport, parentSprite=parentCharacter, entityType=EntityType.weapon)
 
         self.isPlayer = isPlayer
         self.texture = PhenomenaTexture(phenomenaType=PhenomenaType.hit, parentSprite=self)

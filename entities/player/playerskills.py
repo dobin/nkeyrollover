@@ -70,6 +70,7 @@ class PlayerSkills(object):
         damage = self.hitCollisionDetection(hitLocations)
         self.player.announce(damage=damage, particleEffectType=ParticleEffectType.explosion)
 
+
     def skillLaser(self): 
         hitLocations = self.player.world.particleEmiter.emit(
             self.player.characterAttack.getLocation(), 
@@ -100,7 +101,6 @@ class PlayerSkills(object):
                 damage += self.player.characterStatus.getDamage()
 
         return damage
-
 
 
     def advance(self, dt):

@@ -19,7 +19,7 @@ class Texture(object):
             self.offset.y = offset.y
 
 
-    def draw(self): 
+    def draw(self, viewport): 
         pass
 
 

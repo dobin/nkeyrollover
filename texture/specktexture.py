@@ -3,6 +3,7 @@ import curses
 from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 from .texture import Texture
+from world.viewport import Viewport
 
 
 class SpeckTexture(Texture): 
@@ -36,16 +37,15 @@ class SpeckTexture(Texture):
             self.setActive(False)
 
     
-    def draw(self, win):
+    def draw(self, viewport :Viewport):
         if not self.isActive(): 
             return
 
         c = self.getLocation()
 
-        if Utility.isPointDrawable(c):
-            win.addch(
-                    self.offset.y, 
-                    self.offset.x,
-                    self.char, 
-                    curses.color_pair(1))
+        viewport.addstr(
+                c.y, 
+                c.x,
+                self.char, 
+                curses.color_pair(1))
 

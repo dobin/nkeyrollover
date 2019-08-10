@@ -9,17 +9,19 @@ from utilities.utilities import Utility
 logger = logging.getLogger(__name__)
 
 
-class ParticleEmiter(object): 
+class ParticleEmiter(object):
+    """Create and manage independant particles on the screen"""
+    
     def __init__(
         self,
-        win
+        viewport
     ):
-        self.win = win
+        self.viewport = viewport
         self.particlePool = []
         self.particleActive = []
         n = 0
         while n < Config.maxParticles:
-            self.particlePool.append( Particle(win=win) )
+            self.particlePool.append( Particle(viewport=viewport) )
             n += 1
 
     

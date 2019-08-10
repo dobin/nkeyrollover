@@ -24,11 +24,11 @@ logger = logging.getLogger(__name__)
 
 
 class Player(Character):
-    def __init__(self, win, parentEntity, spawnBoundaries, world):
-        Character.__init__(self, win, parentEntity, spawnBoundaries, world, EntityType.player)
+    def __init__(self, viewport, parentEntity, spawnBoundaries, world):
+        Character.__init__(self, viewport, parentEntity, spawnBoundaries, world, EntityType.player)
         
         self.texture = CharacterTexture(parentSprite=self)
-        self.characterAttack = CharacterAttack(win=win, parentCharacter=self, isPlayer=True)
+        self.characterAttack = CharacterAttack(viewport=viewport, parentCharacter=self, isPlayer=True)
         self.skills = PlayerSkills(player=self)
 
         self.initAi()
@@ -58,10 +58,14 @@ class Player(Character):
 
 
     def getInput(self):
-        key = self.win.getch()
+        gotInput = False
+        key = self.viewport.win.getch()
         while key != -1:
+            gotInput = True
             self.handleInput(key)
-            key = self.win.getch()
+            key = self.viewport.win.getch()
+
+        return gotInput
 
 
     def announce(self, damage, particleEffectType): 
@@ -80,11 +84,18 @@ class Player(Character):
             self.speechTexture.changeAnimation(text)
 
 
-    def movePlayer(self): 
+    def movePlayer(self):
+        # move window
+        playerScreenCoords = self.viewport.getScreenCoords ( self.getLocation() )
+        if playerScreenCoords.x == Config.moveBorderRight:
+            self.viewport.adjustViewport(-1)
+        if playerScreenCoords.x == Config.moveBorderLeft:
+            self.viewport.adjustViewport(1)
+
+        # walking animation
         self.advanceStep()
 
         currentState = self.brain.state
-        
         if currentState.name == 'walking': 
             # keep him walking a bit more
             currentState.setTimer(1.0)

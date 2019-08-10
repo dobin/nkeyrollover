@@ -13,24 +13,30 @@ from entities.entity import Entity
 from entities.entitytype import EntityType
 from world.particleemiter import ParticleEmiter
 from sprite.sprite import Sprite
+from .map import Map
+from .viewport import Viewport
 
 logger = logging.getLogger(__name__)
 
 
 class World(object): 
+    """The game world in which all game object live"""
+
     def __init__(self, win): 
         self.win = win
         self.textures = []
-        self.worldSprite :Sprite = Sprite(win=self.win, parentSprite=None)
+        self.viewport :Viewport =Viewport(win=win, world=self)
+        self.worldSprite :Sprite = Sprite(viewport=self.viewport, parentSprite=None)
         self.player :Player = Player(
-            win=self.win, 
+            viewport=self.viewport, 
             parentEntity=self.worldSprite, 
             spawnBoundaries={ 'max_y': Config.columns, 'max_x': Config.rows }, 
             world=self)
-
-        self.director :Director = Director(self.win, self)
+        self.director :Director = Director(self.viewport, self)
         self.director.init()
-        self.particleEmiter :ParticleEmiter = ParticleEmiter(self.win)
+        self.particleEmiter :ParticleEmiter = ParticleEmiter(viewport=self.viewport)
+        self.map :Map = Map(win=win, world=self)
+        
 
         self.pause :bool = False
         self.gameRunning :bool = True
@@ -39,34 +45,14 @@ class World(object):
     def togglePause(self): 
         self.pause = not self.pause
 
+
     def quitGame(self): 
         self.gameRunning = False
 
 
-    def drawWorld(self): 
-        self.win.move(Config.areaMoveable['miny'], Config.areaMoveable['minx'])
-        self.win.hline('-', Config.columns - 2)
-        self.drawDiagonal(8, 45, 15)
-
-
-    def drawDiagonal(self, x, y, len):
-        n = 0
-        while n != len: 
-            x += 1
-            y -= 1
-
-            n += 1
-
-            self.win.addstr(
-                x, 
-                y,
-                '/', 
-                curses.color_pair(7))
-
-
     def draw(self):
         # order here is Z axis
-        self.drawWorld()
+        self.map.draw()
         self.director.drawEnemies()
         self.player.draw()
 
@@ -75,7 +61,7 @@ class World(object):
         self.particleEmiter.draw()
 
         for texture in self.textures: 
-            texture.draw(self.win)
+            texture.draw(self.viewport)
 
         if self.pause: 
             self.win.addstr(12, 40, "Paused", curses.color_pair(7))
@@ -85,13 +71,13 @@ class World(object):
         if self.pause:
             return
 
+        self.map.advance()
         self.player.advance(deltaTime)
         self.director.advanceEnemies(deltaTime)
         self.particleEmiter.advance(deltaTime)
 
         for texture in self.textures: 
             texture.advance(deltaTime)
-
             if not texture.isActive(): 
                 self.textures.remove(texture)
 
@@ -167,7 +153,6 @@ class World(object):
                 [ 0.05, 0.1, 0.2, 0.4 ], 
                 2 )
             self.addTexture(speckTexture)
-
 
 
     def addTexture(self, sprite): 

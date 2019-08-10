@@ -1,14 +1,9 @@
-#!/usr/bin/env python
-
 import unittest
 import time
 import logging
 #import tests.mockcurses as curses
 import curses
 
-from entities.characterattack import CharacterAttack
-from entities.entity import Entity
-from entities.entitytype import EntityType
 from entities.player.player import Player
 from entities.enemy.enemy import Enemy
 from config import Config
@@ -18,9 +13,10 @@ from utilities.utilities import Utility
 from sprite.sprite import Sprite
 from sprite.coordinates import Coordinates
 from tests.fakeworld import FakeWorld
+from world.world import World
 
 
-def test_weaponHit():
+def worldPlayer():
     logging.basicConfig(
         filename='app.log', 
         filemode='a', 
@@ -52,38 +48,26 @@ def test_weaponHit():
     else: 
         win = None
 
-    world = FakeWorld(win)
-    world.player.setLocation( Coordinates(10, 10))
-    world.player.direction = Direction.left
+    world = World(win)
+    world.director.maxEnemies = 0
 
-    enemy = Enemy(win, world.worldSprite, None, world, 'bot')
-    enemy.setLocation(Coordinates(4, 10))
-    world.director.enemiesAlive.append(enemy)
+    while True:
+        win.erase()
 
-    logging.info("LIFE1: " + str(enemy.characterStatus.health))
-    life1 = enemy.characterStatus.health
-    world.player.handleInput(ord('3')) # select first weapon
-    world.player.advance(0.1)
-    enemy.advance(0.1)
-    world.player.handleInput(ord(' ')) # fire
-    logging.info("LIFE2: " + str(enemy.characterStatus.health))
-    life2 = enemy.characterStatus.health
-    world.player.advance(0.1)
-    enemy.advance(0.1)
-    life3 = enemy.characterStatus.health
-    logging.info("LIFE3: " + str(enemy.characterStatus.health))
+        world.draw()
+        world.advance(0.01)
 
-    locs = Utility.getBorderHalf(world.player.getLocationCenter(), distance=2, width=1)
+        if world.player.getInput():
+            playerScreenCoords = world.viewport.getScreenCoords ( world.player.getLocation() )
 
-    if doCurses:
-        enemy.draw()
-        world.player.draw()
-        for loc in locs: 
-            win.addstr(loc.y, loc.x, ',') 
+            if playerScreenCoords.x == 30:
+                world.viewport.x -= 1
 
-        win.refresh()
-        time.sleep(2)
+            if playerScreenCoords.x == 20:
+                world.viewport.x += 1
+
+        time.sleep(0.01)
 
 
 if __name__ == '__main__':
-    test_weaponHit()
+    worldPlayer()

@@ -87,7 +87,7 @@ class AnimationTexture(Texture):
                     self.frameIndex = (self.frameIndex + 1) % self.animation.frameCount
     
 
-    def draw(self, win):
+    def draw(self, viewport):
         if not self.isActive():
             # logging.debug("Drawing nonactive sprite")
             return
@@ -97,17 +97,11 @@ class AnimationTexture(Texture):
         for (y, rows) in enumerate(self.animation.arr[ self.frameIndex ]):
             for (x, column) in enumerate(rows):
                 if column is not '':
-                    coord = Coordinates(
-                        x=pos.x + x,
-                        y=pos.y + y,
-                    )
-
-                    if Utility.isPointDrawable(coord):
-                        win.addstr(
-                            coord.y,
-                            coord.x,
-                            column, 
-                            self.parentSprite.currentColor)
+                    viewport.addstr(
+                        pos.y + y,
+                        pos.x + x,
+                        column, 
+                        self.parentSprite.currentColor)
 
 
     def getCurrentFrameCopy(self): 

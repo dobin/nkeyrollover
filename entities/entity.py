@@ -5,14 +5,15 @@ from sprite.direction import Direction
 from utilities.timer import Timer
 from sprite.sprite import Sprite
 from sprite.coordinates import Coordinates
+from world.viewport import Viewport
 
 logger = logging.getLogger(__name__)
 
 
 class Entity(Sprite):
-    def __init__(self, win, parentSprite :Sprite, entityType :EntityType):
+    def __init__(self, viewport, parentSprite :Sprite, entityType :EntityType):
         super(Entity, self).__init__(
-            win=win, parentSprite=parentSprite, coordinates =Coordinates(),
+            viewport=viewport, parentSprite=parentSprite, coordinates =Coordinates(),
             direction=Direction.right)
 
         self.entityType = entityType
@@ -26,14 +27,14 @@ class Entity(Sprite):
 
 
     def getColorByType(self, type):
-        if self.win is None:
+        if self.viewport is None:
             # for simple unittests
             return
 
         # for unittests using MockWin
         # we always import 'curses', and dont know if we are being unittested
         # in the unittest, we use MockWin, which has method isUnitTest
-        if hasattr(self.win, 'isUnitTest'):
+        if hasattr(self.viewport, 'isUnitTest'):
             return 0
 
         if type is EntityType.player: 

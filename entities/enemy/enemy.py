@@ -20,8 +20,8 @@ logger = logging.getLogger(__name__)
 
 
 class Enemy(Character):
-    def __init__(self, win, parent, spawnBoundaries, world, name):
-        Character.__init__(self, win, parent, spawnBoundaries, world, EntityType.enemy)
+    def __init__(self, viewport, parent, spawnBoundaries, world, name):
+        Character.__init__(self, viewport, parent, spawnBoundaries, world, EntityType.enemy)
         
         self.enemyMovement = True
         self.player = world.getPlayer()
@@ -30,7 +30,7 @@ class Enemy(Character):
             characterAnimationType=CharacterAnimationType.standing,
             head=self.getRandomHead(), 
             body=self.getRandomBody())
-        self.characterAttack = CharacterAttack(win=win, parentCharacter=self, isPlayer=False)
+        self.characterAttack = CharacterAttack(viewport=viewport, parentCharacter=self, isPlayer=False)
         self.name = 'Bot' + name
         self.enemyInfo = EnemyInfo()
 

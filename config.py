@@ -20,6 +20,9 @@ class Config:
         'maxx': 79
     }
 
+    moveBorderRight = 76
+    moveBorderLeft = 4
+
     playerSpawnPoint = {
         'x': 24,
         'y': 13,
@@ -30,3 +33,5 @@ class Config:
     moveDiagonal = False
 
     announceDamage = 350
+
+    maxParticles = 128

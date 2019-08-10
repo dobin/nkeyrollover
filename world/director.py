@@ -8,8 +8,10 @@ logger = logging.getLogger(__name__)
 
 
 class Director(object):
-    def __init__(self, win, world):
-        self.win = win
+    """Create and manage the enemies"""
+    
+    def __init__(self, viewport, world):
+        self.viewport = viewport
         self.world = world
         self.enemiesDead = []
         self.enemiesAlive = []
@@ -27,7 +29,7 @@ class Director(object):
                 'min_y': 13,
                 'max_y': 13,
             }
-            newEnemy = Enemy(win=self.win, 
+            newEnemy = Enemy(viewport=self.viewport, 
                 parent=self.world.worldSprite, 
                 spawnBoundaries=coordinates, 
                 world=self.world, 
@@ -49,7 +51,7 @@ class Director(object):
                     'min_y': Config.areaMoveable['miny'],
                     'max_y': Config.areaMoveable['maxy'],
                 }
-                newEnemy = Enemy(win=self.win, 
+                newEnemy = Enemy(viewport=self.viewport, 
                     parent=self.world.worldSprite, 
                     spawnBoundaries=coordinates, 
                     world=self.world, 

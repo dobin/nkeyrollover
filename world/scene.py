@@ -14,8 +14,10 @@ from texture.phenomena.phenomenatexture import PhenomenaTexture
 from sprite.sprite import Sprite
 from utilities.timer import Timer
 from sprite.coordinates import Coordinates
+from world.viewport import Viewport
 
 logger = logging.getLogger(__name__)
+
 
 class SceneState(Enum): 
     wait1 = 0       # wait 1s
@@ -26,8 +28,11 @@ class SceneState(Enum):
 
 
 class Scene(object):
+    """Play predefined scripts on the screen"""
+
     def __init__(self, win):
         self.win = win
+        self.viewport = Viewport(win=win, world=None)
 
     def title(self):
         self.win.clear()
@@ -45,15 +50,14 @@ class Scene(object):
         targetFrameTime = 1.0 / Config.fps
         deltaTime = targetFrameTime # we try to keep it...
 
-        worldSprite = Sprite(win=self.win, parentSprite=None)
-     
+        worldSprite = Sprite(viewport=self.viewport, parentSprite=None)
 
-        entityCopter = Entity(win=self.win, parentSprite=worldSprite, entityType=EntityType.player)
+        entityCopter = Entity(viewport=self.viewport, parentSprite=worldSprite, entityType=EntityType.player)
         textureCopter = PhenomenaTexture(phenomenaType=PhenomenaType.roflcopter, parentSprite=entityCopter)
         entityCopter.setLocation(Coordinates(13, -5))        
         textureCopter.setActive(False)
 
-        entityPlayer = Entity(win=self.win, parentSprite=worldSprite, entityType=EntityType.player)
+        entityPlayer = Entity(viewport=self.viewport, parentSprite=worldSprite, entityType=EntityType.player)
         texturePlayer = CharacterTexture(characterAnimationType=CharacterAnimationType.standing, parentSprite=entityPlayer)
         texturePlayer.setActive(False)
 
@@ -107,10 +111,9 @@ class Scene(object):
 
             # elements
             texturePlayer.advance(deltaTime)
-            texturePlayer.draw(self.win)            
+            texturePlayer.draw(self.viewport)            
             textureCopter.advance(deltaTime)
-            textureCopter.draw(self.win)
-
+            textureCopter.draw(self.viewport)
 
             # input
             key = self.win.getch()

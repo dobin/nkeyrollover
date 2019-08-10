@@ -34,15 +34,9 @@ class Utility(object):
 
 
     @staticmethod
-    def isPointDrawable(coord :Coordinates): 
-        if coord.x > Config.areaDrawable['minx'] and coord.y > Config.areaDrawable['miny'] and coord.x < Config.areaDrawable['maxx'] and coord.y < Config.areaDrawable['maxy']:
-            return True
-        else:
-            return False
-
-
-    @staticmethod
     def isPointMovable(x, y, width, height): 
+        return True
+
         # left boundary
         if x <= Config.areaMoveable['minx']:
             logging.info("1: {} / {} ".format(x, Config.areaMoveable['minx']))
@@ -80,6 +74,36 @@ class Utility(object):
 
         while y <= basey + dd:
             x = basex
+            while x <= basex + dd:
+                if y == basey or y == basey + dd: 
+                    locs.append( Coordinates(
+                        x = x,
+                        y = y
+                    ))
+                elif x == basex or x == basex + dd:
+                    locs.append( Coordinates(
+                        x = x,
+                        y = y
+                    ))
+                x += 1
+            y += 1
+
+        return locs 
+
+    @staticmethod
+    def getBorderHalf(loc :Coordinates, distance :int =1, width :int =1, partRight=True):
+        locs = []
+
+        basex = loc.x - distance 
+        basey = loc.y - distance
+
+        dd = distance * 2
+
+        y = basey
+        x = basex
+        while y <= basey + dd:
+            x = basex
+            
             while x <= basex + dd:
                 if y == basey or y == basey + dd: 
                     locs.append( Coordinates(

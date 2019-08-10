@@ -17,8 +17,8 @@ logger = logging.getLogger(__name__)
 class Character(Entity):
     """ A character is either a player or an enemy"""
 
-    def __init__(self, win, parentEntity, spawnBoundaries, world, entityType):
-        super(Character, self).__init__(win, parentEntity, entityType)
+    def __init__(self, viewport, parentEntity, spawnBoundaries, world, entityType):
+        super(Character, self).__init__(viewport, parentEntity, entityType)
         self.world = world
         self.spawnBoundaries = spawnBoundaries
 
@@ -47,7 +47,7 @@ class Character(Entity):
 
     def draw(self):
         super(Character, self).draw()
-        self.speechTexture.draw(self.win)
+        self.speechTexture.draw(self.viewport)
 
 
     def drawCharacterAttack(self): 

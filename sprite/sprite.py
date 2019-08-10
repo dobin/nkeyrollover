@@ -4,18 +4,20 @@ import logging
 
 from .coordinates import Coordinates
 from sprite.direction import Direction
+from world.viewport import Viewport
 
 logger = logging.getLogger(__name__)
 
 
-class Sprite(object): 
+class Sprite(object):
     def __init__(
-            self, win, 
+            self, 
+            viewport :Viewport, 
             parentSprite, 
             coordinates :Coordinates =None,
             direction :Direction =Direction.none
     ):
-        self.win = win
+        self.viewport = viewport
         self.parentSprite = parentSprite
         self.direction = direction
         self.texture = None
@@ -36,7 +38,7 @@ class Sprite(object):
 
 
     def initColor(self): 
-        if self.win is None:
+        if self.viewport is None:
             # for simple unittests
             self.currentColor = 0
             return
@@ -44,7 +46,7 @@ class Sprite(object):
         # for unittests using MockWin
         # we always import 'curses', and dont know if we are being unittested
         # in the unittest, we use MockWin, which has method isUnitTest
-        if hasattr(self.win, 'isUnitTest'):
+        if hasattr(self.viewport, 'isUnitTest'):
             self.currentColor = 0
             return 
 
@@ -91,7 +93,7 @@ class Sprite(object):
         if not self.isRendered():
             return
 
-        self.texture.draw(self.win)
+        self.texture.draw(self.viewport)
 
 
     def collidesWithPoint(self, hitCoords :Coordinates):

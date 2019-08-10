@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class Particle(object):
     def __init__(
         self,
-        win =None,
+        viewport =None,
         x :int =0,
         y :int =0, 
         life :int =0,
@@ -23,7 +23,7 @@ class Particle(object):
         byStep :bool =False,
         active :bool =False
     ):
-        self.win = win
+        self.viewport = viewport
         self.movementTimer = Timer()
         self.init(
             x=x, y=y, life=life, angle=angle, speed=speed, fadeout=fadeout, 
@@ -83,14 +83,14 @@ class Particle(object):
 
 
     def setColor(self): 
-        if self.win is None:
+        if self.viewport is None:
             # for simple unittests
             return
 
         # for unittests using MockWin
         # we always import 'curses', and dont know if we are being unittested
         # in the unittest, we use MockWin, which has method isUnitTest
-        if hasattr(self.win, 'isUnitTest'):
+        if hasattr(self.viewport, 'isUnitTest'):
             self.color = 0
             return
 
@@ -152,12 +152,7 @@ class Particle(object):
 
 
     def draw(self):
-        c = Coordinates(
-            x = self.x, 
-            y = self.y,
-        )
-        if Utility.isPointDrawable(c):
-            self.win.addstr(self.y, self.x, self.char, self.color | self.colorOpt)
+        self.viewport.addstr(self.y, self.x, self.char, self.color | self.colorOpt)
 
 
     def isActive(self): 

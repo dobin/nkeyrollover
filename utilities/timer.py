@@ -35,15 +35,16 @@ class Timer(object):
         if self.timeLeft <= 0.0:
             return True
         else:
-            # print("{} ".format(self.timeLeft))
             return False
 
 
     def isActive(self) -> bool:
         return self.active
 
+
     def start(self): 
         self.active = True
+
 
     def stop(self): 
         self.active = False

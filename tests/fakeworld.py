@@ -5,6 +5,7 @@ from entities.entitytype import EntityType
 from world.particleemiter import ParticleEmiter
 from sprite.sprite import Sprite
 
+
 class FakeWorld(object): 
     def __init__(self, win): 
         self.win = win
