@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 
+import copy
 import unittest
 import time
 import sys
+import logging
+import curses
+#import tests.mockcurses as curses
 
 from entities.characterattack import CharacterAttack
 from entities.entity import Entity
@@ -19,10 +23,7 @@ from sprite.particle import Particle
 from world.particleemiter import ParticleEmiter
 from world.particleeffecttype import ParticleEffectType
 from sprite.sprite import Sprite
-
-import logging
-#import tests.mockcurses as curses
-import curses
+from sprite.coordinates import Coordinates
 
 
 class FakeWorld(object): 
@@ -85,10 +86,12 @@ class AnimationTest(object):
 
 
     def play(self, type):
-        if type == 'all':
+        if type == 'animations':
             self.playAllAnimations()
         elif type == 'particle':
             self.playParticle()
+        elif type == 'explosion':
+            self.playParticleExplosion()
         elif type == 'particles':
             self.playParticles()
 
@@ -168,12 +171,12 @@ class AnimationTest(object):
             time.sleep(0.01)
 
 
-    def playParticles(self): 
+    def playParticleExplosion(self): 
         particleEmiter = ParticleEmiter(self.win)
-        loc = {
-            'x': 10,
-            'y': 10,
-        }
+        loc = Coordinates(
+            x = 10,
+            y = 10,
+        )
         particleEmiter.emit(loc, ParticleEffectType.explosion)
 
         dt = 0.01
@@ -190,6 +193,43 @@ class AnimationTest(object):
 
             if key == ord('r'): 
                 particleEmiter.emit(loc, ParticleEffectType.explosion)
+
+            self.win.refresh()
+            time.sleep(dt) 
+
+
+    def playAllParticles(self, loc, particleEmiter): 
+        n = 0
+        for effect in ParticleEffectType: 
+            loc.x += n
+            particleEmiter.emit(loc, effect)
+            n += 10
+
+
+    def playParticles(self): 
+        particleEmiter = ParticleEmiter(self.win)
+
+        loc = Coordinates(
+            x = 10,
+            y = 10,
+        )
+        self.playAllParticles(copy.copy(loc), particleEmiter)
+
+
+        dt = 0.01
+        while True:
+            self.win.erase()
+
+            particleEmiter.advance(dt)
+            particleEmiter.draw()
+
+            key = self.win.getch()
+            if key != -1:
+                if key == 27: # esc
+                    break
+
+            if key == ord('r'): 
+                self.playAllParticles(copy.copy(loc), particleEmiter)
 
             self.win.refresh()
             time.sleep(dt) 

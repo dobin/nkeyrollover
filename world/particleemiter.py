@@ -1,8 +1,10 @@
 import logging
 
+from config import Config
 from sprite.direction import Direction
 from sprite.particle import Particle
 from .particleeffecttype import ParticleEffectType
+from utilities.utilities import Utility
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +18,7 @@ class ParticleEmiter(object):
         self.particlePool = []
         self.particleActive = []
         n = 0
-        while n < 32:
+        while n < Config.maxParticles:
             self.particlePool.append( Particle(win=win) )
             n += 1
 
@@ -53,7 +55,7 @@ class ParticleEmiter(object):
                     angle = 180 
                     xinv = -1
 
-                basex = loc.x + xinv + xinv # distance from char
+                basex = loc.x + (xinv * 6) # distance from char
                 particle.init(
                     x=basex + n * xinv, y=loc.y, life=life, angle=angle, 
                     speed=0.0, fadeout=True, byStep=False, charType=0, 
@@ -70,16 +72,17 @@ class ParticleEmiter(object):
             while n < particleCount: 
                 particle = self.particlePool.pop()
                 if direction is Direction.right: 
-                    angle = 0.0
                     xinv = 4
                 else: 
-                    angle = 180 
-                    xinv = -5
+                    xinv = -1
 
-                particle.init(
-                    x=loc.x + xinv, y=loc.y-4+n, life=life, angle=angle, 
-                    speed=0.0, fadeout=True, byStep=False, charType=0, 
-                    active=True)
+                    c = Utility.getBorderHalf(loc, 2, 1, partRight=False)
+                    for h in c:
+                        particle.init(
+                            x=h.x, y=h.y, life=life, angle=0, 
+                            speed=0.0, fadeout=True, byStep=False, charType=0, 
+                            active=True)
+
 
                 self.particleActive.append(particle)
                 particleList.append(particle)
