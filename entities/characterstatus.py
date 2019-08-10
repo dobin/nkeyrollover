@@ -1,6 +1,7 @@
 import logging
 import math 
 
+from utilities.apm import Apm
 from entities.weapontype import WeaponType
 
 logger = logging.getLogger(__name__)
@@ -35,6 +36,8 @@ class CharacterStatus(object):
             WeaponType.laser: 50,
             WeaponType.cleave: 50,
         }
+
+        self.apm = Apm()
     
 
     def isAlive(self) -> bool: 
@@ -71,3 +74,10 @@ class CharacterStatus(object):
 
     def advance(self, deltaTime): 
         pass
+
+
+    def handleKeyPress(self, time :float):
+        self.apm.tick(time)
+
+    def getApm(self): 
+        return self.apm

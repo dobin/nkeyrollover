@@ -62,6 +62,7 @@ class Player(Character):
         key = self.viewport.win.getch()
         while key != -1:
             gotInput = True
+            self.characterStatus.handleKeyPress(time=self.world.getGameTime())
             self.handleInput(key)
             key = self.viewport.win.getch()
 

@@ -161,10 +161,16 @@ class Keyrollover(object):
 
             n += 1
 
-        weaponIdx = 70
+        weaponIdx = 62
         self.win.addstr(1, 
             weaponIdx, 
-            'W: ' + self.world.player.characterAttack.getWeaponStr(), 
+            'W:' + self.world.player.characterAttack.getWeaponStr(), 
+            curses.color_pair(6))
+
+        weaponIdx = 62
+        self.win.addstr(1, 
+            weaponIdx, 
+            'APS:' + str(int(self.world.player.characterStatus.getApm().getApm())), 
             curses.color_pair(6))
 
 

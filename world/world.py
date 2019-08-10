@@ -37,9 +37,9 @@ class World(object):
         self.particleEmiter :ParticleEmiter = ParticleEmiter(viewport=self.viewport)
         self.map :Map = Map(win=win, world=self)
         
-
         self.pause :bool = False
         self.gameRunning :bool = True
+        self.gameTime :float =0.0
 
 
     def togglePause(self): 
@@ -67,10 +67,15 @@ class World(object):
             self.win.addstr(12, 40, "Paused", curses.color_pair(7))
 
 
+    def getGameTime(self): 
+        return self.gameTime
+
+
     def advance(self, deltaTime):
         if self.pause:
             return
 
+        self.gameTime += deltaTime
         self.map.advance()
         self.player.advance(deltaTime)
         self.director.advanceEnemies(deltaTime)
