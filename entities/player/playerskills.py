@@ -59,37 +59,55 @@ class PlayerSkills(object):
                 # self.skillHeal()
                 self.doSkillType(WeaponType.heal)
                 self.cooldownTimers[key].reset()
+            else: 
+                logger.record("Hitting {} on cooldown {}".format(
+                    WeaponType.heal, self.cooldownTimers[key].getTimeLeft()))
+
 
         if key == 'g':
             if self.isRdy(key): 
                 #self.skillSwitchSide()
                 self.doSkillType(WeaponType.switchside)
                 self.cooldownTimers[key].reset()
+            else: 
+                logger.record("Hitting {} on cooldown {}".format(
+                    WeaponType.switchside, self.cooldownTimers[key].getTimeLeft()))
 
         if key == 'q': 
             if self.isRdy(key): 
                 #self.skillCleave()
                 self.doSkillType(WeaponType.cleave)
                 self.cooldownTimers[key].reset()
-        
+            else: 
+                logger.record("Hitting {} on cooldown {}".format(
+                    WeaponType.cleave, self.cooldownTimers[key].getTimeLeft()))        
+
         if key == 'w':
             if self.isRdy(key): 
                 #self.skillLaser()
                 self.doSkillType(WeaponType.laser)
                 self.cooldownTimers[key].reset()
+            else: 
+                logger.record("Hitting {} on cooldown {}".format(
+                    WeaponType.laser, self.cooldownTimers[key].getTimeLeft()))
 
         if key == 'e':
             if self.isRdy(key): 
                 #self.skillSwitchSide()
                 self.doSkillType(WeaponType.switchside)
                 self.cooldownTimers[key].reset()
+            else: 
+                logger.record("Hitting {} on cooldown {}".format(
+                    WeaponType.switchside, self.cooldownTimers[key].getTimeLeft()))
 
         if key == 'r':
             if self.isRdy(key): 
                 #self.skillExplosion()
                 self.doSkillType(WeaponType.explosion)
                 self.cooldownTimers[key].reset()
-
+            else: 
+                logger.record("Hitting {} on cooldown {}".format(
+                    WeaponType.explosion, self.cooldownTimers[key].getTimeLeft()))
 
     def isRdy(self, skill):
         return self.cooldownTimers[skill].timeIsUp()

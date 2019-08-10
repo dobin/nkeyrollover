@@ -14,6 +14,7 @@ from sprite.direction import Direction
 from .character import Character
 from .weapontype import WeaponType
 from world.viewport import Viewport
+from typing import List
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +41,7 @@ class CharacterAttack(Entity):
         self.selectedWeaponKey = '1'
         
 
-    def switchWeaponByKey(self, key):
+    def switchWeaponByKey(self, key :str):
         self.selectedWeaponKey = key
         if key == '1':
             self.switchWeapon(WeaponType.hit)
@@ -55,18 +56,12 @@ class CharacterAttack(Entity):
             self.switchWeapon(WeaponType.jumpKick)
 
 
-    def switchWeapon(self, weaponType):
+    def switchWeapon(self, weaponType :WeaponType):
         logger.info("Switch to weaopn: " + str(weaponType))
         self.weaponType = weaponType
 
-   
-    def attackWeaponHit(self):
-        self.texture.changeAnimation(PhenomenaType.hit, self.parentSprite.direction)
-        damage = self.hitCollisionDetection( [ self.getLocation()] )
-        return damage
 
-
-    def getLocation(self): 
+    def getLocation(self) -> Coordinates: 
         baselocation = super(CharacterAttack, self).getLocation()
 
         if self.weaponType is WeaponType.hit: 
@@ -92,9 +87,15 @@ class CharacterAttack(Entity):
                 baselocation.y += 1
 
         return baselocation
-        
 
-    def attackWeaponHitSquare(self):
+
+    def attackWeaponHit(self) -> int:
+        self.texture.changeAnimation(PhenomenaType.hit, self.parentSprite.direction)
+        damage = self.hitCollisionDetection( [ self.getLocation()] )
+        return damage        
+
+
+    def attackWeaponHitSquare(self) -> int:
         self.texture.changeAnimation(PhenomenaType.hitSquare, self.parentSprite.direction)
         hitLocations = []
         hitLocationsBase = self.getLocation()
@@ -121,7 +122,7 @@ class CharacterAttack(Entity):
         return damage
 
 
-    def attackWeaponHitLine(self): 
+    def attackWeaponHitLine(self) -> int: 
         self.texture.changeAnimation(PhenomenaType.hitLine, self.parentSprite.direction)
         hitLocations = []
         hitLocationsBase = self.getLocation()
@@ -148,14 +149,14 @@ class CharacterAttack(Entity):
         return damage
 
 
-    def attackWeaponJumpKick(self): 
+    def attackWeaponJumpKick(self) -> int: 
         self.texture.changeAnimation(PhenomenaType.hit, self.parentSprite.direction)
         return 0
 
 
     def attack(self):
         if not self.cooldownTimer.timeIsUp():
-            logger.debug("Hitting on cooldown")
+            logger.record("Hitting {} on cooldown {}".format(self.weaponType, self.cooldownTimer.getTimeLeft()))
             return
         self.cooldownTimer.reset() # activate cooldown
 
@@ -175,8 +176,7 @@ class CharacterAttack(Entity):
         RecordHolder.recordPlayerAttack(weaponType=self.weaponType, damage=damage)
 
 
-
-    def hitCollisionDetection(self, hitLocations):
+    def hitCollisionDetection(self, hitLocations :List[Coordinates]) -> int:
         damageSum = 0
         if self.isPlayer:
             for hitLocation in hitLocations:
@@ -197,7 +197,8 @@ class CharacterAttack(Entity):
 
         return damageSum
 
-    def advance(self, deltaTime):
+
+    def advance(self, deltaTime :float):
         super(CharacterAttack, self).advance(deltaTime)
         self.cooldownTimer.advance(deltaTime)
 

@@ -50,6 +50,10 @@ class Timer(object):
         self.active = False
 
 
+    def getTimeLeft(self): 
+        return self.timeLeft
+
+
     def advance(self, dt: float):
         if not self.active: 
             return
