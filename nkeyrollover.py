@@ -5,7 +5,6 @@ import logging
 
 from entities.player.player import Player
 from world.scene import Scene
-from world.director import Director
 from config import Config
 from world.world import World
 
@@ -15,15 +14,14 @@ current_milli_time = lambda: int(round(time.time() * 1000))
 class Keyrollover(object): 
     def __init__(self): 
         self.win = None         # canvas to draw
-        self.player = None      # the player
-        self.director = None    # the enemies
-        self.world = None       # the world
+        self.world = None       # the world, with all textures and units
         self.currentTime = None
-
         self.init()
 
 
     def init(self): 
+        # RECORD debug level is used to record/indicate statistical relevant
+        # game events
         DEBUG_LEVELV_NUM = logging.WARN + 1 
         logging.addLevelName(DEBUG_LEVELV_NUM, "RECORD")
         def __record(self, message, *args, **kws):
@@ -49,7 +47,6 @@ class Keyrollover(object):
         logger.record("-----------------Start------------------------")
 
         # Create a new Curses window
-        #curses.initScr()
         self.win = curses.newwin(Config.rows, Config.columns)
         curses.noecho()
         curses.cbreak()
@@ -64,9 +61,9 @@ class Keyrollover(object):
         curses.init_pair(3, curses.COLOR_RED, 0)
         curses.init_pair(4, curses.COLOR_YELLOW, 0)
         curses.init_pair(5, curses.COLOR_BLUE, 0)
-        curses.init_pair(6, curses.COLOR_WHITE, curses.COLOR_BLACK)
+        curses.init_pair(6, curses.COLOR_CYAN, 0)
         curses.init_pair(7, curses.COLOR_WHITE, 0)
-
+        # for skill indication
         curses.init_pair(8, curses.COLOR_WHITE, curses.COLOR_GREEN)
         curses.init_pair(9, curses.COLOR_WHITE, curses.COLOR_RED)
 

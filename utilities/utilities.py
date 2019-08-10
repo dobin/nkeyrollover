@@ -35,27 +35,21 @@ class Utility(object):
 
     @staticmethod
     def isPointMovable(x, y, width, height): 
-        return True
-
-        # left boundary
-        if x <= Config.areaMoveable['minx']:
-            logger.info("1: {} / {} ".format(x, Config.areaMoveable['minx']))
+        # lower boundary
+        if y + height > Config.areaMoveable['maxy']:
             return False
 
         # upper boundary
         if y <= Config.areaMoveable['miny'] - height: 
-            logger.info("2: {} / {} ".format(y, Config.areaMoveable['miny']))
             return False
+
+        ## left boundary
+        #if x <= Config.areaMoveable['minx']:
+        #    return False            
 
         # right boundary
-        if x + width >= Config.areaMoveable['maxx']:
-            logger.info("3")
-            return False
-
-        # lower boundary
-        if y + height > Config.areaMoveable['maxy']:
-            logger.info("4")
-            return False
+        #if x + width >= Config.areaMoveable['maxx']:
+        #    return False
 
         return True
 
