@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import curses, random, time
+import curses, random, time, signal, sys
 import logging
 
 from entities.player.player import Player
@@ -152,13 +152,20 @@ class Keyrollover(object):
             curses.color_pair(6))
 
 
+def signal_handler(sig, frame):
+    # Clean up before exiting
+    curses.nocbreak()
+    curses.echo()
+    curses.endwin()
+
+    sys.exit(0)
 
 
 def main(stdscr):
+    signal.signal(signal.SIGINT, signal_handler)
     keyrollover = Keyrollover()
     keyrollover.loop()
-
-
+    
 
 if __name__ == '__main__':
     curses.wrapper(main)
