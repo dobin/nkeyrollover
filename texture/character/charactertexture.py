@@ -16,7 +16,7 @@ class CharacterTexture(AnimationTexture):
             self, 
             parentSprite :Sprite =None, 
             characterAnimationType :CharacterAnimationType =None, 
-            direction :Direction =None, 
+            direction :Direction =Direction.none, 
             head :str =None, 
             body :str =None
         ):
