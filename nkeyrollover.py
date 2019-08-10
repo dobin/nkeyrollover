@@ -24,6 +24,15 @@ class Keyrollover(object):
 
 
     def init(self): 
+
+        DEBUG_LEVELV_NUM = logging.WARN + 1 
+        logging.addLevelName(DEBUG_LEVELV_NUM, "RECORD")
+        def __record(self, message, *args, **kws):
+            if self.isEnabledFor(DEBUG_LEVELV_NUM):
+                # Yes, logger takes its '*args' as 'args'.
+                self._log(DEBUG_LEVELV_NUM, message, args, **kws) 
+        logging.Logger.record = __record
+
         if Config.devMode:
             logging.basicConfig(
                 filename='app.log', 
@@ -34,9 +43,11 @@ class Keyrollover(object):
             logging.basicConfig(
                 filename='app.log', 
                 filemode='a', 
-                level=logging.INFO,
+                level=logging.WARN,
                 format='%(asctime)s %(levelname)07s %(name)32s: %(message)s')
-        logging.info("-----------------Start------------------------")
+
+        logger = logging.getLogger(__name__)
+        logger.record("-----------------Start------------------------")
 
         # Create a new Curses window
         #curses.initScr()
