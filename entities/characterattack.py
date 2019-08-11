@@ -66,27 +66,32 @@ class CharacterAttack(Entity):
     def getLocation(self) -> Coordinates: 
         baselocation = super(CharacterAttack, self).getLocation()
 
-        if self.weaponType is WeaponType.hit: 
-            if self.parentSprite.direction is Direction.right: 
-                baselocation.x += 3
-                baselocation.y += 1
-            else: 
-                baselocation.x -= 1
-                baselocation.y += 1
+        xx = None
+        if self.parentSprite.direction is Direction.right:
+            xx = 1
+        else: 
+            xx = -1
+
+        baselocation.y += 1  # center body
+        baselocation.x += 1  # center body
+        baselocation.x += xx # left/right of body
+
+        if self.weaponType is WeaponType.hit:
+            baselocation.x += (xx * 1)
+
         elif self.weaponType is WeaponType.hitSquare: 
-            if self.parentSprite.direction is Direction.right: 
-                baselocation.x += 3
-                #baselocation.y = 0
+            baselocation.y -= 1 # move it up one notch
+
+            if self.parentSprite.direction is Direction.right:
+                baselocation.x += (xx * 1)
             else: 
-                baselocation.x -= 2
-                #baselocation.y = 0
+                baselocation.x += (xx * self.texture.width)
+
         elif self.weaponType is WeaponType.hitLine: 
-            if self.parentSprite.direction is Direction.right: 
-                baselocation.x += 3
-                baselocation.y += 1
+            if self.parentSprite.direction is Direction.right:
+                baselocation.x += (xx * 1)
             else: 
-                baselocation.x -= 4
-                baselocation.y += 1
+                baselocation.x += (xx * self.texture.width)
 
         return baselocation
 
