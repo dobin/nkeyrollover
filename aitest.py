@@ -8,7 +8,7 @@ import select
 
 class Agent:
     def __init__(self):
-        self.isActive = True
+        self.active = True
         self.playerClose = False
 
         ###
@@ -72,8 +72,8 @@ class Agent:
 
 
     # Other
-    def setActive(self, isActive): 
-        self.isActive = isActive
+    def setActive(self, active): 
+        self.active = active
 
     def isPlayerClose(self):
         return self.playerClose
