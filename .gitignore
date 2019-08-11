@@ -1,3 +1,5 @@
 *.pyc
 *.log
 .vscode/**
+.mypy_cache/**
+temp/**
