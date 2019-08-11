@@ -65,7 +65,6 @@ class PlayerSkills(object):
             else:
                 isCooldown = True
 
-
         if key == 'g':
             weaponType = WeaponType.switchside
             if self.isRdy(key): 

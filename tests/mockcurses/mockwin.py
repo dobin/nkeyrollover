@@ -102,7 +102,7 @@ class MockWin(object):
 
     def clear(self): 
         for y, yrow in enumerate(self.win): 
-            for x, char in enumerate(yrow):
+            for x, _ in enumerate(yrow):
                 self.win[y][x] = ''
 
     # used by hasttr() to check if unit test is being run

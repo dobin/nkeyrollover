@@ -21,15 +21,15 @@ from utilities.utilities import Utility
 class PlayerWeaponTest(unittest.TestCase):
 
     def test_weaponHit(self):
+        """Simple hitting an enemy right of the player with standard weapon"""
         Utility.setupLogger()
-
-        # Simple hitting an enemy right of the player with
-        # standard weapon
+        
         win = None
         world = FakeWorld(win, fakeViewPort=True)
 
         # set player
         world.player.setLocation( Coordinates(10, 10))
+        world.player.direction = Direction.right
 
         # set enemies
         enemy = Enemy(viewport=world.viewport, parent=world.worldSprite, 
