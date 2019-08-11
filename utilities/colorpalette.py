@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, IntEnum
 import logging
 import curses
 
@@ -9,7 +9,7 @@ from world.viewport import Viewport
 logger = logging.getLogger(__name__)
 
 
-class Color(Enum): 
+class Color(IntEnum): 
     green = 1
     magenta = 2
     red = 3
@@ -20,8 +20,24 @@ class Color(Enum):
 
 class ColorPalette(object):
     @staticmethod
+    def cursesInitColor():
+        # Initialize color pairs
+        curses.start_color()    
+        curses.init_pair(1, curses.COLOR_GREEN, 0)
+        curses.init_pair(2, curses.COLOR_MAGENTA, 0)
+        curses.init_pair(3, curses.COLOR_RED, 0)
+        curses.init_pair(4, curses.COLOR_YELLOW, 0)
+        curses.init_pair(5, curses.COLOR_BLUE, 0)
+        curses.init_pair(6, curses.COLOR_CYAN, 0)
+        curses.init_pair(7, curses.COLOR_WHITE, 0)
+        # for skill indication
+        curses.init_pair(8, curses.COLOR_WHITE, curses.COLOR_GREEN)
+        curses.init_pair(9, curses.COLOR_WHITE, curses.COLOR_RED)
+
+
+    @staticmethod
     def getColorByColor(color :Color):
-        return int(color)
+        return curses.color_pair(int(color))
 
     @staticmethod
     def getColorByColorType(colorType: ColorType, viewport :Viewport):
@@ -35,7 +51,7 @@ class ColorPalette(object):
 
         if colorType is ColorType.particle:
             color = curses.color_pair(7)
-        elif colorType is ColorType.sprite:
+        elif colorType is ColorType.sprite: # only init?
             color = curses.color_pair(1)
         elif colorType is ColorType.specktexture:
             color = curses.color_pair(1)

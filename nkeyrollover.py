@@ -55,19 +55,7 @@ class Keyrollover(object):
         self.win.keypad(1) 
         curses.curs_set(0)    
         self.win.nodelay(1) # make getch() nonblocking
-
-        # Initialize color pairs
-        curses.start_color()    
-        curses.init_pair(1, curses.COLOR_GREEN, 0)
-        curses.init_pair(2, curses.COLOR_MAGENTA, 0)
-        curses.init_pair(3, curses.COLOR_RED, 0)
-        curses.init_pair(4, curses.COLOR_YELLOW, 0)
-        curses.init_pair(5, curses.COLOR_BLUE, 0)
-        curses.init_pair(6, curses.COLOR_CYAN, 0)
-        curses.init_pair(7, curses.COLOR_WHITE, 0)
-        # for skill indication
-        curses.init_pair(8, curses.COLOR_WHITE, curses.COLOR_GREEN)
-        curses.init_pair(9, curses.COLOR_WHITE, curses.COLOR_RED)
+        ColorPalette.cursesInitColor()
 
         self.scene = Scene(self.win)
 
