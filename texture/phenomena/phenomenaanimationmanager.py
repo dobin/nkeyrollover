@@ -3,6 +3,7 @@ import logging
 from sprite.direction import Direction
 from texture.phenomena.phenomenatype import PhenomenaType
 from texture.animation import Animation
+from texture.filetextureloader import FileTextureLoader
 
 logger = logging.getLogger("phenomentaanimationmanager")
 
@@ -11,6 +12,7 @@ class PhenomenaAnimationManager(object):
     def __init__(self):
         self.animationsLeft = {}
         self.animationsRight = {}
+        self.fileTextureLoader = FileTextureLoader()
 
         for phenomenatype in PhenomenaType:
             self.animationsLeft[phenomenatype] = self.createAnimation(phenomenatype, Direction.left)
@@ -131,7 +133,7 @@ class PhenomenaAnimationManager(object):
                 0.2
             ]
 
-            t = self.readfile('texture/textures/roflcopter.ascii')
+            t = self.fileTextureLoader.readAnimationFile('texture/textures/roflcopter.ascii')
             animation.width = t['width']
             animation.height = t['height']
             animation.arr = t['arr']
@@ -146,7 +148,7 @@ class PhenomenaAnimationManager(object):
                 0.5,
             ]
 
-            t = self.readfile('texture/textures/intro.ascii')
+            t = self.fileTextureLoader.readAnimationFile('texture/textures/intro.ascii')
             animation.width = t['width']
             animation.height = t['height']
             animation.arr = t['arr']
