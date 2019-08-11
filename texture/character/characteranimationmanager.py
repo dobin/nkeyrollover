@@ -3,26 +3,46 @@ import logging
 from sprite.direction import Direction
 from texture.character.characteranimationtype import CharacterAnimationType
 from texture.animation import Animation
+from .charactertype import CharacterType
+from texture.filetextureloader import FileTextureLoader
 
 logger = logging.getLogger(__name__)
 
 
 class CharacterAnimationManager(object): 
-    def __init__(self, head=None, body=None):
+    def __init__(
+        self, head=None, body=None, 
+        characterType :CharacterType =CharacterType.stickfigure
+    ):
         self.animationsLeft = {}
         self.animationsRight = {}
+        self.fileTextureLoader = FileTextureLoader()
+        self.characterType = characterType
 
-        for animationType in CharacterAnimationType:
-            self.animationsLeft[animationType] = self.createAnimation(animationType, Direction.left)
+        if characterType is CharacterType.stickfigure:
+            for animationType in CharacterAnimationType:
+                self.animationsLeft[animationType] = self.createAnimationStickfigure(
+                    animationType, Direction.left)
+            for animationType in CharacterAnimationType:
+                self.animationsRight[animationType] = self.createAnimationStickfigure(
+                    animationType, Direction.right)
 
-        for animationType in CharacterAnimationType:
-            self.animationsRight[animationType] = self.createAnimation(animationType, Direction.right)
+            if head is not None: 
+                self.updateAllAnimations(1, 0, head, skip=CharacterAnimationType.dying)
 
-        if head is not None: 
-            self.updateAllAnimations(1, 0, head, skip=CharacterAnimationType.dying)
+            if body is not None:
+                self.updateAllAnimations(1, 1, body)
 
-        if body is not None:
-            self.updateAllAnimations(1, 1, body)
+        elif characterType is CharacterType.cow:
+            for animationType in CharacterAnimationType:
+                self.animationsLeft[animationType] = self.createAnimationCow(
+                    animationType, Direction.left)
+            for animationType in CharacterAnimationType:
+                self.animationsRight[animationType] = self.createAnimationCow(
+                    animationType, Direction.right)
+                    
+        else:
+            logger.error("Unknown character type: " + str(characterType))
 
 
     def updateAllAnimations(self, x, y, char, skip=None):
@@ -43,15 +63,17 @@ class CharacterAnimationManager(object):
     def getAnimation(self, characterAnimationType, direction, subtype=0):
         if direction is Direction.left:
             if subtype >= len(self.animationsLeft[characterAnimationType]):
-                logging.error("Tried to access subtype no {} of animation with len {}".format(subtype, len(self.animationsLeft[characterAnimationType])))
+                logger.error("Animation {} tried to access subtype no {} of animation with len {}"
+                    .format(characterAnimationType, subtype, len(self.animationsLeft[characterAnimationType])))
             return self.animationsLeft[characterAnimationType][subtype]
         else: 
             if subtype >= len(self.animationsRight[characterAnimationType]):
-                logging.error("Tried to access subtype no {} of animation with len {}".format(subtype, len(self.animationsRight[characterAnimationType])))
+                logger.error("Animation {} Tried to access subtype no {} of animation with len {}"
+                    .format(characterAnimationType, subtype, len(self.animationsRight[characterAnimationType])))
             return self.animationsRight[characterAnimationType][subtype]
 
 
-    def createAnimation(self, animationType, direction):
+    def createAnimationStickfigure(self, animationType, direction):
         animations = []
         
         if animationType is CharacterAnimationType.standing:
@@ -241,4 +263,116 @@ class CharacterAnimationManager(object):
 
             animations.append(animation)
 
+        for animation in animations:
+            self.checkAnimation(animation, animationType)
+
         return animations
+
+
+    def createAnimationCow(self, animationType, direction):
+        animations = []
+
+        if animationType is CharacterAnimationType.standing:
+            animation = Animation()
+
+            fileAnimation = self.fileTextureLoader.readAnimation(
+                characterType=CharacterType.cow, characterAnimationType=animationType)
+
+            animation.width = fileAnimation['width']
+            animation.height = fileAnimation['height']
+            animation.arr = fileAnimation['arr']
+
+            animation.frameCount = 1
+            animation.frameTime = []
+            animation.advanceByStep = False
+            animation.endless = True
+
+            animations.append(animation)
+
+        if animationType is CharacterAnimationType.walking:
+            animation = Animation()
+
+            fileAnimation = self.fileTextureLoader.readAnimation(
+                characterType=CharacterType.cow, characterAnimationType=animationType)
+
+            animation.width = fileAnimation['width']
+            animation.height = fileAnimation['height']
+            animation.arr = fileAnimation['arr']
+
+            animation.frameCount = 2
+            animation.frameTime = [
+                0.01, 
+                0.01
+            ]
+            animation.endless = True
+            animation.advanceByStep = True
+
+            animations.append(animation)
+
+        if animationType is CharacterAnimationType.hitting:
+            animation = Animation()
+
+            fileAnimation = self.fileTextureLoader.readAnimation(
+                characterType=CharacterType.cow, characterAnimationType=animationType)
+
+            animation.width = fileAnimation['width']
+            animation.height = fileAnimation['height']
+            animation.arr = fileAnimation['arr']
+
+            animation.endless = False
+            animation.frameCount = 2
+            animation.frameTime = [
+                0.8, 
+                0.2
+            ]
+            animation.advanceByStep = False
+
+            animations.append(animation)
+
+        if animationType is CharacterAnimationType.dying:
+            animations = []
+            animation = Animation()
+
+            fileAnimation = self.fileTextureLoader.readAnimation(
+                characterType=CharacterType.cow, characterAnimationType=animationType)
+
+            animation.width = fileAnimation['width']
+            animation.height = fileAnimation['height']
+            animation.arr = fileAnimation['arr']
+
+            animation.frameCount = 1
+            animation.frameTime = []
+            animation.advanceByStep = False
+            animation.frameTime = None
+            animation.endless = True
+
+            animations.append(animation)
+            animations.append(animation)
+
+        if animationType is CharacterAnimationType.hitwindup:
+            animation = Animation()
+
+            fileAnimation = self.fileTextureLoader.readAnimation(
+                characterType=CharacterType.cow, characterAnimationType=animationType)
+
+            animation.width = fileAnimation['width']
+            animation.height = fileAnimation['height']
+            animation.arr = fileAnimation['arr']
+
+            animation.frameCount = 2
+            animation.frameTime = []
+            animation.advanceByStep = False
+            animation.endless = True
+
+            animations.append(animation)
+
+        for animation in animations:
+            self.checkAnimation(animation, animationType)
+
+        return animations
+
+
+    def checkAnimation(self, animation: Animation, animationType :CharacterAnimationType): 
+        if len(animation.arr) != animation.frameCount:
+            raise Exception("Animation {} / {} invalid: frameCount={}, but array contains {}"
+                .format(self.characterType, animationType.name, animation.frameCount, len(animation.arr)))

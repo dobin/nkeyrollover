@@ -153,36 +153,3 @@ class PhenomenaAnimationManager(object):
 
         return animation
 
-
-    def readfile(self, filename):
-        lineList = [line.rstrip('\n') for line in open(filename)]
-        res = []
-
-        # find longest line to make animation
-        maxWidth = 0
-        for line in lineList: 
-            if len(line) > maxWidth: 
-                maxWidth = len(line)
-
-
-        maxHeight = 0
-        tmp = []
-        for line in lineList: 
-            if line == '': 
-                res.append(tmp)
-                if len(tmp) > maxHeight: 
-                    maxHeight = len(tmp)
-                tmp = []
-            else: 
-                line += ' ' * (maxWidth - len(line))
-                tmp.append(list(line))
-        res.append(tmp)
-            
-        d = {
-            'arr': res,
-            'width': maxWidth, 
-            'height': maxHeight,
-        }
-
-        logger.info("Loaded {}: width={} height={} animations={}".format(filename, maxWidth, maxHeight, len(res)))
-        return d

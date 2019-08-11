@@ -1,21 +1,22 @@
 import random
 import logging
 
-from texture.character.charactertexture import CharacterTexture
-from entities.player.player import Player
-from sprite.direction import Direction
-from entities.character import Character
+import entities.enemy.aifsm as aifsm
 from config import Config
 from utilities.timer import Timer
 from utilities.utilities import Utility
+from texture.character.charactertexture import CharacterTexture
+from texture.character.characteranimationtype import CharacterAnimationType
+from entities.player.player import Player
+from entities.characterattack import CharacterAttack
+from entities.character import Character
 from entities.entitytype import EntityType
 from ai.brain import Brain
-import entities.enemy.aifsm as aifsm
-from texture.character.characteranimationtype import CharacterAnimationType
-from entities.characterattack import CharacterAttack
-from .enemyinfo import EnemyInfo
 from sprite.coordinates import Coordinates
+from sprite.direction import Direction
 from world.viewport import Viewport
+from .enemyinfo import EnemyInfo
+from texture.character.charactertype import CharacterType
 
 logger = logging.getLogger(__name__)
 
@@ -24,13 +25,16 @@ class Enemy(Character):
     def __init__(self, viewport :Viewport, parent, spawnBoundaries, world, name):
         Character.__init__(self, viewport, parent, spawnBoundaries, world, EntityType.enemy)
         
+        self.characterType = CharacterType.cow
+
         self.enemyMovement = True
         self.player = world.getPlayer()
         self.texture = CharacterTexture(
             parentSprite=self, 
             characterAnimationType=CharacterAnimationType.standing,
             head=self.getRandomHead(), 
-            body=self.getRandomBody())
+            body=self.getRandomBody(),
+            characterType=self.characterType)
         self.characterAttack = CharacterAttack(viewport=viewport, parentCharacter=self, isPlayer=False)
         self.name = 'Bot' + name
         self.enemyInfo = EnemyInfo()

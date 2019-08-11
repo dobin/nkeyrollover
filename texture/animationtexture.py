@@ -20,7 +20,7 @@ class AnimationTexture(Texture):
     # initSprite needs to be overwritten to make it work
     def __init__(self, parentSprite :Sprite =None):
         super(AnimationTexture, self).__init__(parentSprite=parentSprite)
-        self.animation = None
+        self.animation :Animation = None
         self.init()
         
     
@@ -93,6 +93,9 @@ class AnimationTexture(Texture):
             return
 
         pos = self.getLocation()
+        if self.frameIndex >= len(self.animation.arr): 
+            raise Exception("Trying to access frameIndex {} on array with len {}, actual len{}"
+                .format(self.frameIndex, self.animation.frameCount, len(self.animation.arr)))
 
         for (y, rows) in enumerate(self.animation.arr[ self.frameIndex ]):
             for (x, column) in enumerate(rows):

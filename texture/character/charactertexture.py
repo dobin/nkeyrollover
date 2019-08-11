@@ -7,6 +7,7 @@ from sprite.sprite import Sprite
 from texture.character.characteranimationmanager import CharacterAnimationManager
 from entities.entity import Entity
 from texture.character.characteranimationtype import CharacterAnimationType
+from .charactertype import CharacterType
 
 logger = logging.getLogger(__name__)
 
@@ -17,12 +18,15 @@ class CharacterTexture(AnimationTexture):
             parentSprite :Sprite =None, 
             characterAnimationType :CharacterAnimationType =None, 
             direction :Direction =Direction.none, 
-            head :str =None, 
-            body :str =None
+            head :str =None,
+            body :str =None,
+            characterType :CharacterType =CharacterType.stickfigure
         ):
         super(CharacterTexture, self).__init__(parentSprite)
 
-        self.characterAnimationManager = CharacterAnimationManager(head, body)
+        self.characterAnimationManager = CharacterAnimationManager(
+            head=head, body=body, characterType=characterType)
+
         if characterAnimationType is not None: 
             self.changeAnimation(characterAnimationType, direction)
             self.setActive(True)
@@ -42,7 +46,3 @@ class CharacterTexture(AnimationTexture):
         self.init()            
         self.width = self.animation.width
         self.height = self.animation.height
-        
-
-        
-
