@@ -15,53 +15,62 @@ from world.director import Director
 from sprite.direction import Direction
 from tests.fakeworld import FakeWorld
 from sprite.coordinates import Coordinates
+from utilities.utilities import Utility
 
 
 class PlayerWeaponTest(unittest.TestCase):
 
     def test_weaponHit(self):
+        Utility.setupLogger()
+
         # Simple hitting an enemy right of the player with
         # standard weapon
         win = None
-        world = FakeWorld(win)
+        world = FakeWorld(win, fakeViewPort=True)
+
+        # set player
         world.player.setLocation( Coordinates(10, 10))
 
-        enemy = Enemy(win, world.worldSprite, None, world, 'bot')
+        # set enemies
+        enemy = Enemy(viewport=world.viewport, parent=world.worldSprite, 
+            spawnBoundaries=None, world=world, name='bot')
         enemy.setLocation(Coordinates(13, 10))
         world.director.enemiesAlive.append(enemy)
 
+        # action!
         life1 = enemy.characterStatus.health
-
         world.player.handleInput(ord('1')) # select first weapon
         world.player.advance(0.1)
         enemy.advance(0.1)
         world.player.handleInput(ord(' ')) # fire
-        
         life2 = enemy.characterStatus.health
-        
         self.assertLess(life2, life1)
 
 
     def test_weaponHitLine(self):
-        # hitting an enemy left of the player with the line gun
+        """hitting an enemy left of the player with the line gun"""
+        Utility.setupLogger()
+        
         win = None
         world = FakeWorld(win)
+
+        # player
         world.player.setLocation(Coordinates(10, 10))
         world.player.direction = Direction.left
 
-        enemy = Enemy(win, world.worldSprite, None, world, 'bot')
+        # enemy
+        enemy = Enemy(viewport=world.viewport, parent=world.worldSprite, 
+            spawnBoundaries=None, world=world, name='bot')
         enemy.setLocation(Coordinates(4, 10))
         world.director.enemiesAlive.append(enemy)
 
+        # action!
         life1 = enemy.characterStatus.health
-
         world.player.handleInput(ord('3')) # select third weapon
         world.player.advance(0.1)
         enemy.advance(0.1)
         world.player.handleInput(ord(' ')) # fire
-        
         life2 = enemy.characterStatus.health
-        
         self.assertLess(life2, life1)
 
 

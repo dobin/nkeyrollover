@@ -9,6 +9,7 @@ from config import Config
 from world.world import World
 from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
+from utilities.utilities import Utility
 
 current_milli_time = lambda: int(round(time.time() * 1000))
 
@@ -22,15 +23,7 @@ class Keyrollover(object):
 
 
     def init(self): 
-        # RECORD debug level is used to record/indicate statistical relevant
-        # game events
-        DEBUG_LEVELV_NUM = logging.WARN + 1 
-        logging.addLevelName(DEBUG_LEVELV_NUM, "RECORD")
-        def __record(self, message, *args, **kws):
-            if self.isEnabledFor(DEBUG_LEVELV_NUM):
-                # Yes, logger takes its '*args' as 'args'.
-                self._log(DEBUG_LEVELV_NUM, message, args, **kws) 
-        logging.Logger.record = __record
+        Utility.setupLogger()
 
         if Config.devMode:
             logging.basicConfig(

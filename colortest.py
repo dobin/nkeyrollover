@@ -29,10 +29,7 @@ def colorTest():
     ColorPalette.cursesInitColor()
     win.clear()
     win.border()
-    # end curses
 
-    #win = win
-    #viewport = Viewport(win=win, world=None)
     world = World(win)
 
     dt = 0.01
@@ -52,11 +49,12 @@ def colorTest():
 
             world.viewport.addstr(y+3, x + (colorIdx * 8), '###', curseColor | curses.A_BOLD )
             world.viewport.addstr(y+4, x + (colorIdx * 8), str(color)[6:], curseColor | curses.A_BOLD )
+        
         key = win.getch()
         if key == 27: # esc
             break
-
         # win.refresh()
+
         time.sleep(dt) 
 
 

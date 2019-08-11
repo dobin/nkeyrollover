@@ -88,8 +88,5 @@ class AnimationTest(unittest.TestCase):
         self.assertTrue(coords[3].x == 1 and coords[3].y == 1)
         
 
-
-
-
 if __name__ == '__main__':
     unittest.main()
