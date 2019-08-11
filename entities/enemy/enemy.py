@@ -22,11 +22,13 @@ logger = logging.getLogger(__name__)
 
 
 class Enemy(Character):
-    def __init__(self, viewport :Viewport, parent, spawnBoundaries, world, name):
+    def __init__(
+        self, viewport :Viewport, parent, spawnBoundaries, 
+        world, name :str, characterType=CharacterType.stickfigure
+    ):
         Character.__init__(self, viewport, parent, spawnBoundaries, world, EntityType.enemy)
         
-        self.characterType = CharacterType.cow
-
+        self.characterType = characterType
         self.enemyMovement = True
         self.player = world.getPlayer()
         self.texture = CharacterTexture(
