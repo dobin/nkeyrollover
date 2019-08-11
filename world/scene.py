@@ -47,7 +47,7 @@ class Scene(object):
         entityIntro.setLocation(Coordinates(2, 5))
         textureIntro.setActive(True)
 
-        entityIntro.setColor( curses.color_pair(10) )
+        # entityIntro.setColor( curses.color_pair(10) )
 
         myTimer = Timer(3)
             
