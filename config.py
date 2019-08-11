@@ -33,5 +33,6 @@ class Config:
     moveDiagonal = False
 
     announceDamage = 350
-
     maxParticles = 128
+    movementKeysPerSec = 20.0
+    
