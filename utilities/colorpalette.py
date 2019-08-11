@@ -18,6 +18,7 @@ class Color(IntEnum):
     cyan = 6
     white = 7
 
+
 class ColorPalette(object):
     @staticmethod
     def cursesInitColor():
@@ -34,10 +35,14 @@ class ColorPalette(object):
         curses.init_pair(8, curses.COLOR_WHITE, curses.COLOR_GREEN)
         curses.init_pair(9, curses.COLOR_WHITE, curses.COLOR_RED)
 
+        # intro
+        curses.init_pair(10, curses.COLOR_BLACK, curses.COLOR_BLUE )
+
 
     @staticmethod
     def getColorByColor(color :Color):
         return curses.color_pair(int(color))
+
 
     @staticmethod
     def getColorByColorType(colorType: ColorType, viewport :Viewport):
@@ -67,6 +72,7 @@ class ColorPalette(object):
             logging.error("Unknown colortype " + str(colorType))
 
         return color
+
 
     @staticmethod 
     def getColorByEntityType(entityType: EntityType, viewport :Viewport):

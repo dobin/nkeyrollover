@@ -42,10 +42,12 @@ class Scene(object):
         
         worldSprite = Sprite(viewport=self.viewport, parentSprite=None)
 
-        entityCopter = Entity(viewport=self.viewport, parentSprite=worldSprite, entityType=EntityType.player)
-        textureCopter = PhenomenaTexture(phenomenaType=PhenomenaType.intro, parentSprite=entityCopter)
-        entityCopter.setLocation(Coordinates(2, 5))
-        textureCopter.setActive(True)
+        entityIntro = Entity(viewport=self.viewport, parentSprite=worldSprite, entityType=EntityType.player)
+        textureIntro = PhenomenaTexture(phenomenaType=PhenomenaType.intro, parentSprite=entityIntro)
+        entityIntro.setLocation(Coordinates(2, 5))
+        textureIntro.setActive(True)
+
+        entityIntro.setColor( curses.color_pair(10) )
 
         myTimer = Timer(3)
             
@@ -58,8 +60,8 @@ class Scene(object):
 
             # advance
             myTimer.advance(deltaTime)
-            textureCopter.advance(deltaTime)
-            textureCopter.draw(self.viewport)
+            textureIntro.advance(deltaTime)
+            textureIntro.draw(self.viewport)
 
             # input
             key = self.win.getch()
