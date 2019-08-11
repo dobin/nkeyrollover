@@ -17,8 +17,6 @@ class Apm(object):
         self.time += timeDiff
         self.lastKeyTime = time
 
-        logging.warn("APM: " + str(self.getApm()))
-
         if self.time > 3.0: 
             self.time = self.time * 0.5
             self.count = int(self.count * 0.5)
