@@ -5,6 +5,8 @@ from utilities.timer import Timer
 from config import Config
 from world.viewport import Viewport
 #from world.world import World
+from sprite.direction import Direction
+from texture.character.charactertype import CharacterType
 
 logger = logging.getLogger(__name__)
 
@@ -37,16 +39,18 @@ class Director(object):
                 world=self.world, 
                 name="Enym")
             newEnemy.enemyMovement = False
+            newEnemy.direction = Direction.right
             self.enemiesDead.append(newEnemy)
         else:
             n = 0
-            maxN = self.maxEnemies
-            if Config.devMode:
-                maxN = 1
-            while n < maxN:
+            while n < self.maxEnemies:
                 myx = 1
                 if n % 2 == 0:
                     myx = Config.columns + 1
+
+                characterType = CharacterType.stickfigure
+                if n % 10 == 0:
+                    characterType = CharacterType.cow
 
                 coordinates = {
                     'x': myx, 
@@ -57,7 +61,8 @@ class Director(object):
                     parent=self.world.worldSprite, 
                     spawnBoundaries=coordinates, 
                     world=self.world, 
-                    name=str(n))
+                    name=str(n),
+                    characterType=characterType)
                 self.enemiesDead.append(newEnemy)
                 n = n + 1
 
@@ -79,15 +84,17 @@ class Director(object):
             enemy.drawCharacterAttack()
 
 
-    def worldUpdate(self): 
+    def worldUpdate(self):
         # make more enemies
         if len(self.enemiesAlive) < self.maxEnemies:
             if self.lastEnemyResurrectedTimer.timeIsUp():
                 self.lastEnemyResurrectedTimer.reset()
                 logger.info("Ressurect, alive: " + str(len(self.enemiesAlive)))
-                enemy = self.enemiesDead.pop()
-                enemy.gmRessurectMe()
-                self.enemiesAlive.append(enemy)
+
+                if len(self.enemiesDead) > 0:
+                    enemy = self.enemiesDead.pop()
+                    enemy.gmRessurectMe()
+                    self.enemiesAlive.append(enemy)
 
         # remove inactive enemies
         for enemy in self.enemiesAlive:
