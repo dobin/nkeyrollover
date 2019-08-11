@@ -54,7 +54,6 @@ class Texture(object):
         locations = []
         baseLocation = self.getLocation()
         x = 0
-        logging.info("w: {} h: {}".format(self.width, self.height))
         while x < self.width: 
             y = 0
             while y < self.height:
@@ -62,7 +61,6 @@ class Texture(object):
                 loc = copy.copy(baseLocation)
                 loc.x += x
                 loc.y += y
-                logging.info("B: " + str(loc))
                 locations.append(loc)
 
                 y += 1

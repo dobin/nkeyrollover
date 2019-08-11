@@ -72,26 +72,28 @@ class CharacterAttack(Entity):
         else: 
             xx = -1
 
-        baselocation.y += 1  # center body
-        baselocation.x += 1  # center body
-        baselocation.x += xx # left/right of body
+        # new 1-pt weapon location
+        charHalfWidth = int(self.parentCharacter.texture.width / 2.0)
+        charHalfHeight = int( float(self.parentCharacter.texture.height) / 2.0)
+        baselocation.y += charHalfHeight
+        if self.parentSprite.direction is Direction.left: 
+            baselocation.x -= 1
+        else: 
+            baselocation.x += self.parentCharacter.texture.width
 
+        # adjust for weapon area
         if self.weaponType is WeaponType.hit:
-            baselocation.x += (xx * 1)
+            pass # all good
 
         elif self.weaponType is WeaponType.hitSquare: 
             baselocation.y -= 1 # move it up one notch
 
-            if self.parentSprite.direction is Direction.right:
-                baselocation.x += (xx * 1)
-            else: 
-                baselocation.x += (xx * self.texture.width)
+            if self.parentSprite.direction is Direction.left:
+                baselocation.x -= self.texture.width - 1
 
         elif self.weaponType is WeaponType.hitLine: 
-            if self.parentSprite.direction is Direction.right:
-                baselocation.x += (xx * 1)
-            else: 
-                baselocation.x += (xx * self.texture.width)
+            if self.parentSprite.direction is Direction.left:
+                baselocation.x -= self.texture.width - 1
 
         return baselocation
 

@@ -281,6 +281,8 @@ class CharacterAnimationManager(object):
             animation.width = fileAnimation['width']
             animation.height = fileAnimation['height']
             animation.arr = fileAnimation['arr']
+            if direction is Direction.left: 
+                self.mirrorFrames(animation.arr)
 
             animation.frameCount = 1
             animation.frameTime = []
@@ -298,6 +300,8 @@ class CharacterAnimationManager(object):
             animation.width = fileAnimation['width']
             animation.height = fileAnimation['height']
             animation.arr = fileAnimation['arr']
+            if direction is Direction.left: 
+                self.mirrorFrames(animation.arr)
 
             animation.frameCount = 2
             animation.frameTime = [
@@ -318,6 +322,8 @@ class CharacterAnimationManager(object):
             animation.width = fileAnimation['width']
             animation.height = fileAnimation['height']
             animation.arr = fileAnimation['arr']
+            if direction is Direction.left: 
+                self.mirrorFrames(animation.arr)
 
             animation.endless = False
             animation.frameCount = 2
@@ -339,6 +345,8 @@ class CharacterAnimationManager(object):
             animation.width = fileAnimation['width']
             animation.height = fileAnimation['height']
             animation.arr = fileAnimation['arr']
+            if direction is Direction.left: 
+                self.mirrorFrames(animation.arr)
 
             animation.frameCount = 1
             animation.frameTime = []
@@ -358,6 +366,8 @@ class CharacterAnimationManager(object):
             animation.width = fileAnimation['width']
             animation.height = fileAnimation['height']
             animation.arr = fileAnimation['arr']
+            if direction is Direction.left: 
+                self.mirrorFrames(animation.arr)
 
             animation.frameCount = 2
             animation.frameTime = []
@@ -370,6 +380,19 @@ class CharacterAnimationManager(object):
             self.checkAnimation(animation, animationType)
 
         return animations
+
+
+    def mirrorFrames(self, arr):
+        for a in arr:
+            for line in a:
+                n = 0
+                while n < len(line) / 2:
+                    cl = line[n]
+                    cr = line[ len(line) - 1 - n ]
+
+                    line[n] = cr
+                    line[ len(line) - 1 - n ] = cl
+                    n += 1
 
 
     def checkAnimation(self, animation: Animation, animationType :CharacterAnimationType): 
