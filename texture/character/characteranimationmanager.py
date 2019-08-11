@@ -109,7 +109,7 @@ class CharacterAnimationManager(object):
             if direction is Direction.right:
                 animation.arr = [
                     [
-                        [ '', 'O', '' ],
+                        [ '', 'o', '' ],
                         [ '/', '|', '\\'],
                         [ '', '|', '\\']
                     ],
@@ -127,7 +127,7 @@ class CharacterAnimationManager(object):
                         [ '/', '|', '']
                     ],
                     [
-                        [ '', 'O', '' ],
+                        [ '', 'o', '' ],
                         [ '/', '|', '\\'],
                         [ '', '|', '\\']
                     ]
