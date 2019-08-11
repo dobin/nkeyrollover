@@ -113,3 +113,15 @@ class Utility(object):
             y += 1
 
         return locs
+
+    @staticmethod
+    def setupLogger():
+        # RECORD debug level is used to record/indicate statistical relevant
+        # game events
+        DEBUG_LEVELV_NUM = logging.WARN + 1 
+        logging.addLevelName(DEBUG_LEVELV_NUM, "RECORD")
+        def __record(self, message, *args, **kws):
+            if self.isEnabledFor(DEBUG_LEVELV_NUM):
+                # Yes, logger takes its '*args' as 'args'.
+                self._log(DEBUG_LEVELV_NUM, message, args, **kws) 
+        logging.Logger.record = __record   

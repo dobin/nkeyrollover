@@ -20,25 +20,27 @@ logger = logging.getLogger(__name__)
 
 
 class CharacterAttack(Entity): 
-    def __init__(self, viewport, parentCharacter :Character, isPlayer :bool):
-        super(CharacterAttack, self).__init__(viewport=viewport, parentSprite=parentCharacter, entityType=EntityType.weapon)
+    def __init__(
+        self, viewport :Viewport, parentCharacter :Character, isPlayer :bool
+    ):
+        super(CharacterAttack, self).__init__(
+            viewport=viewport, parentSprite=parentCharacter, 
+            entityType=EntityType.weapon)
 
-        self.isPlayer = isPlayer
-        self.texture = PhenomenaTexture(phenomenaType=PhenomenaType.hit, parentSprite=self)
-        self.parentCharacter = parentCharacter
+        self.isPlayer :bool = isPlayer
+        self.texture :PhenomenaTexture = PhenomenaTexture(phenomenaType=PhenomenaType.hit, parentSprite=self)
+        self.parentCharacter :Character = parentCharacter
 
         # the duration of the hitting animation
         self.durationTimer.setTimer( self.texture.getAnimationTime() )
         self.durationTimer.reset()
 
         # cooldown. 0.2 is actually lower than whats possible, even with 100fps
-        self.cooldownTimer = Timer(0.2, instant=True)
+        self.cooldownTimer :Timer =Timer(0.2, instant=True)
 
-        # for drawing the hit, and see if the char is "hitting"
         self.setActive(False)
-
-        self.weaponType = WeaponType.hit
-        self.selectedWeaponKey = '1'
+        self.weaponType :WeaponType = WeaponType.hit
+        self.selectedWeaponKey :str = '1'
         
 
     def switchWeaponByKey(self, key :str):

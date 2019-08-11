@@ -22,16 +22,23 @@ class FakeWorld(object):
             self.viewport =  Viewport(win=win, world=self)
 
         self.worldSprite = Sprite(viewport=self.viewport, parentSprite=None)
-        self.player = Player(win, self.worldSprite, None, self)
+        self.player = Player(
+            viewport=self.viewport, parentEntity=self.worldSprite, 
+            spawnBoundaries=None, world=self)
 
         if withDirector:
-            self.director = Director(win, self) # real director
+             # real director
+            self.director = Director(viewport=self.viewport, world=self)
         else: 
             self.director = None
-        self.particleEmiter = ParticleEmiter(self.win) # real particle emiter. for test_playerskill
+            
+        # real particle emiter. for test_playerskill
+        self.particleEmiter = ParticleEmiter(viewport=self.viewport) 
+
 
     def getPlayer(self):
         return self.player
+        
 
     def makeExplode(self, sprite, charDirection, data):
         pass

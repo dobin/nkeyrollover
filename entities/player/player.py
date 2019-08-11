@@ -19,12 +19,18 @@ from entities.characterattack import CharacterAttack
 from entities.weapontype import WeaponType
 from .playerskills import PlayerSkills
 from sprite.coordinates import Coordinates
+from world.viewport import Viewport
+#from world.world import World
+#from entity.entity import Entity
 
 logger = logging.getLogger(__name__)
 
 
 class Player(Character):
-    def __init__(self, viewport, parentEntity, spawnBoundaries, world):
+    def __init__(
+        self, viewport :Viewport, parentEntity, 
+        spawnBoundaries, world
+    ):
         Character.__init__(self, viewport, parentEntity, spawnBoundaries, world, EntityType.player)
         
         self.texture = CharacterTexture(parentSprite=self)

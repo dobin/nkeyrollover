@@ -70,6 +70,14 @@ class ColorPalette(object):
 
     @staticmethod 
     def getColorByEntityType(entityType: EntityType, viewport :Viewport):
+        color = 0
+
+        # for unittests using MockWin
+        # we always import 'curses', and dont know if we are being unittested
+        # in the unittest, we use Viewport, which has method isUnitTest
+        if hasattr(viewport, 'isUnitTest'):
+            return color
+
         if entityType is EntityType.player: 
             return curses.color_pair(7) | curses.A_BOLD 
         elif entityType is EntityType.enemy:

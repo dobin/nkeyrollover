@@ -3,6 +3,8 @@ import logging
 from entities.enemy.enemy import Enemy
 from utilities.timer import Timer
 from config import Config
+from world.viewport import Viewport
+#from world.world import World
 
 logger = logging.getLogger(__name__)
 
@@ -10,7 +12,7 @@ logger = logging.getLogger(__name__)
 class Director(object):
     """Create and manage the enemies"""
     
-    def __init__(self, viewport, world):
+    def __init__(self, viewport :Viewport, world):
         self.viewport = viewport
         self.world = world
         self.enemiesDead = []

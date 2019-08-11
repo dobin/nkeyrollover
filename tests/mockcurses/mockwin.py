@@ -55,6 +55,7 @@ class MockWin(object):
         pos = self.getInternalPosFor(x, y)
         return self.win[ pos['y'] ][ pos['x'] ]
 
+
     def addCh(self, y, x, char, color=None): 
         self.addChInternal(y, x, char, color)
 
@@ -70,12 +71,13 @@ class MockWin(object):
         }
         return pos
 
+
     def draw(self): 
         self.internalPrint()
 
 
     def refresh(self): 
-        print("Refresh")
+        pass
 
 
     def internalPrint(self):
@@ -89,20 +91,19 @@ class MockWin(object):
                     sys.stdout.write(char)
 
 
+
     def keypad(self, n): 
         pass
+
 
     def nodelay(self, n): 
         pass
 
+
     def clear(self): 
-        print("Clear")
         for y, yrow in enumerate(self.win): 
             for x, char in enumerate(yrow):
                 self.win[y][x] = ''
-                 #print("X: " + str(x))
-
-
 
     # used by hasttr() to check if unit test is being run
     def isUnitTest(self): 

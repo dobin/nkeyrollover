@@ -2,11 +2,15 @@ import unittest
 import logging 
 
 from tests.fakeworld import FakeWorld
-from sprite.direction import Direction
-from entities.enemy.enemy import Enemy
-from sprite.particle import Particle
 import tests.mockcurses as curses
+from entities.enemy.enemy import Enemy
+from sprite.direction import Direction
+from sprite.particle import Particle
+from texture.phenomena.phenomenatexture import PhenomenaTexture
+from texture.phenomena.phenomenatype import PhenomenaType
 from config import Config
+from sprite.coordinates import Coordinates
+from sprite.sprite import Sprite
 
 
 class AnimationTest(unittest.TestCase):
@@ -55,6 +59,36 @@ class AnimationTest(unittest.TestCase):
         self.assertTrue( win.peek(basex-1, basey) == '' )
         self.assertFalse( win.peek(basex-2, basey) == '' )
         
+
+    def test_texturecoordinates(self): 
+        win = curses.newwin(Config.rows, Config.columns)
+        world = FakeWorld(win)
+
+        sprite = Sprite(viewport = world.viewport, parentSprite=None,
+            coordinates=Coordinates(0,0), direction=Direction.left)
+
+
+        texture :PhenomenaTexture = PhenomenaTexture(
+            phenomenaType=PhenomenaType.hit, 
+            parentSprite=sprite)
+        texture.changeAnimation(PhenomenaType.hit, Direction.left)
+        coords = texture.getTextureHitCoordinates()
+        self.assertTrue(len(coords) == 1)
+        self.assertTrue(coords[0].x == 0 and coords[0].y == 0)
+
+        texture :PhenomenaTexture = PhenomenaTexture(
+            phenomenaType=PhenomenaType.hitSquare,
+            parentSprite=sprite)
+        texture.changeAnimation(PhenomenaType.hitSquare, Direction.left)
+        coords = texture.getTextureHitCoordinates()
+        self.assertTrue(len(coords) == 4)
+        self.assertTrue(coords[0].x == 0 and coords[0].y == 0)
+        self.assertTrue(coords[1].x == 0 and coords[1].y == 1)
+        self.assertTrue(coords[2].x == 1 and coords[2].y == 0)
+        self.assertTrue(coords[3].x == 1 and coords[3].y == 1)
+        
+
+
 
 
 if __name__ == '__main__':

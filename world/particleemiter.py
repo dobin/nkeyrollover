@@ -5,6 +5,7 @@ from sprite.direction import Direction
 from sprite.particle import Particle
 from .particleeffecttype import ParticleEffectType
 from utilities.utilities import Utility
+from world.viewport import Viewport
 
 logger = logging.getLogger(__name__)
 
@@ -14,9 +15,9 @@ class ParticleEmiter(object):
     
     def __init__(
         self,
-        viewport
+        viewport :Viewport
     ):
-        self.viewport = viewport
+        self.viewport :Viewport = viewport
         self.particlePool = []
         self.particleActive = []
         n = 0

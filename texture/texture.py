@@ -49,6 +49,29 @@ class Texture(object):
             return loc
 
 
+    def getTextureHitCoordinates(self, animationIdx=0): 
+        # ani = self.animation[ animationIdx ]
+        locations = []
+        baseLocation = self.getLocation()
+        x = 0
+        logging.info("w: {} h: {}".format(self.width, self.height))
+        while x < self.width: 
+            y = 0
+            while y < self.height:
+                
+                loc = copy.copy(baseLocation)
+                loc.x += x
+                loc.y += y
+                logging.info("B: " + str(loc))
+                locations.append(loc)
+
+                y += 1
+
+            x += 1
+
+        return locations
+
+
     def setLocation(self, x, y):
         self.offset.x = x
         self.offset.y = y

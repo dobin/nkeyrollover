@@ -15,12 +15,13 @@ from texture.character.characteranimationtype import CharacterAnimationType
 from entities.characterattack import CharacterAttack
 from .enemyinfo import EnemyInfo
 from sprite.coordinates import Coordinates
+from world.viewport import Viewport
 
 logger = logging.getLogger(__name__)
 
 
 class Enemy(Character):
-    def __init__(self, viewport, parent, spawnBoundaries, world, name):
+    def __init__(self, viewport :Viewport, parent, spawnBoundaries, world, name):
         Character.__init__(self, viewport, parent, spawnBoundaries, world, EntityType.enemy)
         
         self.enemyMovement = True
