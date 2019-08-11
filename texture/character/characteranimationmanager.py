@@ -399,3 +399,14 @@ class CharacterAnimationManager(object):
         if len(animation.arr) != animation.frameCount:
             raise Exception("Animation {} / {} invalid: frameCount={}, but array contains {}"
                 .format(self.characterType, animationType.name, animation.frameCount, len(animation.arr)))
+
+
+        for a in animation.arr:
+            if len(a) != animation.height:
+                raise Exception("Animation {} / {} invalid: height={}, but array contains {}"
+                    .format(self.characterType, animationType.name, animation.height, len(a)))
+
+            for line in a:
+                if len(line) != animation.width:
+                    raise Exception("Animation {} / {} invalid: width={}, but array contains {}"
+                        .format(self.characterType, animationType.name, animation.width, len(line)))
