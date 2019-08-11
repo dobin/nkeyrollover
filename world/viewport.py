@@ -12,28 +12,32 @@ class Viewport(object):
         self.win = win
         self.world = world
         self.x = 0
+        # For performance reason, we pre-allocate coords for use in getScreenCoords()
+        self.viewportCoords = Coordinates()
 
     
     def addstr(self, y, x, char, options=None):
-        i = Coordinates(
-            x = x, 
-            y = y,
-        )
-        c = self.getScreenCoords(i)
-        
-        if not self.isPointDrawable(c):
+        # Note: This function should be as fast as possible. 
+
+        x = x + self.x # getScreenCoords() - fast version
+
+        if not self.isPointDrawableXY(x, y): 
             return
 
         if options is None:
-            self.win.addstr(c.y, c.x, char)
+            self.win.addstr(y, x, char)
         else: 
-            self.win.addstr(c.y, c.x, char, options)
+            self.win.addstr(y, x, char, options)
 
 
     def getScreenCoords(self, coords):
-        c = copy.copy(coords)
-        c.x += self.x
-        return c
+        """Returns the screen coordinates of the point coords
+        
+        Note that we dont return a copy, but a reference to an internal var.
+        """
+        self.viewportCoords.x = coords.x + self.x
+        self.viewportCoords.y = coords.y
+        return self.viewportCoords
 
 
     def isPointDrawable(self, coord :Coordinates): 
@@ -41,6 +45,14 @@ class Viewport(object):
             return True
         else:
             return False
+
+
+    def isPointDrawableXY(self, x: int, y: int): 
+        if x > Config.areaDrawable['minx'] and y > Config.areaDrawable['miny'] and x < Config.areaDrawable['maxx'] and y < Config.areaDrawable['maxy']:
+            return True
+        else:
+            return False
+
 
     def adjustViewport(self, x): 
         self.x += x

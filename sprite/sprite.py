@@ -28,6 +28,8 @@ class Sprite(object):
         if coordinates is not None:
             self.coordinates.x = coordinates.x
             self.coordinates.y = coordinates.y
+        # For performance reason, we pre-allocate coords for use in getLocation()
+        self.coordinatesRel = Coordinates(0, 0)
 
         self.active = True
         self.rendered = True
@@ -44,17 +46,19 @@ class Sprite(object):
 
 
     def getLocation(self): 
-        """Get a copy of the location
+        """Get a reference to our location.
         
         The location may depend on the parentSprite, if it is not None
+        Note that we dont return a copy of the coordinates, but a reference 
+        to an internal var.
         """
         if self.parentSprite is None: 
-            return copy.copy(self.coordinates)
-        else: 
-            loc = copy.copy(self.parentSprite.getLocation())
-            loc.x += self.coordinates.x
-            loc.y += self.coordinates.y
-            return loc
+            return self.coordinates
+        else:
+            parentLocation = self.parentSprite.getLocation()
+            self.coordinatesRel.x = parentLocation.x + self.coordinates.x
+            self.coordinatesRel.y = parentLocation.y + self.coordinates.y
+            return self.coordinatesRel
 
 
     def setLocation(self, coordinates :Coordinates):

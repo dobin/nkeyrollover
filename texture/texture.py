@@ -17,6 +17,8 @@ class Texture(object):
         if offset is not None: 
             self.offset.x = offset.x
             self.offset.y = offset.y
+        # For performance reason, we pre-allocate coords for use in getLocation()
+        self.offsetRel :Coordinates = Coordinates()
 
 
     def draw(self, viewport): 
@@ -36,17 +38,19 @@ class Texture(object):
 
 
     def getLocation(self):
-        """Get a copy of the location
+        """Get a reference to our location.
         
         The location may depend on the parentSprite, if it is not None
+        Note that we dont return a copy of the coordinates, but a reference 
+        to an internal var.
         """        
         if self.parentSprite is None:
-            return copy.copy(self.offset)
+            return self.offset
         else:
-            loc = copy.copy(self.parentSprite.getLocation())
-            loc.x += self.offset.x
-            loc.y += self.offset.y
-            return loc
+            parentLocation = self.parentSprite.getLocation()
+            self.offsetRel.x = parentLocation.x + self.offset.x
+            self.offsetRel.y = parentLocation.y + self.offset.y
+            return self.offsetRel
 
 
     def getTextureHitCoordinates(self, animationIdx=0): 
@@ -57,7 +61,7 @@ class Texture(object):
         while x < self.width: 
             y = 0
             while y < self.height:
-                
+                # expensive copy, but its only on-hit
                 loc = copy.copy(baseLocation)
                 loc.x += x
                 loc.y += y

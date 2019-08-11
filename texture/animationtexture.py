@@ -97,14 +97,23 @@ class AnimationTexture(Texture):
             raise Exception("Trying to access frameIndex {} on array with len {}, actual len{}"
                 .format(self.frameIndex, self.animation.frameCount, len(self.animation.arr)))
 
-        for (y, rows) in enumerate(self.animation.arr[ self.frameIndex ]):
-            for (x, column) in enumerate(rows):
+        # Note: For performance reason, replace enumerate with a while loop
+        y = 0
+        while y < len(self.animation.arr[ self.frameIndex ]):
+        #for (y, rows) in enumerate(self.animation.arr[ self.frameIndex ]):
+            x = 0
+            while x < len(self.animation.arr[ self.frameIndex ][y]):
+            # for (x, column) in enumerate(rows):
+                column = self.animation.arr[ self.frameIndex ][y][x]
                 if column is not '':
                     viewport.addstr(
                         pos.y + y,
                         pos.x + x,
                         column, 
                         self.parentSprite.currentColor)
+
+                x += 1
+            y += 1
 
 
     def getCurrentFrameCopy(self): 

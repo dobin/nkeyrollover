@@ -91,7 +91,7 @@ class Keyrollover(object):
             workTime = timeEnd - timeStart
             self.workTime = workTime
             if workTime > targetFrameTime:
-                logging.warn("Could not keep FPS!")
+                logging.warn("Could not keep FPS! Worktime was: {}ms".format( self.workTime * 100.0))
 
             targetSleepTime = targetFrameTime - workTime
             if targetSleepTime < 0:
@@ -146,7 +146,7 @@ class Keyrollover(object):
         weaponIdx = 62
         self.win.addstr(1, 
             weaponIdx, 
-            'APS:' + str(int(self.world.player.characterStatus.getApm().getApm())), 
+            'APM:' + str(int(self.world.player.characterStatus.getApm().getApm() * 60)), 
             color)
 
 
