@@ -93,32 +93,19 @@ class CharacterAttack(Entity):
 
     def attackWeaponHit(self) -> int:
         self.texture.changeAnimation(PhenomenaType.hit, self.parentSprite.direction)
-        damage = self.hitCollisionDetection( [ self.getLocation()] )
+        
+        # take hit locations from texture
+        hitLocations = self.texture.getTextureHitCoordinates()
+
+        damage = self.hitCollisionDetection( hitLocations )
         return damage        
 
 
     def attackWeaponHitSquare(self) -> int:
         self.texture.changeAnimation(PhenomenaType.hitSquare, self.parentSprite.direction)
-        hitLocations = []
-        hitLocationsBase = self.getLocation()
         
-        hl2 = Coordinates( 
-            x = hitLocationsBase.x + 1,
-            y = hitLocationsBase.y,
-        )
-        hl3 = Coordinates( 
-            x = hitLocationsBase.x,
-            y = hitLocationsBase.y + 1,
-        )
-        hl4 = Coordinates( 
-            x = hitLocationsBase.x + 1,
-            y = hitLocationsBase.y + 1,
-        )
-
-        hitLocations.append(hitLocationsBase)
-        hitLocations.append(hl2)
-        hitLocations.append(hl3)
-        hitLocations.append(hl4)
+        # take hit locations from texture
+        hitLocations = self.texture.getTextureHitCoordinates()
 
         damage = self.hitCollisionDetection( hitLocations )
         return damage
@@ -126,26 +113,9 @@ class CharacterAttack(Entity):
 
     def attackWeaponHitLine(self) -> int: 
         self.texture.changeAnimation(PhenomenaType.hitLine, self.parentSprite.direction)
-        hitLocations = []
-        hitLocationsBase = self.getLocation()
         
-        hl2 = Coordinates( 
-            x = hitLocationsBase.x + 1,
-            y = hitLocationsBase.y,
-        )
-        hl3 = Coordinates( 
-            x = hitLocationsBase.x + 2,
-            y = hitLocationsBase.y,
-        )
-        hl4 = Coordinates( 
-            x = hitLocationsBase.x + 3,
-            y = hitLocationsBase.y,
-        )
-
-        hitLocations.append(hitLocationsBase)
-        hitLocations.append(hl2)
-        hitLocations.append(hl3)
-        hitLocations.append(hl4)
+        # take hit locations from texture
+        hitLocations = self.texture.getTextureHitCoordinates()
 
         damage = self.hitCollisionDetection( hitLocations )
         return damage
