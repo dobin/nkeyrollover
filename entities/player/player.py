@@ -22,6 +22,7 @@ from sprite.coordinates import Coordinates
 from world.viewport import Viewport
 #from world.world import World
 #from entity.entity import Entity
+from utilities.timer import Timer
 
 logger = logging.getLogger(__name__)
 
@@ -31,13 +32,16 @@ class Player(Character):
         self, viewport :Viewport, parentEntity, 
         spawnBoundaries, world
     ):
-        Character.__init__(self, viewport, parentEntity, spawnBoundaries, world, EntityType.player)
+        Character.__init__(
+            self, viewport=viewport, parentEntity=parentEntity, 
+            spawnBoundaries=spawnBoundaries, world=world, entityType=EntityType.player)
         
         self.texture = CharacterTexture(parentSprite=self)
         self.characterAttack = CharacterAttack(viewport=viewport, parentCharacter=self, isPlayer=True)
         self.skills = PlayerSkills(player=self)
-
+        self.movementTimer = Timer( 1.0 / Config.movementKeysPerSec, instant=True)
         self.initAi()
+        self.name = 'Player'
 
         self.setLocation( Coordinates(
                 Config.playerSpawnPoint['x'],
@@ -159,45 +163,55 @@ class Player(Character):
                 self.skills.doSkill('r')
 
             if key == curses.KEY_LEFT:
-                if Utility.isPointMovable(self.coordinates.x - 1, self.coordinates.y, self.texture.width, self.texture.height):
-                    self.coordinates.x = self.coordinates.x - 1
-                    self.direction = Direction.left
-                    self.movePlayer()
+                if self.movementTimer.timeIsUp(): 
+                    self.movementTimer.reset()
+
+                    if Utility.isPointMovable(self.coordinates.x - 1, self.coordinates.y, self.texture.width, self.texture.height):
+                        self.coordinates.x = self.coordinates.x - 1
+                        self.direction = Direction.left
+                        self.movePlayer()
                     
             elif key == curses.KEY_RIGHT: 
-                if Utility.isPointMovable(self.coordinates.x + 1, self.coordinates.y, self.texture.width, self.texture.height):
-                    self.coordinates.x = self.coordinates.x + 1
-                    self.direction = Direction.right
-                    self.movePlayer()
+                if self.movementTimer.timeIsUp(): 
+                    self.movementTimer.reset()                
+                    if Utility.isPointMovable(self.coordinates.x + 1, self.coordinates.y, self.texture.width, self.texture.height):
+                        self.coordinates.x = self.coordinates.x + 1
+                        self.direction = Direction.right
+                        self.movePlayer()
 
             elif key == curses.KEY_UP:
-                if Config.moveDiagonal:
-                    if Utility.isPointMovable(self.coordinates.x +1 , self.coordinates.y - 1, self.texture.width, self.texture.height):
-                        self.coordinates.y = self.coordinates.y - 1
-                        self.coordinates.x = self.coordinates.x + 1
-                        self.movePlayer()
+                if self.movementTimer.timeIsUp(): 
+                    self.movementTimer.reset()                
+                    if Config.moveDiagonal:
+                        if Utility.isPointMovable(self.coordinates.x +1 , self.coordinates.y - 1, self.texture.width, self.texture.height):
+                            self.coordinates.y = self.coordinates.y - 1
+                            self.coordinates.x = self.coordinates.x + 1
+                            self.movePlayer()
 
-                else: 
-                    if Utility.isPointMovable(self.coordinates.x, self.coordinates.y - 1, self.texture.width, self.texture.height):
-                        self.coordinates.y = self.coordinates.y - 1
-                        self.movePlayer()
+                    else: 
+                        if Utility.isPointMovable(self.coordinates.x, self.coordinates.y - 1, self.texture.width, self.texture.height):
+                            self.coordinates.y = self.coordinates.y - 1
+                            self.movePlayer()
 
             elif key == curses.KEY_DOWN: 
-                if Config.moveDiagonal:
-                    if Utility.isPointMovable(self.coordinates.x - 1, self.coordinates.y + 1, self.texture.width, self.texture.height):
-                        self.coordinates.y = self.coordinates.y + 1
-                        self.coordinates.x = self.coordinates.x - 1
-                        self.movePlayer()
-                else:
-                    if Utility.isPointMovable(self.coordinates.x, self.coordinates.y + 1, self.texture.width, self.texture.height):
-                        self.coordinates.y = self.coordinates.y + 1
-                        self.movePlayer()
+                if self.movementTimer.timeIsUp(): 
+                    self.movementTimer.reset()
+                    if Config.moveDiagonal:
+                        if Utility.isPointMovable(self.coordinates.x - 1, self.coordinates.y + 1, self.texture.width, self.texture.height):
+                            self.coordinates.y = self.coordinates.y + 1
+                            self.coordinates.x = self.coordinates.x - 1
+                            self.movePlayer()
+                    else:
+                        if Utility.isPointMovable(self.coordinates.x, self.coordinates.y + 1, self.texture.width, self.texture.height):
+                            self.coordinates.y = self.coordinates.y + 1
+                            self.movePlayer()
 
 
     def advance(self, deltaTime):
         super(Player, self).advance(deltaTime) # advance Character part (duration, sprite)
         self.brain.update(deltaTime)
         self.skills.advance(deltaTime)
+        self.movementTimer.advance(deltaTime)
 
 
     def ressurectMe(self): 

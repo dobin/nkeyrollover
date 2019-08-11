@@ -44,7 +44,9 @@ class PlayerSkills(object):
         else: 
             logger.error("Unknown skill {}".format(weaponType))            
 
-        RecordHolder.recordPlayerAttack(weaponType=weaponType, damage=damage)
+        RecordHolder.recordAttack(
+            weaponType=weaponType, damage=damage, name=self.player.name, 
+            characterType=self.player.entityType)
 
 
     def doSkill(self, key): 

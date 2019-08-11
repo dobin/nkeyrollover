@@ -10,6 +10,7 @@ from entities.entity import Entity
 from .characterstatus import CharacterStatus
 from sprite.direction import Direction
 from texture.speechtexture import SpeechTexture
+from world.viewport import Viewport
 
 logger = logging.getLogger(__name__)
 
@@ -17,8 +18,12 @@ logger = logging.getLogger(__name__)
 class Character(Entity):
     """ A character is either a player or an enemy"""
 
-    def __init__(self, viewport, parentEntity, spawnBoundaries, world, entityType):
-        super(Character, self).__init__(viewport, parentEntity, entityType)
+    def __init__(
+        self, viewport :Viewport, parentEntity :Entity, 
+        spawnBoundaries, world, entityType :Entity
+    ):
+        super(Character, self).__init__(
+            viewport=viewport, parentSprite=parentEntity, entityType=entityType)
         self.world = world
         self.spawnBoundaries = spawnBoundaries
 

@@ -152,7 +152,9 @@ class CharacterAttack(Entity):
         elif self.weaponType is WeaponType.jumpKick: 
             damage = self.attackWeaponJumpKick()
 
-        RecordHolder.recordPlayerAttack(weaponType=self.weaponType, damage=damage)
+        RecordHolder.recordAttack(
+            weaponType=self.weaponType, damage=damage, name=self.parentCharacter.name, 
+            characterType=self.parentCharacter.entityType)
 
 
     def hitCollisionDetection(self, hitLocations :List[Coordinates]) -> int:
