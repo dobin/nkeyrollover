@@ -25,18 +25,8 @@ from world.particleeffecttype import ParticleEffectType
 from sprite.sprite import Sprite
 from sprite.coordinates import Coordinates
 from world.viewport import Viewport
-
-
-class FakeWorld(object): 
-    def __init__(self, win): 
-        self.win = win
-        self.viewport = Viewport(win=win, world=self)
-        self.worldSprite = Sprite(viewport=self.viewport, parentSprite=None)
-        self.player = Player(win, self.worldSprite, None, self)
-        self.director = Director(win, self) # real director
-
-    def getPlayer(self):
-        return self.player
+from utilities.colorpalette import ColorPalette
+from tests.fakeworld import FakeWorld
 
 
 class AnimationTest(object):
@@ -60,16 +50,7 @@ class AnimationTest(object):
             win.keypad(1) 
             curses.curs_set(0)    
             win.nodelay(1) # make getch() nonblocking
-            # Initialize color pairs
-            curses.start_color()    
-            curses.init_pair(1, curses.COLOR_GREEN, 0)
-            curses.init_pair(2, curses.COLOR_MAGENTA, 0)
-            curses.init_pair(3, curses.COLOR_RED, 0)
-            curses.init_pair(4, curses.COLOR_YELLOW, 0)
-            curses.init_pair(5, curses.COLOR_BLUE, 0)
-            curses.init_pair(6, curses.COLOR_WHITE, curses.COLOR_BLACK)
-            curses.init_pair(7, curses.COLOR_WHITE, 0)
-
+            ColorPalette.cursesInitColor()
             win.clear()
             win.border()
             # end curses
@@ -100,7 +81,8 @@ class AnimationTest(object):
 
 
     def playAllAnimations(self):
-        world = FakeWorld(self.win)
+        #world = FakeWorld(self.win)
+        world = FakeWorld(self.win, fakeViewPort=False, withDirector=False)
         sprites = []
 
         n = 0

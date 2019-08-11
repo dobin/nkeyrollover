@@ -13,12 +13,21 @@ class FakeViewport(Viewport):
 
 
 class FakeWorld(object): 
-    def __init__(self, win): 
+    def __init__(self, win, fakeViewPort=True, withDirector=True): 
         self.win = win
-        self.viewport = FakeViewport(win=win, world=self)
+
+        if fakeViewPort:
+            self.viewport = FakeViewport(win=win, world=self)
+        else: 
+            self.viewport =  Viewport(win=win, world=self)
+
         self.worldSprite = Sprite(viewport=self.viewport, parentSprite=None)
         self.player = Player(win, self.worldSprite, None, self)
-        self.director = Director(win, self) # real director
+
+        if withDirector:
+            self.director = Director(win, self) # real director
+        else: 
+            self.director = None
         self.particleEmiter = ParticleEmiter(self.win) # real particle emiter. for test_playerskill
 
     def getPlayer(self):
