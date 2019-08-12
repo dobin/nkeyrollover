@@ -58,6 +58,7 @@ class Scene(object):
             if myTimer.timeIsUp(): 
                 break
 
+            self.win.addstr(24, 75,  Config.version, curses.color_pair(1))
             # advance
             myTimer.advance(deltaTime)
             textureIntro.advance(deltaTime)
