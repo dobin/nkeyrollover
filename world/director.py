@@ -28,17 +28,22 @@ class Director(object):
     def init(self):
 
         if Config.devMode: 
-            coordinates = {
+            coordinatesClose = {
                 'x': 30, 
                 'min_y': 13,
                 'max_y': 13,
+            }
+            coordinates = {
+                'x': Config.columns + 1, 
+                'min_y': Config.areaMoveable['miny'],
+                'max_y': Config.areaMoveable['maxy'],
             }
             newEnemy = Enemy(viewport=self.viewport, 
                 parent=self.world.worldSprite, 
                 spawnBoundaries=coordinates, 
                 world=self.world, 
                 name="Enym")
-            newEnemy.enemyMovement = False
+            #newEnemy.enemyMovement = False
             newEnemy.direction = Direction.right
             self.enemiesDead.append(newEnemy)
         else:
