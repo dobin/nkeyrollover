@@ -29,6 +29,7 @@ class Config:
     }
 
     devMode = False
+    enemyMovement = True
 
     moveDiagonal = False
 

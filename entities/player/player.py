@@ -30,11 +30,11 @@ logger = logging.getLogger(__name__)
 class Player(Character):
     def __init__(
         self, viewport :Viewport, parentEntity, 
-        spawnBoundaries, world
+        world
     ):
         Character.__init__(
             self, viewport=viewport, parentEntity=parentEntity, 
-            spawnBoundaries=spawnBoundaries, world=world, entityType=EntityType.player)
+            world=world, entityType=EntityType.player)
         
         self.texture = CharacterTexture(parentSprite=self)
         self.characterAttack = CharacterAttack(viewport=viewport, parentCharacter=self, isPlayer=True)

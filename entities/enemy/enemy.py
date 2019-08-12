@@ -23,10 +23,11 @@ logger = logging.getLogger(__name__)
 
 class Enemy(Character):
     def __init__(
-        self, viewport :Viewport, parent, spawnBoundaries, 
+        self, viewport :Viewport, parent, 
         world, name :str, characterType=CharacterType.stickfigure
     ):
-        Character.__init__(self, viewport, parent, spawnBoundaries, world, EntityType.enemy)
+        Character.__init__(self, viewport=viewport, parentEntity=parent, 
+            world=world, entityType=EntityType.enemy)
         
         self.characterType = characterType
         self.enemyMovement = True
@@ -42,23 +43,6 @@ class Enemy(Character):
         self.enemyInfo = EnemyInfo()
 
         self.initAi()
-        self.init()
-
-
-    def init(self):
-        if self.spawnBoundaries is None: 
-            return
-
-        self.setLocation( Coordinates(
-                self.spawnBoundaries['x'],
-                random.randint(self.spawnBoundaries['min_y'], self.spawnBoundaries['max_y'])
-            )
-        )
-
-        if self.coordinates.x < 0:
-            self.direction = Direction.right
-        else: 
-            self.direction = Direction.left
 
 
     def initAi(self): 
@@ -80,14 +64,9 @@ class Enemy(Character):
         self.brain.push("dying")
 
 
-    def gmRessurectMe(self): 
-        if self.characterStatus.isAlive():
-            # anoying, as first few enemies spawn with full life
-            # logger.warn(self.name + " Trying to ressurect enemy which is still alive")
-            return
-
+    def gmRessurectMe(self, spawncoord):
+        self.setLocation(spawncoord)
         logger.info(self.name + " Ressurect at: " + str(self.coordinates))
-        self.init()
         self.characterStatus.init()
 
         # if death animation was deluxe, there is no frame in the sprite

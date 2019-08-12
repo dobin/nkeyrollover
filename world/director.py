@@ -1,4 +1,5 @@
 import logging
+import random
 
 from entities.enemy.enemy import Enemy
 from utilities.timer import Timer
@@ -7,6 +8,7 @@ from world.viewport import Viewport
 #from world.world import World
 from sprite.direction import Direction
 from texture.character.charactertype import CharacterType
+from sprite.coordinates import Coordinates
 
 logger = logging.getLogger(__name__)
 
@@ -40,31 +42,20 @@ class Director(object):
             }
             newEnemy = Enemy(viewport=self.viewport, 
                 parent=self.world.worldSprite, 
-                spawnBoundaries=coordinates, 
                 world=self.world, 
                 name="Enym")
-            #newEnemy.enemyMovement = False
+            newEnemy.enemyMovement = Config.enemyMovement
             newEnemy.direction = Direction.right
             self.enemiesDead.append(newEnemy)
         else:
             n = 0
             while n < self.maxEnemies:
-                myx = 1
-                if n % 2 == 0:
-                    myx = Config.columns + 1
-
                 characterType = CharacterType.stickfigure
                 if n % 10 == 0:
                     characterType = CharacterType.cow
 
-                coordinates = {
-                    'x': myx, 
-                    'min_y': Config.areaMoveable['miny'],
-                    'max_y': Config.areaMoveable['maxy'],
-                }
                 newEnemy = Enemy(viewport=self.viewport, 
                     parent=self.world.worldSprite, 
-                    spawnBoundaries=coordinates, 
                     world=self.world, 
                     name=str(n),
                     characterType=characterType)
@@ -74,7 +65,6 @@ class Director(object):
 
     def advanceEnemies(self, deltaTime):
         self.lastEnemyResurrectedTimer.advance(deltaTime)
-        
         for enemy in self.enemiesAlive:
             enemy.advance(deltaTime)
 
@@ -94,11 +84,12 @@ class Director(object):
         if len(self.enemiesAlive) < self.maxEnemies:
             if self.lastEnemyResurrectedTimer.timeIsUp():
                 self.lastEnemyResurrectedTimer.reset()
-                logger.info("Ressurect, alive: " + str(len(self.enemiesAlive)))
+                logger.warn("Ressurect an enemy. alive are: " + str(len(self.enemiesAlive)))
 
                 if len(self.enemiesDead) > 0:
                     enemy = self.enemiesDead.pop()
-                    enemy.gmRessurectMe()
+                    spawnCoords = self.getRandomSpawnCoords(enemy)
+                    enemy.gmRessurectMe(spawnCoords)
                     self.enemiesAlive.append(enemy)
 
         # remove inactive enemies
@@ -107,6 +98,21 @@ class Director(object):
                 logger.info("Move newly dead enemy to dead queue")
                 self.enemiesDead.append(enemy)
                 self.enemiesAlive.remove(enemy)
+
+
+    def getRandomSpawnCoords(self, enemy): 
+        side = random.choice([True, False])
+        myx = 0
+        if side: 
+            myx = self.viewport.getx() + Config.columns + 1
+        else: 
+            myx = self.viewport.getx() - 1 - enemy.texture.width
+
+        minY = Config.areaMoveable['miny']
+        maxY = Config.areaMoveable['maxy']
+        myy = random.randint(minY, maxY)
+        spawnCoords = Coordinates(myx, myy)
+        return spawnCoords
 
 
     def collisionDetection(self, characterWeaponCoordinates): 

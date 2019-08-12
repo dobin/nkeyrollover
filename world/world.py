@@ -30,7 +30,6 @@ class World(object):
         self.player :Player = Player(
             viewport=self.viewport, 
             parentEntity=self.worldSprite, 
-            spawnBoundaries={ 'max_y': Config.columns, 'max_x': Config.rows }, 
             world=self)
         self.director :Director = Director(self.viewport, self)
         self.director.init()

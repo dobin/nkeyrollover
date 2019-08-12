@@ -20,12 +20,11 @@ class Character(Entity):
 
     def __init__(
         self, viewport :Viewport, parentEntity :Entity, 
-        spawnBoundaries, world, entityType :Entity
+        world, entityType :Entity
     ):
         super(Character, self).__init__(
             viewport=viewport, parentSprite=parentEntity, entityType=entityType)
         self.world = world
-        self.spawnBoundaries = spawnBoundaries
 
         self.characterStatus = CharacterStatus()
         self.speechTexture = SpeechTexture(parentSprite=self, displayText='')
