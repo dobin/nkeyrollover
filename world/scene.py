@@ -105,12 +105,12 @@ class Scene(object):
 
             # static
             if state is IntroSceneState.wait1 or state is IntroSceneState.flydown or state is IntroSceneState.drop or state is IntroSceneState.flyup:
-                self.win.addstr(5, 40,  "N Key Rollover", curses.color_pair(3))
-                self.win.addstr(6, 40,  "Adventures of ASCIIMAN", curses.color_pair(3))
-                self.win.addstr(8, 40,  "Select attack: 1 2 3 4", curses.color_pair(4))
-                self.win.addstr(9, 40,  "Attack       : space", curses.color_pair(4))
-                self.win.addstr(10, 40, "Skills       : q w e r", curses.color_pair(4))
-                self.win.addstr(11, 40, "Heal, Port   : f g", curses.color_pair(4))
+                self.win.addstr(5, 40,  "N Key Rollover", curses.color_pair(5))
+                self.win.addstr(6, 40,  "Adventures of ASCIIMAN", curses.color_pair(5))
+                self.win.addstr(8, 40,  "Select attack: 1 2 3 4", curses.color_pair(1))
+                self.win.addstr(9, 40,  "Attack       : space", curses.color_pair(1))
+                self.win.addstr(10, 40, "Skills       : q w e r", curses.color_pair(1))
+                self.win.addstr(11, 40, "Heal, Port   : f g", curses.color_pair(1))
 
             # state
             if state is IntroSceneState.wait1:

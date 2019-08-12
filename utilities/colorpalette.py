@@ -24,6 +24,7 @@ class ColorPalette(object):
     def cursesInitColor():
         # Initialize color pairs
         curses.start_color()    
+        
         curses.init_pair(1, curses.COLOR_GREEN, 0)
         curses.init_pair(2, curses.COLOR_MAGENTA, 0)
         curses.init_pair(3, curses.COLOR_RED, 0)
@@ -31,12 +32,14 @@ class ColorPalette(object):
         curses.init_pair(5, curses.COLOR_BLUE, 0)
         curses.init_pair(6, curses.COLOR_CYAN, 0)
         curses.init_pair(7, curses.COLOR_WHITE, 0)
+        curses.init_pair(8, curses.COLOR_BLACK, 0)
+
         # for skill indication
-        curses.init_pair(8, curses.COLOR_WHITE, curses.COLOR_GREEN)
-        curses.init_pair(9, curses.COLOR_WHITE, curses.COLOR_RED)
+        curses.init_pair(9, curses.COLOR_WHITE, curses.COLOR_GREEN)
+        curses.init_pair(10, curses.COLOR_WHITE, curses.COLOR_RED)
 
         # intro
-        curses.init_pair(10, curses.COLOR_BLACK, curses.COLOR_BLUE )
+        curses.init_pair(11, curses.COLOR_BLACK, curses.COLOR_BLUE )
 
 
     @staticmethod
@@ -59,7 +62,7 @@ class ColorPalette(object):
         elif colorType is ColorType.sprite: # only init?
             color = curses.color_pair(1)
         elif colorType is ColorType.specktexture:
-            color = curses.color_pair(1)
+            color = curses.color_pair(8) | curses.A_BOLD 
         elif colorType is ColorType.worldmap:
             color = curses.color_pair(7)
         elif colorType is ColorType.scene:
@@ -87,7 +90,7 @@ class ColorPalette(object):
         if entityType is EntityType.player: 
             return curses.color_pair(7) | curses.A_BOLD 
         elif entityType is EntityType.enemy:
-            return curses.color_pair(2)
+            return curses.color_pair(5)
         elif entityType is EntityType.takedamage:
             return curses.color_pair(3)
         elif entityType is EntityType.weapon:

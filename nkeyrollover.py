@@ -134,9 +134,9 @@ class Keyrollover(object):
         n = 0
         for skill in skills.skillStatus: 
             if skills.isRdy(skill): 
-                self.win.addstr(1, basex + n, skill, curses.color_pair(8) | curses.A_BOLD)
-            else: 
                 self.win.addstr(1, basex + n, skill, curses.color_pair(9))
+            else: 
+                self.win.addstr(1, basex + n, skill, curses.color_pair(10))
 
             n += 1
 
