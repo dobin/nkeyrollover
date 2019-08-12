@@ -99,9 +99,9 @@ class Player(Character):
         # move window
         playerScreenCoords = self.viewport.getScreenCoords ( self.getLocation() )
         if playerScreenCoords.x == Config.moveBorderRight:
-            self.viewport.adjustViewport(-1)
-        if playerScreenCoords.x == Config.moveBorderLeft:
             self.viewport.adjustViewport(1)
+        if playerScreenCoords.x == Config.moveBorderLeft:
+            self.viewport.adjustViewport(-1)
 
         # walking animation
         self.advanceStep()

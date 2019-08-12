@@ -98,16 +98,18 @@ class Chase(State):
             return
 
         playerLocation = me.player.getLocation()
-
+        #playerLocationScreen = me.viewport.getScreenCoords(playerLocation)
+        
         if playerLocation.x > me.coordinates.x:
-            if me.coordinates.x < Config.columns - me.texture.width - 1:
+            if me.coordinates.x < (me.viewport.getx() + Config.columns - me.texture.width - 1):
                 me.coordinates.x += 1
                 me.direction = Direction.right
         elif playerLocation.x < me.coordinates.x: 
-            if me.coordinates.x > 1:
+            if me.coordinates.x > 1 + me.viewport.getx():
                 me.coordinates.x -= 1
                 me.direction = Direction.left
 
+        # we can walk diagonally 
         if playerLocation.y > me.coordinates.y:
             if me.coordinates.y < Config.rows - me.texture.height - 1:
                 me.coordinates.y += 1

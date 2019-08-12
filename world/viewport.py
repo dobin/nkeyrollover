@@ -16,10 +16,14 @@ class Viewport(object):
         self.viewportCoords = Coordinates()
 
     
+    def getx(self): 
+        return self.x 
+
+
     def addstr(self, y, x, char, options=None):
         # Note: This function should be as fast as possible. 
 
-        x = x + self.x # getScreenCoords() - fast version
+        x = x - self.x # getScreenCoords() - fast version
 
         if not self.isPointDrawableXY(x, y): 
             return
@@ -35,7 +39,7 @@ class Viewport(object):
         
         Note that we dont return a copy, but a reference to an internal var.
         """
-        self.viewportCoords.x = coords.x + self.x
+        self.viewportCoords.x = coords.x - self.x
         self.viewportCoords.y = coords.y
         return self.viewportCoords
 
