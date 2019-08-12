@@ -36,3 +36,4 @@ class Config:
     maxParticles = 128
     movementKeysPerSec = 20.0
     
+    version = str(0.01)
