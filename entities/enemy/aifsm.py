@@ -64,9 +64,7 @@ class Chase(State):
         me = self.brain.owner
         stateTimeRnd = random.randrange(-100 * me.enemyInfo.chaseTimeRnd, 100 * me.enemyInfo.chaseTimeRnd)
         self.setTimer( me.enemyInfo.chaseTime + (stateTimeRnd / 100) )
-        me.texture.changeAnimation(
-            CharacterAnimationType.walking, 
-            me.direction)
+        me.texture.changeAnimation(CharacterAnimationType.walking, me.direction)
 
 
     def process(self, dt):
@@ -98,16 +96,24 @@ class Chase(State):
             return
 
         playerLocation = me.player.getLocation()
-        #playerLocationScreen = me.viewport.getScreenCoords(playerLocation)
         
         if playerLocation.x > me.coordinates.x:
             if me.coordinates.x < (me.viewport.getx() + Config.columns - me.texture.width - 1):
                 me.coordinates.x += 1
-                me.direction = Direction.right
+                
+                if me.direction is not Direction.right:
+                    me.direction = Direction.right
+                    me.texture.changeAnimation(
+                        CharacterAnimationType.walking, me.direction)
+
         elif playerLocation.x < me.coordinates.x: 
             if me.coordinates.x > 1 + me.viewport.getx():
                 me.coordinates.x -= 1
-                me.direction = Direction.left
+
+                if me.direction is not Direction.left:
+                    me.direction = Direction.left
+                    me.texture.changeAnimation(
+                        CharacterAnimationType.walking, me.direction)                
 
         # we can walk diagonally 
         if playerLocation.y > me.coordinates.y:
@@ -242,11 +248,20 @@ class Wander(State):
         if playerLocation.x > me.coordinates.x:
             if me.coordinates.x < Config.columns - me.texture.width - 1:
                 me.coordinates.x += 1
-                me.direction = Direction.right
+                
+                if me.direction is not Direction.right:
+                    me.direction = Direction.right
+                    me.texture.changeAnimation(
+                        CharacterAnimationType.walking, me.direction)    
+                
         else: 
             if me.coordinates.x > 1:
                 me.coordinates.x -= 1
-                self.direction = Direction.left
+                
+                if me.direction is not Direction.left:
+                    me.direction = Direction.left
+                    me.texture.changeAnimation(
+                        CharacterAnimationType.walking, me.direction)    
 
         if playerLocation.y > me.coordinates.y:
             if me.coordinates.y < Config.rows - me.texture.height - 1:

@@ -38,7 +38,8 @@ class Enemy(Character):
             head=self.getRandomHead(), 
             body=self.getRandomBody(),
             characterType=self.characterType)
-        self.characterAttack = CharacterAttack(viewport=viewport, parentCharacter=self, isPlayer=False)
+        self.characterAttack = CharacterAttack(viewport=viewport, parentCharacter=self, 
+            isPlayer=False)
         self.name = 'Bot' + name
         self.enemyInfo = EnemyInfo()
 

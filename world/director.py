@@ -30,20 +30,12 @@ class Director(object):
     def init(self):
 
         if Config.devMode: 
-            coordinatesClose = {
-                'x': 30, 
-                'min_y': 13,
-                'max_y': 13,
-            }
-            coordinates = {
-                'x': Config.columns + 1, 
-                'min_y': Config.areaMoveable['miny'],
-                'max_y': Config.areaMoveable['maxy'],
-            }
+
             newEnemy = Enemy(viewport=self.viewport, 
                 parent=self.world.worldSprite, 
                 world=self.world, 
-                name="Enym")
+                name="Enym", 
+                characterType=CharacterType.cow)
             newEnemy.enemyMovement = Config.enemyMovement
             newEnemy.direction = Direction.right
             self.enemiesDead.append(newEnemy)
@@ -100,7 +92,20 @@ class Director(object):
                 self.enemiesAlive.remove(enemy)
 
 
-    def getRandomSpawnCoords(self, enemy): 
+    def getRandomSpawnCoords(self, enemy):
+        if Config.devMode: 
+            coordinatesClose = {
+                'x': 30, 
+                'min_y': 13,
+                'max_y': 13,
+            }
+            coordinates = Coordinates(
+                x=Config.columns + 1, 
+                y=15,
+            )
+            return coordinates
+
+
         side = random.choice([True, False])
         myx = 0
         if side: 
