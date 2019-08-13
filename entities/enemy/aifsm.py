@@ -244,31 +244,16 @@ class Wander(State):
             pass
             # TODO
 
-        playerLocation = self.destCoord       
+        playerLocation = self.destCoord
         if playerLocation.x > me.coordinates.x:
-            if me.coordinates.x < Config.columns - me.texture.width - 1:
-                me.coordinates.x += 1
-                
-                if me.direction is not Direction.right:
-                    me.direction = Direction.right
-                    me.texture.changeAnimation(
-                        CharacterAnimationType.walking, me.direction)    
-                
-        else: 
-            if me.coordinates.x > 1:
-                me.coordinates.x -= 1
-                
-                if me.direction is not Direction.left:
-                    me.direction = Direction.left
-                    me.texture.changeAnimation(
-                        CharacterAnimationType.walking, me.direction)    
+            me.move(x=1, y=0)
+        elif playerLocation.x < me.coordinates.x: 
+            me.move(x=-1, y=0)
 
         if playerLocation.y > me.coordinates.y:
-            if me.coordinates.y < Config.rows - me.texture.height - 1:
-                me.coordinates.y += 1
-        else: 
-            if me.coordinates.y > 2:
-                me.coordinates.y -= 1
+            me.move(x=0, y=1)
+        elif playerLocation.y < me.coordinates.y: 
+            me.move(x=0, y=-1)
 
 
 class Dying(State):

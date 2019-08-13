@@ -88,6 +88,34 @@ class Enemy(Character):
             self.brain.push('dying')
 
 
+    def move(self, x=0, y=0):
+        if x > 0:
+            if self.coordinates.x < Config.columns - self.texture.width - 1:
+                self.coordinates.x += 1
+                
+                if self.direction is not Direction.right:
+                    self.direction = Direction.right
+                    self.texture.changeAnimation(
+                        CharacterAnimationType.walking, self.direction)  
+
+        elif x < 0:
+            if self.coordinates.x > 1:
+                self.coordinates.x -= 1
+                if self.direction is not Direction.left:
+                    self.direction = Direction.left
+                    self.texture.changeAnimation(
+                        CharacterAnimationType.walking, self.direction)    
+
+        if y > 0:
+            if self.coordinates.y < Config.rows - self.texture.height - 1:
+                self.coordinates.y += 1
+        
+        elif y < 0:
+            if self.coordinates.y > 2:
+                self.coordinates.y -= 1
+
+
+
     def canReachPlayer(self): 
         return Utility.pointInSprite(self.characterAttack.getLocation(), self.player)
 

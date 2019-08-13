@@ -67,18 +67,6 @@ class Player(Character):
         self.setColorFor( 1.0 - 1.0/damage , EntityType.takedamage)
 
 
-    def getInput(self):
-        gotInput = False
-        key = self.viewport.win.getch()
-        while key != -1:
-            gotInput = True
-            self.characterStatus.handleKeyPress(time=self.world.getGameTime())
-            self.handleInput(key)
-            key = self.viewport.win.getch()
-
-        return gotInput
-
-
     def announce(self, damage, particleEffectType): 
         text = ''
         if particleEffectType is ParticleEffectType.laser:
@@ -93,6 +81,70 @@ class Player(Character):
 
         if damage > Config.announceDamage: 
             self.speechTexture.changeAnimation(text)
+
+
+    def move(self, x=0, y=0):
+        if x < 0:
+            if Utility.isPointMovable(
+                self.coordinates.x - 1, 
+                self.coordinates.y, 
+                self.texture.width, 
+                self.texture.height
+            ):
+                self.coordinates.x -= 1
+                self.direction = Direction.left
+                self.movePlayer()
+        elif x > 0: 
+            if Utility.isPointMovable(
+                self.coordinates.x + 1, 
+                self.coordinates.y, 
+                self.texture.width, 
+                self.texture.height
+            ):
+                self.coordinates.x += 1
+                self.direction = Direction.right
+                self.movePlayer()
+
+        if y < 0:
+            if Config.moveDiagonal:
+                if Utility.isPointMovable(
+                    self.coordinates.x + 1, 
+                    self.coordinates.y - 1, 
+                    self.texture.width, 
+                    self.texture.height
+                ):
+                    self.coordinates.y -= 1
+                    self.coordinates.x += 1
+                    self.movePlayer()
+            else: 
+                if Utility.isPointMovable(
+                    self.coordinates.x, 
+                    self.coordinates.y - 1, 
+                    self.texture.width, 
+                    self.texture.height
+                ):
+                    self.coordinates.y -= 1
+                    self.movePlayer()
+        if y > 0: 
+            if Config.moveDiagonal:
+                if Utility.isPointMovable(
+                    self.coordinates.x - 1, 
+                    self.coordinates.y + 1, 
+                    self.texture.width, 
+                    self.texture.height
+                ):
+                    self.coordinates.y += 1
+                    self.coordinates.x -= 1
+                    self.movePlayer()
+            else:
+                if Utility.isPointMovable(
+                    self.coordinates.x, 
+                    self.coordinates.y + 1, 
+                    self.texture.width, 
+                    self.texture.height
+                ):
+                    self.coordinates.y += 1
+                    self.movePlayer()
 
 
     def movePlayer(self):
@@ -162,49 +214,42 @@ class Player(Character):
             if key == ord('r'):
                 self.skills.doSkill('r')
 
-            if key == curses.KEY_LEFT:
-                if self.movementTimer.timeIsUp(): 
-                    self.movementTimer.reset()
+            if self.movementTimer.timeIsUp(): 
+                if key == curses.KEY_LEFT:
+                    self.move(x=-1, y=0)
+                    return True
 
-                    if Utility.isPointMovable(self.coordinates.x - 1, self.coordinates.y, self.texture.width, self.texture.height):
-                        self.coordinates.x = self.coordinates.x - 1
-                        self.direction = Direction.left
-                        self.movePlayer()
-                    
-            elif key == curses.KEY_RIGHT: 
-                if self.movementTimer.timeIsUp(): 
-                    self.movementTimer.reset()                
-                    if Utility.isPointMovable(self.coordinates.x + 1, self.coordinates.y, self.texture.width, self.texture.height):
-                        self.coordinates.x = self.coordinates.x + 1
-                        self.direction = Direction.right
-                        self.movePlayer()
+                elif key == curses.KEY_RIGHT: 
+                    self.move(x=1, y=0)
+                    return True
 
-            elif key == curses.KEY_UP:
-                if self.movementTimer.timeIsUp(): 
-                    self.movementTimer.reset()                
-                    if Config.moveDiagonal:
-                        if Utility.isPointMovable(self.coordinates.x +1 , self.coordinates.y - 1, self.texture.width, self.texture.height):
-                            self.coordinates.y = self.coordinates.y - 1
-                            self.coordinates.x = self.coordinates.x + 1
-                            self.movePlayer()
+                elif key == curses.KEY_UP:
+                    self.move(x=0, y=-1)
+                    return True
 
-                    else: 
-                        if Utility.isPointMovable(self.coordinates.x, self.coordinates.y - 1, self.texture.width, self.texture.height):
-                            self.coordinates.y = self.coordinates.y - 1
-                            self.movePlayer()
+                elif key == curses.KEY_DOWN: 
+                    self.move(x=0, y=1)
+                    return True
 
-            elif key == curses.KEY_DOWN: 
-                if self.movementTimer.timeIsUp(): 
-                    self.movementTimer.reset()
-                    if Config.moveDiagonal:
-                        if Utility.isPointMovable(self.coordinates.x - 1, self.coordinates.y + 1, self.texture.width, self.texture.height):
-                            self.coordinates.y = self.coordinates.y + 1
-                            self.coordinates.x = self.coordinates.x - 1
-                            self.movePlayer()
-                    else:
-                        if Utility.isPointMovable(self.coordinates.x, self.coordinates.y + 1, self.texture.width, self.texture.height):
-                            self.coordinates.y = self.coordinates.y + 1
-                            self.movePlayer()
+
+    def getInput(self):
+        gotInput = False
+        didMove = False
+        key = self.viewport.win.getch()
+        while key != -1:
+            gotInput = True
+            self.characterStatus.handleKeyPress(time=self.world.getGameTime())
+            didMoveTmp = self.handleInput(key)
+            if didMoveTmp: 
+                didMove = True
+            key = self.viewport.win.getch()
+
+        # to allow diagonal movement, we allow multiple movement keys per input
+        # cycle, without resetting the timer.
+        if didMove: 
+            self.movementTimer.reset()
+        
+        return gotInput
 
 
     def advance(self, deltaTime):

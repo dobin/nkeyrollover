@@ -49,6 +49,10 @@ class Character(Entity):
         raise NotImplementedError('subclasses must override this abstract method')
 
 
+    def move(self, x=None, y=None):
+        raise NotImplementedError('subclasses must override this abstract method')
+
+
     def draw(self):
         super(Character, self).draw()
         self.speechTexture.draw(self.viewport)
