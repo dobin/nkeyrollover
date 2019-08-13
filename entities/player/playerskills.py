@@ -134,11 +134,11 @@ class PlayerSkills(object):
 
 
     def skillExplosion(self): 
-        self.player.world.particleEmiter.emit(
-            self.player.getLocationCenter(), 
-            ParticleEffectType.explosion)
-
         locCenter = self.player.getLocationCenter()
+
+        self.player.world.particleEmiter.emit(
+            locCenter, 
+            ParticleEffectType.explosion)
         hitLocations = Utility.getBorder(locCenter)
 
         damage = self.hitCollisionDetection(hitLocations, weaponType=WeaponType.explosion)

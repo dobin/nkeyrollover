@@ -4,6 +4,7 @@ import random
 import curses
 import logging
 from enum import Enum
+import copy
 
 from config import Config
 from entities.entity import Entity
@@ -79,7 +80,8 @@ class Character(Entity):
 
     
     def getLocationCenter(self): 
-        loc = self.getLocation()
+        # slow, but its currently only used by rare events like skillExplosion
+        loc = copy.copy(self.getLocation())
         loc.x += 1
         loc.y += 1
         return loc
