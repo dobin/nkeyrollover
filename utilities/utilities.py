@@ -84,6 +84,7 @@ class Utility(object):
 
         return locs 
 
+
     @staticmethod
     def getBorderHalf(loc :Coordinates, distance :int =1, width :int =1, partRight=True):
         locs = []
@@ -114,6 +115,7 @@ class Utility(object):
 
         return locs
 
+
     @staticmethod
     def setupLogger():
         # RECORD debug level is used to record/indicate statistical relevant
@@ -124,4 +126,12 @@ class Utility(object):
             if self.isEnabledFor(DEBUG_LEVELV_NUM):
                 # Yes, logger takes its '*args' as 'args'.
                 self._log(DEBUG_LEVELV_NUM, message, args, **kws) 
-        logging.Logger.record = __record   
+        logging.Logger.record = __record
+
+
+    @staticmethod
+    def isIdentical(coord1 :Coordinates, coord2: Coordinates) -> bool:
+        if coord1.x == coord2.x and coord1.y == coord2.y: 
+            return True
+        else:
+            return False

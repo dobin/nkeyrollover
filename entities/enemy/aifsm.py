@@ -8,6 +8,7 @@ from utilities.timer import Timer
 from sprite.direction import Direction
 from config import Config
 from sprite.coordinates import Coordinates
+from utilities.utilities import Utility
 
 logger = logging.getLogger(__name__)
 
@@ -179,37 +180,18 @@ class Wander(State):
     def __init__(self, brain):
         State.__init__(self, brain)
         self.lastInputTimer = Timer( self.brain.owner.enemyInfo.wanderStepDelay, instant=True )
-        self.destCoords = Coordinates()
+        self.destCoord = Coordinates()
         self.destIsPoint = False
 
 
     def on_enter(self):
         me = self.brain.owner
         me.texture.changeAnimation(CharacterAnimationType.walking, me.direction)
-        stateTimeRnd = random.randrange(-100 * me.enemyInfo.wanderTimeRnd, 100 * me.enemyInfo.wanderTimeRnd)
-        self.setTimer( me.enemyInfo.wanderTime + (stateTimeRnd / 100) )        
-
-        # if true:  go to a static point close to the current enemy position
-        # if false: go to a point relative to the enemy
-        self.destIsPoint = random.choice([True, False])
-        self.destCoord = self.pickDestAroundPlayer( me.player.getLocation() )
-
-
-    def pickDestAroundPlayer(self, coord :Coordinates):
-        ptRight = random.choice([True, False])
-        ptDown = random.choice([True, False])
-
-        if ptRight: 
-            coord.x += 6
-        else: 
-            coord.x -= 6
-
-        if ptDown: 
-            coord.y += 4
-        else: 
-            coord.y -= 4
-
-        return coord
+        stateTimeRnd = random.randrange(
+            -100 * me.enemyInfo.wanderTimeRnd, 
+            100 * me.enemyInfo.wanderTimeRnd)
+        self.setTimer( me.enemyInfo.wanderTime + (stateTimeRnd / 100) )
+        self.chooseDestination()
 
 
     def process(self, dt):
@@ -230,6 +212,10 @@ class Wander(State):
             self.brain.pop()
             self.brain.push("chase")
 
+        elif Utility.isIdentical(me.getLocation(), self.destCoord):
+            # No reset of wander state atm, just a new location
+            self.chooseDestination()
+
 
     def getInputWander(self):
         me = self.brain.owner
@@ -240,20 +226,47 @@ class Wander(State):
         if not me.enemyMovement: 
             return
 
-        if not self.destIsPoint:
-            pass
-            # TODO
-
-        playerLocation = self.destCoord
-        if playerLocation.x > me.coordinates.x:
+        if self.destCoord.x > me.coordinates.x:
             me.move(x=1, y=0)
-        elif playerLocation.x < me.coordinates.x: 
+        elif self.destCoord.x < me.coordinates.x: 
             me.move(x=-1, y=0)
 
-        if playerLocation.y > me.coordinates.y:
+        if self.destCoord.y > me.coordinates.y:
             me.move(x=0, y=1)
-        elif playerLocation.y < me.coordinates.y: 
+        elif self.destCoord.y < me.coordinates.y: 
             me.move(x=0, y=-1)
+
+
+    def chooseDestination(self): 
+        me = self.brain.owner
+        # if true:  go to a static point close to the current enemy position
+        # if false: go to a point relative to the enemy
+        #self.destIsPoint = random.choice([True, False])
+
+        # note that getLocation() will return a reference. we need to copy it here.
+        self.destCoord.x = me.player.getLocation().x
+        self.destCoord.y = me.player.getLocation().y
+        self.destCoord = self.pickDestAroundPlayer( self.destCoord )
+        if Config.showEnemyWanderDest:
+            me.world.textureEmiter.showCharAtPos(
+                char='x', timeout=self.timer, coordinate=self.destCoord)
+
+
+    def pickDestAroundPlayer(self, coord :Coordinates):
+        ptRight = random.choice([True, False])
+        ptDown = random.choice([True, False])
+
+        if ptRight: 
+            coord.x += 6 + random.randint(0, 2)
+        else: 
+            coord.x -= 6 + random.randint(0, 2)
+
+        if ptDown: 
+            coord.y += 4 + random.randint(0, 2)
+        else: 
+            coord.y -= 4 + random.randint(0, 2)
+
+        return coord
 
 
 class Dying(State):
@@ -269,7 +282,7 @@ class Dying(State):
         if random.choice([True, False]): 
             logger.info(self.name + " Death animation deluxe")
             animationIndex = random.randint(0, 1)
-            me.world.makeExplode(me.texture, me.direction, None)
+            me.world.textureEmiter.makeExplode(me.texture, me.direction, None)
             me.texture.changeAnimation(CharacterAnimationType.dying, me.direction, animationIndex)
             me.setActive(False)
         else: 

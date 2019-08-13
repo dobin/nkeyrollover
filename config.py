@@ -29,11 +29,12 @@ class Config:
     }
 
     devMode = False
-    enemyMovement = True
+    enemyMovement = True # freeze enemies for tests
+    showEnemyWanderDest = True
 
-    moveDiagonal = False
+    moveDiagonal = False # instead of up/down
 
-    announceDamage = 350
+    announceDamage = 350 # min amount of damage done
     maxParticles = 128
     movementKeysPerSec = 20.0
     
