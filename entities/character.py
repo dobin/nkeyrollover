@@ -76,12 +76,13 @@ class Character(Entity):
 
 
     def getRandomBody(self): 
-        return random.choice([ 'X', 'o', 'O', 'v', 'V'])
+        return random.choice([ 'X', 'o', 'O', 'v', 'V', 'M', 'm' ])
 
     
     def getLocationCenter(self): 
         # slow, but its currently only used by rare events like skillExplosion
         loc = copy.copy(self.getLocation())
-        loc.x += 1
-        loc.y += 1
+        # this will round down
+        loc.x += int(self.texture.width / 2)
+        loc.y += int(self.texture.height / 2)
         return loc
