@@ -300,7 +300,6 @@ class CharacterAnimationManager(object):
             animation.arr = fileAnimation['arr']
             if direction is Direction.left: 
                 self.mirrorFrames(animation.arr)
-
             animation.frameCount = 1
             animation.frameTime = []
             animation.advanceByStep = False
@@ -321,10 +320,7 @@ class CharacterAnimationManager(object):
                 self.mirrorFrames(animation.arr)
 
             animation.frameCount = 2
-            animation.frameTime = [
-                0.01, 
-                0.01
-            ]
+            animation.frameTime = None
             animation.endless = True
             animation.advanceByStep = True
 
@@ -427,3 +423,8 @@ class CharacterAnimationManager(object):
                 if len(line) != animation.width:
                     raise Exception("Animation {} / {} invalid: width={}, but array contains {}"
                         .format(self.characterType, animationType.name, animation.width, len(line)))
+
+        if animation.advanceByStep and animation.frameTime != None: 
+            raise Exception("Animation {} / {} advanceByStep=True, but frameTime array given"
+                .format(self.characterType, animationType.name))
+
