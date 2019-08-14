@@ -98,11 +98,8 @@ class CharacterAnimationManager(object):
             animation = Animation()
             animation.width = 3
             animation.height = 3
-            animation.frameCount = 2
-            animation.frameTime = [
-                0.01, 
-                0.01
-            ]
+            animation.frameCount = 4
+            animation.frameTime = None # by step
             animation.endless = True
             animation.advanceByStep = True
 
@@ -111,25 +108,45 @@ class CharacterAnimationManager(object):
                     [
                         [ '', 'o', '' ],
                         [ '/', '|', '\\'],
+                        [ '', '>', '\\']
+                    ],
+                    [
+                        [ '', 'o', '' ],
+                        [ '/', '|', '\\'],
                         [ '', '|', '\\']
                     ],
                     [
                         [ '', 'o', '' ],
                         [ '/', '|', '\\'],
-                        [ '/', '|', '']
-                    ]                
+                        [ '', '|', '>']
+                    ],
+                    [
+                        [ '', 'o', '' ],
+                        [ '/', '|', '\\'],
+                        [ '/', '', '\\']
+                    ]                    
                 ]
             else: 
                 animation.arr = [
                     [
                         [ '', 'o', '' ],
                         [ '/', '|', '\\'],
+                        [ '/', '<', '']
+                    ],
+                    [
+                        [ '', 'o', '' ],
+                        [ '/', '|', '\\'],
                         [ '/', '|', '']
                     ],
                     [
                         [ '', 'o', '' ],
                         [ '/', '|', '\\'],
-                        [ '', '|', '\\']
+                        [ '<', '|', '']
+                    ],
+                    [
+                        [ '', 'o', '' ],
+                        [ '/', '|', '\\'],
+                        [ '/', '', '\\']
                     ]
                 ]
             animations.append(animation)            

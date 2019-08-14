@@ -29,6 +29,10 @@ class Texture(object):
         pass
 
 
+    def advanceStep(self):
+        pass
+        
+
     def setActive(self, active :bool): 
         self.active = active
 

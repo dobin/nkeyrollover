@@ -78,12 +78,12 @@ class Player(Character):
         if particleEffectType is ParticleEffectType.explosion:
             text = 'Boom baby!'
 
-
         if damage > Config.announceDamage: 
             self.speechTexture.changeAnimation(text)
 
 
     def move(self, x=0, y=0):
+        currentDirection = self.direction
         if x < 0:
             if Utility.isPointMovable(
                 self.coordinates.x - 1, 
@@ -93,7 +93,7 @@ class Player(Character):
             ):
                 self.coordinates.x -= 1
                 self.direction = Direction.left
-                self.movePlayer()
+                self.movePlayer( currentDirection == self.direction )
         elif x > 0: 
             if Utility.isPointMovable(
                 self.coordinates.x + 1, 
@@ -103,7 +103,7 @@ class Player(Character):
             ):
                 self.coordinates.x += 1
                 self.direction = Direction.right
-                self.movePlayer()
+                self.movePlayer( currentDirection == self.direction )
 
         if y < 0:
             if Config.moveDiagonal:
@@ -115,7 +115,7 @@ class Player(Character):
                 ):
                     self.coordinates.y -= 1
                     self.coordinates.x += 1
-                    self.movePlayer()
+                    self.movePlayer( currentDirection == self.direction )
             else: 
                 if Utility.isPointMovable(
                     self.coordinates.x, 
@@ -124,7 +124,7 @@ class Player(Character):
                     self.texture.height
                 ):
                     self.coordinates.y -= 1
-                    self.movePlayer()
+                    self.movePlayer( currentDirection == self.direction )
         if y > 0: 
             if Config.moveDiagonal:
                 if Utility.isPointMovable(
@@ -135,7 +135,7 @@ class Player(Character):
                 ):
                     self.coordinates.y += 1
                     self.coordinates.x -= 1
-                    self.movePlayer()
+                    self.movePlayer( currentDirection == self.direction )
             else:
                 if Utility.isPointMovable(
                     self.coordinates.x, 
@@ -144,16 +144,20 @@ class Player(Character):
                     self.texture.height
                 ):
                     self.coordinates.y += 1
-                    self.movePlayer()
+                    self.movePlayer( currentDirection == self.direction )
 
 
-    def movePlayer(self):
+    def movePlayer(self, sameDirection):
         # move window
         playerScreenCoords = self.viewport.getScreenCoords ( self.getLocation() )
         if playerScreenCoords.x == Config.moveBorderRight:
             self.viewport.adjustViewport(1)
         if playerScreenCoords.x == Config.moveBorderLeft:
             self.viewport.adjustViewport(-1)
+
+        if not sameDirection:
+            self.texture.changeAnimation(
+                CharacterAnimationType.walking, self.direction)
 
         # walking animation
         self.advanceStep()

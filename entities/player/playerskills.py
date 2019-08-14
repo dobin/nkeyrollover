@@ -135,7 +135,6 @@ class PlayerSkills(object):
 
     def skillExplosion(self): 
         locCenter = self.player.getLocationCenter()
-
         self.player.world.particleEmiter.emit(
             locCenter, 
             ParticleEffectType.explosion)
