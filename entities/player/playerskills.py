@@ -138,7 +138,7 @@ class PlayerSkills(object):
         self.player.world.particleEmiter.emit(
             locCenter, 
             ParticleEffectType.explosion)
-        hitLocations = Utility.getBorder(locCenter)
+        hitLocations = Utility.getBorder(locCenter, distance=4, thicc=2)
 
         damage = self.hitCollisionDetection(hitLocations, weaponType=WeaponType.explosion)
         self.player.announce(damage=damage, particleEffectType=ParticleEffectType.explosion)

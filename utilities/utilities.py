@@ -58,7 +58,7 @@ class Utility(object):
 
 
     @staticmethod
-    def getBorder(loc :Coordinates, distance :int =1, width :int =1):
+    def getBorder(loc :Coordinates, distance :int =1, width :int =1, thicc :int =1):
         locs = []
 
         basex = loc.x - distance 
@@ -72,12 +72,12 @@ class Utility(object):
         while y <= basey + dd:
             x = basex
             while x <= basex + dd:
-                if y == basey or y == basey + dd: 
+                if y >= basey and y <= basey + dd + thicc: 
                     locs.append( Coordinates(
                         x = x,
                         y = y
                     ))
-                elif x == basex or x == basex + dd:
+                elif x >= basex and x <= basex + dd + thicc:
                     locs.append( Coordinates(
                         x = x,
                         y = y
