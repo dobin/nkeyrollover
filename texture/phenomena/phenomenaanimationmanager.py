@@ -72,16 +72,16 @@ class PhenomenaAnimationManager(object):
             animation.arr = [
                 [
                     [ 'O', 'O' ],
-                    [ 'O', 'O' ],                    
-                ],
-                [
-                    [ 'O', 'O' ],
                     [ 'O', 'O' ],
                 ],
                 [
-                    [ 'O', 'O' ],
-                    [ 'O', 'O' ],
-                ]                                
+                    [ 'o', 'o' ],
+                    [ 'o', 'o' ],
+                ],
+                [
+                    [ '.', '.' ],
+                    [ '.', '.' ],
+                ]
             ]
 
         if phenomenaType is PhenomenaType.hitLine:

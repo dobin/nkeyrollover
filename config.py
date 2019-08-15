@@ -38,4 +38,7 @@ class Config:
     maxParticles = 128
     movementKeysPerSec = 20.0
     
-    version = str(0.01)
+    # cooldown. 0.2 is actually lower than whats possible, even with 100fps
+    playerAttacksCd = 0.3 # was: 0.2
+
+    version = str(0.02)

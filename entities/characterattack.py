@@ -35,8 +35,7 @@ class CharacterAttack(Entity):
         self.durationTimer.setTimer( self.texture.getAnimationTime() )
         self.durationTimer.reset()
 
-        # cooldown. 0.2 is actually lower than whats possible, even with 100fps
-        self.cooldownTimer :Timer =Timer(0.2, instant=True)
+        self.cooldownTimer :Timer =Timer(Config.playerAttacksCd, instant=True)
 
         self.setActive(False)
         self.weaponType :WeaponType = WeaponType.hit
