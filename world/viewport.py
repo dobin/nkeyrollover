@@ -20,13 +20,14 @@ class Viewport(object):
         return self.x 
 
 
-    def addstr(self, y, x, char, options=None):
+    def addstr(self, y, x, char, options=None, knownDrawable=False):
         # Note: This function should be as fast as possible. 
 
         x = x - self.x # getScreenCoords() - fast version
 
-        if not self.isPointDrawableXY(x, y): 
-            return
+        if not knownDrawable:
+            if not self.isPointDrawableXY(x, y): 
+                return
 
         if options is None:
             self.win.addstr(y, x, char)

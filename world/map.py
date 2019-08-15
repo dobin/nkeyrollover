@@ -7,7 +7,7 @@ from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
 import utilities.xp_loader as xp_loader
 from utilities.color import Color
-
+import utilities.ansitounicode as ansitounicode
 
 class Map(object): 
     """Draws the map on the screen"""
@@ -18,7 +18,7 @@ class Map(object):
         self.world = world
         self.xpmap = None
         self.color = ColorPalette.getColorByColor(Color.grey)
-        self.openMap('texture/textures/map/test4.xp')
+        self.openMap('texture/textures/map/test5.xp')
 
 
     def advance(self): 
@@ -43,8 +43,9 @@ class Map(object):
             while y < 24:
                 cell_data = xp_file_layer['cells'][x][y]
                 if cell_data != 32: # dont print empty (space " ") cells
-                    char = chr(cell_data['keycode'])
-                    self.viewport.addstr(y, x, char, self.color)
+                    char = cell_data['keycode']
+                    self.viewport.addstr(
+                        y=y, x=x, char=char, options=self.color, knownDrawable=True)
                 y += 1
             x += 1
 
@@ -70,4 +71,16 @@ class Map(object):
 
         xpData = xp_loader.load_xp_string(data)
         self.xpmap = xpData
-        
+        #logging.info(str(xpData))
+
+        self.convertToUnicode()
+
+    def convertToUnicode(self): 
+        xp_file_layer = self.xpmap['layer_data'][0]
+        for x in range(xp_file_layer['width']):
+            for y in range(xp_file_layer['height']):  
+                char = xp_file_layer['cells'][x][y]['keycode']
+                xp_file_layer['cells'][x][y]['keycode'] = chr(ansitounicode.getUnicode(char))
+
+
+    
