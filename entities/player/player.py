@@ -5,7 +5,6 @@ import logging
 from enum import Enum
 
 from ai.brain import Brain
-import entities.player.playerfsm as playerfsm
 from world.particleeffecttype import ParticleEffectType
 from utilities.utilities import Utility
 from config import Config
@@ -26,6 +25,12 @@ from utilities.timer import Timer
 from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
 from utilities.color import Color
+from .state_attack import StateAttack
+from .state_dying import StateDying
+from .state_idle import StateIdle
+from .state_spawn import StateSpawn
+from .state_walking import StateWalking
+
 
 logger = logging.getLogger(__name__)
 
@@ -56,10 +61,10 @@ class Player(Character):
     def initAi(self):
         self.brain = Brain(self)
 
-        self.brain.register(playerfsm.Idle)
-        self.brain.register(playerfsm.Spawn)
-        self.brain.register(playerfsm.Attack)
-        self.brain.register(playerfsm.Walking)
+        self.brain.register(StateIdle)
+        self.brain.register(StateSpawn)
+        self.brain.register(StateAttack)
+        self.brain.register(StateWalking)
         self.brain.push("spawn")
 
 
