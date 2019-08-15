@@ -30,11 +30,12 @@ class Map(object):
 
 
     def drawXp(self):
+        # Note: This function should be as fast as possible.
         xp_file_layer = self.xpmap['layer_data'][0]
-        if not xp_file_layer['width'] or not xp_file_layer['height']:
-            raise AttributeError('Attempted to call load_layer_to_console on data that didn\'t have a width or height key, check your data')
-
-        x = self.viewport.getx()
+        # performance...
+        #if not xp_file_layer['width'] or not xp_file_layer['height']:
+        #    raise AttributeError('Attempted to call load_layer_to_console on data that didn\'t have a width or height key, check your data')
+        x = self.viewport.getx() + 1
         maxx = x + 78
         while x < maxx:
         #for x in range(xp_file_layer['width']):

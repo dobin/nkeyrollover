@@ -20,8 +20,8 @@ class Config:
         'maxx': 79
     }
 
-    moveBorderRight = 76
-    moveBorderLeft = 4
+    moveBorderRight = 70
+    moveBorderLeft = 8
 
     playerSpawnPoint = {
         'x': 24,

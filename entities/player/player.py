@@ -158,9 +158,9 @@ class Player(Character):
     def movePlayer(self, sameDirection):
         # move window
         playerScreenCoords = self.viewport.getScreenCoords ( self.getLocation() )
-        if playerScreenCoords.x == Config.moveBorderRight:
+        if playerScreenCoords.x >= Config.moveBorderRight:
             self.viewport.adjustViewport(1)
-        if playerScreenCoords.x == Config.moveBorderLeft:
+        if playerScreenCoords.x <= Config.moveBorderLeft:
             self.viewport.adjustViewport(-1)
 
         if not sameDirection:
