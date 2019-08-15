@@ -1,7 +1,7 @@
 
 
 class Config:
-    fps = 100
+    fps = 60
 
     rows = 25
     columns = 80
