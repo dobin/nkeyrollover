@@ -1,7 +1,6 @@
 import random
 import logging
 
-import entities.enemy.aifsm as aifsm
 from config import Config
 from utilities.timer import Timer
 from utilities.utilities import Utility
@@ -20,6 +19,13 @@ from texture.character.charactertype import CharacterType
 from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
 from utilities.color import Color
+from .state_attack import StateAttack
+from .state_attackwindup import StateAttackWindup
+from .state_chase import StateChase
+from .state_dying import StateDying
+from .state_idle import StateIdle
+from .state_spawn import StateSpawn
+from .state_wander import StateWander
 
 logger = logging.getLogger(__name__)
 
@@ -52,13 +58,13 @@ class Enemy(Character):
     def initAi(self): 
         self.brain = Brain(self)
 
-        self.brain.register(aifsm.Idle)
-        self.brain.register(aifsm.Spawn)
-        self.brain.register(aifsm.Attack)
-        self.brain.register(aifsm.Chase)
-        self.brain.register(aifsm.Wander)
-        self.brain.register(aifsm.Dying)
-        self.brain.register(aifsm.AttackWindup)
+        self.brain.register(StateIdle)
+        self.brain.register(StateSpawn)
+        self.brain.register(StateAttack)
+        self.brain.register(StateChase)
+        self.brain.register(StateWander)
+        self.brain.register(StateDying)
+        self.brain.register(StateAttackWindup)
         self.brain.push("spawn")
 
 
