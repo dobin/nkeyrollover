@@ -17,7 +17,7 @@ class StaticTexture(Texture):
 
         self.char = char
         self.timer = Timer(time)
-        self.color = color
+        self.color = ColorPalette.getColorByColor(color)
 
 
     def advance(self, deltaTime):

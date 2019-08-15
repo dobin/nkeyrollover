@@ -250,7 +250,7 @@ class Wander(State):
         self.destCoord = self.pickDestAroundPlayer( self.destCoord )
         if Config.showEnemyWanderDest:
             me.world.textureEmiter.showCharAtPos(
-                char='💩', timeout=self.timer, coordinate=self.destCoord, color=Color.grey)
+                char='.', timeout=self.timer, coordinate=self.destCoord, color=Color.grey)
 
 
     def pickDestAroundPlayer(self, coord :Coordinates):
