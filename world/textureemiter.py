@@ -60,13 +60,24 @@ class TextureEmiter(object):
                 y = pos.y + y,
             )
 
+            timeArr = [ 
+                0.1, 
+                0.1, 
+                0.1 
+            ]
+            colorArr = [ 
+                ColorPalette.getColorByColor( Color.brightyellow ),
+                ColorPalette.getColorByColor( Color.yellow ),
+                ColorPalette.getColorByColor( Color.grey ),
+            ]
+
             speckTexture = SpeckTexture(
-                char, 
-                c,
-                movementX, 
-                movementY, 
-                [ 0.1, 0.1, 0.1 ], 
-                1)
+                char=char, 
+                coordinate=c,
+                movementX=movementX, 
+                movementY=movementY, 
+                timeArr=timeArr, 
+                colorArr=colorArr)
             self.addTexture(speckTexture)
 
         # push away
@@ -81,13 +92,26 @@ class TextureEmiter(object):
                 y = pos.y + y,
             )
 
+            timeArr = [ 
+                0.05, 
+                0.1, 
+                0.2, 
+                0.4 
+            ]
+            colorArr = [ 
+                ColorPalette.getColorByColor( Color.white ),
+                ColorPalette.getColorByColor( Color.white ),
+                ColorPalette.getColorByColor( Color.grey ),
+                ColorPalette.getColorByColor( Color.grey ),
+            ]
+
             speckTexture = SpeckTexture(
-                char, 
-                c,
-                d * 2, 
-                0, 
-                [ 0.05, 0.1, 0.2, 0.4 ], 
-                2 )
+                char=char, 
+                coordinate=c,
+                movementX = d * 2, 
+                movementY = 0, 
+                timeArr=timeArr, 
+                colorArr=colorArr)
             self.addTexture(speckTexture)
 
 
