@@ -33,7 +33,7 @@ class World(object):
         self.director.init()
         self.particleEmiter :ParticleEmiter = ParticleEmiter(viewport=self.viewport)
         self.textureEmiter :TextureEmiter = TextureEmiter(viewport=self.viewport)
-        self.map :Map = Map(win=win, world=self)
+        self.map :Map = Map(viewport=self.viewport, world=self)
         
         self.pause :bool = False
         self.gameRunning :bool = True
