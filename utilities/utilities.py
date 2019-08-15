@@ -19,7 +19,6 @@ class Utility(object):
             'y': 0,
             'sum': 0,
         }
-
         res['x'] = abs(coord1.x - coord2.x)
         res['y'] = abs(coord1.y - coord2.y)
         res['sum'] = res['x'] + res['y']
@@ -60,12 +59,9 @@ class Utility(object):
     @staticmethod
     def getBorder(loc :Coordinates, distance :int =1, width :int =1, thicc :int =1):
         locs = []
-
         basex = loc.x - distance 
         basey = loc.y - distance
-
         dd = distance * 2
-
         y = basey
         x = basex
 
@@ -91,17 +87,13 @@ class Utility(object):
     @staticmethod
     def getBorderHalf(loc :Coordinates, distance :int =1, width :int =1, partRight=True):
         locs = []
-
         basex = loc.x - distance 
         basey = loc.y - distance
-
         dd = distance * 2
-
         y = basey
         x = basex
         while y <= basey + dd:
             x = basex
-            
             while x <= basex + dd:
                 if y == basey or y == basey + dd: 
                     locs.append( Coordinates(
@@ -115,7 +107,6 @@ class Utility(object):
                     ))
                 x += 1
             y += 1
-
         return locs
 
 
@@ -148,7 +139,6 @@ class Utility(object):
         if len(animation.arr) != animation.frameCount:
             raise Exception("Animation {} / {} invalid: frameCount={}, but array contains {}"
                 .format(characterType, animationType.name, animation.frameCount, len(animation.arr)))
-
 
         for a in animation.arr:
             if len(a) != animation.height:
