@@ -250,7 +250,7 @@ class CharacterAnimationManager(object):
                 animation.frameTime = None
                 animation.endless = True
                 animation.frameColors = [
-                    color,
+                    ColorPalette.getColorByColor(Color.grey),
                 ]   
                 if n == 0:
                     animation.arr = [
