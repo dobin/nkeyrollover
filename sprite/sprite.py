@@ -7,6 +7,8 @@ from sprite.direction import Direction
 from world.viewport import Viewport
 from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
+from utilities.timer import Timer
+from utilities.color import Color
 
 logger = logging.getLogger(__name__)
 
@@ -33,16 +35,21 @@ class Sprite(object):
 
         self.active = True
         self.rendered = True
-        self.currentColor = None
-        self.initColor()
+
+        # color related
+        self.overwriteColorTimer = Timer(0.25, active=False)
+        self.overwriteColor = None
 
 
-    def setColor(self, color): 
-        self.currentColor = color
+    def setOverwriteColorFor(self, time :float, color :Color):
+        if self.overwriteColorTimer.isActive():
+            logger.debug("Color already active on new set color")
+            return 
 
+        self.overwriteColor = color
 
-    def initColor(self): 
-        self.setColor(ColorPalette.getColorByColorType(ColorType.sprite, self.viewport))
+        self.overwriteColorTimer.setTimer(time)
+        self.overwriteColorTimer.reset()
 
 
     def getLocation(self): 
@@ -78,6 +85,12 @@ class Sprite(object):
             return
 
         self.texture.advance(deltaTime)
+
+        # reset overwrite color
+        if self.overwriteColorTimer.timeIsUp():
+            self.overwriteColor = None
+            self.overwriteColorTimer.stop()
+        self.overwriteColorTimer.advance(deltaTime)        
 
 
     def draw(self): 

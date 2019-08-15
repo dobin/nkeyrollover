@@ -6,6 +6,7 @@ from texture.animation import Animation
 from texture.filetextureloader import FileTextureLoader
 from utilities.color import Color
 from utilities.colorpalette import ColorPalette
+from utilities.utilities import Utility
 
 logger = logging.getLogger("phenomentaanimationmanager")
 
@@ -33,13 +34,19 @@ class PhenomenaAnimationManager(object):
     def createAnimation(self, phenomenaType, direction):
         animation = Animation()
 
+        weaponColor = ColorPalette.getColorByColor(Color.brightyellow)
+
         if phenomenaType is PhenomenaType.hit:
             animation.width = 1
             animation.height = 1
             animation.frameCount = 3
             animation.endless = False
             animation.advanceByStep = False
-            
+            animation.frameColors = [
+                weaponColor,
+                weaponColor,
+                weaponColor,
+            ]
             animation.frameTime = [
                 0.1,
                 0.1,
@@ -64,7 +71,11 @@ class PhenomenaAnimationManager(object):
             animation.frameCount = 3
             animation.endless = False
             animation.advanceByStep = False
-            
+            animation.frameColors = [
+                weaponColor,
+                weaponColor,
+                weaponColor,
+            ]
             animation.frameTime = [
                 0.1,
                 0.1,
@@ -92,12 +103,15 @@ class PhenomenaAnimationManager(object):
             animation.frameCount = 3
             animation.endless = False
             animation.advanceByStep = False
-            
+            animation.frameColors = [
+                weaponColor,
+                weaponColor,
+                weaponColor,
+            ]
             animation.frameTime = [
                 0.1,
                 0.1,
                 0.1, 
-                0.1
             ]
 
             if direction is Direction.right:
@@ -129,7 +143,10 @@ class PhenomenaAnimationManager(object):
             animation.frameCount = 2
             animation.endless = True
             animation.advanceByStep = False
-
+            animation.frameColors = [
+                ColorPalette.getColorByColor(Color.white),
+                ColorPalette.getColorByColor(Color.white),
+            ]
             animation.frameTime = [
                 0.2,
                 0.2
@@ -158,6 +175,8 @@ class PhenomenaAnimationManager(object):
             animation.width = t['width']
             animation.height = t['height']
             animation.arr = t['arr']
+
+        Utility.checkAnimation(animation, phenomenaType, None)
 
         return animation
 

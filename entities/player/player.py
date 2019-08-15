@@ -23,6 +23,9 @@ from world.viewport import Viewport
 #from world.world import World
 #from entity.entity import Entity
 from utilities.timer import Timer
+from utilities.colorpalette import ColorPalette
+from utilities.colortype import ColorType
+from utilities.color import Color
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +67,7 @@ class Player(Character):
 
     def gmHandleHit(self, damage):
         self.characterStatus.getHit(damage)
-        self.setColorFor( 1.0 - 1.0/damage , EntityType.takedamage)
+        self.setOverwriteColorFor( 1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
 
 
     def announce(self, damage, particleEffectType): 

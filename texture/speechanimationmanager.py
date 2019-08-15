@@ -1,6 +1,7 @@
 from sprite.direction import Direction
 from texture.animation import Animation
-
+from utilities.color import Color
+from utilities.colorpalette import ColorPalette
 
 class SpeechAnimationManager(object):
     def __init__(self):
@@ -15,6 +16,9 @@ class SpeechAnimationManager(object):
         animation.frameTime = [
             1.5,
         ]
+        animation.frameColors = [
+            ColorPalette.getColorByColor(Color.white)
+        ]           
         animation.endless = False
         animation.advanceByStep = False
 

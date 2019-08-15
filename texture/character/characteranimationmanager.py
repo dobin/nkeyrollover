@@ -5,6 +5,9 @@ from texture.character.characteranimationtype import CharacterAnimationType
 from texture.animation import Animation
 from .charactertype import CharacterType
 from texture.filetextureloader import FileTextureLoader
+from utilities.color import Color
+from utilities.colorpalette import ColorPalette
+from utilities.utilities import Utility
 
 logger = logging.getLogger(__name__)
 
@@ -75,6 +78,7 @@ class CharacterAnimationManager(object):
 
     def createAnimationStickfigure(self, animationType, direction):
         animations = []
+        color = ColorPalette.getColorByColor(Color.brightwhite)
         
         if animationType is CharacterAnimationType.standing:
             animation = Animation()
@@ -84,7 +88,9 @@ class CharacterAnimationManager(object):
             animation.frameTime = []
             animation.advanceByStep = False
             animation.endless = True
-
+            animation.frameColors = [
+                color,
+            ]
             animation.arr = [
                 [
                     [ '', 'o', '' ],
@@ -102,6 +108,12 @@ class CharacterAnimationManager(object):
             animation.frameTime = None # by step
             animation.endless = True
             animation.advanceByStep = True
+            animation.frameColors = [
+                color,
+                color,
+                color,
+                color,
+            ]
 
             if direction is Direction.right:
                 animation.arr = [
@@ -161,6 +173,10 @@ class CharacterAnimationManager(object):
                 0.8, 
                 0.2
             ]
+            animation.frameColors = [
+                color,
+                color,
+            ]            
             animation.advanceByStep = False
 
             if direction is Direction.right:
@@ -198,7 +214,10 @@ class CharacterAnimationManager(object):
             animation.frameCount = 2
             animation.endless = True
             animation.advanceByStep = False
-
+            animation.frameColors = [
+                color,
+                color,
+            ]   
             animation.frameTime = [
                 0.1,
                 0.5
@@ -230,7 +249,9 @@ class CharacterAnimationManager(object):
                 animation.advanceByStep = False
                 animation.frameTime = None
                 animation.endless = True
-
+                animation.frameColors = [
+                    color,
+                ]   
                 if n == 0:
                     animation.arr = [
                         [
@@ -260,7 +281,9 @@ class CharacterAnimationManager(object):
             animation.frameTime = []
             animation.advanceByStep = False
             animation.endless = True
-
+            animation.frameColors = [
+                color,
+            ]   
             if direction is direction.right:
                 animation.arr = [
                     [
@@ -281,13 +304,14 @@ class CharacterAnimationManager(object):
             animations.append(animation)
 
         for animation in animations:
-            self.checkAnimation(animation, animationType)
+            Utility.checkAnimation(animation, animationType, self.characterType)
 
         return animations
 
 
     def createAnimationCow(self, animationType, direction):
         animations = []
+        color = ColorPalette.getColorByColor(Color.white)
 
         if animationType is CharacterAnimationType.standing:
             animation = Animation()
@@ -304,7 +328,9 @@ class CharacterAnimationManager(object):
             animation.frameTime = []
             animation.advanceByStep = False
             animation.endless = True
-
+            animation.frameColors = [
+                color,
+            ]   
             animations.append(animation)
 
         if animationType is CharacterAnimationType.walking:
@@ -320,6 +346,10 @@ class CharacterAnimationManager(object):
                 self.mirrorFrames(animation.arr)
 
             animation.frameCount = 2
+            animation.frameColors = [
+                color,
+                color,
+            ]               
             animation.frameTime = None
             animation.endless = True
             animation.advanceByStep = True
@@ -344,6 +374,10 @@ class CharacterAnimationManager(object):
                 0.8, 
                 0.2
             ]
+            animation.frameColors = [
+                color,
+                color,
+            ]                     
             animation.advanceByStep = False
 
             animations.append(animation)
@@ -362,6 +396,9 @@ class CharacterAnimationManager(object):
                 self.mirrorFrames(animation.arr)
 
             animation.frameCount = 1
+            animation.frameColors = [
+                color,
+            ]                     
             animation.frameTime = []
             animation.advanceByStep = False
             animation.frameTime = None
@@ -383,6 +420,10 @@ class CharacterAnimationManager(object):
                 self.mirrorFrames(animation.arr)
 
             animation.frameCount = 2
+            animation.frameColors = [
+                color,
+                color,
+            ]                     
             animation.frameTime = []
             animation.advanceByStep = False
             animation.endless = True
@@ -390,7 +431,7 @@ class CharacterAnimationManager(object):
             animations.append(animation)
 
         for animation in animations:
-            self.checkAnimation(animation, animationType)
+            Utility.checkAnimation(animation, animationType, self.characterType)
 
         return animations
 
@@ -408,23 +449,4 @@ class CharacterAnimationManager(object):
                     n += 1
 
 
-    def checkAnimation(self, animation: Animation, animationType :CharacterAnimationType): 
-        if len(animation.arr) != animation.frameCount:
-            raise Exception("Animation {} / {} invalid: frameCount={}, but array contains {}"
-                .format(self.characterType, animationType.name, animation.frameCount, len(animation.arr)))
-
-
-        for a in animation.arr:
-            if len(a) != animation.height:
-                raise Exception("Animation {} / {} invalid: height={}, but array contains {}"
-                    .format(self.characterType, animationType.name, animation.height, len(a)))
-
-            for line in a:
-                if len(line) != animation.width:
-                    raise Exception("Animation {} / {} invalid: width={}, but array contains {}"
-                        .format(self.characterType, animationType.name, animation.width, len(line)))
-
-        if animation.advanceByStep and animation.frameTime != None: 
-            raise Exception("Animation {} / {} advanceByStep=True, but frameTime array given"
-                .format(self.characterType, animationType.name))
 

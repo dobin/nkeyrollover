@@ -1,6 +1,9 @@
 import curses
 import logging
 
+from texture.character.charactertype import CharacterType
+from texture.character.characteranimationtype import CharacterAnimationType
+from texture.animation import Animation
 from config import Config
 from sprite.coordinates import Coordinates
 from sprite.sprite import Sprite
@@ -135,3 +138,32 @@ class Utility(object):
             return True
         else:
             return False
+
+
+    @staticmethod
+    def checkAnimation(
+        animation: Animation, animationType :CharacterAnimationType, 
+        characterType :CharacterType
+    ): 
+        if len(animation.arr) != animation.frameCount:
+            raise Exception("Animation {} / {} invalid: frameCount={}, but array contains {}"
+                .format(characterType, animationType.name, animation.frameCount, len(animation.arr)))
+
+
+        for a in animation.arr:
+            if len(a) != animation.height:
+                raise Exception("Animation {} / {} invalid: height={}, but array contains {}"
+                    .format(characterType, animationType.name, animation.height, len(a)))
+
+            for line in a:
+                if len(line) != animation.width:
+                    raise Exception("Animation {} / {} invalid: width={}, but array contains {}"
+                        .format(characterType, animationType.name, animation.width, len(line)))
+
+        if animation.advanceByStep and animation.frameTime != None: 
+            raise Exception("Animation {} / {} advanceByStep=True, but frameTime array given"
+                .format(characterType, animationType.name))
+
+        if len(animation.frameColors) != animation.frameCount: 
+            raise Exception("Animation {} / {} frameColor count {} does not match frameCount {}"
+                .format(characterType, animationType.name, len(animation.frameColors), animation.frameCount))

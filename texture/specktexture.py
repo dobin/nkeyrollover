@@ -21,6 +21,7 @@ class SpeckTexture(Texture):
         self.idx = 0
         self.timeArr = timeArr
         self.time = 0
+        self.color = ColorPalette.getColorByColorType(ColorType.specktexture, None)
 
 
     def advance(self, deltaTime):
@@ -49,5 +50,5 @@ class SpeckTexture(Texture):
                 c.y, 
                 c.x,
                 self.char, 
-                ColorPalette.getColorByColorType(ColorType.specktexture, None))
+                self.color)
 

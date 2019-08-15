@@ -17,6 +17,9 @@ from sprite.direction import Direction
 from world.viewport import Viewport
 from .enemyinfo import EnemyInfo
 from texture.character.charactertype import CharacterType
+from utilities.colorpalette import ColorPalette
+from utilities.colortype import ColorType
+from utilities.color import Color
 
 logger = logging.getLogger(__name__)
 
@@ -82,7 +85,7 @@ class Enemy(Character):
 
     def gmHandleHit(self, damage):
         self.characterStatus.getHit(damage)
-        self.setColorFor( 1.0 - 1.0/damage , EntityType.takedamage)
+        self.setOverwriteColorFor( 1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
         if not self.characterStatus.isAlive():
             self.brain.pop()
             self.brain.push('dying')
