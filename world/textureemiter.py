@@ -3,7 +3,10 @@ import random
 from world.viewport import Viewport
 from sprite.coordinates import Coordinates
 from texture.specktexture import SpeckTexture
+from texture.statictexture import StaticTexture
 from sprite.direction import Direction
+from utilities.color import Color
+from utilities.colorpalette import ColorPalette
 
 
 class TextureEmiter(object):
@@ -12,15 +15,13 @@ class TextureEmiter(object):
         self.textures = []
 
 
-    def showCharAtPos(self, char, timeout, coordinate):
-        speckTexture = SpeckTexture(
+    def showCharAtPos(self, char :str, timeout :float, coordinate :Coordinates, color :Color):
+        staticTexture = StaticTexture(
             char=char, 
             coordinate=coordinate,
-            movementX=0, 
-            movementY=0, 
-            timeArr=[ timeout ], 
-            effect=None)
-        self.addTexture(speckTexture)
+            color=color,
+            time=timeout)
+        self.addTexture(staticTexture)
 
 
     def makeExplode(self, sprite, charDirection, data):

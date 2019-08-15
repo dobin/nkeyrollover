@@ -9,6 +9,7 @@ from sprite.direction import Direction
 from config import Config
 from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
+from utilities.color import Color
 
 logger = logging.getLogger(__name__)
 
@@ -249,7 +250,7 @@ class Wander(State):
         self.destCoord = self.pickDestAroundPlayer( self.destCoord )
         if Config.showEnemyWanderDest:
             me.world.textureEmiter.showCharAtPos(
-                char='x', timeout=self.timer, coordinate=self.destCoord)
+                char='💩', timeout=self.timer, coordinate=self.destCoord, color=Color.grey)
 
 
     def pickDestAroundPlayer(self, coord :Coordinates):
