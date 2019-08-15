@@ -97,6 +97,10 @@ class AnimationTexture(Texture):
             raise Exception("Trying to access frameIndex {} on array with len {}, actual len{}"
                 .format(self.frameIndex, self.animation.frameCount, len(self.animation.arr)))
 
+        color = self.parentSprite.currentColor
+        if self.animation.frameColors is not None: 
+            color = self.animation.frameColors[ self.frameIndex ]
+
         # Note: For performance reason, replace enumerate with a while loop
         y = 0
         while y < len(self.animation.arr[ self.frameIndex ]):
@@ -110,7 +114,7 @@ class AnimationTexture(Texture):
                         pos.y + y,
                         pos.x + x,
                         column, 
-                        self.parentSprite.currentColor)
+                        color)
 
                 x += 1
             y += 1

@@ -4,6 +4,8 @@ from sprite.direction import Direction
 from texture.phenomena.phenomenatype import PhenomenaType
 from texture.animation import Animation
 from texture.filetextureloader import FileTextureLoader
+from utilities.color import Color
+from utilities.colorpalette import ColorPalette
 
 logger = logging.getLogger("phenomentaanimationmanager")
 
@@ -146,6 +148,10 @@ class PhenomenaAnimationManager(object):
             animation.frameTime = [
                 0.1,
                 0.5,
+            ]
+            animation.frameColors = [
+                ColorPalette.getColorByColor(Color.brightred),
+                ColorPalette.getColorByColor(Color.white),
             ]
 
             t = self.fileTextureLoader.readAnimationFile('texture/textures/intro.ascii')

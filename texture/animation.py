@@ -6,8 +6,9 @@ class Animation(object):
         self.advanceByStep = False
         self.endless = False
 
-        self.frameTime = []
+        self.frameTime = None
         self.arr = []
+        self.frameColors = None
 
         self.width = 0
         self.height = 0
