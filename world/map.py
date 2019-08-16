@@ -23,12 +23,12 @@ class Map(object):
         self.playerInMapX :int = 0
         self.world = world
         self.xpmap = None
-        self.mapSprites = None
+        self.mapTextures = None
         self.color :Color = ColorPalette.getColorByColor(Color.grey)
 
-        self.openMap('texture/textures/map/map01.xp')
-        self.mapSprites = [ None ] * self.xpmap['width']
-        self.loadMapSprites('map01')
+        self.openXpMap('texture/textures/map/map01.xp')
+        self.mapTextures = [ None ] * self.xpmap['width'] # array of len(mapwidth), with arrays
+        self.loadMapTextures('map01')
 
 
     def advance(self): 
@@ -37,12 +37,16 @@ class Map(object):
 
     def draw(self): 
         self.drawXp()
+        self.drawTextures()
 
+
+    def drawTextures(self):
+        # Note: This function should be as fast as possible.
         x = self.viewport.getx() + 1
         maxx = x + 78
         while x < maxx:
-            if self.mapSprites[x] is not None:
-                for texture in self.mapSprites[x]:
+            if self.mapTextures[x] is not None:
+                for texture in self.mapTextures[x]:
                     texture.draw(self.viewport)
             x += 1
 
@@ -69,33 +73,33 @@ class Map(object):
             x += 1
 
 
-    def loadMapSprites(self, map): 
+    def loadMapTextures(self, map): 
         t = PhenomenaTexture(parentSprite=None, phenomenaType=PhenomenaType.tree1)
         t.setLocation(50, 8 - t.height)
-        self.addToMap(t)
+        self.addTextureToMap(t)
 
         t = PhenomenaTexture(parentSprite=None, phenomenaType=PhenomenaType.tree3)
         t.setLocation(90, 8 - t.height)
-        self.addToMap(t)
+        self.addTextureToMap(t)
 
 
-    def addToMap(self, texture :Texture):
+    def addTextureToMap(self, texture :Texture):
         x = texture.getLocation().x
-        if not self.mapSprites[ x ]:
-            self.mapSprites[x] = []
+        if not self.mapTextures[ x ]:
+            self.mapTextures[x] = []
 
-        self.mapSprites[x].append(texture)
+        self.mapTextures[x].append(texture)
 
 
-    def openMap(self, filename): 
+    def openXpMap(self, filename): 
         with gzip.open(filename, "rb") as f: 
             data = f.read()
         xpData = xp_loader.load_xp_string(data)
         self.xpmap = xpData
-        self.convertToUnicode()
+        self.convertMapAnsiToUnicode()
 
 
-    def convertToUnicode(self): 
+    def convertMapAnsiToUnicode(self): 
         xp_file_layer = self.xpmap['layer_data'][0]
         for x in range(xp_file_layer['width']):
             for y in range(xp_file_layer['height']):
