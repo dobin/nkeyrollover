@@ -88,13 +88,13 @@ class StateWander(State):
         # note that getLocation() will return a reference. we need to copy it here.
         self.destCoord.x = me.player.getLocation().x
         self.destCoord.y = me.player.getLocation().y
-        self.destCoord = self.pickDestAroundPlayer( self.destCoord )
+        self.destCoord = self.pickDestAroundPlayer(self.destCoord, me)
         if Config.showEnemyWanderDest:
             me.world.textureEmiter.showCharAtPos(
                 char='.', timeout=self.timer, coordinate=self.destCoord, color=Color.grey)
 
 
-    def pickDestAroundPlayer(self, coord :Coordinates):
+    def pickDestAroundPlayer(self, coord :Coordinates, me):
         ptRight = random.choice([True, False])
         ptDown = random.choice([True, False])
 
@@ -105,7 +105,12 @@ class StateWander(State):
 
         if ptDown: 
             coord.y += 4 + random.randint(0, 5)
+            if coord.y > Config.rows - 2 - me.texture.height:
+                coord.y = Config.rows - 2 - me.texture.height
         else: 
             coord.y -= 4 + random.randint(0, 5)
+            # +1 so they can overlap only a bit on top
+            if coord.y < Config.topborder - me.texture.height + 1:
+                coord.y = Config.topborder  - me.texture.height + 1
 
         return coord

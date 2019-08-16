@@ -6,6 +6,8 @@ class Config:
     rows = 25
     columns = 80
 
+    topborder = 8
+
     areaDrawable = {
         'minx': 1,
         'miny': 0,
