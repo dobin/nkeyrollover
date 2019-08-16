@@ -44,9 +44,10 @@ class StateWander(State):
             self.lastInputTimer.reset()
 
         if self.timeIsUp():
-            logger.debug("{}: Too long wandering, chase again a bit".format(self.owner))
-            self.brain.pop()
-            self.brain.push("chase")
+            if me.world.director.canHaveMoreEnemiesChasing():
+                logger.debug("{}: Too long wandering, chase again a bit".format(self.owner))
+                self.brain.pop()
+                self.brain.push("chase")
 
         elif me.isPlayerClose():
             logger.debug("{}: Player is close, chasing".format(self.owner))

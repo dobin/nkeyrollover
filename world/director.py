@@ -11,6 +11,7 @@ from texture.character.charactertype import CharacterType
 from sprite.coordinates import Coordinates
 from entities.enemy.state_attack import StateAttack
 from entities.enemy.state_attackwindup import StateAttackWindup
+from entities.enemy.state_chase import StateChase
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +28,7 @@ class Director(object):
 
         self.maxEnemies = 12
         self.maxEnemiesAttacking = 2
+        self.maxEnemiesChasing = 4
 
 
     # we split this from the constructor, so we can initialize a Director 
@@ -64,6 +66,18 @@ class Director(object):
                 n += 1
 
         if n <= self.maxEnemiesAttacking:
+            return True
+        else: 
+            return False
+
+    
+    def canHaveMoreEnemiesChasing(self) -> bool:
+        n = 0
+        for enemy in self.enemiesAlive:
+            if enemy.brain.state == StateChase:
+                n += 1
+
+        if n <= self.maxEnemiesChasing:
             return True
         else: 
             return False
