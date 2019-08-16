@@ -215,11 +215,11 @@ class PhenomenaAnimationManager(object):
             animation.arr = t['arr']
 
         if phenomenaType is PhenomenaType.tree4: 
-            animation.frameCount = 1
+            animation.frameCount = 2
             animation.endless = True
             animation.advanceByStep = False
-            animation.frameTime = None
-            animation.frameColors = [ mapColor, ]
+            animation.frameTime = [ 2.0, 2.0 ]
+            animation.frameColors = [ mapColor, mapColor ]
 
             t = self.fileTextureLoader.readAnimationFile('texture/textures/tree4.ascii')
             animation.width = t['width']

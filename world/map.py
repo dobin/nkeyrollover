@@ -31,8 +31,14 @@ class Map(object):
         self.loadMapTextures('map01')
 
 
-    def advance(self): 
-        pass
+    def advance(self, deltaTime):
+        x = self.viewport.getx() + 1
+        maxx = x + 78
+        while x < maxx:
+            if self.mapTextures[x] is not None:
+                for texture in self.mapTextures[x]:
+                    texture.advance(deltaTime)
+            x += 1
 
 
     def draw(self): 
@@ -78,7 +84,7 @@ class Map(object):
         t.setLocation(50, 8 - t.height)
         self.addTextureToMap(t)
 
-        t = PhenomenaTexture(parentSprite=None, phenomenaType=PhenomenaType.tree3)
+        t = PhenomenaTexture(parentSprite=None, phenomenaType=PhenomenaType.tree4)
         t.setLocation(90, 8 - t.height)
         self.addTextureToMap(t)
 

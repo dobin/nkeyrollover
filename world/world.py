@@ -72,7 +72,7 @@ class World(object):
             return
 
         self.gameTime += deltaTime
-        self.map.advance()
+        self.map.advance(deltaTime)
         self.player.advance(deltaTime)
         self.director.advanceEnemies(deltaTime)
         self.particleEmiter.advance(deltaTime)

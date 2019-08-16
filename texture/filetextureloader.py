@@ -52,6 +52,7 @@ class FileTextureLoader(object):
             'arr': res,
             'width': maxWidth, 
             'height': maxHeight,
+            'frameCount': len(res),
         }
 
         logger.info("Loaded {}: width={} height={} animations={}".format(filename, maxWidth, maxHeight, len(res)))
