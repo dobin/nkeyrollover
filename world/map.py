@@ -18,7 +18,7 @@ class Map(object):
         self.world = world
         self.xpmap = None
         self.color = ColorPalette.getColorByColor(Color.grey)
-        self.openMap('texture/textures/map/test5.xp')
+        self.openMap('texture/textures/map/map01.xp')
 
 
     def advance(self): 
@@ -43,8 +43,9 @@ class Map(object):
             y = 2
             while y < 24:
                 cell_data = xp_file_layer['cells'][x][y]
-                if cell_data != 32: # dont print empty (space " ") cells
+                if cell_data != '': # dont print empty (space " ") cells
                     char = cell_data['keycode']
+                    # logging.info("{}/{}: {}".format(y, x, char))
                     self.viewport.addstr(
                         y=y, x=x, char=char, options=self.color, knownDrawable=True)
                 y += 1
@@ -81,7 +82,10 @@ class Map(object):
         for x in range(xp_file_layer['width']):
             for y in range(xp_file_layer['height']):  
                 char = xp_file_layer['cells'][x][y]['keycode']
-                xp_file_layer['cells'][x][y]['keycode'] = chr(ansitounicode.getUnicode(char))
+                if char != 32 and char != 0:
+                    xp_file_layer['cells'][x][y]['keycode'] = chr(ansitounicode.getUnicode(char))
+                else: 
+                    xp_file_layer['cells'][x][y]['keycode'] = ''
 
 
     
