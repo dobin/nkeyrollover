@@ -10,6 +10,7 @@ from sprite.direction import Direction
 from texture.character.charactertype import CharacterType
 from sprite.coordinates import Coordinates
 from entities.enemy.state_attack import StateAttack
+from entities.enemy.state_attackwindup import StateAttackWindup
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +60,7 @@ class Director(object):
     def canHaveMoreEnemiesAttacking(self) -> bool:
         n = 0
         for enemy in self.enemiesAlive:
-            if enemy.brain.state == StateAttack:
+            if enemy.brain.state == StateAttack or enemy.brain.state == StateAttackWindup:
                 n += 1
 
         if n <= self.maxEnemiesAttacking:
