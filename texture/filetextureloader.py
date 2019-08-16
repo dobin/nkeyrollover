@@ -41,7 +41,8 @@ class FileTextureLoader(object):
                     maxHeight = len(tmp)
                 tmp = []
             else: 
-                line += '' * (maxWidth - len(line))
+                if not len(line) == maxWidth:
+                    line += ' ' * (maxWidth - len(line))
                 tmp.append(list(line))
         if maxHeight == 0:
             maxHeight = len(tmp)

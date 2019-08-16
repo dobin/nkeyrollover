@@ -8,17 +8,27 @@ from utilities.colortype import ColorType
 import utilities.xp_loader as xp_loader
 from utilities.color import Color
 import utilities.ansitounicode as ansitounicode
+from texture.phenomena.phenomenatexture import PhenomenaTexture
+from texture.phenomena.phenomenatype import PhenomenaType
+from texture.texture import Texture
+#from world.world import World
+from world.viewport import Viewport
+
 
 class Map(object): 
     """Draws the map on the screen"""
 
-    def __init__(self, viewport, world): 
-        self.viewport = viewport
-        self.playerInMapX = 0
+    def __init__(self, viewport :Viewport, world): 
+        self.viewport :Viewport = viewport
+        self.playerInMapX :int = 0
         self.world = world
         self.xpmap = None
-        self.color = ColorPalette.getColorByColor(Color.grey)
+        self.mapSprites = None
+        self.color :Color = ColorPalette.getColorByColor(Color.grey)
+
         self.openMap('texture/textures/map/map01.xp')
+        self.mapSprites = [ None ] * self.xpmap['width']
+        self.loadMapSprites('map01')
 
 
     def advance(self): 
@@ -27,6 +37,14 @@ class Map(object):
 
     def draw(self): 
         self.drawXp()
+
+        x = self.viewport.getx() + 1
+        maxx = x + 78
+        while x < maxx:
+            if self.mapSprites[x] is not None:
+                for texture in self.mapSprites[x]:
+                    texture.draw(self.viewport)
+            x += 1
 
 
     def drawXp(self):
@@ -43,38 +61,37 @@ class Map(object):
             y = 2
             while y < 24:
                 cell_data = xp_file_layer['cells'][x][y]
-                if cell_data != '': # dont print empty (space " ") cells
+                if cell_data['keycode'] != '': # dont print empty (space " ") cells
                     char = cell_data['keycode']
-                    # logging.info("{}/{}: {}".format(y, x, char))
                     self.viewport.addstr(
                         y=y, x=x, char=char, options=cell_data['color'], knownDrawable=True)
                 y += 1
             x += 1
 
 
-    def drawDiagonal(self, x, y, len):
-        n = 0
-        while n != len: 
-            x += 1
-            y -= 1
+    def loadMapSprites(self, map): 
+        t = PhenomenaTexture(parentSprite=None, phenomenaType=PhenomenaType.tree1)
+        t.setLocation(50, 8 - t.height)
+        self.addToMap(t)
 
-            n += 1
+        t = PhenomenaTexture(parentSprite=None, phenomenaType=PhenomenaType.tree3)
+        t.setLocation(90, 8 - t.height)
+        self.addToMap(t)
 
-            self.viewport.addstr(
-                x, 
-                y,
-                '/', 
-                ColorPalette.getColorByColorType(ColorType.worldmap, None))
+
+    def addToMap(self, texture :Texture):
+        x = texture.getLocation().x
+        if not self.mapSprites[ x ]:
+            self.mapSprites[x] = []
+
+        self.mapSprites[x].append(texture)
 
 
     def openMap(self, filename): 
         with gzip.open(filename, "rb") as f: 
             data = f.read()
-
         xpData = xp_loader.load_xp_string(data)
         self.xpmap = xpData
-        #logging.info(str(xpData))
-
         self.convertToUnicode()
 
 
@@ -94,8 +111,9 @@ class Map(object):
                 # character completely (artefact? misclick?)
                 if color is not None: 
                     xp_file_layer['cells'][x][y]['color'] = color
-                    #logging.info("A: " + str(xp_file_layer['cells'][x][y]))
                     if char != 32 and char != 0:
                         xp_file_layer['cells'][x][y]['keycode'] = chr(ansitounicode.getUnicode(char))
                     else: 
                         xp_file_layer['cells'][x][y]['keycode'] = ''
+                else: 
+                    xp_file_layer['cells'][x][y]['keycode'] = ''                        

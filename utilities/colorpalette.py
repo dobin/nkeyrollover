@@ -114,6 +114,7 @@ class ColorPalette(object):
 
 
     @staticmethod
+    # see console.txt for rexpaint palette information
     def getColorByRgb(r :int, g :int, b :int):
         if r == 255 and g == 255 and b == 255:
             return ColorPalette.getColorByColor(Color.brightwhite)
@@ -155,7 +156,7 @@ class ColorPalette(object):
             return ColorPalette.getColorByColor(Color.green)
 
         else:
-            logging.error("Unknown color: {}/{}/{}".format(r, g, b))
+            logging.debug("Unknown color: {}/{}/{}".format(r, g, b))
             return None
 
 

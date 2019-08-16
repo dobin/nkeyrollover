@@ -97,7 +97,7 @@ class AnimationTexture(Texture):
             raise Exception("Trying to access frameIndex {} on array with len {}, actual len{}"
                 .format(self.frameIndex, self.animation.frameCount, len(self.animation.arr)))
 
-        if self.parentSprite.overwriteColor is not None:
+        if self.parentSprite is not None and self.parentSprite.overwriteColor is not None:
             color = self.parentSprite.overwriteColor
         else:
             color = self.animation.frameColors[ self.frameIndex ]

@@ -34,6 +34,7 @@ class PhenomenaAnimationManager(object):
     def createAnimation(self, phenomenaType, direction):
         animation = Animation()
 
+        mapColor = ColorPalette.getColorByColor(Color.grey)
         weaponColor = ColorPalette.getColorByColor(Color.brightyellow)
 
         if phenomenaType is PhenomenaType.hit:
@@ -172,6 +173,55 @@ class PhenomenaAnimationManager(object):
             ]
 
             t = self.fileTextureLoader.readAnimationFile('texture/textures/intro.ascii')
+            animation.width = t['width']
+            animation.height = t['height']
+            animation.arr = t['arr']
+
+
+        if phenomenaType is PhenomenaType.tree1: 
+            animation.frameCount = 1
+            animation.endless = True
+            animation.advanceByStep = False
+            animation.frameTime = None
+            animation.frameColors = [ mapColor, ]
+
+            t = self.fileTextureLoader.readAnimationFile('texture/textures/tree1.ascii')
+            animation.width = t['width']
+            animation.height = t['height']
+            animation.arr = t['arr']
+
+        if phenomenaType is PhenomenaType.tree2: 
+            animation.frameCount = 1
+            animation.endless = True
+            animation.advanceByStep = False
+            animation.frameTime = None
+            animation.frameColors = [ mapColor, ]
+
+            t = self.fileTextureLoader.readAnimationFile('texture/textures/tree2.ascii')
+            animation.width = t['width']
+            animation.height = t['height']
+            animation.arr = t['arr']
+
+        if phenomenaType is PhenomenaType.tree3: 
+            animation.frameCount = 1
+            animation.endless = True
+            animation.advanceByStep = False
+            animation.frameTime = None
+            animation.frameColors = [ mapColor, ]
+
+            t = self.fileTextureLoader.readAnimationFile('texture/textures/tree3.ascii')
+            animation.width = t['width']
+            animation.height = t['height']
+            animation.arr = t['arr']
+
+        if phenomenaType is PhenomenaType.tree4: 
+            animation.frameCount = 1
+            animation.endless = True
+            animation.advanceByStep = False
+            animation.frameTime = None
+            animation.frameColors = [ mapColor, ]
+
+            t = self.fileTextureLoader.readAnimationFile('texture/textures/tree4.ascii')
             animation.width = t['width']
             animation.height = t['height']
             animation.arr = t['arr']
