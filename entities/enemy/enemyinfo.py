@@ -7,6 +7,7 @@ class EnemyInfo(object):
         self.spawnTime = 1.0
         self.attackTime = 1.0
         self.dyingTime = 2.0
+        self.enemyCanAttackPeriod = 0.3
 
         # can have range
         self.wanderTime = 5.0
@@ -19,5 +20,6 @@ class EnemyInfo(object):
         self.chaseStepDelay = 0.5
 
         if Config.devMode:
-            self.wanderTime = 2
+            self.wanderTime = 0.5
             self.spawnTime = 0.2
+            self.chaseTime = 10.0

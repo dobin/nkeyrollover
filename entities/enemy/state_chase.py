@@ -22,6 +22,7 @@ class StateChase(State):
         self.lastInputTimer = Timer( 
             self.brain.owner.enemyInfo.chaseStepDelay, 
             instant=True )
+        self.canAttackTimer = Timer()
 
 
     def on_enter(self):
@@ -29,20 +30,25 @@ class StateChase(State):
         stateTimeRnd = random.randrange(-100 * me.enemyInfo.chaseTimeRnd, 100 * me.enemyInfo.chaseTimeRnd)
         self.setTimer( me.enemyInfo.chaseTime + (stateTimeRnd / 100) )
         me.texture.changeAnimation(CharacterAnimationType.walking, me.direction)
+        self.canAttackTimer.setTimer(me.enemyInfo.enemyCanAttackPeriod)
+        self.canAttackTimer.reset()
 
 
     def process(self, dt):
         me = self.brain.owner
         self.lastInputTimer.advance(dt)
+        self.canAttackTimer.advance(dt)
 
         # manage speed
         if self.lastInputTimer.timeIsUp():
             self.getInputChase()
             self.lastInputTimer.reset()
         
-        if me.canAttackPlayer():
-            self.brain.pop()
-            self.brain.push("attackwindup")
+        if self.canAttackTimer.timeIsUp():
+            if me.canAttackPlayer():
+                self.brain.pop()
+                self.brain.push("attackwindup")
+            self.canAttackTimer.reset()
 
         if self.timeIsUp():
             logger.debug("{}: Too long chasing, switching to wander".format(self.owner))
