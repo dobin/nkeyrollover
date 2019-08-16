@@ -11,6 +11,7 @@ from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
 from utilities.utilities import Utility
 
+import locale 
 current_milli_time = lambda: int(round(time.time() * 1000))
 
 
@@ -23,6 +24,7 @@ class Keyrollover(object):
 
 
     def init(self): 
+        locale.setlocale(locale.LC_ALL, '')
         Utility.setupLogger()
 
         if Config.devMode:
@@ -35,7 +37,7 @@ class Keyrollover(object):
             logging.basicConfig(
                 filename='app.log', 
                 filemode='a', 
-                level=logging.WARN,
+                level=logging.INFO,
                 format='%(asctime)s %(levelname)07s %(name)32s: %(message)s')
 
         logger = logging.getLogger(__name__)

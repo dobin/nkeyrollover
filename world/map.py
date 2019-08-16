@@ -47,7 +47,7 @@ class Map(object):
                     char = cell_data['keycode']
                     # logging.info("{}/{}: {}".format(y, x, char))
                     self.viewport.addstr(
-                        y=y, x=x, char=char, options=self.color, knownDrawable=True)
+                        y=y, x=x, char=char, options=cell_data['color'], knownDrawable=True)
                 y += 1
             x += 1
 
@@ -80,12 +80,19 @@ class Map(object):
     def convertToUnicode(self): 
         xp_file_layer = self.xpmap['layer_data'][0]
         for x in range(xp_file_layer['width']):
-            for y in range(xp_file_layer['height']):  
+            for y in range(xp_file_layer['height']):
+                # {'keycode': 65, 'fore_r': 178, 'fore_g': 134, 'fore_b': 0, 'back_r': 0, 
+                # 'back_g': 0, 'back_b': 0}
                 char = xp_file_layer['cells'][x][y]['keycode']
-                if char != 32 and char != 0:
-                    xp_file_layer['cells'][x][y]['keycode'] = chr(ansitounicode.getUnicode(char))
-                else: 
-                    xp_file_layer['cells'][x][y]['keycode'] = ''
-
-
-    
+                color = ColorPalette.getColorByRgb(
+                    xp_file_layer['cells'][x][y]['fore_r'],
+                    xp_file_layer['cells'][x][y]['fore_g'],
+                    xp_file_layer['cells'][x][y]['fore_b']
+                )
+                if color is not None: 
+                    xp_file_layer['cells'][x][y]['color'] = color
+                #logging.info("A: " + str(xp_file_layer['cells'][x][y]))
+                    if char != 32 and char != 0:
+                        xp_file_layer['cells'][x][y]['keycode'] = chr(ansitounicode.getUnicode(char))
+                    else: 
+                        xp_file_layer['cells'][x][y]['keycode'] = ''

@@ -113,6 +113,52 @@ class ColorPalette(object):
         return color
 
 
+    @staticmethod
+    def getColorByRgb(r :int, g :int, b :int):
+        if r == 255 and g == 255 and b == 255:
+            return ColorPalette.getColorByColor(Color.brightwhite)
+        elif r == 229 and g == 229 and b == 229:
+            return ColorPalette.getColorByColor(Color.white)
+        elif r == 77 and g == 77 and b == 77:
+            return ColorPalette.getColorByColor(Color.grey)
+        elif r == 0 and g == 0 and b == 0:
+            return ColorPalette.getColorByColor(Color.black)
+
+        elif r == 0 and g == 0 and b == 255:
+            return ColorPalette.getColorByColor(Color.brightblue)
+        elif r == 0 and g == 0 and b == 205:
+            return ColorPalette.getColorByColor(Color.blue)
+        elif r == 0 and g == 255 and b == 255:
+            return ColorPalette.getColorByColor(Color.brightcyan)
+        elif r == 0 and g == 205 and b == 205:
+            return ColorPalette.getColorByColor(Color.cyan)
+        elif r == 255 and g == 255 and b == 255:
+            return ColorPalette.getColorByColor(Color.brightwhite)
+
+        elif r == 255 and g == 255 and b == 0:
+            return ColorPalette.getColorByColor(Color.brightyellow)
+        elif r == 205 and g == 205 and b == 0:
+            return ColorPalette.getColorByColor(Color.yellow)
+
+        elif r == 255 and g == 0 and b == 0:
+            return ColorPalette.getColorByColor(Color.brightred)
+        elif r == 205 and g == 0 and b == 0:
+            return ColorPalette.getColorByColor(Color.red)
+        elif r == 255 and g == 0 and b == 255:
+            return ColorPalette.getColorByColor(Color.brightmagenta)
+        elif r == 205 and g == 0 and b == 205:
+            return ColorPalette.getColorByColor(Color.magenta)
+
+        elif r == 0 and g == 255 and b == 0:
+            return ColorPalette.getColorByColor(Color.brightgreen)
+        elif r == 0 and g == 205 and b == 0:
+            return ColorPalette.getColorByColor(Color.green)
+
+        else:
+            logging.error("Unknown color: {}/{}/{}".format(r, g, b))
+            return None
+
+
     @staticmethod 
     def getColorByEntityType(entityType: EntityType, viewport :Viewport):
         color = 0
