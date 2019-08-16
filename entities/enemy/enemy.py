@@ -1,6 +1,7 @@
 import random
 import logging
 
+from entities.weapontype import WeaponType
 from config import Config
 from utilities.timer import Timer
 from utilities.utilities import Utility
@@ -83,6 +84,11 @@ class Enemy(Character):
         # upon spawning, and an exception is thrown
         # change following two when fixed TODO
         self.texture.changeAnimation(CharacterAnimationType.standing, self.direction)
+        
+        # select a weapon
+        self.characterAttack.switchWeapon( random.choice( 
+            [ WeaponType.hit, WeaponType.hitSquare, WeaponType.hitLine]
+        ))
         self.setActive(True)
 
         self.brain.pop()
@@ -125,8 +131,24 @@ class Enemy(Character):
 
 
 
-    def canReachPlayer(self): 
-        return Utility.pointInSprite(self.characterAttack.getLocation(), self.player)
+    def canAttackPlayer(self): 
+        canAttack = False
+
+        hitLocations = self.characterAttack.texture.getTextureHitCoordinates()
+
+        for hitLocation in hitLocations:
+            canAttack = Utility.pointInSprite(
+                hitLocation, 
+                self.player)
+
+            if canAttack: 
+                logging.info("Can attack at: " + str(hitLocation))
+                return True
+            else: 
+                #logging.info("Cannot attack at: " + str(hitLocation))
+                pass
+
+        return False
 
 
     def isPlayerClose(self):

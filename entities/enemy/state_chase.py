@@ -40,7 +40,7 @@ class StateChase(State):
             self.getInputChase()
             self.lastInputTimer.reset()
         
-        if me.canReachPlayer():
+        if me.canAttackPlayer():
             self.brain.pop()
             self.brain.push("attackwindup")
 
