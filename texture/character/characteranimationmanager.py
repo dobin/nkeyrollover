@@ -444,9 +444,29 @@ class CharacterAnimationManager(object):
                     cl = line[n]
                     cr = line[ len(line) - 1 - n ]
 
+                    cl = self.swapChar(cl)
+                    cr = self.swapChar(cr)
+
                     line[n] = cr
                     line[ len(line) - 1 - n ] = cl
                     n += 1
 
 
+    def swapChar(self, char): 
+        if char == ')':
+            return '('
+        elif char == '(':
+            return ')'
 
+        elif char == '/':
+            return '\\'
+        elif char == '\\':
+            return '/'
+
+        elif char == '`':
+            return '\''
+        elif char == '\'':
+            return '`'
+
+        else:
+            return char
