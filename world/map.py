@@ -77,6 +77,7 @@ class Map(object):
 
         self.convertToUnicode()
 
+
     def convertToUnicode(self): 
         xp_file_layer = self.xpmap['layer_data'][0]
         for x in range(xp_file_layer['width']):
@@ -89,9 +90,11 @@ class Map(object):
                     xp_file_layer['cells'][x][y]['fore_g'],
                     xp_file_layer['cells'][x][y]['fore_b']
                 )
+                # we only accept official palette colors. if it is not recognized, ignore
+                # character completely (artefact? misclick?)
                 if color is not None: 
                     xp_file_layer['cells'][x][y]['color'] = color
-                #logging.info("A: " + str(xp_file_layer['cells'][x][y]))
+                    #logging.info("A: " + str(xp_file_layer['cells'][x][y]))
                     if char != 32 and char != 0:
                         xp_file_layer['cells'][x][y]['keycode'] = chr(ansitounicode.getUnicode(char))
                     else: 
