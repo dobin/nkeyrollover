@@ -9,6 +9,7 @@ from world.viewport import Viewport
 from sprite.direction import Direction
 from texture.character.charactertype import CharacterType
 from sprite.coordinates import Coordinates
+from entities.enemy.state_attack import StateAttack
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,7 @@ class Director(object):
         self.lastEnemyResurrectedTimer = Timer(1.0)
 
         self.maxEnemies = 12
+        self.maxEnemiesAttacking = 2
 
 
     # we split this from the constructor, so we can initialize a Director 
@@ -52,6 +54,18 @@ class Director(object):
                     characterType=characterType)
                 self.enemiesDead.append(newEnemy)
                 n = n + 1
+
+    
+    def canHaveMoreEnemiesAttacking(self) -> bool:
+        n = 0
+        for enemy in self.enemiesAlive:
+            if enemy.brain.state == StateAttack:
+                n += 1
+
+        if n <= self.maxEnemiesAttacking:
+            return True
+        else: 
+            return False
 
 
     def advanceEnemies(self, deltaTime):

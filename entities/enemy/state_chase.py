@@ -46,8 +46,9 @@ class StateChase(State):
         
         if self.canAttackTimer.timeIsUp():
             if me.canAttackPlayer():
-                self.brain.pop()
-                self.brain.push("attackwindup")
+                if me.world.director.canHaveMoreEnemiesAttacking():
+                    self.brain.pop()
+                    self.brain.push("attackwindup")
             self.canAttackTimer.reset()
 
         if self.timeIsUp():
