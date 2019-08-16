@@ -29,7 +29,6 @@ class Director(object):
     # we split this from the constructor, so we can initialize a Director 
     # without enemies in the unit test
     def init(self):
-
         if Config.devMode: 
             newEnemy = Enemy(viewport=self.viewport, 
                 parent=self.world.worldSprite, 
@@ -76,9 +75,9 @@ class Director(object):
         if len(self.enemiesAlive) < self.maxEnemies:
             if self.lastEnemyResurrectedTimer.timeIsUp():
                 self.lastEnemyResurrectedTimer.reset()
-                logger.warn("Ressurect an enemy. alive are: " + str(len(self.enemiesAlive)))
-
+                
                 if len(self.enemiesDead) > 0:
+                    logger.warn("Ressurect an enemy. alive are: " + str(len(self.enemiesAlive)))
                     enemy = self.enemiesDead.pop()
                     spawnCoords = self.getRandomSpawnCoords(enemy)
                     enemy.gmRessurectMe(spawnCoords)

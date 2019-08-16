@@ -27,6 +27,7 @@ from .state_dying import StateDying
 from .state_idle import StateIdle
 from .state_spawn import StateSpawn
 from .state_wander import StateWander
+from texture.texture import Texture
 
 logger = logging.getLogger(__name__)
 
@@ -39,25 +40,25 @@ class Enemy(Character):
         Character.__init__(self, viewport=viewport, parentEntity=parent, 
             world=world, entityType=EntityType.enemy)
         
-        self.characterType = characterType
-        self.enemyMovement = True
-        self.player = world.getPlayer()
-        self.texture = CharacterTexture(
+        self.characterType :CharacterType = characterType
+        self.enemyMovement :bool = True
+        self.player :Player = world.getPlayer()
+        self.texture :Texture = CharacterTexture(
             parentSprite=self, 
             characterAnimationType=CharacterAnimationType.standing,
             head=self.getRandomHead(), 
             body=self.getRandomBody(),
             characterType=self.characterType)
-        self.characterAttack = CharacterAttack(viewport=viewport, parentCharacter=self, 
-            isPlayer=False)
-        self.name = 'Bot' + name
-        self.enemyInfo = EnemyInfo()
+        self.characterAttack :CharacterAttack = CharacterAttack(
+            viewport=viewport, parentCharacter=self, isPlayer=False)
+        self.name :str = 'Bot' + name
+        self.enemyInfo :EnemyInfo = EnemyInfo()
 
         self.initAi()
 
 
     def initAi(self): 
-        self.brain = Brain(self)
+        self.brain :Brain = Brain(self)
 
         self.brain.register(StateIdle)
         self.brain.register(StateSpawn)
@@ -70,12 +71,7 @@ class Enemy(Character):
 
 
     # Game Mechanics
-    def gmKill(self): 
-        self.brain.pop()
-        self.brain.push("dying")
-
-
-    def gmRessurectMe(self, spawncoord):
+    def gmRessurectMe(self, spawncoord :Coordinates):
         self.setLocation(spawncoord)
         logger.info(self.name + " Ressurect at: " + str(self.coordinates))
         self.characterStatus.init()
@@ -95,15 +91,18 @@ class Enemy(Character):
         self.brain.push('spawn')
         
 
-    def gmHandleHit(self, damage):
+    def gmHandleHit(self, damage :int):
+        """Handle if i (the enemy) is being hit"""
         self.characterStatus.getHit(damage)
-        self.setOverwriteColorFor( 1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
+        self.setOverwriteColorFor( 
+            1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
         if not self.characterStatus.isAlive():
             self.brain.pop()
             self.brain.push('dying')
 
 
-    def move(self, x=0, y=0):
+    def move(self, x :int =0, y :int =0):
+        """Move this enemy in x/y direction, if allowed. Update direction too"""
         if x > 0:
             if self.coordinates.x < Config.columns - self.texture.width - 1:
                 self.coordinates.x += 1
@@ -131,27 +130,22 @@ class Enemy(Character):
 
 
 
-    def canAttackPlayer(self): 
-        canAttack = False
-
+    def canAttackPlayer(self) -> bool: 
         hitLocations = self.characterAttack.texture.getTextureHitCoordinates()
 
+        # only one of the hitlocations need to hit
         for hitLocation in hitLocations:
             canAttack = Utility.pointInSprite(
                 hitLocation, 
                 self.player)
 
             if canAttack: 
-                logger.info("Can attack at: " + str(hitLocation))
                 return True
-            else: 
-                #logging.info("Cannot attack at: " + str(hitLocation))
-                pass
 
         return False
 
 
-    def isPlayerClose(self):
+    def isPlayerClose(self) -> bool:
         distance = Utility.distance(self.player.getLocation(), self.getLocation())
         if distance['sum'] < 5:
             return True
@@ -159,7 +153,7 @@ class Enemy(Character):
             return False
 
 
-    def advance(self, deltaTime): 
+    def advance(self, deltaTime :float): 
         super(Enemy, self).advance(deltaTime)
         self.brain.update(deltaTime)
         
