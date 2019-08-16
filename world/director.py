@@ -25,12 +25,12 @@ class Director(object):
 
         self.maxEnemies = 12
 
+
     # we split this from the constructor, so we can initialize a Director 
     # without enemies in the unit test
     def init(self):
 
         if Config.devMode: 
-
             newEnemy = Enemy(viewport=self.viewport, 
                 parent=self.world.worldSprite, 
                 world=self.world, 
@@ -94,17 +94,11 @@ class Director(object):
 
     def getRandomSpawnCoords(self, enemy):
         if Config.devMode: 
-            coordinatesClose = {
-                'x': 30, 
-                'min_y': 13,
-                'max_y': 13,
-            }
             coordinates = Coordinates(
-                x=Config.columns + 1, 
+                x=40, 
                 y=15,
             )
             return coordinates
-
 
         side = random.choice([True, False])
         myx = 0

@@ -59,9 +59,10 @@ class StateChase(State):
         if not me.enemyMovement: 
             return
 
+        meWeaponLocation = me.characterAttack.getLocation()
         playerLocation = me.player.getLocation()
         
-        if playerLocation.x > me.coordinates.x:
+        if meWeaponLocation.x < playerLocation.x:
             if me.coordinates.x < (me.viewport.getx() + Config.columns - me.texture.width - 1):
                 me.coordinates.x += 1
                 
@@ -70,7 +71,7 @@ class StateChase(State):
                     me.texture.changeAnimation(
                         CharacterAnimationType.walking, me.direction)
 
-        elif playerLocation.x < me.coordinates.x: 
+        elif meWeaponLocation.x >= playerLocation.x + me.player.texture.width:
             if me.coordinates.x > 1 + me.viewport.getx():
                 me.coordinates.x -= 1
 
@@ -79,10 +80,11 @@ class StateChase(State):
                     me.texture.changeAnimation(
                         CharacterAnimationType.walking, me.direction)                
 
-        # we can walk diagonally 
-        if playerLocation.y > me.coordinates.y:
+        # we can walk diagonally, no elif here
+
+        if meWeaponLocation.y < playerLocation.y:
             if me.coordinates.y < Config.rows - me.texture.height - 1:
                 me.coordinates.y += 1
-        elif playerLocation.y < me.coordinates.y:
+        elif meWeaponLocation.y > playerLocation.y + me.player.texture.height - 1: # why -1?
             if me.coordinates.y > 2:
                 me.coordinates.y -= 1
