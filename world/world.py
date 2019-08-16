@@ -56,8 +56,8 @@ class World(object):
 
         self.player.drawCharacterAttack()
         self.director.drawEnemyAttacks()
-        self.particleEmiter.draw()
         self.textureEmiter.draw()
+        self.particleEmiter.draw() # should be on top
 
         if self.pause: 
             self.win.addstr(12, 40, "Paused", curses.color_pair(7))
