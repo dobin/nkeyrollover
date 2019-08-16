@@ -72,7 +72,7 @@ class ColorPalette(object):
             return curses.color_pair(1)
 
         else: 
-            logging.error("Unknown color: " + str(color))
+            logger.error("Unknown color: " + str(color))
             return curses.color_pair(1)
 
 
@@ -108,7 +108,7 @@ class ColorPalette(object):
             color = ColorPalette.getColorByColor(Color.white)
         
         else: 
-            logging.error("Unknown colortype " + str(colorType))
+            logger.error("Unknown colortype " + str(colorType))
 
         return color
 
@@ -156,7 +156,7 @@ class ColorPalette(object):
             return ColorPalette.getColorByColor(Color.green)
 
         else:
-            logging.debug("Unknown color: {}/{}/{}".format(r, g, b))
+            logger.debug("Unknown color: {}/{}/{}".format(r, g, b))
             return None
 
 
@@ -179,5 +179,5 @@ class ColorPalette(object):
         elif entityType is EntityType.weapon:
             return curses.color_pair(4)
         else: 
-            logging.error("unknown color type: " + str(entityType))
+            logger.error("unknown color type: " + str(entityType))
             return curses.color_pair(1)

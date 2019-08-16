@@ -142,7 +142,7 @@ class Enemy(Character):
                 self.player)
 
             if canAttack: 
-                logging.info("Can attack at: " + str(hitLocation))
+                logger.info("Can attack at: " + str(hitLocation))
                 return True
             else: 
                 #logging.info("Cannot attack at: " + str(hitLocation))

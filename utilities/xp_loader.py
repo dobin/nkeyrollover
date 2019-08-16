@@ -139,7 +139,6 @@ def load_xp_string(file_string, reverse_endian=True):
 
 		this_layer_width = struct.unpack('>I', this_layer_width)[0]
 		this_layer_height = struct.unpack('>I', this_layer_height)[0]
-		logging.info("AA: " + str(this_layer_width))
 
 		current_largest_width = max(current_largest_width, this_layer_width)
 		current_largest_height = max(current_largest_height, this_layer_height)

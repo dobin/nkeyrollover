@@ -82,7 +82,7 @@ class AnimationTexture(Texture):
                     return
                 else: 
                     if self.frameIndex >= len( self.animation.frameTime ): 
-                        logging.error("Frameindex {} larget than frametime arr {}".format(self.frameIndex, self.animation.frameTime))
+                        logger.error("Frameindex {} larget than frametime arr {}".format(self.frameIndex, self.animation.frameTime))
                     self.frameTimeLeft = self.animation.frameTime[ self.frameIndex ]
                     self.frameIndex = (self.frameIndex + 1) % self.animation.frameCount
     

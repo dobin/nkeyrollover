@@ -91,7 +91,7 @@ class ParticleEmiter(object):
                 particle = self.particlePool.pop()
 
                 basex = loc.x + xinv # distance from char
-                logging.info("New at: {}/{}".format(basex + xinv, loc.y + n))
+                logger.info("New at: {}/{}".format(basex + xinv, loc.y + n))
                 particle.init(
                     x=basex + xinv, y=loc.y + n - int(particleCount / 2) + 1, life=life, angle=0, 
                     speed=0.0, fadeout=True, byStep=False, charType=0, 
