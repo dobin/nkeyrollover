@@ -99,13 +99,13 @@ class StateWander(State):
         ptDown = random.choice([True, False])
 
         if ptRight: 
-            coord.x += 6 + random.randint(0, 2)
+            coord.x += 6 + random.randint(0, 5)
         else: 
-            coord.x -= 6 + random.randint(0, 2)
+            coord.x -= 6 + random.randint(0, 5)
 
         if ptDown: 
-            coord.y += 4 + random.randint(0, 2)
+            coord.y += 4 + random.randint(0, 5)
         else: 
-            coord.y -= 4 + random.randint(0, 2)
+            coord.y -= 4 + random.randint(0, 5)
 
         return coord
