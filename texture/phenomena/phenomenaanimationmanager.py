@@ -168,7 +168,7 @@ class PhenomenaAnimationManager(object):
                 0.5,
             ]
             animation.frameColors = [
-                ColorPalette.getColorByColor(Color.brightred),
+                ColorPalette.getColorByColor(Color.brightblue),
                 ColorPalette.getColorByColor(Color.white),
             ]
 
