@@ -23,7 +23,9 @@ class Director(object):
         self.viewport = viewport
         self.world = world
         self.enemiesDead = []
-        self.enemiesAlive = []
+        # sorted by increasing enemy.coordinates.y order after every advance()
+        # to have a good Z order on screen
+        self.enemiesAlive = [] 
         self.lastEnemyResurrectedTimer = Timer(1.0)
 
         self.maxEnemies = 12
@@ -85,8 +87,13 @@ class Director(object):
 
     def advanceEnemies(self, deltaTime):
         self.lastEnemyResurrectedTimer.advance(deltaTime)
+
         for enemy in self.enemiesAlive:
             enemy.advance(deltaTime)
+
+        def gety(elem): 
+            return elem.coordinates.y
+        self.enemiesAlive.sort(key=gety)            
 
 
     def drawEnemies(self):
