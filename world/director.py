@@ -12,6 +12,7 @@ from sprite.coordinates import Coordinates
 from entities.enemy.state_attack import StateAttack
 from entities.enemy.state_attackwindup import StateAttackWindup
 from entities.enemy.state_chase import StateChase
+from entities.enemy.state_wander import StateWander
 
 logger = logging.getLogger(__name__)
 
@@ -60,13 +61,37 @@ class Director(object):
                 self.enemiesDead.append(newEnemy)
                 n = n + 1
 
+
+    def numEnemiesAlive(self) -> int:
+        return len(self.enemiesAlive)
+
     
-    def canHaveMoreEnemiesAttacking(self) -> bool:
+    def numEnemiesAttacking(self) -> int:
         n = 0
         for enemy in self.enemiesAlive:
-            if enemy.brain.state == StateAttack or enemy.brain.state == StateAttackWindup:
+            if enemy.brain.state.name == 'attack' or enemy.brain.state.name == 'attackwindup':
                 n += 1
+        return n
 
+
+    def numEnemiesWandering(self) -> int:
+        n = 0
+        for enemy in self.enemiesAlive:
+            if enemy.brain.state.name == 'wander':
+                n += 1
+        return n
+
+
+    def numEnemiesChasing(self) -> int:
+        n = 0
+        for enemy in self.enemiesAlive:
+            if enemy.brain.state.name == 'chase':
+                n += 1
+        return n
+
+
+    def canHaveMoreEnemiesAttacking(self) -> bool:
+        n = self.numEnemiesAttacking()
         if n <= self.maxEnemiesAttacking:
             return True
         else: 
@@ -74,11 +99,7 @@ class Director(object):
 
     
     def canHaveMoreEnemiesChasing(self) -> bool:
-        n = 0
-        for enemy in self.enemiesAlive:
-            if enemy.brain.state == StateChase:
-                n += 1
-
+        n = self.numEnemiesChasing()
         if n <= self.maxEnemiesChasing:
             return True
         else: 

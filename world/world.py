@@ -38,6 +38,7 @@ class World(object):
         self.pause :bool = False
         self.gameRunning :bool = True
         self.gameTime :float =0.0
+        self.showStats = False
 
 
     def togglePause(self): 
@@ -46,6 +47,11 @@ class World(object):
 
     def quitGame(self): 
         self.gameRunning = False
+
+
+    def toggleStats(self): 
+        self.showStats = not self.showStats
+        pass
 
 
     def draw(self):
@@ -58,6 +64,9 @@ class World(object):
         self.director.drawEnemyAttacks()
         self.textureEmiter.draw()
         self.particleEmiter.draw() # should be on top
+
+        if self.showStats:
+            self.drawStats()
 
         if self.pause: 
             self.win.addstr(12, 40, "Paused", curses.color_pair(7))
@@ -83,3 +92,20 @@ class World(object):
     def getPlayer(self):
         return self.player
 
+
+    def drawStats(self): 
+        x = 4
+        y = 4
+
+        o = []
+
+        o.append('Enemies:')
+        o.append('  Alive     : ' + str( self.director.numEnemiesAlive() ))
+        o.append('  Attacking : ' + str( self.director.numEnemiesAttacking() ))
+        o.append('  Chasing   : ' + str( self.director.numEnemiesChasing() ))
+        o.append('  Wadndering: ' + str( self.director.numEnemiesWandering() ))
+
+        n = 0
+        while n < len(o):
+            self.win.addstr(y + n, x, o[n])
+            n += 1

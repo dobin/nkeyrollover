@@ -192,6 +192,9 @@ class Player(Character):
             if key == 27: # esc
                 self.world.quitGame()
 
+            if key == 265: # f1
+                self.world.toggleStats()
+
             # player related
             if key == ord('1'):
                 self.characterAttack.switchWeaponByKey('1')
