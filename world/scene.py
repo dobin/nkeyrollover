@@ -15,6 +15,8 @@ from sprite.sprite import Sprite
 from utilities.timer import Timer
 from sprite.coordinates import Coordinates
 from world.viewport import Viewport
+from texture.character.charactertype import CharacterType
+
 
 logger = logging.getLogger(__name__)
 
@@ -42,8 +44,11 @@ class Scene(object):
         
         worldSprite = Sprite(viewport=self.viewport, parentSprite=None)
 
-        entityIntro = Entity(viewport=self.viewport, parentSprite=worldSprite, entityType=EntityType.player)
-        textureIntro = PhenomenaTexture(phenomenaType=PhenomenaType.intro, parentSprite=entityIntro)
+        entityIntro = Entity(
+            viewport=self.viewport, parentSprite=worldSprite, 
+            entityType=EntityType.player)
+        textureIntro = PhenomenaTexture(
+            phenomenaType=PhenomenaType.intro, parentSprite=entityIntro)
         entityIntro.setLocation(Coordinates(2, 5))
         textureIntro.setActive(True)
 
@@ -86,13 +91,21 @@ class Scene(object):
 
         worldSprite = Sprite(viewport=self.viewport, parentSprite=None)
 
-        entityCopter = Entity(viewport=self.viewport, parentSprite=worldSprite, entityType=EntityType.player)
-        textureCopter = PhenomenaTexture(phenomenaType=PhenomenaType.roflcopter, parentSprite=entityCopter)
+        entityCopter = Entity(
+            viewport=self.viewport, parentSprite=worldSprite, 
+            entityType=EntityType.player)
+        textureCopter = PhenomenaTexture(
+            phenomenaType=PhenomenaType.roflcopter, parentSprite=entityCopter)
         entityCopter.setLocation(Coordinates(13, -5))        
         textureCopter.setActive(False)
 
-        entityPlayer = Entity(viewport=self.viewport, parentSprite=worldSprite, entityType=EntityType.player)
-        texturePlayer = CharacterTexture(characterAnimationType=CharacterAnimationType.standing, parentSprite=entityPlayer)
+        entityPlayer = Entity(
+            viewport=self.viewport, parentSprite=worldSprite, 
+            entityType=EntityType.player)
+        texturePlayer = CharacterTexture(
+            characterAnimationType=CharacterAnimationType.standing, 
+            parentSprite=entityPlayer, 
+            characterType=CharacterType.player)
         texturePlayer.setActive(False)
 
         myTimer = Timer(0.5)

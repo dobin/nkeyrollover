@@ -15,12 +15,12 @@ logger = logging.getLogger(__name__)
 class CharacterTexture(AnimationTexture):
     def __init__(
             self, 
+            characterType :CharacterType,
             parentSprite :Sprite =None, 
             characterAnimationType :CharacterAnimationType =None, 
             direction :Direction =Direction.none, 
             head :str =None,
             body :str =None,
-            characterType :CharacterType =CharacterType.stickfigure
         ):
         super(CharacterTexture, self).__init__(parentSprite)
 

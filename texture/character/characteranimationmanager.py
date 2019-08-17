@@ -14,15 +14,14 @@ logger = logging.getLogger(__name__)
 
 class CharacterAnimationManager(object): 
     def __init__(
-        self, head=None, body=None, 
-        characterType :CharacterType =CharacterType.stickfigure
+        self, characterType :CharacterType, head=None, body=None, 
     ):
         self.animationsLeft = {}
         self.animationsRight = {}
         self.fileTextureLoader = FileTextureLoader()
         self.characterType = characterType
 
-        if characterType is CharacterType.stickfigure:
+        if characterType is CharacterType.stickfigure or characterType is CharacterType.player:
             for animationType in CharacterAnimationType:
                 self.animationsLeft[animationType] = self.createAnimationStickfigure(
                     animationType, Direction.left)
@@ -78,7 +77,10 @@ class CharacterAnimationManager(object):
 
     def createAnimationStickfigure(self, animationType, direction):
         animations = []
-        color = ColorPalette.getColorByColor(Color.brightwhite)
+        if self.characterType is CharacterType.player:
+            color = ColorPalette.getColorByColor(Color.brightwhite)
+        else: 
+            color = ColorPalette.getColorByColor(Color.white)
         
         if animationType is CharacterAnimationType.standing:
             animation = Animation()

@@ -1,5 +1,6 @@
 from enum import Enum 
 
-class CharacterType(Enum): 
-    stickfigure = 0
-    cow = 1
+class CharacterType(Enum):
+    player = 0
+    stickfigure = 1
+    cow = 2
