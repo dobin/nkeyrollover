@@ -89,7 +89,7 @@ class StateWander(State):
         self.destCoord.x = me.player.getLocation().x
         self.destCoord.y = me.player.getLocation().y
         self.destCoord = self.pickDestAroundPlayer(self.destCoord, me)
-        if Config.showEnemyWanderDest:
+        if me.world.showEnemyWanderDestination:
             me.world.textureEmiter.showCharAtPos(
                 char='.', timeout=self.timer, coordinate=self.destCoord, color=Color.grey)
 

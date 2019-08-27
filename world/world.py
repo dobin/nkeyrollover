@@ -39,19 +39,19 @@ class World(object):
         self.gameRunning :bool = True
         self.gameTime :float =0.0
         self.showStats = False
+        self.showEnemyWanderDestination = False
 
 
     def togglePause(self): 
         self.pause = not self.pause
 
 
-    def quitGame(self): 
-        self.gameRunning = False
-
-
     def toggleStats(self): 
         self.showStats = not self.showStats
-        pass
+
+
+    def toggleShowEnemyWanderDestination(self): 
+        self.showEnemyWanderDestination = not self.showEnemyWanderDestination
 
 
     def draw(self):
@@ -109,3 +109,7 @@ class World(object):
         while n < len(o):
             self.win.addstr(y + n, x, o[n])
             n += 1
+
+
+    def quitGame(self): 
+        self.gameRunning = False

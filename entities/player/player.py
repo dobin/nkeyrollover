@@ -194,6 +194,8 @@ class Player(Character):
 
             if key == 265: # f1
                 self.world.toggleStats()
+            if key == 266: # f2
+                self.world.toggleShowEnemyWanderDestination()                
 
             # player related
             if key == ord('1'):
