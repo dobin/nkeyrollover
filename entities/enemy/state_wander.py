@@ -113,4 +113,10 @@ class StateWander(State):
             if coord.y < Config.topborder - me.texture.height + 1:
                 coord.y = Config.topborder  - me.texture.height + 1
 
+        # make sure destination is on-screen
+        if coord.x < Config.topborder: 
+            coord.x = Config.topborder
+        if coord.x > Config.rows + me.texture.height: 
+            coord.x = Config.rows + me.texture.height
+
         return coord
