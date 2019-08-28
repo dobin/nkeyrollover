@@ -26,7 +26,7 @@ class Director(object):
     def __init__(self, viewport :Viewport, world):
         self.viewport = viewport
         self.world = world
-        self.enemiesDead = []
+        self.enemies = []
         self.lastEnemyResurrectedTimer = Timer(1.0)
 
         self.maxEnemies = 12
@@ -45,7 +45,13 @@ class Director(object):
                 characterType=CharacterType.cow)
             newEnemy.enemyMovement = Config.enemyMovement
             newEnemy.direction = Direction.right
-            self.enemiesDead.append(newEnemy)
+            self.enemies.append(newEnemy)
+            newEnemy.setActive(False)
+
+            enemy = self.world.esperWorld.create_entity()
+            self.world.esperWorld.add_component(enemy, Renderable(r=newEnemy))
+            self.world.esperWorld.add_component(enemy, Advanceable(r=newEnemy))
+
         else:
             n = 0
             while n < self.maxEnemies:
@@ -58,7 +64,7 @@ class Director(object):
                     world=self.world, 
                     name=str(n),
                     characterType=characterType)
-                self.enemiesDead.append(newEnemy)
+                self.enemies.append(newEnemy)
                 newEnemy.setActive(False)
 
                 enemy = self.world.esperWorld.create_entity()
@@ -70,7 +76,7 @@ class Director(object):
 
     def numEnemiesAlive(self) -> int:
         n = 0
-        for enemy in self.enemiesDead:
+        for enemy in self.enemies:
             if enemy.isActive(): 
                 n += 1
         return n
@@ -78,7 +84,7 @@ class Director(object):
 
     def numEnemiesDead(self) -> int:
         n = 0
-        for enemy in self.enemiesDead:
+        for enemy in self.enemies:
             if not enemy.isActive(): 
                 n += 1
         return n
@@ -86,7 +92,7 @@ class Director(object):
     
     def numEnemiesAttacking(self) -> int:
         n = 0
-        for enemy in self.enemiesDead:
+        for enemy in self.enemies:
             if enemy.isActive():
                 if enemy.brain.state.name == 'attack' or enemy.brain.state.name == 'attackwindup':
                     n += 1
@@ -95,7 +101,7 @@ class Director(object):
 
     def numEnemiesWandering(self) -> int:
         n = 0
-        for enemy in self.enemiesDead:
+        for enemy in self.enemies:
             if enemy.isActive():
                 if enemy.brain.state.name == 'wander':
                     n += 1
@@ -104,7 +110,7 @@ class Director(object):
 
     def numEnemiesChasing(self) -> int:
         n = 0
-        for enemy in self.enemiesDead:
+        for enemy in self.enemies:
             if enemy.isActive():
                 if enemy.brain.state.name == 'chase':
                     n += 1
@@ -130,7 +136,7 @@ class Director(object):
     def advanceEnemies(self, deltaTime):
         self.lastEnemyResurrectedTimer.advance(deltaTime)
 
-        for enemy in self.enemiesDead:
+        for enemy in self.enemies:
             if enemy.isActive():
                 enemy.advance(deltaTime)
 
@@ -146,7 +152,7 @@ class Director(object):
 
 
     def findDeadEnemy(self): 
-        for enemy in self.enemiesDead:
+        for enemy in self.enemies:
             if not enemy.isActive():
                 return enemy
 
@@ -181,7 +187,7 @@ class Director(object):
 
 
     def collisionDetection(self, characterWeaponCoordinates): 
-        for enemy in self.enemiesDead:
+        for enemy in self.enemies:
             if enemy.isActive(): 
                 if enemy.collidesWithPoint(characterWeaponCoordinates):
                     enemy.gmHandleHit(50)
@@ -189,7 +195,7 @@ class Director(object):
 
     def getEnemiesHit(self, coordinates):
         enemies = []
-        for enemy in self.enemiesDead:
+        for enemy in self.enemies:
             if enemy.isActive():
                 if enemy.collidesWithPoint(coordinates):
                     enemies.append(enemy)
