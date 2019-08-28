@@ -18,6 +18,7 @@ current_milli_time = lambda: int(round(time.time() * 1000))
 class Keyrollover(object): 
     def __init__(self): 
         self.win = None         # canvas to draw
+        self.menuwin = None
         self.world = None       # the world, with all textures and units
         self.currentTime = None
         self.init()
@@ -43,8 +44,10 @@ class Keyrollover(object):
         logger = logging.getLogger(__name__)
         logger.record("-----------------Start------------------------")
 
-        # Create a new Curses window
-        self.win = curses.newwin(Config.rows, Config.columns)
+        self.menuwin = curses.newwin(3, Config.columns, 0, 0)
+        self.menuwin.border()
+
+        self.win = curses.newwin(Config.rows, Config.columns, 2, 0)
         curses.noecho()
         curses.cbreak()
         self.win.keypad(1) 
@@ -118,15 +121,19 @@ class Keyrollover(object):
         #    fps = 1000 * (float)(n) / (float)(current_milli_time() - self.startTime)
         #    #fps = self.workTime * 1000.0
 
+        #self.menuwin.erase()
+        #self.menuwin.border()
+        
         s = "Health: " + str(self.world.player.characterStatus.health)
         s += "  Mana: " + str(self.world.player.characterStatus.mana)
         s += "  Points: " + str(self.world.player.characterStatus.points)
 
         #s += "  FPS: %.0f" % (fps)
         color = ColorPalette.getColorByColorType(ColorType.menu, None)
-        self.win.addstr(1, 2, s, color )
+        self.menuwin.addstr(1, 2, s, color )
 
         self.printSkillbar(color)
+        self.menuwin.refresh()
 
 
     def printSkillbar(self, color): 
@@ -136,20 +143,20 @@ class Keyrollover(object):
         n = 0
         for skill in skills.skillStatus: 
             if skills.isRdy(skill): 
-                self.win.addstr(1, basex + n, skill, curses.color_pair(9))
+                self.menuwin.addstr(1, basex + n, skill, curses.color_pair(9))
             else: 
-                self.win.addstr(1, basex + n, skill, curses.color_pair(10))
+                self.menuwin.addstr(1, basex + n, skill, curses.color_pair(10))
 
             n += 1
 
         weaponIdx = 62
-        self.win.addstr(1, 
+        self.menuwin.addstr(1, 
             weaponIdx, 
             'W:' + self.world.player.characterAttack.getWeaponStr(), 
             color)
 
         weaponIdx = 62
-        self.win.addstr(1, 
+        self.menuwin.addstr(1, 
             weaponIdx, 
             'APM:' + str(int(self.world.player.characterStatus.getApm().getApm() * 60)), 
             color)
