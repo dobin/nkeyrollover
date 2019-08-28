@@ -14,6 +14,9 @@ from entities.enemy.state_attackwindup import StateAttackWindup
 from entities.enemy.state_chase import StateChase
 from entities.enemy.state_wander import StateWander
 
+from system.advanceable import Advanceable
+from system.renderable import Renderable
+
 logger = logging.getLogger(__name__)
 
 
@@ -24,9 +27,6 @@ class Director(object):
         self.viewport = viewport
         self.world = world
         self.enemiesDead = []
-        # sorted by increasing enemy.coordinates.y order after every advance()
-        # to have a good Z order on screen
-        self.enemiesAlive = [] 
         self.lastEnemyResurrectedTimer = Timer(1.0)
 
         self.maxEnemies = 12
@@ -59,34 +59,55 @@ class Director(object):
                     name=str(n),
                     characterType=characterType)
                 self.enemiesDead.append(newEnemy)
-                n = n + 1
+                newEnemy.setActive(False)
+
+                enemy = self.world.esperWorld.create_entity()
+                self.world.esperWorld.add_component(enemy, Renderable(r=newEnemy))
+                self.world.esperWorld.add_component(enemy, Advanceable(r=newEnemy))
+
+                n += 1
 
 
     def numEnemiesAlive(self) -> int:
-        return len(self.enemiesAlive)
+        n = 0
+        for enemy in self.enemiesDead:
+            if enemy.isActive(): 
+                n += 1
+        return n
+
+
+    def numEnemiesDead(self) -> int:
+        n = 0
+        for enemy in self.enemiesDead:
+            if not enemy.isActive(): 
+                n += 1
+        return n
 
     
     def numEnemiesAttacking(self) -> int:
         n = 0
-        for enemy in self.enemiesAlive:
-            if enemy.brain.state.name == 'attack' or enemy.brain.state.name == 'attackwindup':
-                n += 1
+        for enemy in self.enemiesDead:
+            if enemy.isActive():
+                if enemy.brain.state.name == 'attack' or enemy.brain.state.name == 'attackwindup':
+                    n += 1
         return n
 
 
     def numEnemiesWandering(self) -> int:
         n = 0
-        for enemy in self.enemiesAlive:
-            if enemy.brain.state.name == 'wander':
-                n += 1
+        for enemy in self.enemiesDead:
+            if enemy.isActive():
+                if enemy.brain.state.name == 'wander':
+                    n += 1
         return n
 
 
     def numEnemiesChasing(self) -> int:
         n = 0
-        for enemy in self.enemiesAlive:
-            if enemy.brain.state.name == 'chase':
-                n += 1
+        for enemy in self.enemiesDead:
+            if enemy.isActive():
+                if enemy.brain.state.name == 'chase':
+                    n += 1
         return n
 
 
@@ -109,38 +130,32 @@ class Director(object):
     def advanceEnemies(self, deltaTime):
         self.lastEnemyResurrectedTimer.advance(deltaTime)
 
-        for enemy in self.enemiesAlive:
-            enemy.advance(deltaTime)
-
-        def gety(elem): 
-            return elem.coordinates.y
-        self.enemiesAlive.sort(key=gety)            
-
-
-    def drawEnemies(self):
-        for enemy in self.enemiesAlive: 
-            enemy.draw()
+        for enemy in self.enemiesDead:
+            if enemy.isActive():
+                enemy.advance(deltaTime)
 
 
     def worldUpdate(self):
         # make more enemies
-        if len(self.enemiesAlive) < self.maxEnemies:
+        if self.numEnemiesAlive() < self.maxEnemies:
             if self.lastEnemyResurrectedTimer.timeIsUp():
                 self.lastEnemyResurrectedTimer.reset()
                 
-                if len(self.enemiesDead) > 0:
-                    logger.warn("Ressurect an enemy. alive are: " + str(len(self.enemiesAlive)))
-                    enemy = self.enemiesDead.pop()
-                    spawnCoords = self.getRandomSpawnCoords(enemy)
-                    enemy.gmRessurectMe(spawnCoords)
-                    self.enemiesAlive.append(enemy)
+                if self.numEnemiesDead() > 0:
+                    self.makeEnemyAlive()
 
-        # remove inactive enemies
-        for enemy in self.enemiesAlive:
+
+    def findDeadEnemy(self): 
+        for enemy in self.enemiesDead:
             if not enemy.isActive():
-                logger.info("Move newly dead enemy to dead queue")
-                self.enemiesDead.append(enemy)
-                self.enemiesAlive.remove(enemy)
+                return enemy
+
+
+    def makeEnemyAlive(self): 
+        logger.info("Ressurect an enemy")
+        enemy = self.findDeadEnemy()
+        spawnCoords = self.getRandomSpawnCoords(enemy)
+        enemy.gmRessurectMe(spawnCoords)
 
 
     def getRandomSpawnCoords(self, enemy):
@@ -166,16 +181,18 @@ class Director(object):
 
 
     def collisionDetection(self, characterWeaponCoordinates): 
-        for enemy in self.enemiesAlive: 
-            if enemy.collidesWithPoint(characterWeaponCoordinates):
-                enemy.gmHandleHit(50)
+        for enemy in self.enemiesDead:
+            if enemy.isActive(): 
+                if enemy.collidesWithPoint(characterWeaponCoordinates):
+                    enemy.gmHandleHit(50)
 
 
     def getEnemiesHit(self, coordinates):
         enemies = []
-        for enemy in self.enemiesAlive: 
-            if enemy.collidesWithPoint(coordinates):
-                enemies.append(enemy)
+        for enemy in self.enemiesDead:
+            if enemy.isActive():
+                if enemy.collidesWithPoint(coordinates):
+                    enemies.append(enemy)
 
         return enemies
 

@@ -40,7 +40,6 @@ class World(object):
         self.esperWorld.add_component(self.player, Renderable(r=player))
         self.esperWorld.add_component(self.player, Advanceable(r=player))
         self.playerObj = player
-
         # /Player
 
         self.director :Director = Director(self.viewport, self)
@@ -76,11 +75,6 @@ class World(object):
     def draw(self):
         # order here is Z axis
         self.map.draw()
-        self.director.drawEnemies()
-        #self.player.draw()
-
-        #self.player.drawCharacterAttack()
-        #self.director.drawEnemyAttacks()
         self.textureEmiter.draw()
         self.particleEmiter.draw() # should be on top
 
@@ -103,7 +97,6 @@ class World(object):
 
         self.gameTime += deltaTime
         self.map.advance(deltaTime)
-        #self.player.advance(deltaTime)
         self.director.advanceEnemies(deltaTime)
         self.particleEmiter.advance(deltaTime)
         self.textureEmiter.advance(deltaTime)

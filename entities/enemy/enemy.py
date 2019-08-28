@@ -138,7 +138,6 @@ class Enemy(Character):
                 self.coordinates.y -= 1
 
 
-
     def canAttackPlayer(self) -> bool: 
         hitLocations = self.characterAttack.texture.getTextureHitCoordinates()
 
