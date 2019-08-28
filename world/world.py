@@ -15,20 +15,34 @@ from .map import Map
 from .viewport import Viewport
 from .textureemiter import TextureEmiter
 
+import esper
+from system.advanceable import Advanceable, AdvanceableProcessor
+from system.renderable import Renderable, RenderableProcessor
+
 logger = logging.getLogger(__name__)
 
 
 class World(object): 
     """The game world in which all game object live"""
 
-    def __init__(self, win): 
+    def __init__(self, win):
+        self.esperWorld = esper.World()
         self.win = win
         self.viewport :Viewport =Viewport(win=win, world=self)
         self.worldSprite :Sprite = Sprite(viewport=self.viewport, parentSprite=None)
-        self.player :Player = Player(
+        
+        # Player
+        player :Player = Player(
             viewport=self.viewport, 
             parentEntity=self.worldSprite, 
             world=self)
+        self.player = self.esperWorld.create_entity()
+        self.esperWorld.add_component(self.player, Renderable(r=player))
+        self.esperWorld.add_component(self.player, Advanceable(r=player))
+        self.playerObj = player
+
+        # /Player
+
         self.director :Director = Director(self.viewport, self)
         self.director.init()
         self.particleEmiter :ParticleEmiter = ParticleEmiter(viewport=self.viewport)
@@ -40,6 +54,11 @@ class World(object):
         self.gameTime :float =0.0
         self.showStats = False
         self.showEnemyWanderDestination = False
+
+        renderableProcessor = RenderableProcessor()
+        advanceableProcessor = AdvanceableProcessor()
+        self.esperWorld.add_processor(renderableProcessor)
+        self.esperWorld.add_processor(advanceableProcessor)        
 
 
     def togglePause(self): 
@@ -58,10 +77,10 @@ class World(object):
         # order here is Z axis
         self.map.draw()
         self.director.drawEnemies()
-        self.player.draw()
+        #self.player.draw()
 
-        self.player.drawCharacterAttack()
-        self.director.drawEnemyAttacks()
+        #self.player.drawCharacterAttack()
+        #self.director.drawEnemyAttacks()
         self.textureEmiter.draw()
         self.particleEmiter.draw() # should be on top
 
@@ -80,9 +99,11 @@ class World(object):
         if self.pause:
             return
 
+        self.esperWorld.process(deltaTime)
+
         self.gameTime += deltaTime
         self.map.advance(deltaTime)
-        self.player.advance(deltaTime)
+        #self.player.advance(deltaTime)
         self.director.advanceEnemies(deltaTime)
         self.particleEmiter.advance(deltaTime)
         self.textureEmiter.advance(deltaTime)
@@ -90,7 +111,7 @@ class World(object):
 
 
     def getPlayer(self):
-        return self.player
+        return self.playerObj
 
 
     def drawStats(self): 

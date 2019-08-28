@@ -90,7 +90,7 @@ class Keyrollover(object):
             # https://stackoverflow.com/questions/19748685/curses-library-why-does-getch-clear-my-screen
             # keep inputrate below half FPS (50/s by default)
             if n % 2 == 0:
-                self.world.player.getInput()
+                self.world.getPlayer().getInput()
             else: 
                 self.win.refresh()
 
@@ -124,9 +124,9 @@ class Keyrollover(object):
         #self.menuwin.erase()
         #self.menuwin.border()
         
-        s = "Health: " + str(self.world.player.characterStatus.health)
-        s += "  Mana: " + str(self.world.player.characterStatus.mana)
-        s += "  Points: " + str(self.world.player.characterStatus.points)
+        s = "Health: " + str(self.world.getPlayer().characterStatus.health)
+        s += "  Mana: " + str(self.world.getPlayer().characterStatus.mana)
+        s += "  Points: " + str(self.world.getPlayer().characterStatus.points)
 
         #s += "  FPS: %.0f" % (fps)
         color = ColorPalette.getColorByColorType(ColorType.menu, None)
@@ -137,7 +137,7 @@ class Keyrollover(object):
 
 
     def printSkillbar(self, color): 
-        skills = self.world.player.skills
+        skills = self.world.getPlayer().skills
 
         basex = 54
         n = 0
@@ -152,13 +152,13 @@ class Keyrollover(object):
         weaponIdx = 62
         self.menuwin.addstr(1, 
             weaponIdx, 
-            'W:' + self.world.player.characterAttack.getWeaponStr(), 
+            'W:' + self.world.getPlayer().characterAttack.getWeaponStr(), 
             color)
 
         weaponIdx = 62
         self.menuwin.addstr(1, 
             weaponIdx, 
-            'APM:' + str(int(self.world.player.characterStatus.getApm().getApm() * 60)), 
+            'APM:' + str(int(self.world.getPlayer().characterStatus.getApm().getApm() * 60)), 
             color)
 
 

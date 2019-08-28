@@ -9,6 +9,13 @@ from world.scene import Scene
 from config import Config
 from world.world import World
 
+
+from texture.character.charactertexture import CharacterTexture
+from texture.character.characteranimationtype import CharacterAnimationType
+from sprite.coordinates import Coordinates
+from texture.character.charactertype import CharacterType
+
+
 current_milli_time = lambda: int(round(time.time() * 1000))
 
 
@@ -24,9 +31,9 @@ class KeyMove:
         self.y = y
 
 
-class Renderable:
-    def __init__(self, image, posx, posy, depth=0):
-        self.image = image
+class RenderableAnimation:
+    def __init__(self, texture, posx, posy, depth=0):
+        self.texture = texture
         self.depth = depth
         self.x = posx
         self.y = posy
@@ -42,7 +49,7 @@ class MovementProcessor(esper.Processor):
         self.miny = miny
         self.maxy = maxy
 
-    def process(self):
+    def process(self, dt):
         for ent, (vel, rend) in self.world.get_components(KeyMove, Renderable):
             rend.x += vel.x
             rend.y += vel.y
@@ -74,15 +81,11 @@ class RenderProcessor(esper.Processor):
         self.window = window
         self.clear_color = clear_color
 
-    def process(self):
-        # Clear the window:
-        self.window.erase()
-        self.window.border()
-
-        # This will iterate over every Entity that has this Component, and blit it:
-        for ent, rend in self.world.get_component(Renderable):
+    def process(self, dt):
+        for ent, rend in self.world.get_component(RenderableAnimation):
             #self.window.blit(rend.image, (rend.x, rend.y))
-            self.window.addstr(rend.y, rend.x, rend.image)
+            #self.window.addstr(rend.y, rend.x, rend.image)
+    
 
 ##################################################################################################
 
@@ -139,17 +142,25 @@ class Nkro(object):
 
 
     def initEsper(self):
-        # Initialize Esper world, and create a "player" Entity with a few Components.
         self.world = esper.World()
 
         self.player = self.world.create_entity()
-        #self.world.add_component(player, Velocity(x=1, y=1))
         self.world.add_component(self.player, KeyMove(x=0, y=0))
-        self.world.add_component(self.player, Renderable(image='p', posx=10, posy=10))
+        texture = CharacterTexture(
+            parentSprite=self, 
+            characterType=CharacterType.player)
+
+        self.world.add_component(
+            self.player, 
+            Renderable(texture=texture, posx=10, posy=10))
         
-        # Another, motionless, Entity:
         enemy = self.world.create_entity()
-        self.world.add_component(enemy, Renderable(image='r', posx=12, posy=12))
+        texture = CharacterTexture(
+            parentSprite=self, 
+            characterType=CharacterType.stickfigure)
+        self.world.add_component(
+            enemy, 
+            Renderable(texture=texture, posx=12, posy=12))
 
         # Create some Processor instances, and asign them to be processed.
         render_processor = RenderProcessor(window=self.win)
@@ -168,9 +179,12 @@ class Nkro(object):
         while self.oldWorld.gameRunning:
             timeStart = time.time()
 
+            # Clear the window:
+            self.window.erase()
+            self.window.border()
+
             # has to be after draw, as getch() does a refresh
             # https://stackoverflow.com/questions/19748685/curses-library-why-does-getch-clear-my-screen
-            # keep inputrate below half FPS (50/s by default)
             key = self.oldWorld.viewport.win.getch()
 
             if key == curses.KEY_LEFT:
@@ -185,7 +199,7 @@ class Nkro(object):
             elif key == curses.KEY_DOWN: 
                 self.world.component_for_entity(self.player, KeyMove).y += 1
 
-            self.world.process()
+            self.world.process(targetFrameTime)
 
             # fps logistics
             timeEnd = time.time()

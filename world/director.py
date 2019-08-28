@@ -122,11 +122,6 @@ class Director(object):
             enemy.draw()
 
 
-    def drawEnemyAttacks(self): 
-        for enemy in self.enemiesAlive: 
-            enemy.drawCharacterAttack()
-
-
     def worldUpdate(self):
         # make more enemies
         if len(self.enemiesAlive) < self.maxEnemies:
@@ -187,8 +182,8 @@ class Director(object):
 
     def getPlayersHit(self, coordinates):
         players = []
-        if self.world.player.collidesWithPoint(coordinates):
-            players.append(self.world.player)
+        if self.world.getPlayer().collidesWithPoint(coordinates):
+            players.append(self.world.getPlayer())
 
         return players
 

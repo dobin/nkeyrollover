@@ -31,6 +31,8 @@ from .state_idle import StateIdle
 from .state_spawn import StateSpawn
 from .state_walking import StateWalking
 from texture.character.charactertype import CharacterType
+from system.advanceable import Advanceable
+from system.renderable import Renderable
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +47,14 @@ class Player(Character):
             world=world, entityType=EntityType.player)
         
         self.texture = CharacterTexture(parentSprite=self, characterType=CharacterType.player)
+        
+        # CharacterAttack
         self.characterAttack = CharacterAttack(viewport=viewport, parentCharacter=self, isPlayer=True)
+        characterAttackEntity = self.world.esperWorld.create_entity()
+        self.world.esperWorld.add_component(characterAttackEntity, Renderable(r=self.characterAttack))
+        self.world.esperWorld.add_component(characterAttackEntity, Advanceable(r=self.characterAttack))
+        # /CharacterAttack
+        
         self.skills = PlayerSkills(player=self)
         self.movementTimer = Timer( 1.0 / Config.movementKeysPerSec, instant=True)
         self.initAi()

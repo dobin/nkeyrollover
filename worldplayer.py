@@ -57,8 +57,8 @@ def worldPlayer():
         world.draw()
         world.advance(0.01)
 
-        if world.player.getInput():
-            playerScreenCoords = world.viewport.getScreenCoords ( world.player.getLocation() )
+        if world.getPlayer().getInput():
+            playerScreenCoords = world.viewport.getScreenCoords ( world.getPlayer().getLocation() )
 
             if playerScreenCoords.x == 30:
                 world.viewport.x -= 1

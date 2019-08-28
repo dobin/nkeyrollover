@@ -28,6 +28,8 @@ from .state_idle import StateIdle
 from .state_spawn import StateSpawn
 from .state_wander import StateWander
 from texture.texture import Texture
+from system.advanceable import Advanceable
+from system.renderable import Renderable
 
 logger = logging.getLogger(__name__)
 
@@ -49,8 +51,15 @@ class Enemy(Character):
             head=self.getRandomHead(), 
             body=self.getRandomBody(),
             characterType=self.characterType)
+
+        # CharacterAttack
         self.characterAttack :CharacterAttack = CharacterAttack(
             viewport=viewport, parentCharacter=self, isPlayer=False)
+        characterAttackEntity = self.world.esperWorld.create_entity()
+        self.world.esperWorld.add_component(characterAttackEntity, Renderable(r=self.characterAttack))
+        self.world.esperWorld.add_component(characterAttackEntity, Advanceable(r=self.characterAttack))
+        # /CharacterAttack 
+
         self.name :str = 'Bot' + name
         self.enemyInfo :EnemyInfo = EnemyInfo()
 

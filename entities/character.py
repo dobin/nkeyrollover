@@ -30,7 +30,6 @@ class Character(Entity):
         self.characterStatus = CharacterStatus()
         self.speechTexture = SpeechTexture(parentSprite=self, displayText='')
         self.speechTexture.setActive(False)
-        self.characterAttack = None # by children
         self.characterInfo = None # filled by children
 
 
@@ -59,14 +58,9 @@ class Character(Entity):
         self.speechTexture.draw(self.viewport)
 
 
-    def drawCharacterAttack(self): 
-        self.characterAttack.draw()
-
-
     def advance(self, deltaTime):
         super(Character, self).advance(deltaTime) # advance Entity part (duration, sprite)
 
-        self.characterAttack.advance(deltaTime) # update weapon (duration, sprite)
         self.characterStatus.advance(deltaTime) # update health, mana etc.
         self.speechTexture.advance(deltaTime)
 

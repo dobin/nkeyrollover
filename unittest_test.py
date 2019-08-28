@@ -55,8 +55,8 @@ def test_weaponHit():
         win = None
 
     world = FakeWorld(win)
-    world.player.setLocation( Coordinates(10, 10))
-    world.player.direction = Direction.left
+    world.getPlayer().setLocation( Coordinates(10, 10))
+    world.getPlayer().direction = Direction.left
 
     enemy = Enemy(win, world.worldSprite, None, world, 'bot')
     enemy.setLocation(Coordinates(4, 10))
@@ -64,22 +64,22 @@ def test_weaponHit():
 
     logger.info("LIFE1: " + str(enemy.characterStatus.health))
     life1 = enemy.characterStatus.health
-    world.player.handleInput(ord('3')) # select first weapon
-    world.player.advance(0.1)
+    world.getPlayer().handleInput(ord('3')) # select first weapon
+    world.getPlayer().advance(0.1)
     enemy.advance(0.1)
-    world.player.handleInput(ord(' ')) # fire
+    world.getPlayer().handleInput(ord(' ')) # fire
     logger.info("LIFE2: " + str(enemy.characterStatus.health))
     life2 = enemy.characterStatus.health
-    world.player.advance(0.1)
+    world.getPlayer().advance(0.1)
     enemy.advance(0.1)
     life3 = enemy.characterStatus.health
     logger.info("LIFE3: " + str(enemy.characterStatus.health))
 
-    locs = Utility.getBorderHalf(world.player.getLocationCenter(), distance=2, width=1)
+    locs = Utility.getBorderHalf(world.getPlayer().getLocationCenter(), distance=2, width=1)
 
     if doCurses:
         enemy.draw()
-        world.player.draw()
+        world.getPlayer().draw()
         for loc in locs: 
             win.addstr(loc.y, loc.x, ',') 
 
