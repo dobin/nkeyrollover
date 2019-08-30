@@ -1,11 +1,22 @@
 import esper
+from typing import List
+from sprite.coordinates import Coordinates
+from entities.character import Character
 
 from config import Config
 
 class Renderable():
-    def __init__(self, r, z=0):
-        self.r = r
+    def __init__(self, r :Character, z=0):
+        self.r :Character = r
         self.z = z
+
+
+    def isHitBy(self, hitLocations :List[Coordinates]):
+        for hitLocation in hitLocations:
+            if self.r.collidesWithPoint(hitLocation):
+                return True
+        
+        return False
 
 
 class RenderableProcessor(esper.Processor):
@@ -26,4 +37,5 @@ class RenderableProcessor(esper.Processor):
             
         for l in self.order:
             for entry in l:
-                entry.draw()
+                if entry.isActive():
+                    entry.draw()

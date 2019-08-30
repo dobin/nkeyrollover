@@ -16,6 +16,8 @@ from entities.enemy.state_wander import StateWander
 
 from system.advanceable import Advanceable
 from system.renderable import Renderable
+from system.gamelogic.attackable import Attackable
+from system.gamelogic.tenemy import tEnemy
 
 logger = logging.getLogger(__name__)
 
@@ -38,11 +40,12 @@ class Director(object):
     # without enemies in the unit test
     def init(self):
         if Config.devMode: 
+            characterType = CharacterType.cow
             newEnemy = Enemy(viewport=self.viewport, 
                 parent=self.world.worldSprite, 
                 world=self.world, 
                 name="Enym", 
-                characterType=CharacterType.cow)
+                characterType=characterType)
             newEnemy.enemyMovement = Config.enemyMovement
             newEnemy.direction = Direction.right
             self.enemies.append(newEnemy)
@@ -51,6 +54,8 @@ class Director(object):
             enemy = self.world.esperWorld.create_entity()
             self.world.esperWorld.add_component(enemy, Renderable(r=newEnemy))
             self.world.esperWorld.add_component(enemy, Advanceable(r=newEnemy))
+            self.world.esperWorld.add_component(enemy, tEnemy(characterType=characterType))
+            self.world.esperWorld.add_component(enemy, Attackable(initialHealth=100))
 
         else:
             n = 0
@@ -70,6 +75,8 @@ class Director(object):
                 enemy = self.world.esperWorld.create_entity()
                 self.world.esperWorld.add_component(enemy, Renderable(r=newEnemy))
                 self.world.esperWorld.add_component(enemy, Advanceable(r=newEnemy))
+                self.world.esperWorld.add_component(enemy, tEnemy(characterType=characterType))
+                self.world.esperWorld.add_component(enemy, Attackable(initialHealth=100))
 
                 n += 1
 
@@ -158,10 +165,13 @@ class Director(object):
 
 
     def makeEnemyAlive(self): 
-        logger.info("Ressurect an enemy")
-        enemy = self.findDeadEnemy()
-        spawnCoords = self.getRandomSpawnCoords(enemy)
-        enemy.gmRessurectMe(spawnCoords)
+        for ent, (attackable, renderable, enemy) in self.world.esperWorld.get_components(Attackable, Renderable, tEnemy):
+            if renderable.r.brain.state.name == 'idle':
+                logger.info("Ressurect enemy: " + str(renderable.r))
+                attackable.resetHealth()
+                spawnCoords = self.getRandomSpawnCoords(renderable.r)
+                renderable.r.gmRessurectMe(spawncoord=spawnCoords)
+                break
 
 
     def getRandomSpawnCoords(self, enemy):
@@ -191,16 +201,6 @@ class Director(object):
             if enemy.isActive(): 
                 if enemy.collidesWithPoint(characterWeaponCoordinates):
                     enemy.gmHandleHit(50)
-
-
-    def getEnemiesHit(self, coordinates):
-        enemies = []
-        for enemy in self.enemies:
-            if enemy.isActive():
-                if enemy.collidesWithPoint(coordinates):
-                    enemies.append(enemy)
-
-        return enemies
 
 
     def getPlayersHit(self, coordinates):

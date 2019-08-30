@@ -15,6 +15,13 @@ from .character import Character
 from .weapontype import WeaponType
 from world.viewport import Viewport
 from typing import List
+from utilities.colorpalette import ColorPalette
+from utilities.color import Color
+
+from system.gamelogic.attackable import Attackable
+from system.gamelogic.tenemy import tEnemy
+from system.gamelogic.tplayer import tPlayer
+from system.renderable import Renderable
 
 logger = logging.getLogger(__name__)
 
@@ -159,20 +166,20 @@ class CharacterAttack(Entity):
     def hitCollisionDetection(self, hitLocations :List[Coordinates]) -> int:
         damageSum = 0
         if self.isPlayer:
-            for hitLocation in hitLocations:
-                hittedEnemies = self.parentCharacter.world.director.getEnemiesHit(hitLocation)
-                for enemy in hittedEnemies:
+            for ent, (renderable, attackable, enemy) in self.parentCharacter.world.esperWorld.get_components(Renderable, Attackable, tEnemy):
+                if renderable.isHitBy(hitLocations):
                     damage = self.parentCharacter.characterStatus.getDamage(weaponType=self.weaponType)
-                    enemy.gmHandleHit(damage)
-                    self.parentCharacter.gmHandleEnemyHit(damage)
+                    attackable.handleHit(damage)
+                    renderable.r.setOverwriteColorFor( 
+                        1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
                     damageSum += damage
-        else: 
-            for hitLocation in hitLocations:
-                hittedPlayer = self.parentCharacter.world.director.getPlayersHit(hitLocation)
-                for player in hittedPlayer: 
-                    damage = self.parentCharacter.characterStatus.getDamage(weaponType=self.weaponType) 
-                    player.gmHandleHit(damage)
-                    self.parentCharacter.gmHandleEnemyHit(damage)
+
+        else:
+            for ent, (renderable, attackable, player) in self.parentCharacter.world.esperWorld.get_components(Renderable, Attackable, tPlayer):
+                if renderable.isHitBy(hitLocations):
+                    damage = self.parentCharacter.characterStatus.getDamage(weaponType=self.weaponType)
+                    renderable.r.setOverwriteColorFor( 
+                        1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
                     damageSum += damage
 
         return damageSum

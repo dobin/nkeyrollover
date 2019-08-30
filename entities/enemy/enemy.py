@@ -76,7 +76,7 @@ class Enemy(Character):
         self.brain.register(StateWander)
         self.brain.register(StateDying)
         self.brain.register(StateAttackWindup)
-        self.brain.push("spawn")
+        self.brain.push("idle")
 
 
     # Game Mechanics
@@ -99,16 +99,6 @@ class Enemy(Character):
         self.brain.pop()
         self.brain.push('spawn')
         
-
-    def gmHandleHit(self, damage :int):
-        """Handle if i (the enemy) is being hit"""
-        self.characterStatus.getHit(damage)
-        self.setOverwriteColorFor( 
-            1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
-        if not self.characterStatus.isAlive():
-            self.brain.pop()
-            self.brain.push('dying')
-
 
     def move(self, x :int =0, y :int =0):
         """Move this enemy in x/y direction, if allowed. Update direction too"""

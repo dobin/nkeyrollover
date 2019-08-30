@@ -42,11 +42,8 @@ class StateDying(State):
         me = self.brain.owner
 
         if self.timeIsUp():
-            logger.debug("{}: Died enough, set to inactive".format(self.owner))
+            logger.info("{}: Died enough, set to inactive".format(self.owner))
             self.brain.pop()
             self.brain.push("idle")
             me.setActive(False)
-
-
-
 

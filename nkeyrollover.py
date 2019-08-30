@@ -11,6 +11,9 @@ from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
 from utilities.utilities import Utility
 
+from system.gamelogic.attackable import Attackable
+
+
 import locale 
 current_milli_time = lambda: int(round(time.time() * 1000))
 
@@ -124,7 +127,7 @@ class Keyrollover(object):
         #self.menuwin.erase()
         #self.menuwin.border()
         
-        s = "Health: " + str(self.world.getPlayer().characterStatus.health)
+        s = "Health: " + str(self.world.esperWorld.component_for_entity(self.world.player, Attackable).getHealth())
         s += "  Mana: " + str(self.world.getPlayer().characterStatus.mana)
         s += "  Points: " + str(self.world.getPlayer().characterStatus.points)
 

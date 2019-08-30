@@ -18,6 +18,9 @@ from .textureemiter import TextureEmiter
 import esper
 from system.advanceable import Advanceable, AdvanceableProcessor
 from system.renderable import Renderable, RenderableProcessor
+from system.gamelogic.attackable import Attackable, AttackableProcessor
+from system.gamelogic.tenemy import tEnemy, tEnemyProcessor
+from system.gamelogic.tplayer import tPlayer, tPlayerProcessor
 
 logger = logging.getLogger(__name__)
 
@@ -39,6 +42,8 @@ class World(object):
         self.player = self.esperWorld.create_entity()
         self.esperWorld.add_component(self.player, Renderable(r=player))
         self.esperWorld.add_component(self.player, Advanceable(r=player))
+        self.esperWorld.add_component(self.player, tPlayer())
+        self.esperWorld.add_component(self.player, Attackable(initialHealth=100))
         self.playerObj = player
         # /Player
 
@@ -56,8 +61,15 @@ class World(object):
 
         renderableProcessor = RenderableProcessor()
         advanceableProcessor = AdvanceableProcessor()
+        tplayerProcessor = tPlayerProcessor()
+        tenemyProcessor = tEnemyProcessor()
+        attackableProcessor = AttackableProcessor()
+
         self.esperWorld.add_processor(renderableProcessor)
-        self.esperWorld.add_processor(advanceableProcessor)        
+        self.esperWorld.add_processor(advanceableProcessor)
+        self.esperWorld.add_processor(tplayerProcessor)  
+        self.esperWorld.add_processor(tenemyProcessor)  
+        self.esperWorld.add_processor(attackableProcessor)          
 
 
     def togglePause(self): 
