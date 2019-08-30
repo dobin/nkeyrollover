@@ -3,6 +3,7 @@ import copy
 
 from sprite.coordinates import Coordinates
 from config import Config
+from messaging import messaging, Messaging, Message, MessageType
 
 logger = logging.getLogger(__name__)
 
@@ -61,3 +62,15 @@ class Viewport(object):
 
     def adjustViewport(self, x): 
         self.x += x
+
+
+    def advance(self, deltaTime):
+        # Check if we need to scroll the window
+        for message in messaging.get():
+            if message.type is MessageType.PlayerLocation:
+                playerScreenCoords = self.getScreenCoords ( 
+                    message.data )
+                if playerScreenCoords.x >= Config.moveBorderRight:
+                    self.adjustViewport(1)
+                if playerScreenCoords.x <= Config.moveBorderLeft:
+                    self.adjustViewport(-1)

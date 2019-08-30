@@ -33,6 +33,8 @@ from system.advanceable import Advanceable
 from system.renderable import Renderable
 from texture.speechtexture import SpeechTexture
 
+from messaging import messaging, Messaging, Message, MessageType
+
 
 class tPlayer():
     def __init__(self, renderable):
@@ -88,7 +90,144 @@ class tPlayer():
 class tPlayerProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
+        self.movementTimer = Timer( 1.0 / Config.movementKeysPerSec, instant=True)
+
 
     def process(self, deltaTime):
+        self.handleKeyboardInput()
+        self.advance(deltaTime)
+
+
+    def advance(self, deltaTime):
+        self.movementTimer.advance(deltaTime)
+
         for ent, player in self.world.get_component(tPlayer):
-            player.advance(deltaTime)            
+            player.advance(deltaTime)
+
+
+    def handleKeyboardInput(self):
+        for ent, (renderable, player) in self.world.get_components(Renderable, tPlayer):
+            didMove = False
+            
+            for message in messaging.get():
+                if message.type is MessageType.PlayerKeypress:
+                    didMoveTmp = self.handleKeyPress(message.data, player, renderable)
+                    if didMoveTmp: 
+                        didMove = True
+
+            # to allow diagonal movement, we allow multiple movement keys per input
+            # cycle, without resetting the timer.
+            if didMove: 
+                self.movementTimer.reset()
+
+
+    def handleKeyPress(self, key, player, playerRenderable):
+        # move to attack animation state
+        if key == ord(' '):
+            player.brain.pop()
+            player.brain.push('attack')
+
+        if self.movementTimer.timeIsUp(): 
+            if key == curses.KEY_LEFT:
+                self.move(playerRenderable, player, x=-1, y=0)
+                return True
+
+            elif key == curses.KEY_RIGHT: 
+                self.move(playerRenderable, player, x=1, y=0)
+                return True
+
+            elif key == curses.KEY_UP:
+                self.move(playerRenderable, player, x=0, y=-1)
+                return True
+
+            elif key == curses.KEY_DOWN: 
+                self.move(playerRenderable, player, x=0, y=1)
+                return True
+
+        return False
+
+
+    def move(self, playerRenderable, player, x=0, y=0):
+        currentDirection = playerRenderable.direction
+        if x < 0:
+            if Utility.isPointMovable(
+                playerRenderable.coordinates.x - 1, 
+                playerRenderable.coordinates.y, 
+                playerRenderable.texture.width, 
+                playerRenderable.texture.height
+            ):
+                playerRenderable.coordinates.x -= 1
+                playerRenderable.direction = Direction.left
+                self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
+        elif x > 0: 
+            if Utility.isPointMovable(
+                playerRenderable.coordinates.x + 1, 
+                playerRenderable.coordinates.y, 
+                playerRenderable.texture.width, 
+                playerRenderable.texture.height
+            ):
+                playerRenderable.coordinates.x += 1
+                playerRenderable.direction = Direction.right
+                self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
+
+        if y < 0:
+            if Config.moveDiagonal:
+                if Utility.isPointMovable(
+                    playerRenderable.coordinates.x + 1, 
+                    playerRenderable.coordinates.y - 1, 
+                    playerRenderable.texture.width, 
+                    playerRenderable.texture.height
+                ):
+                    playerRenderable.coordinates.y -= 1
+                    playerRenderable.coordinates.x += 1
+                    self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
+            else: 
+                if Utility.isPointMovable(
+                    playerRenderable.coordinates.x, 
+                    playerRenderable.coordinates.y - 1, 
+                    playerRenderable.texture.width, 
+                    playerRenderable.texture.height
+                ):
+                    playerRenderable.coordinates.y -= 1
+                    self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
+        if y > 0: 
+            if Config.moveDiagonal:
+                if Utility.isPointMovable(
+                    playerRenderable.coordinates.x - 1, 
+                    playerRenderable.coordinates.y + 1, 
+                    playerRenderable.texture.width, 
+                    playerRenderable.texture.height
+                ):
+                    playerRenderable.coordinates.y += 1
+                    playerRenderable.coordinates.x -= 1
+                    self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
+            else:
+                if Utility.isPointMovable(
+                    playerRenderable.coordinates.x, 
+                    playerRenderable.coordinates.y + 1, 
+                    playerRenderable.texture.width, 
+                    playerRenderable.texture.height
+                ):
+                    playerRenderable.coordinates.y += 1
+                    self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
+
+        messaging.add(
+            type=MessageType.PlayerLocation, 
+            data=playerRenderable.coordinates)
+
+
+    def movePlayer(self, playerRenderable, player, sameDirection):
+        if not sameDirection:
+            playerRenderable.texture.changeAnimation(
+                CharacterAnimationType.walking, playerRenderable.direction)
+
+        # walking animation
+        playerRenderable.advanceStep()
+
+        currentState = player.brain.state
+        if currentState.name == 'walking': 
+            # keep him walking a bit more
+            currentState.setTimer(1.0)
+        else: 
+            player.brain.pop()
+            player.brain.push('walking')

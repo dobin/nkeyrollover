@@ -94,10 +94,7 @@ class Keyrollover(object):
             # has to be after draw, as getch() does a refresh
             # https://stackoverflow.com/questions/19748685/curses-library-why-does-getch-clear-my-screen
             # keep inputrate below half FPS (50/s by default)
-            if n % 2 == 0:
-                self.keyboardInput.getInput()
-            else: 
-                self.win.refresh()
+            self.keyboardInput.getInput()
 
             # fps logistics
             timeEnd = time.time()

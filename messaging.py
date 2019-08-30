@@ -11,10 +11,9 @@ class MessageType(Enum):
     EnemyStateUpdate = 5
 
 
-
 class Message(object): 
-    def __init__(self, messageType, data): 
-        self.messageType = messageType
+    def __init__(self, type, data): 
+        self.type = type
         self.data = data
 
 
@@ -22,11 +21,16 @@ class Messaging(object):
     def __init__(self): 
         self.messages = []
 
-    def add(self, message):
-        self.messages.append(message)
+    def add(self, type, data):
+        self.messages.append(Message(
+            type=type,
+            data=data
+        ))
 
     def reset(self): 
         self.messages.clear()
 
     def get(self): 
         return self.messages
+
+messaging = Messaging()

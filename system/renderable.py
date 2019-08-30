@@ -193,6 +193,7 @@ class Renderable():
             if self.coordinates.y > 2:
                 self.coordinates.y -= 1
 
+
 class RenderableProcessor(esper.Processor):
     def __init__(self):
         super().__init__()

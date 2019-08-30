@@ -25,6 +25,8 @@ from system.gamelogic.tplayer import tPlayer, tPlayerProcessor
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
 from system.offensiveattack import OffensiveAttack, OffensiveAttackProcessor
+from messaging import messaging, Messaging, Message, MessageType
+
 logger = logging.getLogger(__name__)
 
 
@@ -36,7 +38,8 @@ class World(object):
         self.win = win
         self.viewport :Viewport =Viewport(win=win, world=self)
         self.worldSprite :Sprite = Sprite(viewport=self.viewport, parentSprite=None)
-        
+        self.messaging = messaging
+
         # Player
         self.player = self.esperWorld.create_entity()
         texture = CharacterTexture(parentSprite=None, characterType=CharacterType.player)
@@ -95,8 +98,10 @@ class World(object):
         tplayerProcessor = tPlayerProcessor()
         tenemyProcessor = tEnemyProcessor()
         attackableProcessor = AttackableProcessor()
-        offensiveAttackProcessor = OffensiveAttackProcessor()
-
+        offensiveAttackProcessor = OffensiveAttackProcessor(
+            playerAttackEntity=self.characterAttackEntity
+        )
+        
         self.esperWorld.add_processor(renderableProcessor)
         self.esperWorld.add_processor(advanceableProcessor)
         self.esperWorld.add_processor(tplayerProcessor)  
@@ -146,10 +151,9 @@ class World(object):
         self.particleEmiter.advance(deltaTime)
         self.textureEmiter.advance(deltaTime)
         self.director.worldUpdate()
+        self.viewport.advance(deltaTime)
 
-
-    def getPlayer(self):
-        return self.playerObj
+        messaging.reset()
 
 
     def drawStats(self): 
