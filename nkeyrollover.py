@@ -10,6 +10,7 @@ from world.world import World
 from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
 from utilities.utilities import Utility
+from system.keyboardinput import KeyboardInput
 
 from system.gamelogic.attackable import Attackable
 
@@ -68,6 +69,7 @@ class Keyrollover(object):
         self.win.border()
 
         self.world = World(win=self.win)
+        self.keyboardInput = KeyboardInput(world=self.world)
 
         self.startTime = current_milli_time()
         self.currentTime = self.startTime
@@ -88,12 +90,13 @@ class Keyrollover(object):
             self.drawStatusbar(n)
             self.world.draw()
             self.world.advance(deltaTime)
+            self.keyboardInput.advance(deltaTime)
 
             # has to be after draw, as getch() does a refresh
             # https://stackoverflow.com/questions/19748685/curses-library-why-does-getch-clear-my-screen
             # keep inputrate below half FPS (50/s by default)
             if n % 2 == 0:
-                self.world.getPlayer().getInput()
+                self.keyboardInput.getInput()
             else: 
                 self.win.refresh()
 

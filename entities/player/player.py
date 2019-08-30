@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import curses
 import logging
 from enum import Enum
@@ -56,7 +54,6 @@ class Player(Character):
         # /CharacterAttack
         
         self.skills = PlayerSkills(player=self)
-        self.movementTimer = Timer( 1.0 / Config.movementKeysPerSec, instant=True)
         self.initAi()
         self.name = 'Player'
 
@@ -75,13 +72,6 @@ class Player(Character):
         self.brain.register(StateAttack)
         self.brain.register(StateWalking)
         self.brain.push("spawn")
-
-
-    # game mechanics 
-
-    def gmHandleHit(self, damage):
-        self.characterStatus.getHit(damage)
-        self.setOverwriteColorFor( 1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
 
 
     def announce(self, damage, particleEffectType): 
@@ -188,111 +178,10 @@ class Player(Character):
             self.brain.push('walking')
 
 
-    def handleInput(self, key):
-            if key == ord(' '):
-                self.brain.pop()
-                self.brain.push('attack')
-                self.characterAttack.attack()
-
-            # game related
-            if key == ord('p'):
-                self.world.togglePause()
-
-            if key == 27: # esc
-                self.world.quitGame()
-
-            if key == 265: # f1
-                self.world.toggleStats()
-            if key == 266: # f2
-                self.world.toggleShowEnemyWanderDestination()                
-
-            # player related
-            if key == ord('1'):
-                self.characterAttack.switchWeaponByKey('1')
-
-            if key == ord('2'):
-                self.characterAttack.switchWeaponByKey('2')
-
-            if key == ord('3'):
-                self.characterAttack.switchWeaponByKey('3')
-
-            if key == ord('4'):
-                self.characterAttack.switchWeaponByKey('4')
-
-            if key == ord('c'):
-                self.skills.doSkill('c')
-
-            if key == ord('f'):
-                self.skills.doSkill('f')
-
-            if key == ord('g'):
-                self.skills.doSkill('g')
-
-            if key == ord('q'):
-                self.skills.doSkill('q')
-
-            if key == ord('w'):
-                self.skills.doSkill('w')
-
-            if key == ord('e'):
-                self.skills.doSkill('e')
-
-            if key == ord('r'):
-                self.skills.doSkill('r')
-
-            if self.movementTimer.timeIsUp(): 
-                if key == curses.KEY_LEFT:
-                    self.move(x=-1, y=0)
-                    return True
-
-                elif key == curses.KEY_RIGHT: 
-                    self.move(x=1, y=0)
-                    return True
-
-                elif key == curses.KEY_UP:
-                    self.move(x=0, y=-1)
-                    return True
-
-                elif key == curses.KEY_DOWN: 
-                    self.move(x=0, y=1)
-                    return True
-
-
-    def getInput(self):
-        gotInput = False
-        didMove = False
-        key = self.viewport.win.getch()
-        while key != -1:
-            gotInput = True
-            self.characterStatus.handleKeyPress(time=self.world.getGameTime())
-            didMoveTmp = self.handleInput(key)
-            if didMoveTmp: 
-                didMove = True
-            key = self.viewport.win.getch()
-
-        # to allow diagonal movement, we allow multiple movement keys per input
-        # cycle, without resetting the timer.
-        if didMove: 
-            self.movementTimer.reset()
-        
-        return gotInput
-
-
     def advance(self, deltaTime):
         super(Player, self).advance(deltaTime) # advance Character part (duration, sprite)
         self.brain.update(deltaTime)
         self.skills.advance(deltaTime)
-        self.movementTimer.advance(deltaTime)
-
-
-    def ressurectMe(self): 
-        if self.characterStatus.isAlive(): 
-            return
-
-        logger.info("Ressurect player at: " + str(self.coordinates.x) + " / " + str(self.coordinates.y))
-        self.characterStatus.init()
-        self.brain.pop()
-        self.brain.push('spawn')
 
 
     def __repr__(self): 
