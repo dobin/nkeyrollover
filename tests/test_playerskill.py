@@ -2,7 +2,6 @@ import unittest
 
 from tests.fakeworld import FakeWorld
 from sprite.direction import Direction
-from entities.enemy.enemy import Enemy
 from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 

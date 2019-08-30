@@ -69,14 +69,14 @@ class StateWander(State):
             return
 
         if self.destCoord.x > me.coordinates.x:
-            me.move(x=1, y=0)
+            me.enemy_move(x=1, y=0)
         elif self.destCoord.x < me.coordinates.x: 
-            me.move(x=-1, y=0)
+            me.enemy_move(x=-1, y=0)
 
         if self.destCoord.y > me.coordinates.y:
-            me.move(x=0, y=1)
+            me.enemy_move(x=0, y=1)
         elif self.destCoord.y < me.coordinates.y: 
-            me.move(x=0, y=-1)
+            me.enemy_move(x=0, y=-1)
 
 
     def chooseDestination(self): 

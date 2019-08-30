@@ -66,7 +66,8 @@ class StateChase(State):
         if not me.enemyMovement: 
             return
 
-        meWeaponLocation = me.characterAttack.getLocation()
+        #meWeaponLocation = me.characterAttack.getLocation()
+        meWeaponLocation = me.getLocation()
         playerLocation = me.player.getLocation()
         
         if meWeaponLocation.x < playerLocation.x:

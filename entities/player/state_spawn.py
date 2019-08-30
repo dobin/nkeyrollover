@@ -36,10 +36,10 @@ class StateSpawn(State):
 
         if self.speechTimer.timeIsUp(): 
             if self.state == 0:
-                me.speechTexture.changeAnimation('I\'m here to chew gum and kick ass')
+                #me.speechTexture.changeAnimation('I\'m here to chew gum and kick ass')
                 self.speechTimer.setTimer(1.5)
                 self.speechTimer.reset()
                 self.state += 1
             elif self.state == 1:
-                me.speechTexture.changeAnimation('And i\'m all out of gum')
+                #me.speechTexture.changeAnimation('And i\'m all out of gum')
                 self.speechTimer.stop()

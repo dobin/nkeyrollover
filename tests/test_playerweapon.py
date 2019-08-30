@@ -5,11 +5,8 @@ import time
 import logging
 import curses
 
-from entities.characterattack import CharacterAttack
 from entities.entity import Entity
 from entities.entitytype import EntityType
-from entities.player.player import Player
-from entities.enemy.enemy import Enemy
 from config import Config
 from world.director import Director
 from sprite.direction import Direction

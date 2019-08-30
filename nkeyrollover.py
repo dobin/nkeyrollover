@@ -3,7 +3,6 @@
 import curses, random, time, signal, sys
 import logging
 
-from entities.player.player import Player
 from world.scene import Scene
 from config import Config
 from world.world import World
@@ -87,7 +86,7 @@ class Keyrollover(object):
             self.win.erase()
             self.win.border()
 
-            self.drawStatusbar(n)
+            #self.drawStatusbar(n)
             self.world.draw()
             self.world.advance(deltaTime)
             self.keyboardInput.advance(deltaTime)

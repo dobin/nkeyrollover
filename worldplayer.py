@@ -4,8 +4,6 @@ import logging
 #import tests.mockcurses as curses
 import curses
 
-from entities.player.player import Player
-from entities.enemy.enemy import Enemy
 from config import Config
 from world.director import Director
 from sprite.direction import Direction

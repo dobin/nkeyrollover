@@ -3,7 +3,6 @@ import logging
 
 from tests.fakeworld import FakeWorld
 import tests.mockcurses as curses
-from entities.enemy.enemy import Enemy
 from sprite.direction import Direction
 from sprite.particle import Particle
 from texture.phenomena.phenomenatexture import PhenomenaTexture

@@ -1,3 +1,5 @@
+import esper
+
 from enum import Enum 
 import logging
 
@@ -7,47 +9,42 @@ from utilities.timer import Timer
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
 from config import Config
-from .entity import Entity
-from .entitytype import EntityType
-from .character import Character
+from entities.entity import Entity
+from entities.entitytype import EntityType
+from entities.character import Character
 from sprite.direction import Direction
-from .character import Character
-from .weapontype import WeaponType
+from entities.character import Character
+from entities.weapontype import WeaponType
 from world.viewport import Viewport
 from typing import List
 from utilities.colorpalette import ColorPalette
 from utilities.color import Color
 
+from system.renderable import Renderable
 from system.gamelogic.attackable import Attackable
 from system.gamelogic.tenemy import tEnemy
 from system.gamelogic.tplayer import tPlayer
-from system.renderable import Renderable
 
 logger = logging.getLogger(__name__)
 
 
-class CharacterAttack(Entity): 
-    def __init__(
-        self, viewport :Viewport, parentCharacter :Character, isPlayer :bool
-    ):
-        super(CharacterAttack, self).__init__(
-            viewport=viewport, parentSprite=parentCharacter, 
-            entityType=EntityType.weapon)
-
+class OffensiveAttack():
+    def __init__(self, isPlayer, renderable, world):
         self.isPlayer :bool = isPlayer
-        self.texture :PhenomenaTexture = PhenomenaTexture(phenomenaType=PhenomenaType.hit, parentSprite=self)
-        self.parentCharacter :Character = parentCharacter
+        self.renderable = renderable
+        self.world = world
+
+        self.durationTimer = Timer(0.0, active=False)
 
         # the duration of the hitting animation
-        self.durationTimer.setTimer( self.texture.getAnimationTime() )
+        self.durationTimer.setTimer( renderable.texture.getAnimationTime() )
         self.durationTimer.reset()
 
         self.cooldownTimer :Timer =Timer(Config.playerAttacksCd, instant=True)
 
-        self.setActive(False)
         self.weaponType :WeaponType = WeaponType.hit
         self.selectedWeaponKey :str = '1'
-        
+
 
     def switchWeaponByKey(self, key :str):
         self.selectedWeaponKey = key
@@ -68,24 +65,42 @@ class CharacterAttack(Entity):
         logger.info("Switch to weaopn: " + str(weaponType))
         self.weaponType = weaponType
 
+        # TODO: This is ugly..
+        self.renderable.texture.changeAnimation(self.weaponTypeToAnimationType(weaponType), self.renderable.parent.direction)
+        coordinates = Coordinates( # for hit
+            -1 * self.renderable.texture.width,
+            1
+        )
+        self.renderable.setLocation(coordinates)
 
-    def getLocation(self) -> Coordinates: 
-        baselocation = super(CharacterAttack, self).getLocation()
+    def weaponTypeToAnimationType(self, weaponType):
+        if self.weaponType is WeaponType.hit:
+            return PhenomenaType.hit
+        elif self.weaponType is WeaponType.hitSquare:
+            return PhenomenaType.hitSquare
+        elif self.weaponType is WeaponType.hitLine: 
+            return PhenomenaType.hitLine
+        elif self.weaponType is WeaponType.jumpKick: 
+            return PhenomenaType.hit
+
+
+    def __getLocation(self) -> Coordinates: 
+        baselocation = self.renderable.parent.getLocation()
 
         xx = None
-        if self.parentSprite.direction is Direction.right:
+        if self.renderable.parent.direction is Direction.right:
             xx = 1
         else: 
             xx = -1
 
         # new 1-pt weapon location
-        charHalfWidth = int(self.parentCharacter.texture.width / 2.0)
-        charHalfHeight = int( float(self.parentCharacter.texture.height) / 2.0)
+        charHalfWidth = int(self.renderable.parent.texture.width / 2.0)
+        charHalfHeight = int( float(self.renderable.parent.texture.height) / 2.0)
         baselocation.y += charHalfHeight
-        if self.parentSprite.direction is Direction.left: 
+        if self.renderable.parent.direction is Direction.left: 
             baselocation.x -= 1
         else: 
-            baselocation.x += self.parentCharacter.texture.width
+            baselocation.x += self.renderable.parent.texture.width
 
         # adjust for weapon area
         if self.weaponType is WeaponType.hit:
@@ -94,48 +109,48 @@ class CharacterAttack(Entity):
         elif self.weaponType is WeaponType.hitSquare: 
             baselocation.y -= 1 # move it up one notch
 
-            if self.parentSprite.direction is Direction.left:
-                baselocation.x -= self.texture.width - 1
+            if self.renderable.parent.direction is Direction.left:
+                baselocation.x -= self.renderable.texture.width - 1
 
         elif self.weaponType is WeaponType.hitLine: 
-            if self.parentSprite.direction is Direction.left:
-                baselocation.x -= self.texture.width - 1
+            if self.renderable.parent.direction is Direction.left:
+                baselocation.x -= self.renderable.texture.width - 1
 
         return baselocation
 
 
     def attackWeaponHit(self) -> int:
-        self.texture.changeAnimation(PhenomenaType.hit, self.parentSprite.direction)
+        self.renderable.texture.changeAnimation(PhenomenaType.hit, self.renderable.parent.direction)
         
         # take hit locations from texture
-        hitLocations = self.texture.getTextureHitCoordinates()
+        hitLocations = self.renderable.texture.getTextureHitCoordinates()
 
         damage = self.hitCollisionDetection( hitLocations )
         return damage        
 
 
     def attackWeaponHitSquare(self) -> int:
-        self.texture.changeAnimation(PhenomenaType.hitSquare, self.parentSprite.direction)
+        self.renderable.texture.changeAnimation(PhenomenaType.hitSquare, self.renderable.parent.direction)
         
         # take hit locations from texture
-        hitLocations = self.texture.getTextureHitCoordinates()
+        hitLocations = self.renderable.texture.getTextureHitCoordinates()
 
         damage = self.hitCollisionDetection( hitLocations )
         return damage
 
 
     def attackWeaponHitLine(self) -> int: 
-        self.texture.changeAnimation(PhenomenaType.hitLine, self.parentSprite.direction)
+        self.renderable.texture.changeAnimation(PhenomenaType.hitLine, self.renderable.parent.direction)
         
         # take hit locations from texture
-        hitLocations = self.texture.getTextureHitCoordinates()
+        hitLocations = self.renderable.texture.getTextureHitCoordinates()
 
         damage = self.hitCollisionDetection( hitLocations )
         return damage
 
 
     def attackWeaponJumpKick(self) -> int: 
-        self.texture.changeAnimation(PhenomenaType.hit, self.parentSprite.direction)
+        self.renderable.texture.changeAnimation(PhenomenaType.hit, self.renderable.parent.direction)
         return 0
 
 
@@ -145,7 +160,7 @@ class CharacterAttack(Entity):
             return
         self.cooldownTimer.reset() # activate cooldown
 
-        self.setActive(True)
+        self.renderable.setActive(True)
         self.durationTimer.reset() # entity will setActive(false) when time is up
 
         damage = 0
@@ -158,27 +173,27 @@ class CharacterAttack(Entity):
         elif self.weaponType is WeaponType.jumpKick: 
             damage = self.attackWeaponJumpKick()
 
-        RecordHolder.recordAttack(
-            weaponType=self.weaponType, damage=damage, name=self.parentCharacter.name, 
-            characterType=self.parentCharacter.entityType)
+        #RecordHolder.recordAttack(
+        #    weaponType=self.weaponType, damage=damage, name=self.renderable.parent.name, 
+        #    characterType=self.renderable.parent.entityType)
 
 
     def hitCollisionDetection(self, hitLocations :List[Coordinates]) -> int:
         damageSum = 0
         if self.isPlayer:
-            for ent, (renderable, attackable, enemy) in self.parentCharacter.world.esperWorld.get_components(Renderable, Attackable, tEnemy):
+            for ent, (renderable, attackable, enemy) in self.world.esperWorld.get_components(Renderable, Attackable, tEnemy):
                 if renderable.isHitBy(hitLocations):
-                    damage = self.parentCharacter.characterStatus.getDamage(weaponType=self.weaponType)
+                    damage = enemy.characterStatus.getDamage(weaponType=self.weaponType)
                     attackable.handleHit(damage)
-                    renderable.r.setOverwriteColorFor( 
+                    renderable.setOverwriteColorFor( 
                         1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
                     damageSum += damage
 
         else:
-            for ent, (renderable, attackable, player) in self.parentCharacter.world.esperWorld.get_components(Renderable, Attackable, tPlayer):
+            for ent, (renderable, attackable, player) in self.world.esperWorld.get_components(Renderable, Attackable, tPlayer):
                 if renderable.isHitBy(hitLocations):
-                    damage = self.parentCharacter.characterStatus.getDamage(weaponType=self.weaponType)
-                    renderable.r.setOverwriteColorFor( 
+                    damage = player.characterStatus.getDamage(weaponType=self.weaponType)
+                    renderable.setOverwriteColorFor( 
                         1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
                     damageSum += damage
 
@@ -186,9 +201,21 @@ class CharacterAttack(Entity):
 
 
     def advance(self, deltaTime :float):
-        super(CharacterAttack, self).advance(deltaTime)
         self.cooldownTimer.advance(deltaTime)
+        self.durationTimer.advance(deltaTime)
 
+        if self.durationTimer.isActive() and self.durationTimer.timeIsUp():
+            self.renderable.setActive(False)
 
     def getWeaponStr(self): 
         return self.selectedWeaponKey
+
+
+class OffensiveAttackProcessor(esper.Processor):
+    def __init__(self):
+        super().__init__()
+
+    def process(self, dt):
+        for ent, offensiveAttack in self.world.get_component(OffensiveAttack):
+            offensiveAttack.advance(dt)
+            

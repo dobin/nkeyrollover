@@ -2,9 +2,14 @@ import curses
 
 from utilities.timer import Timer
 from config import Config
+from sprite.direction import Direction
+from utilities.utilities import Utility
+from texture.character.characteranimationtype import CharacterAnimationType
+
+from system.offensiveattack import OffensiveAttack
 
 from system.renderable import Renderable
-
+from system.gamelogic.tplayer import tPlayer
 
 class KeyboardInput(object):
     def __init__(self, world): 
@@ -47,30 +52,29 @@ class KeyboardInput(object):
                 self.world.toggleShowEnemyWanderDestination()                
 
             # player related
-            #ent, () self.world.esperWorld.components_for_entity(self.world.player, Velocity).x = -3
-            #for ent, (renderable, tPlayer) in self.world.get_components(Renderable, tPlayer):
             playerRenderable = self.world.esperWorld.component_for_entity(self.world.player, Renderable)
-            player = playerRenderable.r
+            playerAttack = self.world.esperWorld.component_for_entity(self.world.characterAttackEntity, OffensiveAttack)
+
+            player = self.world.esperWorld.component_for_entity(self.world.player, tPlayer)
 
             player.characterStatus.handleKeyPress(time=self.world.getGameTime())
-
 
             if key == ord(' '):
                 player.brain.pop()
                 player.brain.push('attack')
-                player.characterAttack.attack()
+                playerAttack.attack()
 
             if key == ord('1'):
-                player.characterAttack.switchWeaponByKey('1')
+                playerAttack.switchWeaponByKey('1')
 
             if key == ord('2'):
-                player.characterAttack.switchWeaponByKey('2')
+                playerAttack.switchWeaponByKey('2')
 
             if key == ord('3'):
-                player.characterAttack.switchWeaponByKey('3')
+                playerAttack.switchWeaponByKey('3')
 
             if key == ord('4'):
-                player.characterAttack.switchWeaponByKey('4')
+                playerAttack.switchWeaponByKey('4')
 
             if key == ord('c'):
                 player.skills.doSkill('c')
@@ -95,20 +99,110 @@ class KeyboardInput(object):
 
             if self.movementTimer.timeIsUp(): 
                 if key == curses.KEY_LEFT:
-                    player.move(x=-1, y=0)
+                    self.move(playerRenderable, player, x=-1, y=0)
                     return True
 
                 elif key == curses.KEY_RIGHT: 
-                    player.move(x=1, y=0)
+                    self.move(playerRenderable, player, x=1, y=0)
                     return True
 
                 elif key == curses.KEY_UP:
-                    player.move(x=0, y=-1)
+                    self.move(playerRenderable, player, x=0, y=-1)
                     return True
 
                 elif key == curses.KEY_DOWN: 
-                    player.move(x=0, y=1)
+                    self.move(playerRenderable, player, x=0, y=1)
                     return True
+
+
+    def move(self, playerRenderable, player, x=0, y=0):
+        currentDirection = playerRenderable.direction
+        if x < 0:
+            if Utility.isPointMovable(
+                playerRenderable.coordinates.x - 1, 
+                playerRenderable.coordinates.y, 
+                playerRenderable.texture.width, 
+                playerRenderable.texture.height
+            ):
+                playerRenderable.coordinates.x -= 1
+                playerRenderable.direction = Direction.left
+                self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
+        elif x > 0: 
+            if Utility.isPointMovable(
+                playerRenderable.coordinates.x + 1, 
+                playerRenderable.coordinates.y, 
+                playerRenderable.texture.width, 
+                playerRenderable.texture.height
+            ):
+                playerRenderable.coordinates.x += 1
+                playerRenderable.direction = Direction.right
+                self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
+
+        if y < 0:
+            if Config.moveDiagonal:
+                if Utility.isPointMovable(
+                    playerRenderable.coordinates.x + 1, 
+                    playerRenderable.coordinates.y - 1, 
+                    playerRenderable.texture.width, 
+                    playerRenderable.texture.height
+                ):
+                    playerRenderable.coordinates.y -= 1
+                    playerRenderable.coordinates.x += 1
+                    self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
+            else: 
+                if Utility.isPointMovable(
+                    playerRenderable.coordinates.x, 
+                    playerRenderable.coordinates.y - 1, 
+                    playerRenderable.texture.width, 
+                    playerRenderable.texture.height
+                ):
+                    playerRenderable.coordinates.y -= 1
+                    self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
+        if y > 0: 
+            if Config.moveDiagonal:
+                if Utility.isPointMovable(
+                    playerRenderable.coordinates.x - 1, 
+                    playerRenderable.coordinates.y + 1, 
+                    playerRenderable.texture.width, 
+                    playerRenderable.texture.height
+                ):
+                    playerRenderable.coordinates.y += 1
+                    playerRenderable.coordinates.x -= 1
+                    self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
+            else:
+                if Utility.isPointMovable(
+                    playerRenderable.coordinates.x, 
+                    playerRenderable.coordinates.y + 1, 
+                    playerRenderable.texture.width, 
+                    playerRenderable.texture.height
+                ):
+                    playerRenderable.coordinates.y += 1
+                    self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
+
+
+    def movePlayer(self, playerRenderable, player, sameDirection):
+        # move window
+        playerScreenCoords = self.viewport.getScreenCoords ( 
+            playerRenderable.getLocation() )
+        if playerScreenCoords.x >= Config.moveBorderRight:
+            self.viewport.adjustViewport(1)
+        if playerScreenCoords.x <= Config.moveBorderLeft:
+            self.viewport.adjustViewport(-1)
+
+        if not sameDirection:
+            playerRenderable.texture.changeAnimation(
+                CharacterAnimationType.walking, playerRenderable.direction)
+
+        # walking animation
+        playerRenderable.advanceStep()
+
+        currentState = player.brain.state
+        if currentState.name == 'walking': 
+            # keep him walking a bit more
+            currentState.setTimer(1.0)
+        else: 
+            player.brain.pop()
+            player.brain.push('walking')
 
 
     def advance(self, deltaTime):

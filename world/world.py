@@ -4,7 +4,6 @@ import curses
 
 from sprite.coordinates import Coordinates
 from sprite.direction import Direction
-from entities.player.player import Player
 from world.director import Director
 from config import Config
 from entities.entity import Entity
@@ -14,14 +13,18 @@ from sprite.sprite import Sprite
 from .map import Map
 from .viewport import Viewport
 from .textureemiter import TextureEmiter
-
+from texture.character.charactertype import CharacterType
+from texture.character.charactertexture import CharacterTexture
 import esper
 from system.advanceable import Advanceable, AdvanceableProcessor
 from system.renderable import Renderable, RenderableProcessor
-from system.gamelogic.attackable import Attackable, AttackableProcessor
+from system.gamelogic.attackable import Attackable
+from system.gamelogic.attackableprocessor import AttackableProcessor
 from system.gamelogic.tenemy import tEnemy, tEnemyProcessor
 from system.gamelogic.tplayer import tPlayer, tPlayerProcessor
-
+from texture.phenomena.phenomenatexture import PhenomenaTexture
+from texture.phenomena.phenomenatype import PhenomenaType
+from system.offensiveattack import OffensiveAttack, OffensiveAttackProcessor
 logger = logging.getLogger(__name__)
 
 
@@ -35,17 +38,45 @@ class World(object):
         self.worldSprite :Sprite = Sprite(viewport=self.viewport, parentSprite=None)
         
         # Player
-        player :Player = Player(
-            viewport=self.viewport, 
-            parentEntity=self.worldSprite, 
-            world=self)
         self.player = self.esperWorld.create_entity()
-        self.esperWorld.add_component(self.player, Renderable(r=player))
-        self.esperWorld.add_component(self.player, Advanceable(r=player))
-        self.esperWorld.add_component(self.player, tPlayer())
+        texture = CharacterTexture(parentSprite=None, characterType=CharacterType.player)
+        coordinates = Coordinates(
+            Config.playerSpawnPoint['x'],
+            Config.playerSpawnPoint['y']
+        )
+        renderable = Renderable(
+            texture=texture,
+            viewport=self.viewport,
+            parent=None,
+            coordinates=coordinates)
+        texture.parentSprite = renderable
+        self.esperWorld.add_component(self.player, renderable)
+        self.esperWorld.add_component(self.player, tPlayer(renderable=renderable))
         self.esperWorld.add_component(self.player, Attackable(initialHealth=100))
-        self.playerObj = player
+        self.playerRendable = renderable
         # /Player
+
+        # CharacterAttack
+        characterAttackEntity = self.esperWorld.create_entity()
+        texture :PhenomenaTexture = PhenomenaTexture(phenomenaType=PhenomenaType.hit, parentSprite=self)
+        coordinates = Coordinates( # for hit
+            -1,
+            1
+        )
+        renderable = Renderable(
+            texture=texture,
+            viewport=self.viewport,
+            parent=self.playerRendable,
+            coordinates=coordinates)
+        texture.parentSprite = renderable
+        self.esperWorld.add_component(characterAttackEntity, renderable)
+        offensiveAttack = OffensiveAttack(
+            isPlayer=True, 
+            world=self,
+            renderable=renderable)
+        self.esperWorld.add_component(characterAttackEntity, offensiveAttack)
+        self.characterAttackEntity = characterAttackEntity
+        # /CharacterAttack
 
         self.director :Director = Director(self.viewport, self)
         self.director.init()
@@ -64,12 +95,14 @@ class World(object):
         tplayerProcessor = tPlayerProcessor()
         tenemyProcessor = tEnemyProcessor()
         attackableProcessor = AttackableProcessor()
+        offensiveAttackProcessor = OffensiveAttackProcessor()
 
         self.esperWorld.add_processor(renderableProcessor)
         self.esperWorld.add_processor(advanceableProcessor)
         self.esperWorld.add_processor(tplayerProcessor)  
         self.esperWorld.add_processor(tenemyProcessor)  
         self.esperWorld.add_processor(attackableProcessor)          
+        self.esperWorld.add_processor(offensiveAttackProcessor)          
 
 
     def togglePause(self): 

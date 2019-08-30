@@ -10,9 +10,10 @@ from entities.weapontype import WeaponType
 from utilities.colorpalette import ColorPalette
 from utilities.color import Color
 
+
 from system.gamelogic.attackable import Attackable
-from system.gamelogic.tenemy import tEnemy
-from system.gamelogic.tplayer import tPlayer
+#from system.gamelogic.tenemy import tEnemy
+#from system.gamelogic.tplayer import tPlayer
 from system.renderable import Renderable
 
 logger = logging.getLogger(__name__)
@@ -177,7 +178,8 @@ class PlayerSkills(object):
     def hitCollisionDetection(self, hitLocations, weaponType):
         damageSum = 0
 
-        for ent, (renderable, attackable, enemy) in self.player.world.esperWorld.get_components(Renderable, Attackable, tEnemy):
+        #for ent, (renderable, attackable, enemy) in self.player.world.esperWorld.get_components(Renderable, Attackable, tEnemy):
+        for ent, (renderable, attackable) in self.player.world.esperWorld.get_components(Renderable, Attackable):
             if renderable.isHitBy(hitLocations):
                 damage = self.player.characterStatus.getDamage(weaponType=weaponType)
                 attackable.handleHit(damage)
