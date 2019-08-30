@@ -1,5 +1,6 @@
 import curses
 import logging
+import math
 
 from texture.character.charactertype import CharacterType
 from texture.character.characteranimationtype import CharacterAnimationType
@@ -21,8 +22,8 @@ class Utility(object):
         }
         res['x'] = abs(coord1.x - coord2.x)
         res['y'] = abs(coord1.y - coord2.y)
-        res['sum'] = res['x'] + res['y']
-
+        #res['sum'] = res['x'] + res['y']
+        res['sum'] = math.sqrt(res['x'] ** 2 + res['y'] ** 2)
         return res
 
     

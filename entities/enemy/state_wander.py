@@ -10,9 +10,9 @@ from config import Config
 from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 from utilities.color import Color
+from messaging import messaging, Messaging, Message, MessageType
 
 logger = logging.getLogger(__name__)
-
 
 
 class StateWander(State):
@@ -49,14 +49,23 @@ class StateWander(State):
                 self.brain.pop()
                 self.brain.push("chase")
 
-        elif me.isPlayerClose():
-            logger.debug("{}: Player is close, chasing".format(self.owner))
-            self.brain.pop()
-            self.brain.push("chase")
-
         elif Utility.isIdentical(me.getLocation(), self.destCoord):
             # No reset of wander state atm, just a new location
             self.chooseDestination()
+
+        else:
+            # check if player is close
+            for message in messaging.get(): 
+                if message.type is MessageType.PlayerLocation:
+
+                    distance = Utility.distance(
+                        message.data, 
+                        me.getLocation())
+
+                    if distance['sum'] < 10:
+                        logger.info("{}: Player is close, chasing".format(self.owner))
+                        self.brain.pop()
+                        self.brain.push("chase")
 
 
     def getInputWander(self):

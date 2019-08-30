@@ -81,16 +81,6 @@ class tEnemy():
         return False
 
 
-    def isPlayerClose(self) -> bool:
-        distance = Utility.distance(
-            self.player.getLocation(), 
-            self.renderable.getLocation())
-        if distance['sum'] < 5:
-            return True
-        else: 
-            return False
-
-
     def advance(self, deltaTime :float): 
         self.brain.update(deltaTime)
         #self.characterAttack.advance(deltaTime)

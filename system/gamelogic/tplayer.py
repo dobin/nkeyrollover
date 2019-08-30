@@ -76,7 +76,6 @@ class tPlayer():
 
 
     def advance(self, deltaTime):
-        #self.characterAttack.advance(deltaTime)
         self.characterStatus.advance(deltaTime)
         self.speechTexture.advance(deltaTime)        
         self.brain.update(deltaTime)
