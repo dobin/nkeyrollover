@@ -188,7 +188,7 @@ class Renderable():
                 self.coordinates.y += 1
         
         elif y < 0:
-            if self.coordinates.y > 2:
+            if self.coordinates.y >  Config.areaMoveable['miny'] - self.texture.height + 1:
                 self.coordinates.y -= 1
 
 

@@ -42,26 +42,6 @@ class Utility(object):
         else: 
             return False
 
-    @staticmethod
-    def isPointMovable(x, y, width, height): 
-        # lower boundary
-        if y + height > Config.areaMoveable['maxy']:
-            return False
-
-        # upper boundary
-        if y <= Config.areaMoveable['miny'] - height: 
-            return False
-
-        ## left boundary
-        #if x <= Config.areaMoveable['minx']:
-        #    return False            
-
-        # right boundary
-        #if x + width >= Config.areaMoveable['maxx']:
-        #    return False
-
-        return True
-
 
     @staticmethod
     def getBorder(loc :Coordinates, distance :int =1, width :int =1, thicc :int =1):
