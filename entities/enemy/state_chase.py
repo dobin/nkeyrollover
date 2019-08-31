@@ -11,8 +11,8 @@ from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 from utilities.color import Color
 from messaging import messaging, Messaging, Message, MessageType
-from system.renderable import Renderable
-from system.renderable import Renderable
+
+import system.renderable
 import system.gamelogic.tenemy
 
 logger = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ class StateChase(State):
 
     def on_enter(self):
         meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, Renderable)
+            self.brain.owner.entity, system.renderable.Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
 
@@ -60,7 +60,6 @@ class StateChase(State):
             self.lastInputTimer.reset()
         
         if self.canAttackTimer.timeIsUp():
-            logger.info("Check if i can hit him...")
             if self.canAttackPlayer():
                 if meEnemy.world.director.canHaveMoreEnemiesAttacking():
                     self.brain.pop()
@@ -88,7 +87,7 @@ class StateChase(State):
             self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
 
         attackRendable = self.brain.owner.world.component_for_entity(
-            meEnemy.offensiveAttackEntity, Renderable)
+            meEnemy.offensiveAttackEntity, system.renderable.Renderable)
         hitLocations = attackRendable.texture.getTextureHitCoordinates()
 
         # only one of the hitlocations need to hit
@@ -98,12 +97,12 @@ class StateChase(State):
                 playerLocation)
 
             if canAttack: 
-                logger.info("Can attack, me {} in {}".format(
+                logger.debug("Can attack, me {} in {}".format(
                     hitLocation, playerLocation
                 ))
                 return True
             else: 
-                logger.info("Can not attack, me {} in {}".format(
+                logger.debug("Can not attack, me {} in {}".format(
                     hitLocation, playerLocation
                 ))
 
@@ -112,7 +111,7 @@ class StateChase(State):
 
     def getInputChase(self):
         meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, Renderable)
+            self.brain.owner.entity, system.renderable.Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
 
@@ -123,7 +122,7 @@ class StateChase(State):
             return
 
         meOffensiveWeaponRenderable = self.brain.owner.world.component_for_entity(
-            meEnemy.offensiveAttackEntity, Renderable)
+            meEnemy.offensiveAttackEntity, system.renderable.Renderable)
         meWeaponLocation = meOffensiveWeaponRenderable.getLocation()
         logger.info("Enemy: {}  Weapon: {}".format(
             meRenderable.getLocation(), meWeaponLocation))

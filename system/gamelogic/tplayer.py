@@ -29,11 +29,11 @@ from entities.player.state_idle import StateIdle
 from entities.player.state_spawn import StateSpawn
 from entities.player.state_walking import StateWalking
 from texture.character.charactertype import CharacterType
-from system.advanceable import Advanceable
-from system.renderable import Renderable
 from texture.speechtexture import SpeechTexture
-
 from messaging import messaging, Messaging, Message, MessageType
+
+import system.advanceable 
+import system.renderable
 
 
 class tPlayer():
@@ -105,7 +105,7 @@ class tPlayerProcessor(esper.Processor):
 
 
     def handleKeyboardInput(self):
-        for ent, (renderable, player) in self.world.get_components(Renderable, tPlayer):
+        for ent, (renderable, player) in self.world.get_components(system.renderable.Renderable, tPlayer):
             didMove = False
             
             for message in messaging.get():

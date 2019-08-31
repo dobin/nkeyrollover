@@ -20,8 +20,8 @@ from typing import List
 from utilities.colorpalette import ColorPalette
 from utilities.color import Color
 
-from system.renderable import Renderable
-from system.gamelogic.attackable import Attackable
+import system.renderable
+import system.gamelogic.attackable 
 import system.gamelogic.tenemy 
 import system.gamelogic.tplayer
 
@@ -94,41 +94,6 @@ class OffensiveAttack():
             return PhenomenaType.hit
 
 
-    def attackWeaponHit(self) -> int:
-        self.renderable.texture.changeAnimation(PhenomenaType.hit, self.renderable.parent.direction)
-        
-        # take hit locations from texture
-        hitLocations = self.renderable.texture.getTextureHitCoordinates()
-
-        damage = self.hitCollisionDetection( hitLocations )
-        return damage        
-
-
-    def attackWeaponHitSquare(self) -> int:
-        self.renderable.texture.changeAnimation(PhenomenaType.hitSquare, self.renderable.parent.direction)
-        
-        # take hit locations from texture
-        hitLocations = self.renderable.texture.getTextureHitCoordinates()
-
-        damage = self.hitCollisionDetection( hitLocations )
-        return damage
-
-
-    def attackWeaponHitLine(self) -> int: 
-        self.renderable.texture.changeAnimation(PhenomenaType.hitLine, self.renderable.parent.direction)
-        
-        # take hit locations from texture
-        hitLocations = self.renderable.texture.getTextureHitCoordinates()
-
-        damage = self.hitCollisionDetection( hitLocations )
-        return damage
-
-
-    def attackWeaponJumpKick(self) -> int: 
-        self.renderable.texture.changeAnimation(PhenomenaType.hit, self.renderable.parent.direction)
-        return 0
-
-
     def attack(self):
         if not self.cooldownTimer.timeIsUp():
             RecordHolder.recordPlayerAttackCooldown(self.weaponType, time=self.cooldownTimer.getTimeLeft())
@@ -136,47 +101,36 @@ class OffensiveAttack():
         self.cooldownTimer.reset() # activate cooldown
 
         self.renderable.setActive(True)
-        self.durationTimer.reset() # entity will setActive(false) when time is up
+        self.durationTimer.reset() # will setActive(false) when time is up
 
-        damage = 0
         if self.weaponType is WeaponType.hit:
-            damage = self.attackWeaponHit()
+            self.renderable.texture.changeAnimation(PhenomenaType.hit, self.renderable.parent.direction)
+            hitLocations = self.renderable.texture.getTextureHitCoordinates()
         elif self.weaponType is WeaponType.hitSquare:
-            damage = self.attackWeaponHitSquare()
+            self.renderable.texture.changeAnimation(PhenomenaType.hitSquare, self.renderable.parent.direction)
+            hitLocations = self.renderable.texture.getTextureHitCoordinates()        
         elif self.weaponType is WeaponType.hitLine: 
-            damage = self.attackWeaponHitLine()
+            self.renderable.texture.changeAnimation(PhenomenaType.hitLine, self.renderable.parent.direction)
+            hitLocations = self.renderable.texture.getTextureHitCoordinates()
         elif self.weaponType is WeaponType.jumpKick: 
-            damage = self.attackWeaponJumpKick()
-
-        #RecordHolder.recordAttack(
-        #    weaponType=self.weaponType, damage=damage, name=self.renderable.parent.name, 
-        #    characterType=self.renderable.parent.entityType)
-
-
-    def hitCollisionDetection(self, hitLocations :List[Coordinates]) -> int:
-        damageSum = 0
+            self.renderable.texture.changeAnimation(PhenomenaType.hit, self.renderable.parent.direction)
+            hitLocations = []
+        
+        messageType = None
         if self.isPlayer:
-            for ent, (renderable, attackable, enemy) in self.world.esperWorld.get_components(
-                Renderable, Attackable, system.gamelogic.tenemy.tEnemy
-            ):
-                if renderable.isHitBy(hitLocations):
-                    damage = self.damage[ self.weaponType ]
-                    attackable.handleHit(damage)
-                    renderable.setOverwriteColorFor( 
-                        1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
-                    damageSum += damage
+            messageType = MessageType.PlayerAttack
+        else: 
+            messageType = MessageType.EnemyAttack
 
-        else:
-            for ent, (renderable, attackable, player) in self.world.esperWorld.get_components(
-                Renderable, Attackable, system.gamelogic.tplayer.tPlayer
-            ):
-                if renderable.isHitBy(hitLocations):
-                    damage = self.damage[ self.weaponType ]
-                    renderable.setOverwriteColorFor( 
-                        1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
-                    damageSum += damage
+        messaging.add(
+            type=messageType, 
+            data= {
+                'hitLocations': hitLocations,
+                'damage': self.damage[ self.weaponType ]
+            }
+        )
 
-        return damageSum
+
 
 
     def advance(self, deltaTime :float):

@@ -112,12 +112,12 @@ class World(object):
             playerAttackEntity=self.characterAttackEntity
         )
         
-        self.esperWorld.add_processor(renderableProcessor)
         self.esperWorld.add_processor(advanceableProcessor)
         self.esperWorld.add_processor(tplayerProcessor)  
         self.esperWorld.add_processor(tenemyProcessor)  
         self.esperWorld.add_processor(attackableProcessor)          
         self.esperWorld.add_processor(offensiveAttackProcessor)          
+        self.esperWorld.add_processor(renderableProcessor)
 
 
     def togglePause(self): 

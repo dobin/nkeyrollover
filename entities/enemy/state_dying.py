@@ -10,7 +10,8 @@ from config import Config
 from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 from utilities.color import Color
-from system.renderable import Renderable
+
+import system.renderable
 import system.gamelogic.tenemy
 
 logger = logging.getLogger(__name__)
@@ -25,7 +26,7 @@ class StateDying(State):
 
     def on_enter(self):
         meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, Renderable)
+            self.brain.owner.entity, system.renderable.Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
 
@@ -55,7 +56,7 @@ class StateDying(State):
 
     def process(self, dt):
         meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, Renderable)
+            self.brain.owner.entity, system.renderable.Renderable)
 
         if self.timeIsUp():
             logger.info("{}: Died enough, set to inactive".format(self.owner))

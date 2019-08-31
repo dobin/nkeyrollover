@@ -8,7 +8,8 @@ from utilities.timer import Timer
 from sprite.direction import Direction
 from config import Config
 from sprite.coordinates import Coordinates
-from system.renderable import Renderable
+
+import system.renderable
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +22,7 @@ class StateIdle(State):
 
     def on_enter(self):
         meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, Renderable)
+            self.brain.owner.entity, system.renderable.Renderable)
         meRenderable.texture.changeAnimation(
             CharacterAnimationType.standing, 
             meRenderable.direction)

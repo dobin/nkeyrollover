@@ -11,8 +11,9 @@ from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 from utilities.color import Color
 from system.offensiveattack import OffensiveAttack
+
 import system.gamelogic.tenemy
-from system.renderable import Renderable
+import system.renderable 
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +28,7 @@ class StateAttack(State):
 
     def on_enter(self):
         meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, Renderable)
+            self.brain.owner.entity, system.renderable.Renderable)
 
         self.attackTimer.init()
         meRenderable.texture.changeAnimation(

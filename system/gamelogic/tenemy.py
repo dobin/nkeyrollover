@@ -25,8 +25,6 @@ from entities.enemy.state_idle import StateIdle
 from entities.enemy.state_spawn import StateSpawn
 from entities.enemy.state_wander import StateWander
 from texture.texture import Texture
-from system.advanceable import Advanceable
-from system.renderable import Renderable
 from entities.characterstatus import CharacterStatus
 from entities.enemy.enemyinfo import EnemyInfo
 

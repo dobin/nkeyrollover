@@ -107,7 +107,7 @@ class Director(object):
         texture.parentSprite = renderable
         self.world.esperWorld.add_component(characterAttackEntity, renderable)
         offensiveAttack = OffensiveAttack(
-            isPlayer=True, 
+            isPlayer=False, 
             world=self.world,
             renderable=renderable)
         self.world.esperWorld.add_component(characterAttackEntity, offensiveAttack)

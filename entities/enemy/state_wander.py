@@ -11,7 +11,8 @@ from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 from utilities.color import Color
 from messaging import messaging, Messaging, Message, MessageType
-from system.renderable import Renderable
+
+import system.renderable
 import system.gamelogic.tenemy
 
 logger = logging.getLogger(__name__)
@@ -31,10 +32,9 @@ class StateWander(State):
 
     def on_enter(self):
         meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, Renderable)
+            self.brain.owner.entity, system.renderable.Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
-
 
         meRenderable.texture.changeAnimation(
             CharacterAnimationType.walking, 
@@ -48,7 +48,7 @@ class StateWander(State):
 
     def process(self, dt):
         meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, Renderable)
+            self.brain.owner.entity, system.renderable.Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
 
@@ -85,7 +85,7 @@ class StateWander(State):
 
     def getInputWander(self):
         meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, Renderable)
+            self.brain.owner.entity, system.renderable.Renderable)
 
         # make run-animation 
         meRenderable.texture.advanceStep()
@@ -109,7 +109,7 @@ class StateWander(State):
             self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
 
         meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, Renderable)
+            self.brain.owner.entity, system.renderable.Renderable)
 
         # if true:  go to a static point close to the current enemy position
         # if false: go to a point relative to the enemy
