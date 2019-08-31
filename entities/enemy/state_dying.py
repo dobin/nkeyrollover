@@ -63,4 +63,3 @@ class StateDying(State):
             self.brain.pop()
             self.brain.push("idle")
             meRenderable.setActive(False)
-

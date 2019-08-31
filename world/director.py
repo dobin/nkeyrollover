@@ -129,7 +129,7 @@ class Director(object):
     def numEnemiesAlive(self) -> int:
         n = 0
         for enemy in self.enemies:
-            if enemy.isActive(): 
+            if enemy.brain.state.name != 'idle': 
                 n += 1
         return n
 
@@ -137,7 +137,7 @@ class Director(object):
     def numEnemiesDead(self) -> int:
         n = 0
         for enemy in self.enemies:
-            if not enemy.isActive(): 
+            if enemy.brain.state.name == 'idle':
                 n += 1
         return n
 
@@ -197,10 +197,10 @@ class Director(object):
         # make more enemies
         if self.numEnemiesAlive() < self.maxEnemies:
             if self.lastEnemyResurrectedTimer.timeIsUp():
-                self.lastEnemyResurrectedTimer.reset()
-                
                 if self.numEnemiesDead() > 0:
                     self.makeEnemyAlive()
+                    self.lastEnemyResurrectedTimer.reset()
+
 
 
     def findDeadEnemy(self): 
@@ -251,19 +251,3 @@ class Director(object):
         myy = random.randint(minY, maxY)
         spawnCoords = Coordinates(myx, myy)
         return spawnCoords
-
-
-    def collisionDetection(self, characterWeaponCoordinates): 
-        for enemy in self.enemies:
-            if enemy.isActive(): 
-                if enemy.collidesWithPoint(characterWeaponCoordinates):
-                    enemy.gmHandleHit(50)
-
-
-    def getPlayersHit(self, coordinates):
-        players = []
-        if self.world.getPlayer().collidesWithPoint(coordinates):
-            players.append(self.world.getPlayer())
-
-        return players
-
