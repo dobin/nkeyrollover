@@ -87,21 +87,18 @@ class StateWander(State):
         meRenderable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.renderable.Renderable)
 
-        # make run-animation 
-        meRenderable.texture.advanceStep()
-
         if not meRenderable.enemyMovement: 
             return
 
         if self.destCoord.x > meRenderable.coordinates.x:
-            meRenderable.enemy_move(x=1, y=0)
+            meRenderable.move(x=1, y=0)
         elif self.destCoord.x < meRenderable.coordinates.x: 
-            meRenderable.enemy_move(x=-1, y=0)
+            meRenderable.move(x=-1, y=0)
 
         if self.destCoord.y > meRenderable.coordinates.y:
-            meRenderable.enemy_move(x=0, y=1)
+            meRenderable.move(x=0, y=1)
         elif self.destCoord.y < meRenderable.coordinates.y: 
-            meRenderable.enemy_move(x=0, y=-1)
+            meRenderable.move(x=0, y=-1)
 
 
     def chooseDestination(self): 

@@ -126,98 +126,35 @@ class tPlayerProcessor(esper.Processor):
             player.brain.pop()
             player.brain.push('attack')
 
+        didMove = False
         if self.movementTimer.timeIsUp(): 
             if key == curses.KEY_LEFT:
-                self.move(playerRenderable, player, x=-1, y=0)
-                return True
+                playerRenderable.move(x=-1, y=0)
+                didMove = True
 
             elif key == curses.KEY_RIGHT: 
-                self.move(playerRenderable, player, x=1, y=0)
-                return True
+                playerRenderable.move(x=1, y=0)
+                didMove = True
 
             elif key == curses.KEY_UP:
-                self.move(playerRenderable, player, x=0, y=-1)
-                return True
+                playerRenderable.move(x=0, y=-1)
+                didMove = True
 
             elif key == curses.KEY_DOWN: 
-                self.move(playerRenderable, player, x=0, y=1)
-                return True
+                playerRenderable.move(x=0, y=1)
+                didMove = True
 
-        return False
-
-
-    def move(self, playerRenderable, player, x=0, y=0):
-        currentDirection = playerRenderable.direction
-        if x < 0:
-            if Utility.isPointMovable(
-                playerRenderable.coordinates.x - 1, 
-                playerRenderable.coordinates.y, 
-                playerRenderable.texture.width, 
-                playerRenderable.texture.height
-            ):
-                playerRenderable.coordinates.x -= 1
-                playerRenderable.direction = Direction.left
-                self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
-        elif x > 0: 
-            if Utility.isPointMovable(
-                playerRenderable.coordinates.x + 1, 
-                playerRenderable.coordinates.y, 
-                playerRenderable.texture.width, 
-                playerRenderable.texture.height
-            ):
-                playerRenderable.coordinates.x += 1
-                playerRenderable.direction = Direction.right
-                self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
-
-        if y < 0:
-            if Config.moveDiagonal:
-                if Utility.isPointMovable(
-                    playerRenderable.coordinates.x + 1, 
-                    playerRenderable.coordinates.y - 1, 
-                    playerRenderable.texture.width, 
-                    playerRenderable.texture.height
-                ):
-                    playerRenderable.coordinates.y -= 1
-                    playerRenderable.coordinates.x += 1
-                    self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
-            else: 
-                if Utility.isPointMovable(
-                    playerRenderable.coordinates.x, 
-                    playerRenderable.coordinates.y - 1, 
-                    playerRenderable.texture.width, 
-                    playerRenderable.texture.height
-                ):
-                    playerRenderable.coordinates.y -= 1
-                    self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
-        if y > 0: 
-            if Config.moveDiagonal:
-                if Utility.isPointMovable(
-                    playerRenderable.coordinates.x - 1, 
-                    playerRenderable.coordinates.y + 1, 
-                    playerRenderable.texture.width, 
-                    playerRenderable.texture.height
-                ):
-                    playerRenderable.coordinates.y += 1
-                    playerRenderable.coordinates.x -= 1
-                    self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
-            else:
-                if Utility.isPointMovable(
-                    playerRenderable.coordinates.x, 
-                    playerRenderable.coordinates.y + 1, 
-                    playerRenderable.texture.width, 
-                    playerRenderable.texture.height
-                ):
-                    playerRenderable.coordinates.y += 1
-                    self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
-
-        extcords = ExtCoordinates(
-            playerRenderable.coordinates.x,
-            playerRenderable.coordinates.y,
-            playerRenderable.texture.width,
-            playerRenderable.texture.height)
-        messaging.add(
-            type=MessageType.PlayerLocation, 
-            data=extcords)
+        if didMove:
+            extcords = ExtCoordinates(
+                playerRenderable.coordinates.x,
+                playerRenderable.coordinates.y,
+                playerRenderable.texture.width,
+                playerRenderable.texture.height)
+            messaging.add(
+                type=MessageType.PlayerLocation, 
+                data=extcords)
+        
+        return didMove
 
 
     def movePlayer(self, playerRenderable, player, sameDirection):

@@ -115,44 +115,25 @@ class StateChase(State):
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
 
-        # make run-animation 
-        meRenderable.texture.advanceStep()
-
         if not meEnemy.enemyMovement: 
             return
 
         meOffensiveWeaponRenderable = self.brain.owner.world.component_for_entity(
             meEnemy.offensiveAttackEntity, system.renderable.Renderable)
         meWeaponLocation = meOffensiveWeaponRenderable.getLocation()
-        logger.info("Enemy: {}  Weapon: {}".format(
-            meRenderable.getLocation(), meWeaponLocation))
         playerLocation = meEnemy.player.getLocation()
-        
+
+        moveX = 0
+        moveY = 0
+
         if meWeaponLocation.x < playerLocation.x:
-            if meRenderable.coordinates.x < (meEnemy.viewport.getx() + Config.columns - meRenderable.texture.width - 1):
-                meRenderable.coordinates.x += 1
-                
-                if meRenderable.direction is not Direction.right:
-                    meRenderable.direction = Direction.right
-                    meRenderable.texture.changeAnimation(
-                        CharacterAnimationType.walking, 
-                        meRenderable.direction)
-
+            moveX = 1
         elif meWeaponLocation.x >= playerLocation.x + meEnemy.player.texture.width:
-            if meRenderable.coordinates.x > 1 + meEnemy.viewport.getx():
-                meRenderable.coordinates.x -= 1
-
-                if meRenderable.direction is not Direction.left:
-                    meRenderable.direction = Direction.left
-                    meRenderable.texture.changeAnimation(
-                        CharacterAnimationType.walking, 
-                        meRenderable.direction)                
-
+            moveX = -1            
         # we can walk diagonally, no elif here
-
         if meWeaponLocation.y < playerLocation.y:
-            if meRenderable.coordinates.y < Config.rows - meRenderable.texture.height - 1:
-                meRenderable.coordinates.y += 1
+            moveY = 1
         elif meWeaponLocation.y > playerLocation.y + meEnemy.player.texture.height - 1: # why -1?
-            if meRenderable.coordinates.y > 2:
-                meRenderable.coordinates.y -= 1
+            moveY = -1
+
+        meRenderable.move(moveX, moveY)

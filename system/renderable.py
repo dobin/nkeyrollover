@@ -161,8 +161,11 @@ class Renderable():
         return self.rendered
     
 
-    def enemy_move(self, x :int =0, y :int =0):
+    def move(self, x :int =0, y :int =0):
         """Move this enemy in x/y direction, if allowed. Update direction too"""
+        if x != 0 or y != 0:
+            self.texture.advanceStep()
+
         if x > 0:
             if self.coordinates.x < Config.columns - self.texture.width - 1:
                 self.coordinates.x += 1
