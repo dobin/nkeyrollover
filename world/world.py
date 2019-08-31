@@ -26,6 +26,7 @@ from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
 from system.offensiveattack import OffensiveAttack
 from system.offensiveattackprocessor import OffensiveAttackProcessor
+from entities.esperdata import EsperData
 
 from messaging import messaging, Messaging, Message, MessageType
 
@@ -38,6 +39,7 @@ class World(object):
     def addPlayer(self): 
         # Player
         self.player = self.esperWorld.create_entity()
+        esperData = EsperData(self.esperWorld, self.player)
         texture = CharacterTexture(parentSprite=None, characterType=CharacterType.player)
         coordinates = Coordinates(
             Config.playerSpawnPoint['x'],
@@ -51,7 +53,7 @@ class World(object):
         texture.parentSprite = renderable
         renderable.name = "Player"
         self.esperWorld.add_component(self.player, renderable)
-        self.esperWorld.add_component(self.player, tPlayer(renderable=renderable))
+        self.esperWorld.add_component(self.player, tPlayer(esperData=esperData))
         self.esperWorld.add_component(self.player, Attackable(initialHealth=100))
         self.playerRendable = renderable
         # /Player

@@ -11,6 +11,8 @@ from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 from utilities.color import Color
 from system.offensiveattack import OffensiveAttack
+import system.gamelogic.tenemy
+from system.renderable import Renderable
 
 logger = logging.getLogger(__name__)
 
@@ -24,22 +26,29 @@ class StateAttack(State):
 
 
     def on_enter(self):
-        me = self.brain.owner
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, Renderable)
+
         self.attackTimer.init()
-        me.texture.changeAnimation(CharacterAnimationType.hitting, me.direction)
+        meRenderable.texture.changeAnimation(
+            CharacterAnimationType.hitting, 
+            meRenderable.direction)
         
-        self.attackTimer.setTimer(me.texture.getAnimationTime())
-        self.setTimer( me.texture.getAnimationTime() )
+        self.attackTimer.setTimer(meRenderable.texture.getAnimationTime())
+        self.setTimer( meRenderable.texture.getAnimationTime() )
 
  
     def process(self, dt):
         self.attackTimer.advance(dt)
-        me = self.brain.owner
+        meEnemy = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
 
         if self.attackTimer.timeIsUp(): 
             logger.warn(self.name + " I'm attacking!")
             self.attackTimer.reset()
-            offensiveAttack = me.world.esperWorld.component_for_entity(me.offensiveAttackEntity, OffensiveAttack)
+            offensiveAttack = self.brain.owner.world.component_for_entity(
+                meEnemy.offensiveAttackEntity, 
+                OffensiveAttack)
             offensiveAttack.attack()
 
         if self.timeIsUp():

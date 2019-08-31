@@ -29,7 +29,7 @@ class Messaging(object):
             type=type,
             data=data
         ))
-        logging.info("Msg {}: {}".format(type, data))
+        logger.info("Msg {}: {}".format(type, data))
 
     def reset(self): 
         self.messages.clear()

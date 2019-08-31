@@ -10,6 +10,8 @@ from config import Config
 from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 from utilities.color import Color
+from system.renderable import Renderable
+import system.gamelogic.tenemy
 
 logger = logging.getLogger(__name__)
 
@@ -18,10 +20,17 @@ class StateAttackWindup(State):
     name = 'attackwindup'
 
     def on_enter(self):
-        me = self.brain.owner
-        me.texture.changeAnimation(CharacterAnimationType.hitwindup, me.direction)
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, Renderable)
+        meEnemy = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
 
-        self.setTimer( me.enemyInfo.windupTime )
+
+        meRenderable.texture.changeAnimation(
+            CharacterAnimationType.hitwindup, 
+            meRenderable.direction)
+
+        self.setTimer( meEnemy.enemyInfo.windupTime )
 
     def process(self, dt):
         if self.timeIsUp():

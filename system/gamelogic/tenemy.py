@@ -28,25 +28,32 @@ from texture.texture import Texture
 from system.advanceable import Advanceable
 from system.renderable import Renderable
 from entities.characterstatus import CharacterStatus
+from entities.enemy.enemyinfo import EnemyInfo
 
 logger = logging.getLogger(__name__)
 
 class tEnemy():
-    def __init__(self, player, name, renderable):
+    def __init__(self, player, name, esperData, director, world, viewport):
         self.enemyMovement :bool = True
-        self.player = player
-        self.renderable = renderable
+        self.player = player #
+        self.esperData = esperData
+        self.director = director #
+        self.world = world #
+        self.viewport = viewport #
 
         self.characterStatus = CharacterStatus()
 
         self.name :str = 'Bot' + name
         self.active = False
+        self.enemyInfo :EnemyInfo = EnemyInfo()
 
         self.initAi()
 
+        self.offensiveAttackEntity = None
+
 
     def initAi(self): 
-        self.brain :Brain = Brain(self.renderable)
+        self.brain :Brain = Brain(self.esperData)
 
         self.brain.register(StateIdle)
         self.brain.register(StateSpawn)

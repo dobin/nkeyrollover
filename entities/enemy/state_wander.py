@@ -11,6 +11,8 @@ from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 from utilities.color import Color
 from messaging import messaging, Messaging, Message, MessageType
+from system.renderable import Renderable
+import system.gamelogic.tenemy
 
 logger = logging.getLogger(__name__)
 
@@ -20,23 +22,37 @@ class StateWander(State):
 
     def __init__(self, brain):
         State.__init__(self, brain)
-        self.lastInputTimer = Timer( self.brain.owner.enemyInfo.wanderStepDelay, instant=True )
+        meEnemy = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy)         
+        self.lastInputTimer = Timer( meEnemy.enemyInfo.wanderStepDelay, instant=True )
         self.destCoord = Coordinates()
         self.destIsPoint = False
 
 
     def on_enter(self):
-        me = self.brain.owner
-        me.texture.changeAnimation(CharacterAnimationType.walking, me.direction)
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, Renderable)
+        meEnemy = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
+
+
+        meRenderable.texture.changeAnimation(
+            CharacterAnimationType.walking, 
+            meRenderable.direction)
         stateTimeRnd = random.randrange(
-            -100 * me.enemyInfo.wanderTimeRnd, 
-            100 * me.enemyInfo.wanderTimeRnd)
-        self.setTimer( me.enemyInfo.wanderTime + (stateTimeRnd / 100) )
+            -100 * meEnemy.enemyInfo.wanderTimeRnd, 
+            100 * meEnemy.enemyInfo.wanderTimeRnd)
+        self.setTimer( meEnemy.enemyInfo.wanderTime + (stateTimeRnd / 100) )
         self.chooseDestination()
 
 
     def process(self, dt):
-        me = self.brain.owner
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, Renderable)
+        meEnemy = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
+
+
         self.lastInputTimer.advance(dt)
 
         if self.lastInputTimer.timeIsUp(): 
@@ -44,12 +60,12 @@ class StateWander(State):
             self.lastInputTimer.reset()
 
         if self.timeIsUp():
-            if me.world.director.canHaveMoreEnemiesChasing():
+            if meEnemy.director.canHaveMoreEnemiesChasing():
                 logger.debug("{}: Too long wandering, chase again a bit".format(self.owner))
                 self.brain.pop()
                 self.brain.push("chase")
 
-        elif Utility.isIdentical(me.getLocation(), self.destCoord):
+        elif Utility.isIdentical(meRenderable.getLocation(), self.destCoord):
             # No reset of wander state atm, just a new location
             self.chooseDestination()
 
@@ -59,7 +75,7 @@ class StateWander(State):
                 if message.type is MessageType.PlayerLocation:
                     distance = Utility.distance(
                         message.data, 
-                        me.getLocation())
+                        meRenderable.getLocation())
 
                     if distance['sum'] < 10:
                         logger.info("{}: Player is close, chasing".format(self.owner))
@@ -68,41 +84,47 @@ class StateWander(State):
 
 
     def getInputWander(self):
-        me = self.brain.owner
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, Renderable)
 
         # make run-animation 
-        me.texture.advanceStep()
+        meRenderable.texture.advanceStep()
 
-        if not me.enemyMovement: 
+        if not meRenderable.enemyMovement: 
             return
 
-        if self.destCoord.x > me.coordinates.x:
-            me.enemy_move(x=1, y=0)
-        elif self.destCoord.x < me.coordinates.x: 
-            me.enemy_move(x=-1, y=0)
+        if self.destCoord.x > meRenderable.coordinates.x:
+            meRenderable.enemy_move(x=1, y=0)
+        elif self.destCoord.x < meRenderable.coordinates.x: 
+            meRenderable.enemy_move(x=-1, y=0)
 
-        if self.destCoord.y > me.coordinates.y:
-            me.enemy_move(x=0, y=1)
-        elif self.destCoord.y < me.coordinates.y: 
-            me.enemy_move(x=0, y=-1)
+        if self.destCoord.y > meRenderable.coordinates.y:
+            meRenderable.enemy_move(x=0, y=1)
+        elif self.destCoord.y < meRenderable.coordinates.y: 
+            meRenderable.enemy_move(x=0, y=-1)
 
 
     def chooseDestination(self): 
-        me = self.brain.owner
+        meEnemy = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
+
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, Renderable)
+
         # if true:  go to a static point close to the current enemy position
         # if false: go to a point relative to the enemy
         #self.destIsPoint = random.choice([True, False])
 
         # note that getLocation() will return a reference. we need to copy it here.
-        self.destCoord.x = me.player.getLocation().x
-        self.destCoord.y = me.player.getLocation().y
-        self.destCoord = self.pickDestAroundPlayer(self.destCoord, me)
-        if me.world.showEnemyWanderDestination:
-            me.world.textureEmiter.showCharAtPos(
+        self.destCoord.x = meEnemy.player.getLocation().x
+        self.destCoord.y = meEnemy.player.getLocation().y
+        self.destCoord = self.pickDestAroundPlayer(self.destCoord, meRenderable)
+        if meEnemy.world.showEnemyWanderDestination:
+            meEnemy.world.textureEmiter.showCharAtPos(
                 char='.', timeout=self.timer, coordinate=self.destCoord, color=Color.grey)
 
 
-    def pickDestAroundPlayer(self, coord :Coordinates, me):
+    def pickDestAroundPlayer(self, coord :Coordinates, meRenderable):
         ptRight = random.choice([True, False])
         ptDown = random.choice([True, False])
 
@@ -113,18 +135,18 @@ class StateWander(State):
 
         if ptDown: 
             coord.y += 4 + random.randint(0, 5)
-            if coord.y > Config.rows - 2 - me.texture.height:
-                coord.y = Config.rows - 2 - me.texture.height
+            if coord.y > Config.rows - 2 - meRenderable.texture.height:
+                coord.y = Config.rows - 2 - meRenderable.texture.height
         else: 
             coord.y -= 4 + random.randint(0, 5)
             # +1 so they can overlap only a bit on top
-            if coord.y < Config.topborder - me.texture.height + 1:
-                coord.y = Config.topborder  - me.texture.height + 1
+            if coord.y < Config.topborder - meRenderable.texture.height + 1:
+                coord.y = Config.topborder  - meRenderable.texture.height + 1
 
         # make sure destination is on-screen
         if coord.x < Config.topborder: 
             coord.x = Config.topborder
-        if coord.x > Config.rows + me.texture.height: 
-            coord.x = Config.rows + me.texture.height
+        if coord.x > Config.rows + meRenderable.texture.height: 
+            coord.x = Config.rows + meRenderable.texture.height
 
         return coord

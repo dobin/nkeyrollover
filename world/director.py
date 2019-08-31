@@ -21,7 +21,7 @@ from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
 from system.offensiveattack import OffensiveAttack
 from messaging import messaging, Messaging, Message, MessageType
-
+from entities.esperdata import EsperData
 
 logger = logging.getLogger(__name__)
 
@@ -40,9 +40,26 @@ class Director(object):
         self.maxEnemiesChasing = 4
 
 
+    # we split this from the constructor, so we can initialize a Director 
+    # without enemies in the unit test
+    def init(self):
+        if Config.devMode: 
+            characterType = CharacterType.cow
+            self.createEnemy(characterType, "Enemy")
+        else:
+            n = 0
+            while n < self.maxEnemies:
+                characterType = CharacterType.stickfigure
+                if n % 10 == 0:
+                    characterType = CharacterType.cow
+                self.createEnemy(characterType, str(n))
+                n += 1
+
+
     def createEnemy(self, characterType, name): 
         # Enemy
         enemy = self.world.esperWorld.create_entity()
+        esperData = EsperData(self.world.esperWorld, enemy)
         texture = CharacterTexture(
             parentSprite=None, 
             characterAnimationType=CharacterAnimationType.standing,
@@ -56,15 +73,17 @@ class Director(object):
             parent=None,
             coordinates=coordinates)
         renderable.name = "Enemy "
-        renderable.player = self.world.playerRendable
         renderable.world = self.world
         renderable.enemyMovement = True
         texture.parentSprite = renderable
         self.world.esperWorld.add_component(enemy, renderable)
         tenemy = tEnemy(
-            player=None,
+            player=self.world.playerRendable,
             name=name,
-            renderable=renderable)
+            esperData=esperData, 
+            director=self,
+            world=self.world,
+            viewport=self.viewport)
         self.world.esperWorld.add_component(enemy, tenemy)
         self.enemies.append(tenemy)
         self.world.esperWorld.add_component(enemy, Attackable(initialHealth=100))
@@ -94,23 +113,8 @@ class Director(object):
         self.world.esperWorld.add_component(characterAttackEntity, offensiveAttack)
         self.characterAttackEntity = characterAttackEntity
         offensiveAttack.switchWeapon(WeaponType.hitLine)
-        enemyRenderable.offensiveAttackEntity = characterAttackEntity
+        tenemy.offensiveAttackEntity = characterAttackEntity
         # /CharacterAttack    
-
-    # we split this from the constructor, so we can initialize a Director 
-    # without enemies in the unit test
-    def init(self):
-        if Config.devMode: 
-            characterType = CharacterType.cow
-            self.createEnemy(characterType, "Enemy")
-        else:
-            n = 0
-            while n < self.maxEnemies:
-                characterType = CharacterType.stickfigure
-                if n % 10 == 0:
-                    characterType = CharacterType.cow
-                self.createEnemy(characterType, str(n))
-                n += 1
 
 
     def getRandomHead(self):

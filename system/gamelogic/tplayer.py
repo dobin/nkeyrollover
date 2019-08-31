@@ -37,8 +37,8 @@ from messaging import messaging, Messaging, Message, MessageType
 
 
 class tPlayer():
-    def __init__(self, renderable):
-        self.renderable = renderable
+    def __init__(self, esperData):
+        self.esperData = esperData
 
         # from character
         self.characterStatus = CharacterStatus()
@@ -52,7 +52,7 @@ class tPlayer():
 
 
     def initAi(self):
-        self.brain = Brain(self.renderable)
+        self.brain = Brain(self.esperData)
         self.brain.register(StateIdle)
         self.brain.register(StateSpawn)
         self.brain.register(StateAttack)

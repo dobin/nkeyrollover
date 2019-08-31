@@ -8,6 +8,7 @@ from utilities.timer import Timer
 from sprite.direction import Direction
 from config import Config
 from sprite.coordinates import Coordinates
+from system.renderable import Renderable
 
 logger = logging.getLogger(__name__)
 
@@ -20,16 +21,20 @@ class StateDying(State):
 
 
     def on_enter(self):
-        me = self.brain.owner
-        me.texture.changeAnimation(CharacterAnimationType.dying, me.direction)
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, Renderable)        
+        meRenderable.texture.changeAnimation(
+            CharacterAnimationType.dying, 
+            meRenderable.direction)
         self.setTimer(1.0)
         
 
     def process(self, dt):
-        me = self.brain.owner
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, Renderable)  
 
         if self.timeIsUp():
             logger.info("Player died enough. deactive")
-            me.setActive(False)
+            meRenderable.setActive(False)
 
 

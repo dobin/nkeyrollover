@@ -8,6 +8,7 @@ from utilities.timer import Timer
 from sprite.direction import Direction
 from config import Config
 from sprite.coordinates import Coordinates
+from system.renderable import Renderable
 
 logger = logging.getLogger(__name__)
 
@@ -17,21 +18,23 @@ class StateSpawn(State):
 
     def __init__(self, brain):
         State.__init__(self, brain)
-        me = self.brain.owner
         self.state = 0
         self.speechTimer = Timer(1.0)
         
 
     def on_enter(self):
-        me = self.brain.owner
-        me.texture.changeAnimation(CharacterAnimationType.standing, me.direction)
-        me.setActive(True)
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, Renderable)
+            
+        meRenderable.texture.changeAnimation(
+            CharacterAnimationType.standing, 
+            meRenderable.direction)
+        meRenderable.setActive(True)
         self.state = 0
         self.speechTimer.reset()
 
 
     def process(self, dt):
-        me = self.brain.owner
         self.speechTimer.advance(dt)
 
         if self.speechTimer.timeIsUp(): 

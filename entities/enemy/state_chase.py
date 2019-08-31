@@ -12,6 +12,8 @@ from utilities.utilities import Utility
 from utilities.color import Color
 from messaging import messaging, Messaging, Message, MessageType
 from system.renderable import Renderable
+from system.renderable import Renderable
+import system.gamelogic.tenemy
 
 logger = logging.getLogger(__name__)
 
@@ -21,23 +23,36 @@ class StateChase(State):
 
     def __init__(self, brain):
         State.__init__(self, brain)
+        meEnemy = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
+
         self.lastInputTimer = Timer( 
-            self.brain.owner.enemyInfo.chaseStepDelay, 
+            meEnemy.enemyInfo.chaseStepDelay, 
             instant=True )
         self.canAttackTimer = Timer()
 
 
     def on_enter(self):
-        me = self.brain.owner
-        stateTimeRnd = random.randrange(-100 * me.enemyInfo.chaseTimeRnd, 100 * me.enemyInfo.chaseTimeRnd)
-        self.setTimer( me.enemyInfo.chaseTime + (stateTimeRnd / 100) )
-        me.texture.changeAnimation(CharacterAnimationType.walking, me.direction)
-        self.canAttackTimer.setTimer(me.enemyInfo.enemyCanAttackPeriod)
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, Renderable)
+        meEnemy = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
+
+        stateTimeRnd = random.randrange(-100 * meEnemy.enemyInfo.chaseTimeRnd, 100 * meEnemy.enemyInfo.chaseTimeRnd)
+        self.setTimer( meEnemy.enemyInfo.chaseTime + (stateTimeRnd / 100) )
+        meRenderable.texture.changeAnimation(
+            CharacterAnimationType.walking, 
+            meRenderable.direction)
+        self.canAttackTimer.setTimer(meEnemy.enemyInfo.enemyCanAttackPeriod)
         self.canAttackTimer.reset()
 
 
     def process(self, dt):
-        me = self.brain.owner
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, Renderable)
+        meEnemy = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
+
         self.lastInputTimer.advance(dt)
         self.canAttackTimer.advance(dt)
 
@@ -47,11 +62,12 @@ class StateChase(State):
             self.lastInputTimer.reset()
         
         if self.canAttackTimer.timeIsUp():
-            if self.canAttackPlayer(me):
-                if me.world.director.canHaveMoreEnemiesAttacking():
+            logger.info("Check if i can hit him...")
+            if self.canAttackPlayer():
+                if meEnemy.world.director.canHaveMoreEnemiesAttacking():
                     self.brain.pop()
                     self.brain.push("attackwindup")
-            self.canAttackTimer.reset()
+                    self.canAttackTimer.reset()
 
         if self.timeIsUp():
             logger.debug("{}: Too long chasing, switching to wander".format(self.owner))
@@ -59,20 +75,25 @@ class StateChase(State):
             self.brain.push("wander")
 
 
-    def canAttackPlayer(self, me):
+    def canAttackPlayer(self):
         for message in messaging.get(): 
             if message.type is MessageType.PlayerLocation:
-                ret = self.checkHitLocation(message.data, me)
+                ret = self.checkHitLocation(message.data)
                 if ret is True: 
                     return True
         
         return False
 
 
-    def checkHitLocation(self, playerLocation, me): 
-        attackRendable = me.world.esperWorld.component_for_entity(me.offensiveAttackEntity, Renderable)
+    def checkHitLocation(self, playerLocation): 
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, Renderable)
+        meEnemy = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
+
+        attackRendable = self.brain.owner.world.component_for_entity(
+            meEnemy.offensiveAttackEntity, Renderable)
         hitLocations = attackRendable.texture.getTextureHitCoordinates()
-        #hitLocations = me.offensiveAttackRenderable.texture.getTextureHitCoordinates()
 
         # only one of the hitlocations need to hit
         for hitLocation in hitLocations:
@@ -81,47 +102,62 @@ class StateChase(State):
                 playerLocation)
 
             if canAttack: 
+                logger.info("Can attack, me {} in {}".format(
+                    hitLocation, playerLocation
+                ))
                 return True
+            else: 
+                logger.info("Can not attack, me {} in {}".format(
+                    hitLocation, playerLocation
+                ))
 
         return False
 
 
     def getInputChase(self):
-        me = self.brain.owner
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, Renderable)
+        meEnemy = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
 
         # make run-animation 
-        me.texture.advanceStep()
+        meRenderable.texture.advanceStep()
 
-        if not me.enemyMovement: 
+        if not meEnemy.enemyMovement: 
             return
 
-        #meWeaponLocation = me.characterAttack.getLocation()
-        meWeaponLocation = me.getLocation()
-        playerLocation = me.player.getLocation()
+        meOffensiveWeaponRenderable = self.brain.owner.world.component_for_entity(
+            meEnemy.offensiveAttackEntity, Renderable)
+        meWeaponLocation = meOffensiveWeaponRenderable.getLocation()
+        logger.info("Enemy: {}  Weapon: {}".format(
+            meRenderable.getLocation(), meWeaponLocation))
+        playerLocation = meEnemy.player.getLocation()
         
         if meWeaponLocation.x < playerLocation.x:
-            if me.coordinates.x < (me.viewport.getx() + Config.columns - me.texture.width - 1):
-                me.coordinates.x += 1
+            if meRenderable.coordinates.x < (meEnemy.viewport.getx() + Config.columns - meRenderable.texture.width - 1):
+                meRenderable.coordinates.x += 1
                 
-                if me.direction is not Direction.right:
-                    me.direction = Direction.right
-                    me.texture.changeAnimation(
-                        CharacterAnimationType.walking, me.direction)
+                if meRenderable.direction is not Direction.right:
+                    meRenderable.direction = Direction.right
+                    meRenderable.texture.changeAnimation(
+                        CharacterAnimationType.walking, 
+                        meRenderable.direction)
 
-        elif meWeaponLocation.x >= playerLocation.x + me.player.texture.width:
-            if me.coordinates.x > 1 + me.viewport.getx():
-                me.coordinates.x -= 1
+        elif meWeaponLocation.x >= playerLocation.x + meEnemy.player.texture.width:
+            if meRenderable.coordinates.x > 1 + meEnemy.viewport.getx():
+                meRenderable.coordinates.x -= 1
 
-                if me.direction is not Direction.left:
-                    me.direction = Direction.left
-                    me.texture.changeAnimation(
-                        CharacterAnimationType.walking, me.direction)                
+                if meRenderable.direction is not Direction.left:
+                    meRenderable.direction = Direction.left
+                    meRenderable.texture.changeAnimation(
+                        CharacterAnimationType.walking, 
+                        meRenderable.direction)                
 
         # we can walk diagonally, no elif here
 
         if meWeaponLocation.y < playerLocation.y:
-            if me.coordinates.y < Config.rows - me.texture.height - 1:
-                me.coordinates.y += 1
-        elif meWeaponLocation.y > playerLocation.y + me.player.texture.height - 1: # why -1?
-            if me.coordinates.y > 2:
-                me.coordinates.y -= 1
+            if meRenderable.coordinates.y < Config.rows - meRenderable.texture.height - 1:
+                meRenderable.coordinates.y += 1
+        elif meWeaponLocation.y > playerLocation.y + meEnemy.player.texture.height - 1: # why -1?
+            if meRenderable.coordinates.y > 2:
+                meRenderable.coordinates.y -= 1

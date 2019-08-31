@@ -8,6 +8,7 @@ from utilities.timer import Timer
 from sprite.direction import Direction
 from config import Config
 from sprite.coordinates import Coordinates
+from system.renderable import Renderable
 
 logger = logging.getLogger(__name__)
 
@@ -19,8 +20,11 @@ class StateIdle(State):
         State.__init__(self, brain)
 
     def on_enter(self):
-        me = self.brain.owner
-        me.texture.changeAnimation(CharacterAnimationType.standing, me.direction)
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, Renderable)
+        meRenderable.texture.changeAnimation(
+            CharacterAnimationType.standing, 
+            meRenderable.direction)
 
     def on_exit(self):
         pass

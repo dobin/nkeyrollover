@@ -11,7 +11,6 @@ from utilities.timer import Timer
 from utilities.color import Color
 from sprite.direction import Direction
 from texture.character.characteranimationtype import CharacterAnimationType
-from entities.enemy.enemyinfo import EnemyInfo
 
 from config import Config
 
@@ -49,13 +48,6 @@ class Renderable():
         self.direction = Direction.left
         self.name = 'none'
 
-        ## FUCK (for enemy)
-        self.enemyInfo :EnemyInfo = EnemyInfo()
-        self.player = None
-        self.world = None
-        self.enemyMovement = None
-        self.offensiveAttackEntity = None
-    ## END FUCK
 
     def isHitBy(self, hitLocations :List[Coordinates]):
         for hitLocation in hitLocations:
