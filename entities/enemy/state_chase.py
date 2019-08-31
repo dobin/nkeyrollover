@@ -48,8 +48,6 @@ class StateChase(State):
 
 
     def process(self, dt):
-        meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
 
@@ -86,8 +84,6 @@ class StateChase(State):
 
 
     def checkHitLocation(self, playerLocation): 
-        meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
 

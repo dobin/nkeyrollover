@@ -22,8 +22,8 @@ from utilities.color import Color
 
 from system.renderable import Renderable
 from system.gamelogic.attackable import Attackable
-#from system.gamelogic.tenemy import tEnemy
-#from system.gamelogic.tplayer import tPlayer
+import system.gamelogic.tenemy 
+import system.gamelogic.tplayer
 
 from messaging import messaging, Messaging, Message, MessageType
 
@@ -47,6 +47,13 @@ class OffensiveAttack():
 
         self.weaponType :WeaponType = WeaponType.hit
         self.selectedWeaponKey :str = '1'
+
+        self.damage = {
+            WeaponType.hit: 50, 
+            WeaponType.hitSquare: 50,
+            WeaponType.hitLine: 50,
+            WeaponType.jumpKick: 50
+        }
 
 
     def switchWeaponByKey(self, key :str):
@@ -85,41 +92,6 @@ class OffensiveAttack():
             return PhenomenaType.hitLine
         elif self.weaponType is WeaponType.jumpKick: 
             return PhenomenaType.hit
-
-
-    def __getLocation(self) -> Coordinates: 
-        baselocation = self.renderable.parent.getLocation()
-
-        xx = None
-        if self.renderable.parent.direction is Direction.right:
-            xx = 1
-        else: 
-            xx = -1
-
-        # new 1-pt weapon location
-        charHalfWidth = int(self.renderable.parent.texture.width / 2.0)
-        charHalfHeight = int( float(self.renderable.parent.texture.height) / 2.0)
-        baselocation.y += charHalfHeight
-        if self.renderable.parent.direction is Direction.left: 
-            baselocation.x -= 1
-        else: 
-            baselocation.x += self.renderable.parent.texture.width
-
-        # adjust for weapon area
-        if self.weaponType is WeaponType.hit:
-            pass # all good
-
-        elif self.weaponType is WeaponType.hitSquare: 
-            baselocation.y -= 1 # move it up one notch
-
-            if self.renderable.parent.direction is Direction.left:
-                baselocation.x -= self.renderable.texture.width - 1
-
-        elif self.weaponType is WeaponType.hitLine: 
-            if self.renderable.parent.direction is Direction.left:
-                baselocation.x -= self.renderable.texture.width - 1
-
-        return baselocation
 
 
     def attackWeaponHit(self) -> int:
@@ -184,22 +156,22 @@ class OffensiveAttack():
     def hitCollisionDetection(self, hitLocations :List[Coordinates]) -> int:
         damageSum = 0
         if self.isPlayer:
-            #for ent, (renderable, attackable, enemy) in self.world.esperWorld.get_components(Renderable, Attackable, tEnemy):
-            for ent, (renderable, attackable) in self.world.esperWorld.get_components(Renderable, Attackable):
+            for ent, (renderable, attackable, enemy) in self.world.esperWorld.get_components(
+                Renderable, Attackable, system.gamelogic.tenemy.tEnemy
+            ):
                 if renderable.isHitBy(hitLocations):
-                    #damage = enemy.characterStatus.getDamage(weaponType=self.weaponType)
-                    damage = 10
+                    damage = self.damage[ self.weaponType ]
                     attackable.handleHit(damage)
                     renderable.setOverwriteColorFor( 
                         1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
                     damageSum += damage
 
         else:
-            #for ent, (renderable, attackable, player) in self.world.esperWorld.get_components(Renderable, Attackable, tPlayer):
-            for ent, (renderable, attackable) in self.world.esperWorld.get_components(Renderable, Attackable):
+            for ent, (renderable, attackable, player) in self.world.esperWorld.get_components(
+                Renderable, Attackable, system.gamelogic.tplayer.tPlayer
+            ):
                 if renderable.isHitBy(hitLocations):
-                    #damage = player.characterStatus.getDamage(weaponType=self.weaponType)
-                    damage = 10
+                    damage = self.damage[ self.weaponType ]
                     renderable.setOverwriteColorFor( 
                         1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
                     damageSum += damage
