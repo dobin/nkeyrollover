@@ -24,7 +24,24 @@ class OffensiveAttackProcessor(esper.Processor):
 
     def handleAttackKeyPress(self):
         for message in messaging.get():
-            if message.type is MessageType.PlayerKeypress: 
-                if message.data == ord(' '):
-                    playerAttack = self.world.component_for_entity(self.playerAttackEntity, OffensiveAttack)
-                    playerAttack.attack()
+            if message.type is MessageType.PlayerKeypress:
+                self.handlePlayerKeypress(message.data)
+
+
+    def handlePlayerKeypress(self, key):
+        playerAttack = self.world.component_for_entity(self.playerAttackEntity, OffensiveAttack)
+
+        if key == ord(' '):
+            playerAttack.attack()
+
+        if key == ord('1'):
+            playerAttack.switchWeaponByKey('1')
+
+        if key == ord('2'):
+            playerAttack.switchWeaponByKey('2')
+
+        if key == ord('3'):
+            playerAttack.switchWeaponByKey('3')
+
+        if key == ord('4'):
+            playerAttack.switchWeaponByKey('4')

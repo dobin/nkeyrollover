@@ -57,18 +57,6 @@ class KeyboardInput(object):
 
             player.characterStatus.handleKeyPress(time=self.world.getGameTime())
 
-            if key == ord('1'):
-                playerAttack.switchWeaponByKey('1')
-
-            if key == ord('2'):
-                playerAttack.switchWeaponByKey('2')
-
-            if key == ord('3'):
-                playerAttack.switchWeaponByKey('3')
-
-            if key == ord('4'):
-                playerAttack.switchWeaponByKey('4')
-
             if key == ord('c'):
                 player.skills.doSkill('c')
 
