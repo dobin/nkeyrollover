@@ -24,7 +24,9 @@ from system.gamelogic.tenemy import tEnemy, tEnemyProcessor
 from system.gamelogic.tplayer import tPlayer, tPlayerProcessor
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
-from system.offensiveattack import OffensiveAttack, OffensiveAttackProcessor
+from system.offensiveattack import OffensiveAttack
+from system.offensiveattackprocessor import OffensiveAttackProcessor
+
 from messaging import messaging, Messaging, Message, MessageType
 
 logger = logging.getLogger(__name__)
@@ -33,13 +35,7 @@ logger = logging.getLogger(__name__)
 class World(object): 
     """The game world in which all game object live"""
 
-    def __init__(self, win):
-        self.esperWorld = esper.World()
-        self.win = win
-        self.viewport :Viewport =Viewport(win=win, world=self)
-        self.worldSprite :Sprite = Sprite(viewport=self.viewport, parentSprite=None)
-        self.messaging = messaging
-
+    def addPlayer(self): 
         # Player
         self.player = self.esperWorld.create_entity()
         texture = CharacterTexture(parentSprite=None, characterType=CharacterType.player)
@@ -53,6 +49,7 @@ class World(object):
             parent=None,
             coordinates=coordinates)
         texture.parentSprite = renderable
+        renderable.name = "Player"
         self.esperWorld.add_component(self.player, renderable)
         self.esperWorld.add_component(self.player, tPlayer(renderable=renderable))
         self.esperWorld.add_component(self.player, Attackable(initialHealth=100))
@@ -70,7 +67,9 @@ class World(object):
             texture=texture,
             viewport=self.viewport,
             parent=self.playerRendable,
-            coordinates=coordinates)
+            coordinates=coordinates,
+            z=3)
+        renderable.name = "PlayerWeapon"
         texture.parentSprite = renderable
         self.esperWorld.add_component(characterAttackEntity, renderable)
         offensiveAttack = OffensiveAttack(
@@ -80,6 +79,15 @@ class World(object):
         self.esperWorld.add_component(characterAttackEntity, offensiveAttack)
         self.characterAttackEntity = characterAttackEntity
         # /CharacterAttack
+
+    def __init__(self, win):
+        self.esperWorld = esper.World()
+        self.win = win
+        self.viewport :Viewport =Viewport(win=win, world=self)
+        self.worldSprite :Sprite = Sprite(viewport=self.viewport, parentSprite=None)
+        self.messaging = messaging
+
+        self.addPlayer()
 
         self.director :Director = Director(self.viewport, self)
         self.director.init()

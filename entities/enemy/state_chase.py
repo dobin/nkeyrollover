@@ -10,6 +10,8 @@ from config import Config
 from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 from utilities.color import Color
+from messaging import messaging, Messaging, Message, MessageType
+from system.renderable import Renderable
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +47,7 @@ class StateChase(State):
             self.lastInputTimer.reset()
         
         if self.canAttackTimer.timeIsUp():
-            if me.canAttackPlayer():
+            if self.canAttackPlayer(me):
                 if me.world.director.canHaveMoreEnemiesAttacking():
                     self.brain.pop()
                     self.brain.push("attackwindup")
@@ -55,6 +57,33 @@ class StateChase(State):
             logger.debug("{}: Too long chasing, switching to wander".format(self.owner))
             self.brain.pop()
             self.brain.push("wander")
+
+
+    def canAttackPlayer(self, me):
+        for message in messaging.get(): 
+            if message.type is MessageType.PlayerLocation:
+                ret = self.checkHitLocation(message.data, me)
+                if ret is True: 
+                    return True
+        
+        return False
+
+
+    def checkHitLocation(self, playerLocation, me): 
+        attackRendable = me.world.esperWorld.component_for_entity(me.offensiveAttackEntity, Renderable)
+        hitLocations = attackRendable.texture.getTextureHitCoordinates()
+        #hitLocations = me.offensiveAttackRenderable.texture.getTextureHitCoordinates()
+
+        # only one of the hitlocations need to hit
+        for hitLocation in hitLocations:
+            canAttack = Utility.pointIn(
+                hitLocation, 
+                playerLocation)
+
+            if canAttack: 
+                return True
+
+        return False
 
 
     def getInputChase(self):

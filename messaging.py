@@ -1,5 +1,8 @@
-
+import logging
 from enum import Enum
+
+logger = logging.getLogger(__name__)
+
 
 class MessageType(Enum): 
     PlayerKeypress = 0
@@ -26,6 +29,7 @@ class Messaging(object):
             type=type,
             data=data
         ))
+        logging.info("Msg {}: {}".format(type, data))
 
     def reset(self): 
         self.messages.clear()

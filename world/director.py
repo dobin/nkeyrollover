@@ -8,18 +8,20 @@ from world.viewport import Viewport
 from sprite.direction import Direction
 from texture.character.charactertype import CharacterType
 from sprite.coordinates import Coordinates
-from entities.enemy.state_attack import StateAttack
-from entities.enemy.state_attackwindup import StateAttackWindup
-from entities.enemy.state_chase import StateChase
-from entities.enemy.state_wander import StateWander
 from texture.character.characteranimationtype import CharacterAnimationType
 from texture.character.charactertexture import CharacterTexture
 from texture.texture import Texture
+from entities.weapontype import WeaponType
 
 from system.advanceable import Advanceable
 from system.renderable import Renderable
 from system.gamelogic.attackable import Attackable
 from system.gamelogic.tenemy import tEnemy
+from texture.phenomena.phenomenatexture import PhenomenaTexture
+from texture.phenomena.phenomenatype import PhenomenaType
+from system.offensiveattack import OffensiveAttack
+from messaging import messaging, Messaging, Message, MessageType
+
 
 logger = logging.getLogger(__name__)
 
@@ -38,60 +40,76 @@ class Director(object):
         self.maxEnemiesChasing = 4
 
 
+    def createEnemy(self, characterType, name): 
+        # Enemy
+        enemy = self.world.esperWorld.create_entity()
+        texture = CharacterTexture(
+            parentSprite=None, 
+            characterAnimationType=CharacterAnimationType.standing,
+            head=self.getRandomHead(), 
+            body=self.getRandomBody(),
+            characterType=characterType)
+        coordinates = Coordinates(0, 0)
+        renderable = Renderable(
+            texture=texture,
+            viewport=self.viewport,
+            parent=None,
+            coordinates=coordinates)
+        renderable.name = "Enemy "
+        renderable.player = self.world.playerRendable
+        renderable.world = self.world
+        renderable.enemyMovement = True
+        texture.parentSprite = renderable
+        self.world.esperWorld.add_component(enemy, renderable)
+        tenemy = tEnemy(
+            player=None,
+            name=name,
+            renderable=renderable)
+        self.world.esperWorld.add_component(enemy, tenemy)
+        self.enemies.append(tenemy)
+        self.world.esperWorld.add_component(enemy, Attackable(initialHealth=100))
+        enemyRenderable = renderable
+        # /Enemy
+
+        # CharacterAttack
+        characterAttackEntity = self.world.esperWorld.create_entity()
+        texture :PhenomenaTexture = PhenomenaTexture(phenomenaType=PhenomenaType.hit, parentSprite=self)
+        coordinates = Coordinates( # for hit
+            -1,
+            1
+        )
+        renderable = Renderable(
+            texture=texture,
+            viewport=self.viewport,
+            parent=enemyRenderable,
+            coordinates=coordinates,
+            z=2)
+        renderable.name = "EnemyWeapon "
+        texture.parentSprite = renderable
+        self.world.esperWorld.add_component(characterAttackEntity, renderable)
+        offensiveAttack = OffensiveAttack(
+            isPlayer=True, 
+            world=self.world,
+            renderable=renderable)
+        self.world.esperWorld.add_component(characterAttackEntity, offensiveAttack)
+        self.characterAttackEntity = characterAttackEntity
+        offensiveAttack.switchWeapon(WeaponType.hitLine)
+        enemyRenderable.offensiveAttackEntity = characterAttackEntity
+        # /CharacterAttack    
+
     # we split this from the constructor, so we can initialize a Director 
     # without enemies in the unit test
     def init(self):
         if Config.devMode: 
             characterType = CharacterType.cow
-            newEnemy = Enemy(viewport=self.viewport, 
-                parent=self.world.worldSprite, 
-                world=self.world, 
-                name="Enym", 
-                characterType=characterType)
-            newEnemy.enemyMovement = Config.enemyMovement
-            newEnemy.direction = Direction.right
-            self.enemies.append(newEnemy)
-            newEnemy.setActive(False)
-
-            enemy = self.world.esperWorld.create_entity()
-            self.world.esperWorld.add_component(enemy, Renderable(r=newEnemy))
-            self.world.esperWorld.add_component(enemy, Advanceable(r=newEnemy))
-            self.world.esperWorld.add_component(enemy, tEnemy(characterType=characterType))
-            self.world.esperWorld.add_component(enemy, Attackable(initialHealth=100))
-
+            self.createEnemy(characterType, "Enemy")
         else:
             n = 0
             while n < self.maxEnemies:
                 characterType = CharacterType.stickfigure
                 if n % 10 == 0:
                     characterType = CharacterType.cow
-
-                enemy = self.world.esperWorld.create_entity()
-                texture = CharacterTexture(
-                    parentSprite=None, 
-                    characterAnimationType=CharacterAnimationType.standing,
-                    head=self.getRandomHead(), 
-                    body=self.getRandomBody(),
-                    characterType=characterType)
-                coordinates = Coordinates(0, 0)
-                renderable = Renderable(
-                    texture=texture,
-                    viewport=self.viewport,
-                    parent=None,
-                    coordinates=coordinates)
-                renderable.player = self.world.playerRendable
-                renderable.world = self.world
-                renderable.enemyMovement = True
-                texture.parentSprite = renderable
-                self.world.esperWorld.add_component(enemy, renderable)
-                tenemy = tEnemy(
-                    player=None,
-                    name=str(n),
-                    renderable=renderable)
-                self.world.esperWorld.add_component(enemy, tenemy)
-                self.enemies.append(tenemy)
-                self.world.esperWorld.add_component(enemy, Attackable(initialHealth=100))
-
+                self.createEnemy(characterType, str(n))
                 n += 1
 
 

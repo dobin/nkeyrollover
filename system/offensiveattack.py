@@ -22,8 +22,8 @@ from utilities.color import Color
 
 from system.renderable import Renderable
 from system.gamelogic.attackable import Attackable
-from system.gamelogic.tenemy import tEnemy
-from system.gamelogic.tplayer import tPlayer
+#from system.gamelogic.tenemy import tEnemy
+#from system.gamelogic.tplayer import tPlayer
 
 from messaging import messaging, Messaging, Message, MessageType
 
@@ -184,18 +184,22 @@ class OffensiveAttack():
     def hitCollisionDetection(self, hitLocations :List[Coordinates]) -> int:
         damageSum = 0
         if self.isPlayer:
-            for ent, (renderable, attackable, enemy) in self.world.esperWorld.get_components(Renderable, Attackable, tEnemy):
+            #for ent, (renderable, attackable, enemy) in self.world.esperWorld.get_components(Renderable, Attackable, tEnemy):
+            for ent, (renderable, attackable) in self.world.esperWorld.get_components(Renderable, Attackable):
                 if renderable.isHitBy(hitLocations):
-                    damage = enemy.characterStatus.getDamage(weaponType=self.weaponType)
+                    #damage = enemy.characterStatus.getDamage(weaponType=self.weaponType)
+                    damage = 10
                     attackable.handleHit(damage)
                     renderable.setOverwriteColorFor( 
                         1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
                     damageSum += damage
 
         else:
-            for ent, (renderable, attackable, player) in self.world.esperWorld.get_components(Renderable, Attackable, tPlayer):
+            #for ent, (renderable, attackable, player) in self.world.esperWorld.get_components(Renderable, Attackable, tPlayer):
+            for ent, (renderable, attackable) in self.world.esperWorld.get_components(Renderable, Attackable):
                 if renderable.isHitBy(hitLocations):
-                    damage = player.characterStatus.getDamage(weaponType=self.weaponType)
+                    #damage = player.characterStatus.getDamage(weaponType=self.weaponType)
+                    damage = 10
                     renderable.setOverwriteColorFor( 
                         1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
                     damageSum += damage
@@ -214,25 +218,4 @@ class OffensiveAttack():
         return self.selectedWeaponKey
 
 
-class OffensiveAttackProcessor(esper.Processor):
-    def __init__(self, playerAttackEntity):
-        super().__init__()
-        self.playerAttackEntity = playerAttackEntity
 
-
-    def process(self, dt):
-        self.handleAttackKeyPress()
-        self.advance(dt)
-
-    
-    def advance(self, dt):
-        for ent, offensiveAttack in self.world.get_component(OffensiveAttack):
-            offensiveAttack.advance(dt)
-
-
-    def handleAttackKeyPress(self):
-        for message in messaging.get():
-            if message.type is MessageType.PlayerKeypress: 
-                if message.data == ord(' '):
-                    playerAttack = self.world.component_for_entity(self.playerAttackEntity, OffensiveAttack)
-                    playerAttack.attack()

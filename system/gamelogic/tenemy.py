@@ -37,18 +37,11 @@ class tEnemy():
         self.player = player
         self.renderable = renderable
 
-        # CharacterAttack
-        #self.characterAttack :CharacterAttack = CharacterAttack(
-        #    viewport=viewport, parentCharacter=self, isPlayer=False)
-        #characterAttackEntity = self.world.esperWorld.create_entity()
-        #self.world.esperWorld.add_component(characterAttackEntity, Renderable(r=self.characterAttack))
-        #self.world.esperWorld.add_component(characterAttackEntity, Advanceable(r=self.characterAttack))
-        # /CharacterAttack 
-
         self.characterStatus = CharacterStatus()
 
         self.name :str = 'Bot' + name
         self.active = False
+
         self.initAi()
 
 
@@ -65,25 +58,8 @@ class tEnemy():
         self.brain.push("idle")
 
 
-    def canAttackPlayer(self) -> bool: 
-        return
-        hitLocations = self.characterAttack.texture.getTextureHitCoordinates()
-
-        # only one of the hitlocations need to hit
-        for hitLocation in hitLocations:
-            canAttack = Utility.pointInSprite(
-                hitLocation, 
-                self.player)
-
-            if canAttack: 
-                return True
-
-        return False
-
-
     def advance(self, deltaTime :float): 
         self.brain.update(deltaTime)
-        #self.characterAttack.advance(deltaTime)
 
 
     def setActive(self, active :bool): 

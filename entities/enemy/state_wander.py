@@ -57,7 +57,6 @@ class StateWander(State):
             # check if player is close
             for message in messaging.get(): 
                 if message.type is MessageType.PlayerLocation:
-
                     distance = Utility.distance(
                         message.data, 
                         me.getLocation())

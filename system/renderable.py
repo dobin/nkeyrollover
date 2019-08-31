@@ -47,19 +47,14 @@ class Renderable():
         self.overwriteColor = None
 
         self.direction = Direction.left
+        self.name = 'none'
 
         ## FUCK (for enemy)
         self.enemyInfo :EnemyInfo = EnemyInfo()
         self.player = None
         self.world = None
         self.enemyMovement = None
-
-    def isPlayerClose(self):
-        return False
-
-    def canAttackPlayer(self): 
-        return False
-
+        self.offensiveAttackEntity = None
     ## END FUCK
 
     def isHitBy(self, hitLocations :List[Coordinates]):
@@ -68,6 +63,10 @@ class Renderable():
                 return True
         
         return False
+
+
+    def __repr__(self): 
+        return self.name
 
 
     def getLocation(self): 
@@ -136,8 +135,8 @@ class Renderable():
 
 
     def collidesWithPoint(self, hitCoords :Coordinates):
-        if hitCoords.x >= self.coordinates.x and hitCoords.x <= self.coordinates.x + self.texture.width:
-            if hitCoords.y >= self.coordinates.y and hitCoords.y <= self.coordinates.y + self.texture.height:
+        if hitCoords.x >= self.coordinates.x and hitCoords.x < self.coordinates.x + self.texture.width:
+            if hitCoords.y >= self.coordinates.y and hitCoords.y < self.coordinates.y + self.texture.height:
                 return True
 
         return False
@@ -199,7 +198,7 @@ class RenderableProcessor(esper.Processor):
         super().__init__()
 
         # list of HEIGHT lists
-        self.renderOrder = [[] for i in range(Config.rows)]
+        self.renderOrder = [[] for i in range(Config.rows + 3)]
 
 
     def process(self, dt):
@@ -219,9 +218,11 @@ class RenderableProcessor(esper.Processor):
         # add all elements to draw in the correct Z order
         # which is by y coordinates
         for ent, rend in self.world.get_component(Renderable):
-            self.renderOrder[ rend.coordinates.y ].append(rend)
+            if rend.isActive():
+                #logging.info("REND: {} {} {}".format(rend, rend.z, rend.coordinates))
+                loc = rend.getLocation()
+                self.renderOrder[ loc.y + rend.z ].append(rend)
             
         for l in self.renderOrder:
-            for entry in l:
-                if entry.isActive():
-                    entry.draw()
+            for rend in l:
+                rend.draw()

@@ -10,6 +10,7 @@ from config import Config
 from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 from utilities.color import Color
+from system.offensiveattack import OffensiveAttack
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +39,8 @@ class StateAttack(State):
         if self.attackTimer.timeIsUp(): 
             logger.warn(self.name + " I'm attacking!")
             self.attackTimer.reset()
-            me.characterAttack.attack()
+            offensiveAttack = me.world.esperWorld.component_for_entity(me.offensiveAttackEntity, OffensiveAttack)
+            offensiveAttack.attack()
 
         if self.timeIsUp():
             # too long attacking. lets switch to chasing

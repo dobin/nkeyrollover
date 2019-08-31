@@ -15,7 +15,7 @@ from texture.character.charactertexture import CharacterTexture
 from texture.character.characteranimationtype import CharacterAnimationType
 from entities.weapontype import WeaponType
 from entities.player.playerskills import PlayerSkills
-from sprite.coordinates import Coordinates
+from sprite.coordinates import Coordinates, ExtCoordinates
 from world.viewport import Viewport
 #from world.world import World
 #from entity.entity import Entity
@@ -210,9 +210,14 @@ class tPlayerProcessor(esper.Processor):
                     playerRenderable.coordinates.y += 1
                     self.movePlayer(playerRenderable, player, currentDirection == playerRenderable.direction )
 
+        extcords = ExtCoordinates(
+            playerRenderable.coordinates.x,
+            playerRenderable.coordinates.y,
+            playerRenderable.texture.width,
+            playerRenderable.texture.height)
         messaging.add(
             type=MessageType.PlayerLocation, 
-            data=playerRenderable.coordinates)
+            data=extcords)
 
 
     def movePlayer(self, playerRenderable, player, sameDirection):

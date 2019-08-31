@@ -35,6 +35,12 @@ class Utility(object):
         else: 
             return False
 
+    @staticmethod
+    def pointIn(coord1 :Coordinates, location2):
+        if coord1.x >= location2.x and coord1.x < location2.x + location2.width and coord1.y >= location2.y and coord1.y < location2.y + location2.height:
+            return True
+        else: 
+            return False
 
     @staticmethod
     def isPointMovable(x, y, width, height): 
