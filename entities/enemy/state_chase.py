@@ -101,10 +101,6 @@ class StateChase(State):
                     hitLocation, playerLocation
                 ))
                 return True
-            else: 
-                logger.debug("Can not attack, me {} in {}".format(
-                    hitLocation, playerLocation
-                ))
 
         return False
 
@@ -125,15 +121,24 @@ class StateChase(State):
 
         moveX = 0
         moveY = 0
+        dontChangeDirection = False
 
         if meWeaponLocation.x < playerLocation.x:
             moveX = 1
         elif meWeaponLocation.x >= playerLocation.x + meEnemy.player.texture.width:
-            moveX = -1            
+            moveX = -1
+
+        # check if its better to just walk backwards
+        meWeaponLocationInverted = meOffensiveWeaponRenderable.getLocationDirectionInverted()
+        distanceNormal = Utility.distance(playerLocation, meWeaponLocation)
+        distanceInverted = Utility.distance(playerLocation, meWeaponLocationInverted)
+        if distanceNormal['sum'] < distanceInverted['sum']:
+            dontChangeDirection = True
+
         # we can walk diagonally, no elif here
         if meWeaponLocation.y < playerLocation.y:
             moveY = 1
         elif meWeaponLocation.y > playerLocation.y + meEnemy.player.texture.height - 1: # why -1?
             moveY = -1
 
-        meRenderable.move(moveX, moveY)
+        meRenderable.move(moveX, moveY, dontChangeDirection)

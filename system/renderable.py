@@ -52,6 +52,7 @@ class Renderable(object):
             self.coordinates.y = coordinates.y
         # For performance reason, we pre-allocate coords for use in getLocation()
         self.coordinatesRel :Coordinates = Coordinates(0, 0)
+        self.coordinatesRel2 :Coordinates = Coordinates(0, 0)
         self.z :int = z
 
         # color related
@@ -85,7 +86,6 @@ class Renderable(object):
             return self.coordinates
         else:
             parentLocation = self.parent.getLocation()
-
             if self.parent.direction is Direction.left:
                 self.coordinatesRel.x = parentLocation.x + self.coordinates.x
                 self.coordinatesRel.y = parentLocation.y + self.coordinates.y
@@ -93,6 +93,20 @@ class Renderable(object):
                 self.coordinatesRel.x = parentLocation.x + (-1 * self.coordinates.x) + self.parent.texture.width - self.texture.width
                 self.coordinatesRel.y = parentLocation.y + self.coordinates.y         
             return self.coordinatesRel
+
+
+    def getLocationDirectionInverted(self):
+        if self.parent is None: 
+            return self.coordinates
+        else:
+            parentLocation = self.parent.getLocation()
+            if self.parent.direction is Direction.right:
+                self.coordinatesRel2.x = parentLocation.x + self.coordinates.x
+                self.coordinatesRel2.y = parentLocation.y + self.coordinates.y
+            else: 
+                self.coordinatesRel2.x = parentLocation.x + (-1 * self.coordinates.x) + self.parent.texture.width - self.texture.width
+                self.coordinatesRel2.y = parentLocation.y + self.coordinates.y         
+            return self.coordinatesRel2
 
 
     def setLocation(self, coordinates :Coordinates):
@@ -163,7 +177,7 @@ class Renderable(object):
         self.active = active
 
 
-    def move(self, x :int =0, y :int =0):
+    def move(self, x :int =0, y :int =0, dontChangeDirection :bool =False):
         """Move this renderable in x/y direction, if allowed. Update direction too"""
         if x != 0 or y != 0:
             self.texture.advanceStep()
@@ -172,7 +186,7 @@ class Renderable(object):
             if self.coordinates.x < Config.columns - self.texture.width - 1:
                 self.coordinates.x += 1
                 
-                if self.direction is not Direction.right:
+                if not dontChangeDirection and self.direction is not Direction.right:
                     self.direction = Direction.right
                     self.texture.changeAnimation(
                         CharacterAnimationType.walking, self.direction)  
@@ -180,7 +194,7 @@ class Renderable(object):
         elif x < 0:
             if self.coordinates.x > 1:
                 self.coordinates.x -= 1
-                if self.direction is not Direction.left:
+                if not dontChangeDirection and self.direction is not Direction.left:
                     self.direction = Direction.left
                     self.texture.changeAnimation(
                         CharacterAnimationType.walking, self.direction)    
