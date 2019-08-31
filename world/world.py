@@ -26,6 +26,8 @@ from system.gamelogic.enemy import Enemy
 from system.gamelogic.enemyprocessor import EnemyProcessor
 from system.gamelogic.player import Player
 from system.gamelogic.playerprocessor import PlayerProcessor
+from system.offensiveskill import OffensiveSkill
+from system.offensiveskillprocessor import OffensiveSkillProcessor
 
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
@@ -40,6 +42,46 @@ logger = logging.getLogger(__name__)
 
 class World(object): 
     """The game world in which all game object live"""
+
+    def __init__(self, win):
+        self.esperWorld = esper.World()
+        self.win = win
+        self.viewport :Viewport =Viewport(win=win, world=self)
+        self.worldSprite :Sprite = Sprite(viewport=self.viewport, parentSprite=None)
+        self.particleEmiter :ParticleEmiter = ParticleEmiter(viewport=self.viewport)
+        self.textureEmiter :TextureEmiter = TextureEmiter(viewport=self.viewport)
+        self.map :Map = Map(viewport=self.viewport, world=self)
+
+        self.addPlayer()
+        self.director :Director = Director(self.viewport, self)
+        self.director.init()
+
+        self.pause :bool = False
+        self.gameRunning :bool = True
+        self.gameTime :float =0.0
+        self.showStats = False
+        self.showEnemyWanderDestination = False
+
+        renderableProcessor = RenderableProcessor()
+        advanceableProcessor = AdvanceableProcessor()
+        playerProcessor = PlayerProcessor()
+        enemyProcessor = EnemyProcessor()
+        attackableProcessor = AttackableProcessor()
+        offensiveAttackProcessor = OffensiveAttackProcessor(
+            playerAttackEntity=self.characterAttackEntity
+        )
+        offensiveSkillProcessor = OffensiveSkillProcessor(
+            player=self.player
+        )
+
+        self.esperWorld.add_processor(advanceableProcessor)
+        self.esperWorld.add_processor(playerProcessor)  
+        self.esperWorld.add_processor(enemyProcessor)  
+        self.esperWorld.add_processor(attackableProcessor)          
+        self.esperWorld.add_processor(offensiveAttackProcessor)
+        self.esperWorld.add_processor(offensiveSkillProcessor)         
+        self.esperWorld.add_processor(renderableProcessor)
+
 
     def addPlayer(self): 
         # Player
@@ -56,7 +98,10 @@ class World(object):
             parent=None,
             coordinates=coordinates)
         texture.parentSprite = renderable
+        characterSkill = OffensiveSkill(esperData, self.particleEmiter)
+        self.characterSkillEntity = characterSkill
         renderable.name = "Player"
+        self.esperWorld.add_component(self.player, characterSkill)
         self.esperWorld.add_component(self.player, renderable)
         self.esperWorld.add_component(self.player, Player(esperData=esperData))
         self.esperWorld.add_component(self.player, Attackable(initialHealth=100))
@@ -87,43 +132,6 @@ class World(object):
         self.esperWorld.add_component(characterAttackEntity, offensiveAttack)
         self.characterAttackEntity = characterAttackEntity
         # /CharacterAttack
-
-    def __init__(self, win):
-        self.esperWorld = esper.World()
-        self.win = win
-        self.viewport :Viewport =Viewport(win=win, world=self)
-        self.worldSprite :Sprite = Sprite(viewport=self.viewport, parentSprite=None)
-        self.messaging = messaging
-
-        self.addPlayer()
-
-        self.director :Director = Director(self.viewport, self)
-        self.director.init()
-        self.particleEmiter :ParticleEmiter = ParticleEmiter(viewport=self.viewport)
-        self.textureEmiter :TextureEmiter = TextureEmiter(viewport=self.viewport)
-        self.map :Map = Map(viewport=self.viewport, world=self)
-        
-        self.pause :bool = False
-        self.gameRunning :bool = True
-        self.gameTime :float =0.0
-        self.showStats = False
-        self.showEnemyWanderDestination = False
-
-        renderableProcessor = RenderableProcessor()
-        advanceableProcessor = AdvanceableProcessor()
-        playerProcessor = PlayerProcessor()
-        enemyProcessor = EnemyProcessor()
-        attackableProcessor = AttackableProcessor()
-        offensiveAttackProcessor = OffensiveAttackProcessor(
-            playerAttackEntity=self.characterAttackEntity
-        )
-        
-        self.esperWorld.add_processor(advanceableProcessor)
-        self.esperWorld.add_processor(playerProcessor)  
-        self.esperWorld.add_processor(enemyProcessor)  
-        self.esperWorld.add_processor(attackableProcessor)          
-        self.esperWorld.add_processor(offensiveAttackProcessor)          
-        self.esperWorld.add_processor(renderableProcessor)
 
 
     def togglePause(self): 

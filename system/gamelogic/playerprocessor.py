@@ -14,7 +14,6 @@ from entities.entitytype import EntityType
 from texture.character.charactertexture import CharacterTexture
 from texture.character.characteranimationtype import CharacterAnimationType
 from entities.weapontype import WeaponType
-from entities.player.playerskills import PlayerSkills
 from sprite.coordinates import Coordinates, ExtCoordinates
 from world.viewport import Viewport
 #from world.world import World

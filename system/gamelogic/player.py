@@ -14,7 +14,6 @@ from entities.entitytype import EntityType
 from texture.character.charactertexture import CharacterTexture
 from texture.character.characteranimationtype import CharacterAnimationType
 from entities.weapontype import WeaponType
-from entities.player.playerskills import PlayerSkills
 from sprite.coordinates import Coordinates, ExtCoordinates
 from world.viewport import Viewport
 #from world.world import World
@@ -46,7 +45,6 @@ class Player():
         self.speechTexture.setActive(False)
 
         # from player
-        self.skills = PlayerSkills(player=self)
         self.initAi()
         self.name = 'Player'
         self.points = 0
@@ -80,7 +78,6 @@ class Player():
         self.characterStatus.advance(deltaTime)
         self.speechTexture.advance(deltaTime)        
         self.brain.update(deltaTime)
-        self.skills.advance(deltaTime)
 
 
     def __repr__(self): 

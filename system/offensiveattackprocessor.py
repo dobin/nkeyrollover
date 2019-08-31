@@ -5,6 +5,8 @@ import logging
 from messaging import messaging, Messaging, Message, MessageType
 from system.offensiveattack import OffensiveAttack
 
+logger = logging.getLogger(__name__)
+
 
 class OffensiveAttackProcessor(esper.Processor):
     def __init__(self, playerAttackEntity):

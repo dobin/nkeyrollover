@@ -49,34 +49,9 @@ class KeyboardInput(object):
                 type=MessageType.PlayerKeypress, 
                 data=key)
 
-            # player related
-            playerRenderable = self.world.esperWorld.component_for_entity(self.world.player, Renderable)
-            playerAttack = self.world.esperWorld.component_for_entity(self.world.characterAttackEntity, OffensiveAttack)
-
             player = self.world.esperWorld.component_for_entity(self.world.player, Player)
-
             player.characterStatus.handleKeyPress(time=self.world.getGameTime())
 
-            if key == ord('c'):
-                player.skills.doSkill('c')
-
-            if key == ord('f'):
-                player.skills.doSkill('f')
-
-            if key == ord('g'):
-                player.skills.doSkill('g')
-
-            if key == ord('q'):
-                player.skills.doSkill('q')
-
-            if key == ord('w'):
-                player.skills.doSkill('w')
-
-            if key == ord('e'):
-                player.skills.doSkill('e')
-
-            if key == ord('r'):
-                player.skills.doSkill('r')
 
 
     def advance(self, deltaTime):

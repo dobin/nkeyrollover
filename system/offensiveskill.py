@@ -10,16 +10,19 @@ from entities.weapontype import WeaponType
 from utilities.colorpalette import ColorPalette
 from utilities.color import Color
 
-
 import system.gamelogic.attackable 
 import system.renderable
+
+from messaging import messaging, Messaging, Message, MessageType
+
 
 logger = logging.getLogger(__name__)
 
 
-class PlayerSkills(object): 
-    def __init__(self, player): 
-        self.player = player
+class OffensiveSkill(object): 
+    def __init__(self, esperData, particleEmiter):
+        self.particleEmiter = particleEmiter 
+        self.esperData = esperData
         self.skillStatus = [
             'q', 'w', 'e', 'r', 'f', 'g'
         ]
@@ -33,26 +36,32 @@ class PlayerSkills(object):
             'f': Timer(30.0, instant=True),
             'g': Timer(5.0, instant=True),
         }
+        self.damage = {
+            WeaponType.explosion: 100,
+            WeaponType.laser: 100,
+            WeaponType.cleave: 100,
+            WeaponType.heal: 0,
+            WeaponType.switchside: 0,
+        }
 
 
     def doSkillType(self, weaponType :WeaponType): 
-        damage = 0
         if weaponType is WeaponType.explosion: 
-            damage = self.skillExplosion()
+            self.skillExplosion()
         elif weaponType is WeaponType.laser:
-            damage = self.skillLaser()
+            self.skillLaser()
         elif weaponType is WeaponType.cleave:
-            damage = self.skillCleave()
+            self.skillCleave()
         elif weaponType is WeaponType.heal:
-            damage = self.skillHeal()
+            self.skillHeal()
         elif weaponType is WeaponType.switchside: 
-            damage = self.skillSwitchSide()
+            self.skillSwitchSide()
         else: 
             logger.error("Unknown skill {}".format(weaponType))            
 
-        RecordHolder.recordAttack(
-            weaponType=weaponType, damage=damage, name=self.player.name, 
-            characterType=self.player.entityType)
+        #RecordHolder.recordAttack(
+        #    weaponType=weaponType, damage=damage, name=self.player.name, 
+        #    characterType=self.player.entityType)
 
 
     def doSkill(self, key): 
@@ -60,7 +69,8 @@ class PlayerSkills(object):
         isCooldown = False
 
         if key == 'c': 
-            self.player.speechTexture.changeAnimation('hoi')
+            pass
+            #self.player.speechTexture.changeAnimation('hoi')
             #self.player.actionCtrl.changeTo(
             #    CharacterAnimationType.shrugging, 
             #    self.player.direction)
@@ -123,58 +133,80 @@ class PlayerSkills(object):
 
 
     def skillHeal(self): 
-        self.player.characterStatus.heal(100)
+        #self.player.characterStatus.heal(100)
         return 0
 
 
     def skillSwitchSide(self): 
-        screenCoordinates = self.player.viewport.getScreenCoords(self.player.coordinates)
-
-        if screenCoordinates.x < (Config.columns / 2):
-            diff = 80 - 2 * screenCoordinates.x
-            self.player.coordinates.x += diff
-        else: 
-            diff = Config.areaMoveable['maxx'] - 2 * (Config.areaMoveable['maxx'] - screenCoordinates.x)
-            self.player.coordinates.x -= diff
+        #screenCoordinates = self.player.viewport.getScreenCoords(self.player.coordinates)
+        #
+        #if screenCoordinates.x < (Config.columns / 2):
+        #    diff = 80 - 2 * screenCoordinates.x
+        #    self.player.coordinates.x += diff
+        #else: 
+        #    diff = Config.areaMoveable['maxx'] - 2 * (Config.areaMoveable['maxx'] - screenCoordinates.x)
+        #    self.player.coordinates.x -= diff
         return 0
 
 
-    def skillExplosion(self): 
-        locCenter = self.player.getLocationCenter()
-        self.player.world.particleEmiter.emit(
+    def skillExplosion(self):
+        meRenderable = self.esperData.world.component_for_entity(
+            self.esperData.entity, system.renderable.Renderable)
+
+        locCenter = meRenderable.getLocationCenter()
+        self.particleEmiter.emit(
             locCenter, 
             ParticleEffectType.explosion)
         hitLocations = Utility.getBorder(locCenter, distance=4, thicc=2)
 
-        damage = self.hitCollisionDetection(hitLocations, weaponType=WeaponType.explosion)
-        self.player.announce(damage=damage, particleEffectType=ParticleEffectType.explosion)
-        return damage
+        messaging.add(
+            type=MessageType.PlayerAttack, 
+            data= {
+                'hitLocations': hitLocations,
+                'damage': self.damage[ WeaponType.explosion ]
+            }
+        )
+
+        #self.player.announce(damage=damage, particleEffectType=ParticleEffectType.explosion)
 
 
-    def skillLaser(self): 
-        hitLocations = self.player.world.particleEmiter.emit(
-            self.player.characterAttack.getLocation(), 
+    def skillLaser(self):
+        meRenderable = self.esperData.world.component_for_entity(
+            self.esperData.entity, system.renderable.Renderable)
+
+        hitLocations = self.particleEmiter.emit(
+            meRenderable.getLocation(), 
             ParticleEffectType.laser, 
-            direction=self.player.direction)
+            direction=meRenderable.direction)
 
-        damage = self.hitCollisionDetection(hitLocations, weaponType=WeaponType.laser)
-        self.player.announce(damage=damage, particleEffectType=ParticleEffectType.laser)
-        return damage
+        messaging.add(
+            type=MessageType.PlayerAttack, 
+            data= {
+                'hitLocations': hitLocations,
+                'damage': self.damage[ WeaponType.laser ]
+            }
+        )
+        #self.player.announce(damage=damage, particleEffectType=ParticleEffectType.laser)
 
 
-    def skillCleave(self): 
-        hitLocations = self.player.world.particleEmiter.emit(
-            self.player.characterAttack.getLocation(), 
+    def skillCleave(self):
+        meRenderable = self.esperData.world.component_for_entity(
+            self.esperData.entity, system.renderable.Renderable)        
+
+        hitLocations = self.particleEmiter.emit(
+            meRenderable.getLocation(), 
             ParticleEffectType.cleave, 
-            direction=self.player.direction)
+            direction=meRenderable.direction)
 
-        damage = self.hitCollisionDetection(hitLocations, weaponType=WeaponType.cleave)
-        self.player.announce(damage=damage, particleEffectType=ParticleEffectType.cleave)
-        return damage
+        messaging.add(
+            type=MessageType.PlayerAttack, 
+            data= {
+                'hitLocations': hitLocations,
+                'damage': self.damage[ WeaponType.cleave ]
+            }
+        )
 
-
-    def hitCollisionDetection(self, hitLocations, weaponType):
-        return
+        #self.player.announce(damage=damage, particleEffectType=ParticleEffectType.cleave)
 
 
     def advance(self, dt):

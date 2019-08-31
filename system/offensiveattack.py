@@ -23,7 +23,6 @@ from utilities.color import Color
 import system.renderable
 import system.gamelogic.attackable 
 
-
 from messaging import messaging, Messaging, Message, MessageType
 
 
@@ -128,8 +127,6 @@ class OffensiveAttack():
                 'damage': self.damage[ self.weaponType ]
             }
         )
-
-
 
 
     def advance(self, deltaTime :float):
