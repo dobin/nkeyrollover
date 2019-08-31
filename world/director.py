@@ -71,7 +71,8 @@ class Director(object):
             texture=texture,
             viewport=self.viewport,
             parent=None,
-            coordinates=coordinates)
+            coordinates=coordinates,
+            active=False)
         renderable.name = "Enemy "
         renderable.world = self.world
         renderable.enemyMovement = True

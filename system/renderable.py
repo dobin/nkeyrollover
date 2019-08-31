@@ -23,9 +23,12 @@ logger = logging.getLogger(__name__)
 
 class Renderable():
     def __init__(
-        self, texture, viewport, parent =None, coordinates =None, z =0
+        self, texture, viewport, parent =None, coordinates =None, z =0, active=True
     ):
         self.viewport = viewport
+        self.texture = texture
+        self.parent = parent
+        self.active = active
 
         # coordinates
         self.coordinates = Coordinates(0, 0)
@@ -35,15 +38,6 @@ class Renderable():
         # For performance reason, we pre-allocate coords for use in getLocation()
         self.coordinatesRel = Coordinates(0, 0)
         self.z = z
-
-        # texture
-        self.texture = texture
-
-        # parent
-        self.parent = parent
-
-        self.active = True
-        self.rendered = True
 
         # color related
         self.overwriteColorTimer = Timer(0.25, active=False)
@@ -124,9 +118,6 @@ class Renderable():
         if not self.isActive():
             return 
 
-        if not self.isRendered():
-            return
-
         self.texture.draw(self.viewport)
 
 
@@ -156,10 +147,6 @@ class Renderable():
     def setActive(self, active):
         self.active = active
 
-
-    def isRendered(self): 
-        return self.rendered
-    
 
     def move(self, x :int =0, y :int =0):
         """Move this enemy in x/y direction, if allowed. Update direction too"""
