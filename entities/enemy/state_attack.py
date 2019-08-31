@@ -45,7 +45,7 @@ class StateAttack(State):
             self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
 
         if self.attackTimer.timeIsUp(): 
-            logger.warn(self.name + " I'm attacking!")
+            logger.warning(self.name + " I'm attacking!")
             self.attackTimer.reset()
             offensiveAttack = self.brain.owner.world.component_for_entity(
                 meEnemy.offensiveAttackEntity, 

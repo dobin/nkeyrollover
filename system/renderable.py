@@ -1,3 +1,7 @@
+from __future__ import annotations
+# this so i can give type information about my own class
+# https://stackoverflow.com/questions/33533148/how-do-i-specify-that-the-return-type-of-a-method-is-the-same-as-the-class-itsel
+
 import esper
 import copy
 import logging
@@ -13,30 +17,42 @@ from sprite.direction import Direction
 from texture.character.characteranimationtype import CharacterAnimationType
 from messaging import messaging, Messaging, Message, MessageType
 from config import Config
+from texture.texture import Texture
+from world.viewport import Viewport
 
 import system.gamelogic.attackable
-
 
 logger = logging.getLogger(__name__)
 
 
-class Renderable():
+class Renderable(object):
     def __init__(
-        self, texture, viewport, parent =None, coordinates =None, z =0, active=True
+        self, 
+        texture :Texture, 
+        viewport :Viewport, 
+        parent :Renderable =None, 
+        coordinates :Coordinates =None, 
+        z :int =0, 
+        active :bool =True
     ):
-        self.viewport = viewport
-        self.texture = texture
-        self.parent = parent
-        self.active = active
+        self.viewport :Viewport = viewport
+        self.texture :Texture = texture
+
+        # if parent is given, this position will always be relative
+        # to that parent
+        self.parent :Renderable = parent
+
+        # if this is being rendered
+        self.active :bool = active 
 
         # coordinates
-        self.coordinates = Coordinates(0, 0)
+        self.coordinates :Coordinates = Coordinates(0, 0)
         if coordinates is not None:
             self.coordinates.x = coordinates.x
             self.coordinates.y = coordinates.y
         # For performance reason, we pre-allocate coords for use in getLocation()
-        self.coordinatesRel = Coordinates(0, 0)
-        self.z = z
+        self.coordinatesRel :Coordinates = Coordinates(0, 0)
+        self.z :int = z
 
         # color related
         self.overwriteColorTimer = Timer(0.25, active=False)
@@ -148,7 +164,7 @@ class Renderable():
 
 
     def move(self, x :int =0, y :int =0):
-        """Move this enemy in x/y direction, if allowed. Update direction too"""
+        """Move this renderable in x/y direction, if allowed. Update direction too"""
         if x != 0 or y != 0:
             self.texture.advanceStep()
 

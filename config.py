@@ -31,7 +31,7 @@ class Config:
     }
 
     devMode = False
-    enemyMovement = True # freeze enemies for tests
+    enemyMovement = True # freeze enemies for tests?
     showEnemyWanderDest = True
 
     moveDiagonal = False # instead of up/down

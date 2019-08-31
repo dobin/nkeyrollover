@@ -102,7 +102,7 @@ class Keyrollover(object):
             workTime = timeEnd - timeStart
             self.workTime = workTime
             if workTime > targetFrameTime:
-                logging.warn("Could not keep FPS! Worktime was: {}ms".format( self.workTime * 100.0))
+                logging.warning("Could not keep FPS! Worktime was: {}ms".format( self.workTime * 100.0))
 
             targetSleepTime = targetFrameTime - workTime
             if targetSleepTime < 0:
