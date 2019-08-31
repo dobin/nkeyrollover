@@ -49,6 +49,7 @@ class Player():
         self.skills = PlayerSkills(player=self)
         self.initAi()
         self.name = 'Player'
+        self.points = 0
 
 
     def initAi(self):

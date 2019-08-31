@@ -12,7 +12,8 @@ from utilities.utilities import Utility
 from system.keyboardinput import KeyboardInput
 
 from system.gamelogic.attackable import Attackable
-
+from system.gamelogic.player import Player
+from system.offensiveattack import OffensiveAttack
 
 import locale 
 current_milli_time = lambda: int(round(time.time() * 1000))
@@ -86,7 +87,7 @@ class Keyrollover(object):
             self.win.erase()
             self.win.border()
 
-            #self.drawStatusbar(n)
+            self.drawStatusbar(n)
             self.world.draw()
             self.world.advance(deltaTime)
             self.keyboardInput.advance(deltaTime)
@@ -125,20 +126,24 @@ class Keyrollover(object):
 
         #self.menuwin.erase()
         #self.menuwin.border()
-        
-        s = "Health: " + str(self.world.esperWorld.component_for_entity(self.world.player, Attackable).getHealth())
-        s += "  Mana: " + str(self.world.getPlayer().characterStatus.mana)
-        s += "  Points: " + str(self.world.getPlayer().characterStatus.points)
+        playerAttackable = self.world.esperWorld.component_for_entity(
+            self.world.player, Attackable)
+        player = self.world.esperWorld.component_for_entity(
+            self.world.player, Player)
+
+        s = "Health: " + str(playerAttackable.getHealth())
+        s += "  Points: " + str(player.points)
 
         #s += "  FPS: %.0f" % (fps)
         color = ColorPalette.getColorByColorType(ColorType.menu, None)
         self.menuwin.addstr(1, 2, s, color )
 
-        self.printSkillbar(color)
+        #self.printSkillbar(color)
+        self.printAttackbar(color)
         self.menuwin.refresh()
 
 
-    def printSkillbar(self, color): 
+    def printSkillbar(self, color):
         skills = self.world.getPlayer().skills
 
         basex = 54
@@ -151,17 +156,24 @@ class Keyrollover(object):
 
             n += 1
 
+    def printAttackbar(self, color):
+        playerOffensiveAttack = self.world.esperWorld.component_for_entity(
+            self.world.characterAttackEntity, OffensiveAttack)
+        player = self.world.esperWorld.component_for_entity(
+            self.world.player, Player)
+
         weaponIdx = 62
         self.menuwin.addstr(1, 
             weaponIdx, 
-            'W:' + self.world.getPlayer().characterAttack.getWeaponStr(), 
+            'W:' + playerOffensiveAttack.getWeaponStr(), 
             color)
 
         weaponIdx = 62
         self.menuwin.addstr(1, 
             weaponIdx, 
-            'APM:' + str(int(self.world.getPlayer().characterStatus.getApm().getApm() * 60)), 
+            'APM:' + str(int(player.characterStatus.getApm().getApm() * 60)), 
             color)
+
 
 
 def signal_handler(sig, frame):
