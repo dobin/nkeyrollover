@@ -30,6 +30,7 @@ from entities.enemy.enemyinfo import EnemyInfo
 
 logger = logging.getLogger(__name__)
 
+
 class tEnemy():
     def __init__(self, player, name, esperData, director, world, viewport):
         self.enemyMovement :bool = True
@@ -77,13 +78,3 @@ class tEnemy():
 
     def __repr__(self):
         return self.name
-
-
-class tEnemyProcessor(esper.Processor):
-    def __init__(self):
-        super().__init__()
-
-
-    def process(self, deltaTime):
-        for ent, player in self.world.get_component(tEnemy):
-            player.advance(deltaTime)                

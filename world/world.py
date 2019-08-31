@@ -15,13 +15,18 @@ from .viewport import Viewport
 from .textureemiter import TextureEmiter
 from texture.character.charactertype import CharacterType
 from texture.character.charactertexture import CharacterTexture
+
 import esper
 from system.advanceable import Advanceable, AdvanceableProcessor
-from system.renderable import Renderable, RenderableProcessor
+from system.renderable import Renderable
+from system.renderableprocessor import RenderableProcessor
 from system.gamelogic.attackable import Attackable
 from system.gamelogic.attackableprocessor import AttackableProcessor
-from system.gamelogic.tenemy import tEnemy, tEnemyProcessor
-from system.gamelogic.tplayer import tPlayer, tPlayerProcessor
+from system.gamelogic.tenemy import tEnemy
+from system.gamelogic.enemyprocessor import EnemyProcessor
+from system.gamelogic.tplayer import tPlayer
+from system.gamelogic.playerprocessor import PlayerProcessor
+
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
 from system.offensiveattack import OffensiveAttack
@@ -105,8 +110,8 @@ class World(object):
 
         renderableProcessor = RenderableProcessor()
         advanceableProcessor = AdvanceableProcessor()
-        tplayerProcessor = tPlayerProcessor()
-        tenemyProcessor = tEnemyProcessor()
+        tplayerProcessor = PlayerProcessor()
+        tenemyProcessor = EnemyProcessor()
         attackableProcessor = AttackableProcessor()
         offensiveAttackProcessor = OffensiveAttackProcessor(
             playerAttackEntity=self.characterAttackEntity
