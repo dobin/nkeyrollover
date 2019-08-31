@@ -12,7 +12,7 @@ from utilities.utilities import Utility
 from utilities.color import Color
 
 import system.renderable
-import system.gamelogic.tenemy
+import system.gamelogic.enemy
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +27,7 @@ class StateSpawn(State):
         meRenderable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.renderable.Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
 
 
         self.setTimer( meEnemy.enemyInfo.spawnTime )

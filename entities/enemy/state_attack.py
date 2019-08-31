@@ -12,7 +12,7 @@ from utilities.utilities import Utility
 from utilities.color import Color
 from system.offensiveattack import OffensiveAttack
 
-import system.gamelogic.tenemy
+import system.gamelogic.enemy
 import system.renderable 
 
 logger = logging.getLogger(__name__)
@@ -42,7 +42,7 @@ class StateAttack(State):
     def process(self, dt):
         self.attackTimer.advance(dt)
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
 
         if self.attackTimer.timeIsUp(): 
             logger.warn(self.name + " I'm attacking!")

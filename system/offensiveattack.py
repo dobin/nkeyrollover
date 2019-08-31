@@ -22,8 +22,7 @@ from utilities.color import Color
 
 import system.renderable
 import system.gamelogic.attackable 
-import system.gamelogic.tenemy 
-import system.gamelogic.tplayer
+
 
 from messaging import messaging, Messaging, Message, MessageType
 

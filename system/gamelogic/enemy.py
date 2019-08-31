@@ -31,7 +31,7 @@ from entities.enemy.enemyinfo import EnemyInfo
 logger = logging.getLogger(__name__)
 
 
-class tEnemy():
+class Enemy():
     def __init__(self, player, name, esperData, director, world, viewport):
         self.enemyMovement :bool = True
         self.player = player #

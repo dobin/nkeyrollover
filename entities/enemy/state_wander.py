@@ -13,7 +13,7 @@ from utilities.color import Color
 from messaging import messaging, Messaging, Message, MessageType
 
 import system.renderable
-import system.gamelogic.tenemy
+import system.gamelogic.enemy
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +24,7 @@ class StateWander(State):
     def __init__(self, brain):
         State.__init__(self, brain)
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy)         
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy)         
         self.lastInputTimer = Timer( meEnemy.enemyInfo.wanderStepDelay, instant=True )
         self.destCoord = Coordinates()
         self.destIsPoint = False
@@ -34,7 +34,7 @@ class StateWander(State):
         meRenderable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.renderable.Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
 
         meRenderable.texture.changeAnimation(
             CharacterAnimationType.walking, 
@@ -50,7 +50,7 @@ class StateWander(State):
         meRenderable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.renderable.Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
 
 
         self.lastInputTimer.advance(dt)
@@ -103,7 +103,7 @@ class StateWander(State):
 
     def chooseDestination(self): 
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
 
         meRenderable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.renderable.Renderable)

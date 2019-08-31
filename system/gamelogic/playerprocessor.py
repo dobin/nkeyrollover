@@ -34,7 +34,7 @@ from messaging import messaging, Messaging, Message, MessageType
 
 import system.advanceable 
 import system.renderable
-import system.gamelogic.tplayer
+import system.gamelogic.player
 
 
 class PlayerProcessor(esper.Processor):
@@ -52,14 +52,14 @@ class PlayerProcessor(esper.Processor):
         self.movementTimer.advance(deltaTime)
 
         for ent, player in self.world.get_component(
-            system.gamelogic.tplayer.tPlayer
+            system.gamelogic.player.Player
         ):
             player.advance(deltaTime)
 
 
     def handleKeyboardInput(self):
         for ent, (renderable, player) in self.world.get_components(
-            system.renderable.Renderable, system.gamelogic.tplayer.tPlayer
+            system.renderable.Renderable, system.gamelogic.player.Player
         ):
             didMove = False
             

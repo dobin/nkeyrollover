@@ -15,8 +15,7 @@ from messaging import messaging, Messaging, Message, MessageType
 from config import Config
 
 import system.gamelogic.attackable
-import system.gamelogic.tenemy
-import system.gamelogic.tplayer
+
 
 logger = logging.getLogger(__name__)
 

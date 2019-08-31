@@ -36,7 +36,7 @@ import system.advanceable
 import system.renderable
 
 
-class tPlayer():
+class Player():
     def __init__(self, esperData):
         self.esperData = esperData
 

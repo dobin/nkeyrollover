@@ -22,9 +22,9 @@ from system.renderable import Renderable
 from system.renderableprocessor import RenderableProcessor
 from system.gamelogic.attackable import Attackable
 from system.gamelogic.attackableprocessor import AttackableProcessor
-from system.gamelogic.tenemy import tEnemy
+from system.gamelogic.enemy import Enemy
 from system.gamelogic.enemyprocessor import EnemyProcessor
-from system.gamelogic.tplayer import tPlayer
+from system.gamelogic.player import Player
 from system.gamelogic.playerprocessor import PlayerProcessor
 
 from texture.phenomena.phenomenatexture import PhenomenaTexture
@@ -58,7 +58,7 @@ class World(object):
         texture.parentSprite = renderable
         renderable.name = "Player"
         self.esperWorld.add_component(self.player, renderable)
-        self.esperWorld.add_component(self.player, tPlayer(esperData=esperData))
+        self.esperWorld.add_component(self.player, Player(esperData=esperData))
         self.esperWorld.add_component(self.player, Attackable(initialHealth=100))
         self.playerRendable = renderable
         # /Player
@@ -110,16 +110,16 @@ class World(object):
 
         renderableProcessor = RenderableProcessor()
         advanceableProcessor = AdvanceableProcessor()
-        tplayerProcessor = PlayerProcessor()
-        tenemyProcessor = EnemyProcessor()
+        playerProcessor = PlayerProcessor()
+        enemyProcessor = EnemyProcessor()
         attackableProcessor = AttackableProcessor()
         offensiveAttackProcessor = OffensiveAttackProcessor(
             playerAttackEntity=self.characterAttackEntity
         )
         
         self.esperWorld.add_processor(advanceableProcessor)
-        self.esperWorld.add_processor(tplayerProcessor)  
-        self.esperWorld.add_processor(tenemyProcessor)  
+        self.esperWorld.add_processor(playerProcessor)  
+        self.esperWorld.add_processor(enemyProcessor)  
         self.esperWorld.add_processor(attackableProcessor)          
         self.esperWorld.add_processor(offensiveAttackProcessor)          
         self.esperWorld.add_processor(renderableProcessor)

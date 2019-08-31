@@ -13,7 +13,7 @@ from utilities.color import Color
 from messaging import messaging, Messaging, Message, MessageType
 
 import system.renderable
-import system.gamelogic.tenemy
+import system.gamelogic.enemy
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +24,7 @@ class StateChase(State):
     def __init__(self, brain):
         State.__init__(self, brain)
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
 
         self.lastInputTimer = Timer( 
             meEnemy.enemyInfo.chaseStepDelay, 
@@ -36,7 +36,7 @@ class StateChase(State):
         meRenderable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.renderable.Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
 
         stateTimeRnd = random.randrange(-100 * meEnemy.enemyInfo.chaseTimeRnd, 100 * meEnemy.enemyInfo.chaseTimeRnd)
         self.setTimer( meEnemy.enemyInfo.chaseTime + (stateTimeRnd / 100) )
@@ -49,7 +49,7 @@ class StateChase(State):
 
     def process(self, dt):
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
 
         self.lastInputTimer.advance(dt)
         self.canAttackTimer.advance(dt)
@@ -84,7 +84,7 @@ class StateChase(State):
 
     def checkHitLocation(self, playerLocation): 
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
 
         attackRendable = self.brain.owner.world.component_for_entity(
             meEnemy.offensiveAttackEntity, system.renderable.Renderable)
@@ -113,7 +113,7 @@ class StateChase(State):
         meRenderable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.renderable.Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.tenemy.tEnemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
 
         if not meEnemy.enemyMovement: 
             return

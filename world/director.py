@@ -16,7 +16,7 @@ from entities.weapontype import WeaponType
 from system.advanceable import Advanceable
 from system.renderable import Renderable
 from system.gamelogic.attackable import Attackable
-from system.gamelogic.tenemy import tEnemy
+from system.gamelogic.enemy import Enemy
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
 from system.offensiveattack import OffensiveAttack
@@ -78,7 +78,7 @@ class Director(object):
         renderable.enemyMovement = True
         texture.parentSprite = renderable
         self.world.esperWorld.add_component(enemy, renderable)
-        tenemy = tEnemy(
+        tenemy = Enemy(
             player=self.world.playerRendable,
             name=name,
             esperData=esperData, 
@@ -210,7 +210,9 @@ class Director(object):
 
 
     def makeEnemyAlive(self): 
-        for ent, (attackable, renderable, enemy) in self.world.esperWorld.get_components(Attackable, Renderable, tEnemy):
+        for ent, (attackable, renderable, enemy) in self.world.esperWorld.get_components(
+            Attackable, Renderable, Enemy
+        ):
             if enemy.brain.state.name == 'idle':
                 spawnCoords = self.getRandomSpawnCoords(renderable)
                 renderable.setLocation(spawnCoords)

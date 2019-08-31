@@ -9,7 +9,7 @@ from texture.character.characteranimationtype import CharacterAnimationType
 from system.offensiveattack import OffensiveAttack
 
 from system.renderable import Renderable
-from system.gamelogic.tplayer import tPlayer
+from system.gamelogic.player import Player
 
 from messaging import messaging, Messaging, Message, MessageType
 
@@ -53,7 +53,7 @@ class KeyboardInput(object):
             playerRenderable = self.world.esperWorld.component_for_entity(self.world.player, Renderable)
             playerAttack = self.world.esperWorld.component_for_entity(self.world.characterAttackEntity, OffensiveAttack)
 
-            player = self.world.esperWorld.component_for_entity(self.world.player, tPlayer)
+            player = self.world.esperWorld.component_for_entity(self.world.player, Player)
 
             player.characterStatus.handleKeyPress(time=self.world.getGameTime())
 

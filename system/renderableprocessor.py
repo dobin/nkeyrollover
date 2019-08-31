@@ -15,8 +15,8 @@ from messaging import messaging, Messaging, Message, MessageType
 from config import Config
 
 import system.gamelogic.attackable
-import system.gamelogic.tenemy
-import system.gamelogic.tplayer
+import system.gamelogic.enemy
+import system.gamelogic.player
 import system.renderable
 
 logger = logging.getLogger(__name__)
@@ -49,7 +49,7 @@ class RenderableProcessor(esper.Processor):
                 damage = message.data['damage']
 
                 for ent, (renderable, attackable, enemy) in self.world.get_components(
-                    system.renderable.Renderable, system.gamelogic.attackable.Attackable, system.gamelogic.tenemy.tEnemy
+                    system.renderable.Renderable, system.gamelogic.attackable.Attackable, system.gamelogic.enemy.Enemy
                 ):
                     if renderable.isHitBy(hitLocations):
                         attackable.handleHit(damage)
@@ -62,7 +62,7 @@ class RenderableProcessor(esper.Processor):
                 damage = message.data['damage']
 
                 for ent, (renderable, attackable, player) in self.world.get_components(
-                    system.renderable.Renderable, system.gamelogic.attackable.Attackable, system.gamelogic.tplayer.tPlayer
+                    system.renderable.Renderable, system.gamelogic.attackable.Attackable, system.gamelogic.player.Player
                 ):
                     if renderable.isHitBy(hitLocations):
                         attackable.handleHit(damage)

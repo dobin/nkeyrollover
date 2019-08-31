@@ -1,6 +1,6 @@
 import esper
 
-from system.gamelogic.tenemy import tEnemy
+from system.gamelogic.enemy import Enemy
 
 
 class EnemyProcessor(esper.Processor):
@@ -9,5 +9,5 @@ class EnemyProcessor(esper.Processor):
 
 
     def process(self, deltaTime):
-        for ent, player in self.world.get_component(tEnemy):
+        for ent, player in self.world.get_component(Enemy):
             player.advance(deltaTime)                
