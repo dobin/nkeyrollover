@@ -5,6 +5,7 @@
 
 Follow the adventures of ASCIIMAN.
 
+<<<<<<< HEAD
 
 
 ## History Lesson 
@@ -65,3 +66,8 @@ Configure:
 # adduser game # password game
 # chsh -s '/opt/nkeyrollover/nkeyrollover.py' game
 ```
+=======
+## Requirements 
+
+* Python 3.7+
+>>>>>>> 28fd77a911f4fbed7afd66b58b13663b34db23db

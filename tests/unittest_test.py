@@ -1,11 +1,13 @@
+#!/usr/bin/env python
+
 import unittest
 import time
 import logging
 #import tests.mockcurses as curses
 import curses
 
-from entities.player.player import Player
-from entities.enemy.enemy import Enemy
+from entities.entity import Entity
+from entities.entitytype import EntityType
 from config import Config
 from world.director import Director
 from sprite.direction import Direction
@@ -13,10 +15,11 @@ from utilities.utilities import Utility
 from sprite.sprite import Sprite
 from sprite.coordinates import Coordinates
 from tests.fakeworld import FakeWorld
-from world.world import World
+
+logger = logging.getLogger(__name__)
 
 
-def worldPlayer():
+def test_weaponHit():
     logging.basicConfig(
         filename='app.log', 
         filemode='a', 
@@ -48,26 +51,38 @@ def worldPlayer():
     else: 
         win = None
 
-    world = World(win)
-    world.director.maxEnemies = 0
+    world = FakeWorld(win)
+    world.getPlayer().setLocation( Coordinates(10, 10))
+    world.getPlayer().direction = Direction.left
 
-    while True:
-        win.erase()
+    enemy = Enemy(win, world.worldSprite, None, world, 'bot')
+    enemy.setLocation(Coordinates(4, 10))
+    world.director.enemiesAlive.append(enemy)
 
-        world.draw()
-        world.advance(0.01)
+    logger.info("LIFE1: " + str(enemy.characterStatus.health))
+    life1 = enemy.characterStatus.health
+    world.getPlayer().handleInput(ord('3')) # select first weapon
+    world.getPlayer().advance(0.1)
+    enemy.advance(0.1)
+    world.getPlayer().handleInput(ord(' ')) # fire
+    logger.info("LIFE2: " + str(enemy.characterStatus.health))
+    life2 = enemy.characterStatus.health
+    world.getPlayer().advance(0.1)
+    enemy.advance(0.1)
+    life3 = enemy.characterStatus.health
+    logger.info("LIFE3: " + str(enemy.characterStatus.health))
 
-        if world.player.getInput():
-            playerScreenCoords = world.viewport.getScreenCoords ( world.player.getLocation() )
+    locs = Utility.getBorderHalf(world.getPlayer().getLocationCenter(), distance=2, width=1)
 
-            if playerScreenCoords.x == 30:
-                world.viewport.x -= 1
+    if doCurses:
+        enemy.draw()
+        world.getPlayer().draw()
+        for loc in locs: 
+            win.addstr(loc.y, loc.x, ',') 
 
-            if playerScreenCoords.x == 20:
-                world.viewport.x += 1
-
-        time.sleep(0.01)
+        win.refresh()
+        time.sleep(2)
 
 
 if __name__ == '__main__':
-    worldPlayer()
+    test_weaponHit()

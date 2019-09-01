@@ -10,6 +10,10 @@ from config import Config
 from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 from utilities.color import Color
+from system.offensiveattack import OffensiveAttack
+
+import system.gamelogic.enemy
+import system.renderable 
 
 logger = logging.getLogger(__name__)
 
@@ -23,22 +27,30 @@ class StateAttack(State):
 
 
     def on_enter(self):
-        me = self.brain.owner
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.renderable.Renderable)
+
         self.attackTimer.init()
-        me.texture.changeAnimation(CharacterAnimationType.hitting, me.direction)
+        meRenderable.texture.changeAnimation(
+            CharacterAnimationType.hitting, 
+            meRenderable.direction)
         
-        self.attackTimer.setTimer(me.texture.getAnimationTime())
-        self.setTimer( me.texture.getAnimationTime() )
+        self.attackTimer.setTimer(meRenderable.texture.getAnimationTime())
+        self.setTimer( meRenderable.texture.getAnimationTime() )
 
  
     def process(self, dt):
         self.attackTimer.advance(dt)
-        me = self.brain.owner
+        meEnemy = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
 
         if self.attackTimer.timeIsUp(): 
-            logger.warn(self.name + " I'm attacking!")
+            logger.warning(self.name + " I'm attacking!")
             self.attackTimer.reset()
-            me.characterAttack.attack()
+            offensiveAttack = self.brain.owner.world.component_for_entity(
+                meEnemy.offensiveAttackEntity, 
+                OffensiveAttack)
+            offensiveAttack.attack()
 
         if self.timeIsUp():
             # too long attacking. lets switch to chasing

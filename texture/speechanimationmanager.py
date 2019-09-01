@@ -49,11 +49,4 @@ class SpeechAnimationManager(object):
         l4.extend(list(' ' * (l - 1)))
         animation.arr[0].append(l4)
 
-        #        [ '.', list('-' * (l - 2)), '.' ],
-        #        [ '|', 'h', 'o', 'i', '|' ],
-        #        [ '`', '^', list('-' * (l - 3)), '\'' ],
-       #         [ '/', list('-' * (l - 1)), ],                        
-        #    ]
-        #]
-
         return animation

@@ -1,5 +1,4 @@
 from entities.entity import Entity
-from entities.player.player import Player
 from world.director import Director
 from entities.entitytype import EntityType
 from world.particleemiter import ParticleEmiter

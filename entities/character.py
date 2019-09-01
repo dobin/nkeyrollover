@@ -10,36 +10,30 @@ from config import Config
 from entities.entity import Entity
 from .characterstatus import CharacterStatus
 from sprite.direction import Direction
-from texture.speechtexture import SpeechTexture
 from world.viewport import Viewport
 
 logger = logging.getLogger(__name__)
 
 
-class Character(Entity):
+class Character(object):
     """ A character is either a player or an enemy"""
 
     def __init__(
-        self, viewport :Viewport, parentEntity :Entity, 
+        self, viewport :Viewport, parent, 
         world, entityType :Entity
     ):
-        super(Character, self).__init__(
-            viewport=viewport, parentSprite=parentEntity, entityType=entityType)
+        self.parent = parent
+        self.entityType = entityType
         self.world = world
 
         self.characterStatus = CharacterStatus()
         self.speechTexture = SpeechTexture(parentSprite=self, displayText='')
         self.speechTexture.setActive(False)
-        self.characterAttack = None # by children
         self.characterInfo = None # filled by children
 
 
     def getInput(self, playerLocation): 
         raise NotImplementedError('subclasses must override this abstract method')
-
-
-    def gmHandleEnemyHit(self, damage, isAttack=True): 
-        self.characterStatus.enemyHit(damage, isAttack)
 
 
     def gmRessurectMe(self): 
@@ -55,18 +49,13 @@ class Character(Entity):
 
 
     def draw(self):
-        super(Character, self).draw()
+        #super(Character, self).draw()
         self.speechTexture.draw(self.viewport)
 
 
-    def drawCharacterAttack(self): 
-        self.characterAttack.draw()
-
-
     def advance(self, deltaTime):
-        super(Character, self).advance(deltaTime) # advance Entity part (duration, sprite)
+        #super(Character, self).advance(deltaTime) # advance Entity part (duration, sprite)
 
-        self.characterAttack.advance(deltaTime) # update weapon (duration, sprite)
         self.characterStatus.advance(deltaTime) # update health, mana etc.
         self.speechTexture.advance(deltaTime)
 
@@ -78,11 +67,3 @@ class Character(Entity):
     def getRandomBody(self): 
         return random.choice([ 'X', 'o', 'O', 'v', 'V', 'M', 'm' ])
 
-    
-    def getLocationCenter(self): 
-        # slow, but its currently only used by rare events like skillExplosion
-        loc = copy.copy(self.getLocation())
-        # this will round down
-        loc.x += int(self.texture.width / 2)
-        loc.y += int(self.texture.height / 2)
-        return loc

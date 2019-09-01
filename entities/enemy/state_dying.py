@@ -11,6 +11,9 @@ from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 from utilities.color import Color
 
+import system.renderable
+import system.gamelogic.enemy
+
 logger = logging.getLogger(__name__)
 
 
@@ -22,31 +25,41 @@ class StateDying(State):
 
 
     def on_enter(self):
-        me = self.brain.owner
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.renderable.Renderable)
+        meEnemy = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
+
 
         if random.choice([True, False]): 
             logger.info(self.name + " Death animation deluxe")
             animationIndex = random.randint(0, 1)
-            me.world.textureEmiter.makeExplode(me.texture, me.direction, None)
-            me.texture.changeAnimation(CharacterAnimationType.dying, me.direction, animationIndex)
-            me.setActive(False)
+            meEnemy.world.textureEmiter.makeExplode(
+                meRenderable.texture, 
+                meRenderable.direction, 
+                None)
+            meRenderable.texture.changeAnimation(
+                CharacterAnimationType.dying, 
+                meRenderable.direction, 
+                animationIndex)
+            meRenderable.setActive(False)
         else: 
             animationIndex = random.randint(0, 1)
-            me.texture.changeAnimation(CharacterAnimationType.dying, me.direction, animationIndex)
+            meRenderable.texture.changeAnimation(
+                CharacterAnimationType.dying, 
+                meRenderable.direction, 
+                animationIndex)
 
 
-        self.setTimer( me.enemyInfo.dyingTime )
+        self.setTimer( meEnemy.enemyInfo.dyingTime )
 
 
     def process(self, dt):
-        me = self.brain.owner
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.renderable.Renderable)
 
         if self.timeIsUp():
-            logger.debug("{}: Died enough, set to inactive".format(self.owner))
+            logger.info("{}: Died enough, set to inactive".format(self.owner))
             self.brain.pop()
             self.brain.push("idle")
-            me.setActive(False)
-
-
-
-
+            meRenderable.setActive(False)

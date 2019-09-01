@@ -1,5 +1,6 @@
 import curses
 import logging
+import math
 
 from texture.character.charactertype import CharacterType
 from texture.character.characteranimationtype import CharacterAnimationType
@@ -21,8 +22,8 @@ class Utility(object):
         }
         res['x'] = abs(coord1.x - coord2.x)
         res['y'] = abs(coord1.y - coord2.y)
-        res['sum'] = res['x'] + res['y']
-
+        #res['sum'] = res['x'] + res['y']
+        res['sum'] = math.sqrt(res['x'] ** 2 + res['y'] ** 2)
         return res
 
     
@@ -34,26 +35,12 @@ class Utility(object):
         else: 
             return False
 
-
     @staticmethod
-    def isPointMovable(x, y, width, height): 
-        # lower boundary
-        if y + height > Config.areaMoveable['maxy']:
+    def pointIn(coord1 :Coordinates, location2):
+        if coord1.x >= location2.x and coord1.x < location2.x + location2.width and coord1.y >= location2.y and coord1.y < location2.y + location2.height:
+            return True
+        else: 
             return False
-
-        # upper boundary
-        if y <= Config.areaMoveable['miny'] - height: 
-            return False
-
-        ## left boundary
-        #if x <= Config.areaMoveable['minx']:
-        #    return False            
-
-        # right boundary
-        #if x + width >= Config.areaMoveable['maxx']:
-        #    return False
-
-        return True
 
 
     @staticmethod

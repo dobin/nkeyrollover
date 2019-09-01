@@ -3,13 +3,17 @@
 import curses, random, time, signal, sys
 import logging
 
-from entities.player.player import Player
 from world.scene import Scene
 from config import Config
 from world.world import World
 from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
 from utilities.utilities import Utility
+from system.keyboardinput import KeyboardInput
+
+from system.gamelogic.attackable import Attackable
+from system.gamelogic.player import Player
+from system.offensiveattack import OffensiveAttack
 
 import locale 
 current_milli_time = lambda: int(round(time.time() * 1000))
@@ -18,6 +22,7 @@ current_milli_time = lambda: int(round(time.time() * 1000))
 class Keyrollover(object): 
     def __init__(self): 
         self.win = None         # canvas to draw
+        self.menuwin = None
         self.world = None       # the world, with all textures and units
         self.currentTime = None
         self.init()
@@ -43,8 +48,10 @@ class Keyrollover(object):
         logger = logging.getLogger(__name__)
         logger.record("-----------------Start------------------------")
 
-        # Create a new Curses window
-        self.win = curses.newwin(Config.rows, Config.columns)
+        self.menuwin = curses.newwin(3, Config.columns, 0, 0)
+        self.menuwin.border()
+
+        self.win = curses.newwin(Config.rows, Config.columns, 2, 0)
         curses.noecho()
         curses.cbreak()
         self.win.keypad(1) 
@@ -62,6 +69,7 @@ class Keyrollover(object):
         self.win.border()
 
         self.world = World(win=self.win)
+        self.keyboardInput = KeyboardInput(world=self.world)
 
         self.startTime = current_milli_time()
         self.currentTime = self.startTime
@@ -82,21 +90,19 @@ class Keyrollover(object):
             self.drawStatusbar(n)
             self.world.draw()
             self.world.advance(deltaTime)
+            self.keyboardInput.advance(deltaTime)
 
             # has to be after draw, as getch() does a refresh
             # https://stackoverflow.com/questions/19748685/curses-library-why-does-getch-clear-my-screen
             # keep inputrate below half FPS (50/s by default)
-            if n % 2 == 0:
-                self.world.player.getInput()
-            else: 
-                self.win.refresh()
+            self.keyboardInput.getInput()
 
             # fps logistics
             timeEnd = time.time()
             workTime = timeEnd - timeStart
             self.workTime = workTime
             if workTime > targetFrameTime:
-                logging.warn("Could not keep FPS! Worktime was: {}ms".format( self.workTime * 100.0))
+                logging.warning("Could not keep FPS! Worktime was: {}ms".format( self.workTime * 100.0))
 
             targetSleepTime = targetFrameTime - workTime
             if targetSleepTime < 0:
@@ -118,41 +124,56 @@ class Keyrollover(object):
         #    fps = 1000 * (float)(n) / (float)(current_milli_time() - self.startTime)
         #    #fps = self.workTime * 1000.0
 
-        s = "Health: " + str(self.world.player.characterStatus.health)
-        s += "  Mana: " + str(self.world.player.characterStatus.mana)
-        s += "  Points: " + str(self.world.player.characterStatus.points)
+        #self.menuwin.erase()
+        #self.menuwin.border()
+        playerAttackable = self.world.esperWorld.component_for_entity(
+            self.world.player, Attackable)
+        player = self.world.esperWorld.component_for_entity(
+            self.world.player, Player)
+
+        s = "Health: " + str(playerAttackable.getHealth())
+        s += "  Points: " + str(player.points)
 
         #s += "  FPS: %.0f" % (fps)
         color = ColorPalette.getColorByColorType(ColorType.menu, None)
-        self.win.addstr(1, 2, s, color )
+        self.menuwin.addstr(1, 2, s, color )
 
-        self.printSkillbar(color)
+        #self.printSkillbar(color)
+        self.printAttackbar(color)
+        self.menuwin.refresh()
 
 
-    def printSkillbar(self, color): 
-        skills = self.world.player.skills
+    def printSkillbar(self, color):
+        skills = self.world.getPlayer().skills
 
         basex = 54
         n = 0
         for skill in skills.skillStatus: 
             if skills.isRdy(skill): 
-                self.win.addstr(1, basex + n, skill, curses.color_pair(9))
+                self.menuwin.addstr(1, basex + n, skill, curses.color_pair(9))
             else: 
-                self.win.addstr(1, basex + n, skill, curses.color_pair(10))
+                self.menuwin.addstr(1, basex + n, skill, curses.color_pair(10))
 
             n += 1
 
+    def printAttackbar(self, color):
+        playerOffensiveAttack = self.world.esperWorld.component_for_entity(
+            self.world.characterAttackEntity, OffensiveAttack)
+        player = self.world.esperWorld.component_for_entity(
+            self.world.player, Player)
+
         weaponIdx = 62
-        self.win.addstr(1, 
+        self.menuwin.addstr(1, 
             weaponIdx, 
-            'W:' + self.world.player.characterAttack.getWeaponStr(), 
+            'W:' + playerOffensiveAttack.getWeaponStr(), 
             color)
 
         weaponIdx = 62
-        self.win.addstr(1, 
+        self.menuwin.addstr(1, 
             weaponIdx, 
-            'APM:' + str(int(self.world.player.characterStatus.getApm().getApm() * 60)), 
+            'APM:' + str(int(player.characterStatus.getApm().getApm() * 60)), 
             color)
+
 
 
 def signal_handler(sig, frame):

@@ -1,7 +1,6 @@
 import logging
 import random
 
-from entities.enemy.enemy import Enemy
 from utilities.timer import Timer
 from config import Config
 from world.viewport import Viewport
@@ -9,10 +8,21 @@ from world.viewport import Viewport
 from sprite.direction import Direction
 from texture.character.charactertype import CharacterType
 from sprite.coordinates import Coordinates
-from entities.enemy.state_attack import StateAttack
-from entities.enemy.state_attackwindup import StateAttackWindup
-from entities.enemy.state_chase import StateChase
-from entities.enemy.state_wander import StateWander
+from texture.character.characteranimationtype import CharacterAnimationType
+from texture.character.charactertexture import CharacterTexture
+from texture.texture import Texture
+from entities.weapontype import WeaponType
+
+from system.groupid import GroupId
+from system.advanceable import Advanceable
+from system.renderable import Renderable
+from system.gamelogic.attackable import Attackable
+from system.gamelogic.enemy import Enemy
+from texture.phenomena.phenomenatexture import PhenomenaTexture
+from texture.phenomena.phenomenatype import PhenomenaType
+from system.offensiveattack import OffensiveAttack
+from messaging import messaging, Messaging, Message, MessageType
+from entities.esperdata import EsperData
 
 logger = logging.getLogger(__name__)
 
@@ -23,10 +33,7 @@ class Director(object):
     def __init__(self, viewport :Viewport, world):
         self.viewport = viewport
         self.world = world
-        self.enemiesDead = []
-        # sorted by increasing enemy.coordinates.y order after every advance()
-        # to have a good Z order on screen
-        self.enemiesAlive = [] 
+        self.enemies = []
         self.lastEnemyResurrectedTimer = Timer(1.0)
 
         self.maxEnemies = 12
@@ -38,55 +45,133 @@ class Director(object):
     # without enemies in the unit test
     def init(self):
         if Config.devMode: 
-            newEnemy = Enemy(viewport=self.viewport, 
-                parent=self.world.worldSprite, 
-                world=self.world, 
-                name="Enym", 
-                characterType=CharacterType.cow)
-            newEnemy.enemyMovement = Config.enemyMovement
-            newEnemy.direction = Direction.right
-            self.enemiesDead.append(newEnemy)
+            characterType = CharacterType.cow
+            self.createEnemy(characterType, 0)
         else:
             n = 0
             while n < self.maxEnemies:
                 characterType = CharacterType.stickfigure
                 if n % 10 == 0:
                     characterType = CharacterType.cow
+                self.createEnemy(characterType, n)
+                n += 1
 
-                newEnemy = Enemy(viewport=self.viewport, 
-                    parent=self.world.worldSprite, 
-                    world=self.world, 
-                    name=str(n),
-                    characterType=characterType)
-                self.enemiesDead.append(newEnemy)
-                n = n + 1
+
+    def createEnemy(self, characterType, id): 
+        name = str(id)
+        # Enemy
+        groupId = GroupId(id=id)
+        enemy = self.world.esperWorld.create_entity()
+        esperData = EsperData(self.world.esperWorld, enemy)
+        texture = CharacterTexture(
+            parentSprite=None, 
+            characterAnimationType=CharacterAnimationType.standing,
+            head=self.getRandomHead(), 
+            body=self.getRandomBody(),
+            characterType=characterType)
+        coordinates = Coordinates(0, 0)
+        renderable = Renderable(
+            texture=texture,
+            viewport=self.viewport,
+            parent=None,
+            coordinates=coordinates,
+            active=False)
+        renderable.name = "Enemy "
+        renderable.world = self.world
+        renderable.enemyMovement = True
+        texture.parentSprite = renderable
+        self.world.esperWorld.add_component(enemy, groupId)
+        self.world.esperWorld.add_component(enemy, renderable)
+        tenemy = Enemy(
+            player=self.world.playerRendable,
+            name=name,
+            esperData=esperData, 
+            director=self,
+            world=self.world,
+            viewport=self.viewport)
+        self.world.esperWorld.add_component(enemy, tenemy)
+        self.enemies.append(tenemy)
+        self.world.esperWorld.add_component(enemy, Attackable(initialHealth=100))
+        enemyRenderable = renderable
+        # /Enemy
+
+        # CharacterAttack
+        characterAttackEntity = self.world.esperWorld.create_entity()
+        texture :PhenomenaTexture = PhenomenaTexture(phenomenaType=PhenomenaType.hit, parentSprite=self)
+        coordinates = Coordinates( # for hit
+            -1,
+            1
+        )
+        renderable = Renderable(
+            texture=texture,
+            viewport=self.viewport,
+            parent=enemyRenderable,
+            coordinates=coordinates,
+            z=2,
+            useParentDirection=True)
+        renderable.name = "EnemyWeapon "
+        texture.parentSprite = renderable
+        self.world.esperWorld.add_component(characterAttackEntity, renderable)
+        offensiveAttack = OffensiveAttack(
+            isPlayer=False, 
+            world=self.world,
+            renderable=renderable)
+        self.world.esperWorld.add_component(characterAttackEntity, groupId)
+        self.world.esperWorld.add_component(characterAttackEntity, offensiveAttack)
+        self.characterAttackEntity = characterAttackEntity
+        offensiveAttack.switchWeapon(WeaponType.hitLine)
+        tenemy.offensiveAttackEntity = characterAttackEntity
+        # /CharacterAttack    
+
+
+    def getRandomHead(self):
+        return random.choice([ '^', 'o', 'O', 'v', 'V'])
+
+
+    def getRandomBody(self): 
+        return random.choice([ 'X', 'o', 'O', 'v', 'V', 'M', 'm' ])
 
 
     def numEnemiesAlive(self) -> int:
-        return len(self.enemiesAlive)
+        n = 0
+        for enemy in self.enemies:
+            if enemy.brain.state.name != 'idle': 
+                n += 1
+        return n
+
+
+    def numEnemiesDead(self) -> int:
+        n = 0
+        for enemy in self.enemies:
+            if enemy.brain.state.name == 'idle':
+                n += 1
+        return n
 
     
     def numEnemiesAttacking(self) -> int:
         n = 0
-        for enemy in self.enemiesAlive:
-            if enemy.brain.state.name == 'attack' or enemy.brain.state.name == 'attackwindup':
-                n += 1
+        for enemy in self.enemies:
+            if enemy.isActive():
+                if enemy.brain.state.name == 'attack' or enemy.brain.state.name == 'attackwindup':
+                    n += 1
         return n
 
 
     def numEnemiesWandering(self) -> int:
         n = 0
-        for enemy in self.enemiesAlive:
-            if enemy.brain.state.name == 'wander':
-                n += 1
+        for enemy in self.enemies:
+            if enemy.isActive():
+                if enemy.brain.state.name == 'wander':
+                    n += 1
         return n
 
 
     def numEnemiesChasing(self) -> int:
         n = 0
-        for enemy in self.enemiesAlive:
-            if enemy.brain.state.name == 'chase':
-                n += 1
+        for enemy in self.enemies:
+            if enemy.isActive():
+                if enemy.brain.state.name == 'chase':
+                    n += 1
         return n
 
 
@@ -109,43 +194,49 @@ class Director(object):
     def advanceEnemies(self, deltaTime):
         self.lastEnemyResurrectedTimer.advance(deltaTime)
 
-        for enemy in self.enemiesAlive:
-            enemy.advance(deltaTime)
-
-        def gety(elem): 
-            return elem.coordinates.y
-        self.enemiesAlive.sort(key=gety)            
-
-
-    def drawEnemies(self):
-        for enemy in self.enemiesAlive: 
-            enemy.draw()
-
-
-    def drawEnemyAttacks(self): 
-        for enemy in self.enemiesAlive: 
-            enemy.drawCharacterAttack()
+        for enemy in self.enemies:
+            if enemy.isActive():
+                enemy.advance(deltaTime)
 
 
     def worldUpdate(self):
         # make more enemies
-        if len(self.enemiesAlive) < self.maxEnemies:
+        if self.numEnemiesAlive() < self.maxEnemies:
             if self.lastEnemyResurrectedTimer.timeIsUp():
-                self.lastEnemyResurrectedTimer.reset()
-                
-                if len(self.enemiesDead) > 0:
-                    logger.warn("Ressurect an enemy. alive are: " + str(len(self.enemiesAlive)))
-                    enemy = self.enemiesDead.pop()
-                    spawnCoords = self.getRandomSpawnCoords(enemy)
-                    enemy.gmRessurectMe(spawnCoords)
-                    self.enemiesAlive.append(enemy)
+                if self.numEnemiesDead() > 0:
+                    self.makeEnemyAlive()
+                    self.lastEnemyResurrectedTimer.reset()
 
-        # remove inactive enemies
-        for enemy in self.enemiesAlive:
+
+
+    def findDeadEnemy(self): 
+        for enemy in self.enemies:
             if not enemy.isActive():
-                logger.info("Move newly dead enemy to dead queue")
-                self.enemiesDead.append(enemy)
-                self.enemiesAlive.remove(enemy)
+                return enemy
+
+
+    def makeEnemyAlive(self): 
+        for ent, (attackable, renderable, enemy) in self.world.esperWorld.get_components(
+            Attackable, Renderable, Enemy
+        ):
+            if enemy.brain.state.name == 'idle':
+                spawnCoords = self.getRandomSpawnCoords(renderable)
+                renderable.setLocation(spawnCoords)
+
+                logger.info("Ressurect enemy {} at {}".format(enemy, renderable.coordinates))
+                attackable.resetHealth()
+                enemy.setActive(True)
+
+                enemy.brain.pop()
+                enemy.brain.push('spawn')
+                # if death animation was deluxe, there is no frame in the sprite
+                # upon spawning, and an exception is thrown
+                # change following two when fixed TODO
+                renderable.texture.changeAnimation(
+                    CharacterAnimationType.standing, 
+                    renderable.direction)
+
+                break
 
 
     def getRandomSpawnCoords(self, enemy):
@@ -168,27 +259,3 @@ class Director(object):
         myy = random.randint(minY, maxY)
         spawnCoords = Coordinates(myx, myy)
         return spawnCoords
-
-
-    def collisionDetection(self, characterWeaponCoordinates): 
-        for enemy in self.enemiesAlive: 
-            if enemy.collidesWithPoint(characterWeaponCoordinates):
-                enemy.gmHandleHit(50)
-
-
-    def getEnemiesHit(self, coordinates):
-        enemies = []
-        for enemy in self.enemiesAlive: 
-            if enemy.collidesWithPoint(coordinates):
-                enemies.append(enemy)
-
-        return enemies
-
-
-    def getPlayersHit(self, coordinates):
-        players = []
-        if self.world.player.collidesWithPoint(coordinates):
-            players.append(self.world.player)
-
-        return players
-

@@ -9,6 +9,8 @@ from sprite.direction import Direction
 from config import Config
 from sprite.coordinates import Coordinates
 
+import system.renderable
+
 logger = logging.getLogger(__name__)
 
 
@@ -20,14 +22,16 @@ class StateWalking(State):
 
 
     def on_enter(self):
-        me = self.brain.owner
-        me.texture.changeAnimation(CharacterAnimationType.walking, me.direction)
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.renderable.Renderable)
+
+        meRenderable.texture.changeAnimation(
+            CharacterAnimationType.walking, 
+            meRenderable.direction)
         self.setTimer(1.0)
         
 
     def process(self, dt):
-        me = self.brain.owner
-
         if self.timeIsUp():
             self.brain.pop()
             self.brain.push('idle')

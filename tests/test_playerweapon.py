@@ -5,11 +5,8 @@ import time
 import logging
 import curses
 
-from entities.characterattack import CharacterAttack
 from entities.entity import Entity
 from entities.entitytype import EntityType
-from entities.player.player import Player
-from entities.enemy.enemy import Enemy
 from config import Config
 from world.director import Director
 from sprite.direction import Direction
@@ -28,8 +25,8 @@ class PlayerWeaponTest(unittest.TestCase):
         world = FakeWorld(win, fakeViewPort=True)
 
         # set player
-        world.player.setLocation( Coordinates(10, 10))
-        world.player.direction = Direction.right
+        world.getPlayer().setLocation( Coordinates(10, 10))
+        world.getPlayer().direction = Direction.right
 
         # set enemies
         enemy = Enemy(viewport=world.viewport, parent=world.worldSprite, 
@@ -39,10 +36,10 @@ class PlayerWeaponTest(unittest.TestCase):
 
         # action!
         life1 = enemy.characterStatus.health
-        world.player.handleInput(ord('1')) # select first weapon
-        world.player.advance(0.1)
+        world.getPlayer().handleInput(ord('1')) # select first weapon
+        world.getPlayer().advance(0.1)
         enemy.advance(0.1)
-        world.player.handleInput(ord(' ')) # fire
+        world.getPlayer().handleInput(ord(' ')) # fire
         life2 = enemy.characterStatus.health
         self.assertLess(life2, life1)
 
@@ -55,8 +52,8 @@ class PlayerWeaponTest(unittest.TestCase):
         world = FakeWorld(win)
 
         # player
-        world.player.setLocation(Coordinates(10, 10))
-        world.player.direction = Direction.left
+        world.getPlayer().setLocation(Coordinates(10, 10))
+        world.getPlayer().direction = Direction.left
 
         # enemy
         enemy = Enemy(viewport=world.viewport, parent=world.worldSprite, 
@@ -66,10 +63,10 @@ class PlayerWeaponTest(unittest.TestCase):
 
         # action!
         life1 = enemy.characterStatus.health
-        world.player.handleInput(ord('3')) # select third weapon
-        world.player.advance(0.1)
+        world.getPlayer().handleInput(ord('3')) # select third weapon
+        world.getPlayer().advance(0.1)
         enemy.advance(0.1)
-        world.player.handleInput(ord(' ')) # fire
+        world.getPlayer().handleInput(ord(' ')) # fire
         life2 = enemy.characterStatus.health
         self.assertLess(life2, life1)
 
