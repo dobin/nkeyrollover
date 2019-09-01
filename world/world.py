@@ -71,7 +71,7 @@ class World(object):
             playerAttackEntity=self.characterAttackEntity
         )
         offensiveSkillProcessor = OffensiveSkillProcessor(
-            player=self.player
+            player=self.player,
         )
 
         self.esperWorld.add_processor(advanceableProcessor)
@@ -98,7 +98,10 @@ class World(object):
             parent=None,
             coordinates=coordinates)
         texture.parentSprite = renderable
-        characterSkill = OffensiveSkill(esperData, self.particleEmiter)
+        characterSkill = OffensiveSkill(
+            esperData=esperData, 
+            particleEmiter=self.particleEmiter,
+            viewport=self.viewport)
         self.characterSkillEntity = characterSkill
         renderable.name = "Player"
         self.esperWorld.add_component(self.player, characterSkill)

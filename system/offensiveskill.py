@@ -12,6 +12,7 @@ from utilities.color import Color
 
 import system.gamelogic.attackable 
 import system.renderable
+import system.gamelogic.attackable
 
 from messaging import messaging, Messaging, Message, MessageType
 
@@ -20,9 +21,11 @@ logger = logging.getLogger(__name__)
 
 
 class OffensiveSkill(object): 
-    def __init__(self, esperData, particleEmiter):
+    def __init__(self, esperData, particleEmiter, viewport):
         self.particleEmiter = particleEmiter 
         self.esperData = esperData
+        self.viewport = viewport
+
         self.skillStatus = [
             'q', 'w', 'e', 'r', 'f', 'g'
         ]
@@ -133,20 +136,24 @@ class OffensiveSkill(object):
 
 
     def skillHeal(self): 
-        #self.player.characterStatus.heal(100)
-        return 0
+        meAttackable = self.esperData.world.component_for_entity(
+            self.esperData.entity, system.gamelogic.attackable.Attackable)
+        meAttackable.heal(50)
 
 
     def skillSwitchSide(self): 
-        #screenCoordinates = self.player.viewport.getScreenCoords(self.player.coordinates)
-        #
-        #if screenCoordinates.x < (Config.columns / 2):
-        #    diff = 80 - 2 * screenCoordinates.x
-        #    self.player.coordinates.x += diff
-        #else: 
-        #    diff = Config.areaMoveable['maxx'] - 2 * (Config.areaMoveable['maxx'] - screenCoordinates.x)
-        #    self.player.coordinates.x -= diff
-        return 0
+        meRenderable = self.esperData.world.component_for_entity(
+            self.esperData.entity, system.renderable.Renderable)
+
+        screenCoordinates = self.viewport.getScreenCoords(
+            meRenderable.getLocation())
+        
+        if screenCoordinates.x < (Config.columns / 2):
+            diff = 80 - 2 * screenCoordinates.x
+            meRenderable.coordinates.x += diff
+        else: 
+            diff = Config.areaMoveable['maxx'] - 2 * (Config.areaMoveable['maxx'] - screenCoordinates.x)
+            meRenderable.coordinates.x -= diff
 
 
     def skillExplosion(self):
