@@ -58,11 +58,11 @@ class Director(object):
 
 
     def createEnemy(self, characterType, id): 
-        name = str(id)
+        name = "Bot " + str(id)
         # Enemy
         groupId = GroupId(id=id)
         enemy = self.world.esperWorld.create_entity()
-        esperData = EsperData(self.world.esperWorld, enemy)
+        esperData = EsperData(self.world.esperWorld, enemy, name)
         texture = CharacterTexture(
             parentSprite=None, 
             characterAnimationType=CharacterAnimationType.standing,

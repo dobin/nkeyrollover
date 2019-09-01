@@ -69,5 +69,5 @@ class FileTextureLoader(object):
             'frameCount': len(res),
         }
 
-        logger.info("Loaded {}: width={} height={} animations={}".format(filename, maxWidth, maxHeight, len(res)))
+        logger.debug("Loaded {}: width={} height={} animations={}".format(filename, maxWidth, maxHeight, len(res)))
         return d

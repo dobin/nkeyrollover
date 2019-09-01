@@ -90,7 +90,7 @@ class World(object):
         # Player
         myid = 31337
         self.player = self.esperWorld.create_entity()
-        esperData = EsperData(self.esperWorld, self.player)
+        esperData = EsperData(self.esperWorld, self.player, 'player')
         texture = CharacterTexture(parentSprite=None, characterType=CharacterType.player)
         coordinates = Coordinates(
             Config.playerSpawnPoint['x'],
