@@ -18,6 +18,10 @@ import system.gamelogic.attackable
 import system.gamelogic.enemy
 import system.gamelogic.player
 import system.renderable
+import system.groupid
+
+from directmessaging import directMessaging, DirectMessage, DirectMessageType
+
 
 logger = logging.getLogger(__name__)
 
@@ -27,13 +31,34 @@ class RenderableProcessor(esper.Processor):
         super().__init__()
 
         # list of HEIGHT lists
+        # used to add renderable objects in the right Z order for render()
         self.renderOrder = [[] for i in range(Config.rows + 3)]
 
 
     def process(self, dt):
+        self.speechBubbleActivator()
+
         self.collisionDetection()
         self.advance(dt)
         self.render()
+
+
+    def speechBubbleActivator(self):
+        msg = directMessaging.get(
+            messageType = DirectMessageType.activateSpeechBubble
+        )
+        while msg is not None:
+            for ent, (renderable, speechBubble, groupId) in self.world.get_components(
+                system.renderable.Renderable, 
+                system.graphics.speechbubble.SpeechBubble,
+                system.groupid.GroupId
+            ):
+                if groupId.getId() == msg.groupId:
+                    speechBubble.changeText(msg.data)
+
+            msg = directMessaging.get(
+                messageType = DirectMessageType.activateSpeechBubble
+            )
 
 
     def advance(self, deltaTime):

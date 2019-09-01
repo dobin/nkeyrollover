@@ -13,9 +13,10 @@ from utilities.color import Color
 import system.gamelogic.attackable 
 import system.renderable
 import system.graphics.speechbubble
+import system.groupid
 
 from messaging import messaging, Messaging, Message, MessageType
-
+from directmessaging import directMessaging, DirectMessage, DirectMessageType
 
 logger = logging.getLogger(__name__)
 
@@ -132,13 +133,18 @@ class OffensiveSkill(object):
 
 
     def skillSay(self, text): 
-        for ent, (renderable, speechBubble) in self.esperData.world.get_components(
-            system.renderable.Renderable, system.graphics.speechbubble.SpeechBubble
-        ):
-            speechBubble.changeText(text)
-            #self.player.actionCtrl.changeTo(
-            #    CharacterAnimationType.shrugging, 
-            #    self.player.direction)
+        meGroupId = self.esperData.world.component_for_entity(
+            self.esperData.entity, system.groupid.GroupId)
+
+        directMessaging.add(
+            groupId = meGroupId.getId(),
+            type = DirectMessageType.activateSpeechBubble,
+            data = 'hoi',
+        )
+         
+        #self.player.actionCtrl.changeTo(
+        #    CharacterAnimationType.shrugging, 
+        #    self.player.direction)
 
 
     def skillHeal(self): 
