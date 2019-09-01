@@ -14,6 +14,7 @@ from messaging import messaging, Messaging, Message, MessageType
 
 import system.renderable
 import system.gamelogic.enemy
+from directmessaging import directMessaging, DirectMessage, DirectMessageType
 
 logger = logging.getLogger(__name__)
 
@@ -110,6 +111,8 @@ class StateChase(State):
             self.brain.owner.entity, system.renderable.Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
+        meGroupId = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.groupid.GroupId)
 
         if not meEnemy.enemyMovement: 
             return
@@ -146,4 +149,12 @@ class StateChase(State):
         elif meWeaponLocation.y > playerLocation.y + meEnemy.player.texture.height - 1: # why -1?
             moveY = -1
 
-        meRenderable.move(moveX, moveY, dontChangeDirection)
+        directMessaging.add(
+            groupId = meGroupId.getId(),
+            type = DirectMessageType.moveEnemy,
+            data = {
+                'x': moveX,
+                'y': moveY,
+                'dontChangeDirection': dontChangeDirection
+            },
+        )   

@@ -14,6 +14,8 @@ from messaging import messaging, Messaging, Message, MessageType
 
 import system.renderable
 import system.gamelogic.enemy
+from directmessaging import directMessaging, DirectMessage, DirectMessageType
+
 
 logger = logging.getLogger(__name__)
 
@@ -86,19 +88,32 @@ class StateWander(State):
     def getInputWander(self):
         meRenderable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.renderable.Renderable)
+        meGroupId = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.groupid.GroupId)
 
         if not meRenderable.enemyMovement: 
             return
 
+        x = 0
+        y = 0
         if self.destCoord.x > meRenderable.coordinates.x:
-            meRenderable.move(x=1, y=0)
+            x=1
         elif self.destCoord.x < meRenderable.coordinates.x: 
-            meRenderable.move(x=-1, y=0)
+            x=-1
 
         if self.destCoord.y > meRenderable.coordinates.y:
-            meRenderable.move(x=0, y=1)
+            y=1
         elif self.destCoord.y < meRenderable.coordinates.y: 
-            meRenderable.move(x=0, y=-1)
+            y=-1
+
+        directMessaging.add(
+            groupId = meGroupId.getId(),
+            type = DirectMessageType.moveEnemy,
+            data = {
+                'x': x,
+                'y': y
+            },
+        )            
 
 
     def chooseDestination(self): 

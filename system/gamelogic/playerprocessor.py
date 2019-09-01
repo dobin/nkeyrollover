@@ -34,6 +34,9 @@ import system.advanceable
 import system.renderable
 import system.gamelogic.player
 
+from directmessaging import directMessaging, DirectMessage, DirectMessageType
+
+
 
 class PlayerProcessor(esper.Processor):
     def __init__(self):
@@ -63,7 +66,7 @@ class PlayerProcessor(esper.Processor):
             
             for message in messaging.get():
                 if message.type is MessageType.PlayerKeypress:
-                    didMoveTmp = self.handleKeyPress(message.data, player, renderable)
+                    didMoveTmp = self.handleKeyPress(message.data, player, renderable, ent)
                     if didMoveTmp: 
                         didMove = True
 
@@ -73,29 +76,42 @@ class PlayerProcessor(esper.Processor):
                 self.movementTimer.reset()
 
 
-    def handleKeyPress(self, key, player, playerRenderable):
+    def handleKeyPress(self, key, player, playerRenderable, playerEntity):
         # move to attack animation state
         if key == ord(' '):
             player.brain.pop()
             player.brain.push('attack')
 
         didMove = False
+        x = 0
+        y = 0
         if self.movementTimer.timeIsUp(): 
             if key == curses.KEY_LEFT:
-                playerRenderable.move(x=-1, y=0)
+                x=-1
                 didMove = True
 
             elif key == curses.KEY_RIGHT: 
-                playerRenderable.move(x=1, y=0)
+                x=1
                 didMove = True
 
             elif key == curses.KEY_UP:
-                playerRenderable.move(x=0, y=-1)
+                y=-1
                 didMove = True
 
             elif key == curses.KEY_DOWN: 
-                playerRenderable.move(x=0, y=1)
+                y=1
                 didMove = True
+
+        meGroupId = self.world.component_for_entity(
+            playerEntity, system.groupid.GroupId)
+        directMessaging.add(
+            groupId = meGroupId.getId(),
+            type = DirectMessageType.movePlayer,
+            data = {
+                'x': x,
+                'y': y
+            },
+        )
 
         if didMove:
             extcords = ExtCoordinates(

@@ -36,11 +36,83 @@ class RenderableProcessor(esper.Processor):
 
 
     def process(self, dt):
+        self.move()
         self.speechBubbleActivator()
 
         self.collisionDetection()
         self.advance(dt)
         self.render()
+
+
+    def findEnemyByGroupId(self, id):
+        for ent, (groupId, enemy, renderable) in self.world.get_components(
+            system.groupid.GroupId, 
+            system.gamelogic.enemy.Enemy, 
+            system.renderable.Renderable
+        ):
+            if groupId.getId() == id:
+                return renderable
+
+
+    def move(self): 
+        # findplayer
+        for ent, (groupId, player, renderable) in self.world.get_components(
+            system.groupid.GroupId, 
+            system.gamelogic.player.Player, 
+            system.renderable.Renderable
+        ):
+            msg = directMessaging.get(
+                messageType = DirectMessageType.movePlayer
+            )
+            while msg is not None:
+                self.moveRenderable(renderable, msg.data['x'], msg.data['y'])
+
+                msg = directMessaging.get(
+                    messageType = DirectMessageType.activateSpeechBubble
+                )  
+
+        # enemies
+        msg = directMessaging.get(
+            messageType = DirectMessageType.moveEnemy
+        )
+        while msg is not None:
+            renderable = self.findEnemyByGroupId(msg.groupId)
+            self.moveRenderable(renderable, msg.data['x'], msg.data['y'], msg.data['dontChangeDirection'])
+
+            msg = directMessaging.get(
+                messageType = DirectMessageType.activateSpeechBubble
+            )  
+
+
+    def moveRenderable(self, renderable, x :int =0, y :int =0, dontChangeDirection :bool =False):
+        """Move this renderable in x/y direction, if allowed. Update direction too"""
+        if x != 0 or y != 0:
+            renderable.texture.advanceStep()
+
+        if x > 0:
+            if renderable.coordinates.x < Config.columns - renderable.texture.width - 1:
+                renderable.coordinates.x += 1
+                
+                if not dontChangeDirection and renderable.direction is not Direction.right:
+                    renderable.direction = Direction.right
+                    renderable.texture.changeAnimation(
+                        CharacterAnimationType.walking, renderable.direction)  
+
+        elif x < 0:
+            if renderable.coordinates.x > 1:
+                renderable.coordinates.x -= 1
+                if not dontChangeDirection and renderable.direction is not Direction.left:
+                    renderable.direction = Direction.left
+                    renderable.texture.changeAnimation(
+                        CharacterAnimationType.walking, renderable.direction)    
+
+        if y > 0:
+            if renderable.coordinates.y < Config.rows - renderable.texture.height - 1:
+                renderable.coordinates.y += 1
+        
+        elif y < 0:
+            if renderable.coordinates.y >  Config.areaMoveable['miny'] - renderable.texture.height + 1:
+                renderable.coordinates.y -= 1
 
 
     def speechBubbleActivator(self):
@@ -85,6 +157,7 @@ class RenderableProcessor(esper.Processor):
 
                 # check if we should announce our awesomeness
                 if damageSum > Config.announceDamage:
+                    # find player
                     for ent, (groupId, player) in self.world.get_components(
                         system.groupid.GroupId, system.gamelogic.player.Player
                     ):

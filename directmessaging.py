@@ -10,6 +10,8 @@ logger = logging.getLogger(__name__)
 
 class DirectMessageType(Enum):
     activateSpeechBubble = 0
+    movePlayer = 1
+    moveEnemy = 2
 
 
 class DirectMessage(object): 

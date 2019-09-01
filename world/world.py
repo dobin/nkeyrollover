@@ -77,8 +77,8 @@ class World(object):
             player=self.player,
         )
 
+        self.esperWorld.add_processor(playerProcessor) # beginning, handle key preses for movement
         self.esperWorld.add_processor(advanceableProcessor)
-        self.esperWorld.add_processor(playerProcessor)  
         self.esperWorld.add_processor(enemyProcessor)  
         self.esperWorld.add_processor(attackableProcessor)          
         self.esperWorld.add_processor(offensiveAttackProcessor)
