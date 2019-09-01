@@ -123,15 +123,20 @@ class StateChase(State):
         moveY = 0
         dontChangeDirection = False
 
-        if meWeaponLocation.x < playerLocation.x:
+        if meWeaponLocation.x < playerLocation.x - 1:
             moveX = 1
-        elif meWeaponLocation.x >= playerLocation.x + meEnemy.player.texture.width:
+        elif meWeaponLocation.x > playerLocation.x: #+ meEnemy.player.texture.width:
             moveX = -1
 
         # check if its better to just walk backwards
         meWeaponLocationInverted = meOffensiveWeaponRenderable.getLocationDirectionInverted()
         distanceNormal = Utility.distance(playerLocation, meWeaponLocation)
         distanceInverted = Utility.distance(playerLocation, meWeaponLocationInverted)
+        #logging.info("CC Dir: {}  X: {}   Normal: {}  Inverted: {}".format(
+        #    meRenderable.direction, moveX,
+        #    distanceNormal['sum'],
+        #    distanceInverted['sum']
+        #))
         if distanceNormal['sum'] < distanceInverted['sum']:
             dontChangeDirection = True
 
