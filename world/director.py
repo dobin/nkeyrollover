@@ -103,7 +103,8 @@ class Director(object):
             viewport=self.viewport,
             parent=enemyRenderable,
             coordinates=coordinates,
-            z=2)
+            z=2,
+            useParentDirection=True)
         renderable.name = "EnemyWeapon "
         texture.parentSprite = renderable
         self.world.esperWorld.add_component(characterAttackEntity, renderable)

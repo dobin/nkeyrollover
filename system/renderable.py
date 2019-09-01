@@ -33,7 +33,8 @@ class Renderable(object):
         parent :Renderable =None, 
         coordinates :Coordinates =None, 
         z :int =0, 
-        active :bool =True
+        active :bool =True,
+        useParentDirection =False,
     ):
         self.viewport :Viewport = viewport
         self.texture :Texture = texture
@@ -41,6 +42,10 @@ class Renderable(object):
         # if parent is given, this position will always be relative
         # to that parent
         self.parent :Renderable = parent
+
+        # some things, like weapon, need to be on the correct
+        # side of the parent
+        self.useParentDirection = useParentDirection
 
         # if this is being rendered
         self.active :bool = active 
@@ -86,7 +91,7 @@ class Renderable(object):
             return self.coordinates
         else:
             parentLocation = self.parent.getLocation()
-            if self.parent.direction is Direction.left:
+            if self.parent.direction is Direction.left or not self.useParentDirection:
                 self.coordinatesRel.x = parentLocation.x + self.coordinates.x
                 self.coordinatesRel.y = parentLocation.y + self.coordinates.y
             else: 

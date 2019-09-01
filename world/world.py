@@ -126,7 +126,8 @@ class World(object):
             parent=self.playerRendable,
             coordinates=coordinates,
             z=3,
-            active=False)
+            active=False,
+            useParentDirection=True)
         renderable.name = "PlayerWeapon"
         texture.parentSprite = renderable
         self.esperWorld.add_component(characterAttackEntity, renderable)
