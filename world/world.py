@@ -30,6 +30,7 @@ from system.gamelogic.playerprocessor import PlayerProcessor
 from system.offensiveskill import OffensiveSkill
 from system.offensiveskillprocessor import OffensiveSkillProcessor
 from system.graphics.speechbubble import SpeechBubble
+from system.groupid import GroupId
 
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
@@ -87,6 +88,7 @@ class World(object):
 
     def addPlayer(self): 
         # Player
+        myid = 31337
         self.player = self.esperWorld.create_entity()
         esperData = EsperData(self.esperWorld, self.player)
         texture = CharacterTexture(parentSprite=None, characterType=CharacterType.player)
@@ -106,6 +108,8 @@ class World(object):
             viewport=self.viewport)
         self.characterSkillEntity = characterSkill
         renderable.name = "Player"
+        groupId = GroupId(id=myid)
+        self.esperWorld.add_component(self.player, groupId)
         self.esperWorld.add_component(self.player, characterSkill)
         self.esperWorld.add_component(self.player, renderable)
         self.esperWorld.add_component(self.player, Player(esperData=esperData))
@@ -135,6 +139,8 @@ class World(object):
             isPlayer=True, 
             world=self,
             renderable=renderable)
+        groupId = GroupId(id=myid)
+        self.esperWorld.add_component(characterAttackEntity, groupId)
         self.esperWorld.add_component(characterAttackEntity, offensiveAttack)
         self.characterAttackEntity = characterAttackEntity
         # /CharacterAttack
@@ -152,6 +158,10 @@ class World(object):
             active=False)
         texture.parentSprite = renderable
         speechBubble = SpeechBubble(renderable=renderable)
+        groupId = GroupId(id=myid)
+        self.esperWorld.add_component(
+            speechEntity, 
+            groupId)
         self.esperWorld.add_component(
             speechEntity, 
             renderable)

@@ -13,6 +13,7 @@ from texture.character.charactertexture import CharacterTexture
 from texture.texture import Texture
 from entities.weapontype import WeaponType
 
+from system.groupid import GroupId
 from system.advanceable import Advanceable
 from system.renderable import Renderable
 from system.gamelogic.attackable import Attackable
@@ -45,19 +46,21 @@ class Director(object):
     def init(self):
         if Config.devMode: 
             characterType = CharacterType.cow
-            self.createEnemy(characterType, "Enemy")
+            self.createEnemy(characterType, 0)
         else:
             n = 0
             while n < self.maxEnemies:
                 characterType = CharacterType.stickfigure
                 if n % 10 == 0:
                     characterType = CharacterType.cow
-                self.createEnemy(characterType, str(n))
+                self.createEnemy(characterType, n)
                 n += 1
 
 
-    def createEnemy(self, characterType, name): 
+    def createEnemy(self, characterType, id): 
+        name = str(id)
         # Enemy
+        groupId = GroupId(id=id)
         enemy = self.world.esperWorld.create_entity()
         esperData = EsperData(self.world.esperWorld, enemy)
         texture = CharacterTexture(
@@ -77,6 +80,7 @@ class Director(object):
         renderable.world = self.world
         renderable.enemyMovement = True
         texture.parentSprite = renderable
+        self.world.esperWorld.add_component(enemy, groupId)
         self.world.esperWorld.add_component(enemy, renderable)
         tenemy = Enemy(
             player=self.world.playerRendable,
@@ -112,6 +116,7 @@ class Director(object):
             isPlayer=False, 
             world=self.world,
             renderable=renderable)
+        self.world.esperWorld.add_component(characterAttackEntity, groupId)
         self.world.esperWorld.add_component(characterAttackEntity, offensiveAttack)
         self.characterAttackEntity = characterAttackEntity
         offensiveAttack.switchWeapon(WeaponType.hitLine)
