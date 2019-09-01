@@ -13,7 +13,6 @@ class AttackableProcessor(esper.Processor):
 
 
     def process(self, dt):
-
         # if enemies have taken enough damage, make them gonna die
         for ent, (attackable, renderable, enemy) in self.world.get_components(Attackable, Renderable, Enemy):
             if attackable.getHealth() <= 0:

@@ -67,8 +67,9 @@ class RenderableProcessor(esper.Processor):
 
 
     def collisionDetection(self): 
-        damageSum = 0
         for message in messaging.get():
+            damageSum = 0
+
             if message.type is MessageType.PlayerAttack: 
                 hitLocations = message.data['hitLocations']
                 damage = message.data['damage']
@@ -82,6 +83,17 @@ class RenderableProcessor(esper.Processor):
                             1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
                         damageSum += damage
 
+                # check if we should announce our awesomeness
+                if damageSum > Config.announceDamage:
+                    for ent, (groupId, player) in self.world.get_components(
+                        system.groupid.GroupId, system.gamelogic.player.Player
+                    ):
+                        directMessaging.add(
+                            groupId = groupId.getId(),
+                            type = DirectMessageType.activateSpeechBubble,
+                            data = 'Cowabunga!',
+                        )
+
             if message.type is MessageType.EnemyAttack:
                 hitLocations = message.data['hitLocations']
                 damage = message.data['damage']
@@ -93,7 +105,7 @@ class RenderableProcessor(esper.Processor):
                         attackable.handleHit(damage)
                         renderable.setOverwriteColorFor( 
                             1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
-                        damageSum += damage
+
 
         #RecordHolder.recordAttack(
         #    weaponType=self.weaponType, damage=damage, name=self.renderable.parent.name, 
