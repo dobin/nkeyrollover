@@ -9,10 +9,25 @@ from config import Config
 from sprite.coordinates import Coordinates
 from sprite.sprite import Sprite
 
+import system.gamelogic.attackable
+import system.renderable
+import system.groupid
+
+
 logger = logging.getLogger(__name__)
 
 
 class Utility(object):
+    @staticmethod
+    def findByGroupId(world, id):
+        for ent, (groupId, renderable) in world.get_components(
+            system.groupid.GroupId, 
+            system.renderable.Renderable
+        ):
+            if groupId.getId() == id:
+                return ent
+
+
     @staticmethod
     def distance(coord1 :Coordinates, coord2 :Coordinates):
         res = {

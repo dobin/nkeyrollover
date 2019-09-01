@@ -13,6 +13,7 @@ from sprite.direction import Direction
 from texture.character.characteranimationtype import CharacterAnimationType
 from messaging import messaging, Messaging, Message, MessageType
 from config import Config
+from utilities.utilities import Utility
 
 import system.gamelogic.attackable
 import system.gamelogic.enemy
@@ -44,16 +45,6 @@ class RenderableProcessor(esper.Processor):
         self.render()
 
 
-    def findEnemyByGroupId(self, id):
-        for ent, (groupId, enemy, renderable) in self.world.get_components(
-            system.groupid.GroupId, 
-            system.gamelogic.enemy.Enemy, 
-            system.renderable.Renderable
-        ):
-            if groupId.getId() == id:
-                return renderable
-
-
     def move(self): 
         # findplayer
         for ent, (groupId, player, renderable) in self.world.get_components(
@@ -76,8 +67,10 @@ class RenderableProcessor(esper.Processor):
             messageType = DirectMessageType.moveEnemy
         )
         while msg is not None:
-            renderable = self.findEnemyByGroupId(msg.groupId)
-            self.moveRenderable(renderable, msg.data['x'], msg.data['y'], msg.data['dontChangeDirection'])
+            entity = Utility.findByGroupId(self.world, msg.groupId)
+            meRenderable = self.world.component_for_entity(
+                entity, system.renderable.Renderable)            
+            self.moveRenderable(meRenderable, msg.data['x'], msg.data['y'], msg.data['dontChangeDirection'])
 
             msg = directMessaging.get(
                 messageType = DirectMessageType.activateSpeechBubble
@@ -146,13 +139,18 @@ class RenderableProcessor(esper.Processor):
                 hitLocations = message.data['hitLocations']
                 damage = message.data['damage']
 
-                for ent, (renderable, attackable, enemy) in self.world.get_components(
-                    system.renderable.Renderable, system.gamelogic.attackable.Attackable, system.gamelogic.enemy.Enemy
+                for ent, (groupId, renderable, attackable, enemy) in self.world.get_components(
+                    system.groupid.GroupId,
+                    system.renderable.Renderable, 
+                    system.gamelogic.attackable.Attackable, 
+                    system.gamelogic.enemy.Enemy
                 ):
                     if renderable.isHitBy(hitLocations):
-                        attackable.handleHit(damage)
-                        renderable.setOverwriteColorFor( 
-                            1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
+                        directMessaging.add(
+                            groupId=groupId.id,
+                            type=DirectMessageType.receiveDamage,
+                            data=damage
+                        )
                         damageSum += damage
 
                 # check if we should announce our awesomeness
@@ -171,14 +169,18 @@ class RenderableProcessor(esper.Processor):
                 hitLocations = message.data['hitLocations']
                 damage = message.data['damage']
 
-                for ent, (renderable, attackable, player) in self.world.get_components(
-                    system.renderable.Renderable, system.gamelogic.attackable.Attackable, system.gamelogic.player.Player
+                for ent, (groupId, renderable, attackable, player) in self.world.get_components(
+                    system.groupid.GroupId,
+                    system.renderable.Renderable, 
+                    system.gamelogic.attackable.Attackable, 
+                    system.gamelogic.player.Player
                 ):
                     if renderable.isHitBy(hitLocations):
-                        attackable.handleHit(damage)
-                        renderable.setOverwriteColorFor( 
-                            1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
-
+                        directMessaging.add(
+                            groupId=groupId.id,
+                            type=DirectMessageType.receiveDamage,
+                            data=damage
+                        )                        
 
         #RecordHolder.recordAttack(
         #    weaponType=self.weaponType, damage=damage, name=self.renderable.parent.name, 

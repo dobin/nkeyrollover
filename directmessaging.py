@@ -12,6 +12,7 @@ class DirectMessageType(Enum):
     activateSpeechBubble = 0
     movePlayer = 1
     moveEnemy = 2
+    receiveDamage = 3
 
 
 class DirectMessage(object): 
@@ -34,7 +35,7 @@ class DirectMessaging(object):
             type = type,
             data = data
         ))
-        logger.info("DirectMsg for {} type {}: {}".format(groupId, type, data))
+        logger.info("DirectMsg for {} type {}: {}".format(groupId, type.name, data))
 
     def get(self, messageType): 
         for message in self.messages: 
