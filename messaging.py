@@ -21,6 +21,11 @@ class Message(object):
 
 
 class Messaging(object):
+    """Deliver messages to 0-n recipients
+    This queue will be emptied upon each iteration / frame. 
+    See world esper processors for the order in which messages can be sent
+    (onyl downward)
+    """
     def __init__(self): 
         self.messages = []
 

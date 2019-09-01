@@ -22,6 +22,9 @@ class DirectMessage(object):
 
 
 class DirectMessaging(object): 
+    """Send a message directly to another virtual object (via groupid)
+    Every message here is intended for exactly 1 (one) recipient. 
+    """
     def __init__(self):
         self.messages = []
 
@@ -43,4 +46,5 @@ class DirectMessaging(object):
         return None
 
 
+# singleton
 directMessaging = DirectMessaging()
