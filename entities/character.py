@@ -10,7 +10,6 @@ from config import Config
 from entities.entity import Entity
 from .characterstatus import CharacterStatus
 from sprite.direction import Direction
-from texture.speechtexture import SpeechTexture
 from world.viewport import Viewport
 
 logger = logging.getLogger(__name__)

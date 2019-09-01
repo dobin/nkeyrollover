@@ -28,7 +28,6 @@ from entities.player.state_idle import StateIdle
 from entities.player.state_spawn import StateSpawn
 from entities.player.state_walking import StateWalking
 from texture.character.charactertype import CharacterType
-from texture.speechtexture import SpeechTexture
 from messaging import messaging, Messaging, Message, MessageType
 
 import system.advanceable 

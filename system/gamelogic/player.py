@@ -28,7 +28,6 @@ from entities.player.state_idle import StateIdle
 from entities.player.state_spawn import StateSpawn
 from entities.player.state_walking import StateWalking
 from texture.character.charactertype import CharacterType
-from texture.speechtexture import SpeechTexture
 from messaging import messaging, Messaging, Message, MessageType
 
 import system.advanceable 
@@ -41,8 +40,6 @@ class Player():
 
         # from character
         self.characterStatus = CharacterStatus()
-        self.speechTexture = SpeechTexture(parentSprite=self, displayText='')
-        self.speechTexture.setActive(False)
 
         # from player
         self.initAi()
@@ -70,13 +67,12 @@ class Player():
         if particleEffectType is ParticleEffectType.explosion:
             text = 'Boom baby!'
 
-        if damage > Config.announceDamage: 
-            self.speechTexture.changeAnimation(text)
+        #if damage > Config.announceDamage: 
+        #    self.speechTexture.changeAnimation(text)
 
 
     def advance(self, deltaTime):
         self.characterStatus.advance(deltaTime)
-        self.speechTexture.advance(deltaTime)        
         self.brain.update(deltaTime)
 
 

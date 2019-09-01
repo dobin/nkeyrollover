@@ -12,7 +12,7 @@ from utilities.color import Color
 
 import system.gamelogic.attackable 
 import system.renderable
-import system.gamelogic.attackable
+import system.graphics.speechbubble
 
 from messaging import messaging, Messaging, Message, MessageType
 
@@ -72,11 +72,7 @@ class OffensiveSkill(object):
         isCooldown = False
 
         if key == 'c': 
-            pass
-            #self.player.speechTexture.changeAnimation('hoi')
-            #self.player.actionCtrl.changeTo(
-            #    CharacterAnimationType.shrugging, 
-            #    self.player.direction)
+            self.skillSay('hoi')
 
         if key == 'f':
             weaponType = WeaponType.heal
@@ -133,6 +129,16 @@ class OffensiveSkill(object):
 
     def isRdy(self, skill):
         return self.cooldownTimers[skill].timeIsUp()
+
+
+    def skillSay(self, text): 
+        for ent, (renderable, speechBubble) in self.esperData.world.get_components(
+            system.renderable.Renderable, system.graphics.speechbubble.SpeechBubble
+        ):
+            speechBubble.changeText(text)
+            #self.player.actionCtrl.changeTo(
+            #    CharacterAnimationType.shrugging, 
+            #    self.player.direction)
 
 
     def skillHeal(self): 

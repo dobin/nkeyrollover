@@ -15,6 +15,7 @@ from .viewport import Viewport
 from .textureemiter import TextureEmiter
 from texture.character.charactertype import CharacterType
 from texture.character.charactertexture import CharacterTexture
+from texture.animationtexture import AnimationTexture
 
 import esper
 from system.advanceable import Advanceable, AdvanceableProcessor
@@ -28,6 +29,7 @@ from system.gamelogic.player import Player
 from system.gamelogic.playerprocessor import PlayerProcessor
 from system.offensiveskill import OffensiveSkill
 from system.offensiveskillprocessor import OffensiveSkillProcessor
+from system.graphics.speechbubble import SpeechBubble
 
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
@@ -135,6 +137,27 @@ class World(object):
         self.esperWorld.add_component(characterAttackEntity, offensiveAttack)
         self.characterAttackEntity = characterAttackEntity
         # /CharacterAttack
+
+        # speech
+        speechEntity = self.esperWorld.create_entity()
+        texture = AnimationTexture(parentSprite=None)
+        coordinates = Coordinates(1, -4)
+        renderable = Renderable(
+            texture=texture,
+            viewport=self.viewport,
+            parent=self.playerRendable,
+            coordinates=coordinates,
+            z=3,
+            active=False)
+        texture.parentSprite = renderable
+        speechBubble = SpeechBubble(renderable=renderable)
+        self.esperWorld.add_component(
+            speechEntity, 
+            renderable)
+        self.esperWorld.add_component(
+            speechEntity, 
+            speechBubble)
+        # /speech
 
 
     def togglePause(self): 
