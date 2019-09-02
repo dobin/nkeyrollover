@@ -7,7 +7,7 @@ import copy
 import logging
 from typing import List
 
-from sprite.coordinates import Coordinates
+from sprite.coordinates import Coordinates, ExtCoordinates
 from entities.character import Character
 from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
@@ -79,6 +79,17 @@ class Renderable(object):
     def __repr__(self): 
         return self.name
 
+
+    def getLocationAndSize(self): 
+        loc = self.getLocation()
+
+        d = ExtCoordinates(
+            x = loc.x, 
+            y = loc.y,
+            width = self.texture.width,
+            height = self.texture.height
+        )
+        return d
 
     def getLocation(self): 
         """Get a reference to our location.
@@ -166,7 +177,7 @@ class Renderable(object):
     def setOverwriteColorFor(self, time :float, color :Color):
         if self.overwriteColorTimer.isActive():
             logger.debug("Color already active on new set color")
-            return 
+            #return 
 
         self.overwriteColor = color
 
@@ -181,33 +192,3 @@ class Renderable(object):
     def setActive(self, active):
         self.active = active
 
-
-    def move(self, x :int =0, y :int =0, dontChangeDirection :bool =False):
-        """Move this renderable in x/y direction, if allowed. Update direction too"""
-        if x != 0 or y != 0:
-            self.texture.advanceStep()
-
-        if x > 0:
-            if self.coordinates.x < Config.columns - self.texture.width - 1:
-                self.coordinates.x += 1
-                
-                if not dontChangeDirection and self.direction is not Direction.right:
-                    self.direction = Direction.right
-                    self.texture.changeAnimation(
-                        CharacterAnimationType.walking, self.direction)  
-
-        elif x < 0:
-            if self.coordinates.x > 1:
-                self.coordinates.x -= 1
-                if not dontChangeDirection and self.direction is not Direction.left:
-                    self.direction = Direction.left
-                    self.texture.changeAnimation(
-                        CharacterAnimationType.walking, self.direction)    
-
-        if y > 0:
-            if self.coordinates.y < Config.rows - self.texture.height - 1:
-                self.coordinates.y += 1
-        
-        elif y < 0:
-            if self.coordinates.y >  Config.areaMoveable['miny'] - self.texture.height + 1:
-                self.coordinates.y -= 1

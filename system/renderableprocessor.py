@@ -37,75 +37,11 @@ class RenderableProcessor(esper.Processor):
 
 
     def process(self, dt):
-        self.move()
-        self.speechBubbleActivator()
-
+        # TODO which one first?
         self.collisionDetection()
+        self.speechBubbleActivator()
         self.advance(dt)
         self.render()
-
-
-    def move(self): 
-        # findplayer
-        for ent, (groupId, player, renderable) in self.world.get_components(
-            system.groupid.GroupId, 
-            system.gamelogic.player.Player, 
-            system.renderable.Renderable
-        ):
-            msg = directMessaging.get(
-                messageType = DirectMessageType.movePlayer
-            )
-            while msg is not None:
-                self.moveRenderable(renderable, msg.data['x'], msg.data['y'])
-
-                msg = directMessaging.get(
-                    messageType = DirectMessageType.activateSpeechBubble
-                )  
-
-        # enemies
-        msg = directMessaging.get(
-            messageType = DirectMessageType.moveEnemy
-        )
-        while msg is not None:
-            entity = Utility.findByGroupId(self.world, msg.groupId)
-            meRenderable = self.world.component_for_entity(
-                entity, system.renderable.Renderable)            
-            self.moveRenderable(meRenderable, msg.data['x'], msg.data['y'], msg.data['dontChangeDirection'])
-
-            msg = directMessaging.get(
-                messageType = DirectMessageType.activateSpeechBubble
-            )  
-
-
-    def moveRenderable(self, renderable, x :int =0, y :int =0, dontChangeDirection :bool =False):
-        """Move this renderable in x/y direction, if allowed. Update direction too"""
-        if x != 0 or y != 0:
-            renderable.texture.advanceStep()
-
-        if x > 0:
-            if renderable.coordinates.x < Config.columns - renderable.texture.width - 1:
-                renderable.coordinates.x += 1
-                
-                if not dontChangeDirection and renderable.direction is not Direction.right:
-                    renderable.direction = Direction.right
-                    renderable.texture.changeAnimation(
-                        CharacterAnimationType.walking, renderable.direction)  
-
-        elif x < 0:
-            if renderable.coordinates.x > 1:
-                renderable.coordinates.x -= 1
-                if not dontChangeDirection and renderable.direction is not Direction.left:
-                    renderable.direction = Direction.left
-                    renderable.texture.changeAnimation(
-                        CharacterAnimationType.walking, renderable.direction)    
-
-        if y > 0:
-            if renderable.coordinates.y < Config.rows - renderable.texture.height - 1:
-                renderable.coordinates.y += 1
-        
-        elif y < 0:
-            if renderable.coordinates.y >  Config.areaMoveable['miny'] - renderable.texture.height + 1:
-                renderable.coordinates.y -= 1
 
 
     def speechBubbleActivator(self):
@@ -131,7 +67,7 @@ class RenderableProcessor(esper.Processor):
             rend.advance(deltaTime)
 
 
-    def collisionDetection(self): 
+    def collisionDetection(self):
         for message in messaging.get():
             damageSum = 0
 

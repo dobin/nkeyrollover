@@ -36,7 +36,9 @@ from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
 from system.offensiveattack import OffensiveAttack
 from system.offensiveattackprocessor import OffensiveAttackProcessor
+from system.movementprocessor import MovementProcessor
 from entities.esperdata import EsperData
+from system.inputprocessor import InputProcessor
 
 from messaging import messaging, Messaging, Message, MessageType
 
@@ -76,14 +78,36 @@ class World(object):
         offensiveSkillProcessor = OffensiveSkillProcessor(
             player=self.player,
         )
+        movementProcessor = MovementProcessor()
+        inputProcessor = InputProcessor()
 
-        self.esperWorld.add_processor(playerProcessor) # beginning, handle key preses for movement
+        # p handle:   MessageType         PlayerKeyPress (movement)
+        # p generate: DirectMessageType   movePlayer
+        self.esperWorld.add_processor(inputProcessor, priority=3)
+
+        # p handle:   DirectMessageType   movePlayer
+        # p generate: MessageType         PlayerLocation
+        self.esperWorld.add_processor(movementProcessor, priority=2)
+
+        self.esperWorld.add_processor(playerProcessor, priority=1) 
+
+        # e handle:   MessageType         PlayerLocation
+        # e generate: MessageType         EnemyAttack
+        self.esperWorld.add_processor(enemyProcessor, priority=1)
+
         self.esperWorld.add_processor(advanceableProcessor)
-        self.esperWorld.add_processor(enemyProcessor)  
-        self.esperWorld.add_processor(attackableProcessor)          
+
+        # x handle:     DirectMessageType receiveDamage
+        self.esperWorld.add_processor(attackableProcessor)     
+
+        # p handle:   MessageType         PlayerKeyPress (space)
+        # p generate: MessageType         PlayerAttack (via OffensiveAttackEntity)
         self.esperWorld.add_processor(offensiveAttackProcessor)
         self.esperWorld.add_processor(offensiveSkillProcessor)         
+
+        # p handle:   MessageType         PlayerAttack
         self.esperWorld.add_processor(renderableProcessor)
+        logging.info("ORDER: " + str(self.esperWorld._processors))
 
 
     def addPlayer(self): 
@@ -208,7 +232,7 @@ class World(object):
 
         self.gameTime += deltaTime
         self.map.advance(deltaTime)
-        self.director.advanceEnemies(deltaTime)
+        self.director.advance(deltaTime)
         self.particleEmiter.advance(deltaTime)
         self.textureEmiter.advance(deltaTime)
         self.director.worldUpdate()
@@ -228,6 +252,9 @@ class World(object):
         o.append('  Attacking : ' + str( self.director.numEnemiesAttacking() ))
         o.append('  Chasing   : ' + str( self.director.numEnemiesChasing() ))
         o.append('  Wadndering: ' + str( self.director.numEnemiesWandering() ))
+        
+        o.append('Player:')
+        o.append('  Location:' + str( self.playerRendable.getLocation() ) )
 
         n = 0
         while n < len(o):

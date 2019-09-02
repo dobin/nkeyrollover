@@ -1,4 +1,5 @@
 import time as _time
+import logging
 
 from functools import lru_cache as _lru_cache
 from typing import List, Type, TypeVar, Any, Tuple, Iterable
@@ -6,6 +7,7 @@ from typing import List, Type, TypeVar, Any, Tuple, Iterable
 C = TypeVar('C')
 P = TypeVar('P')
 
+logger = logging.getLogger(__name__)
 
 class Processor:
     """Base class for all Processors to inherit from.
@@ -296,6 +298,7 @@ class World:
 
     def _process(self, *args, **kwargs):
         for processor in self._processors:
+            #logger.info("P: " + str(processor))
             processor.process(*args, **kwargs)
 
     def _timed_process(self, *args, **kwargs):

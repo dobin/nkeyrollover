@@ -35,4 +35,4 @@ class StateAttack(State):
     def process(self, dt):
         if self.timeIsUp(): 
             self.brain.pop()
-            self.brain.push('idle')  
+            self.brain.push('idle')

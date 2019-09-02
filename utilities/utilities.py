@@ -6,7 +6,7 @@ from texture.character.charactertype import CharacterType
 from texture.character.characteranimationtype import CharacterAnimationType
 from texture.animation import Animation
 from config import Config
-from sprite.coordinates import Coordinates
+from sprite.coordinates import Coordinates, ExtCoordinates
 from sprite.sprite import Sprite
 
 import system.gamelogic.attackable
@@ -26,6 +26,13 @@ class Utility(object):
         ):
             if groupId.getId() == id:
                 return ent
+
+    @staticmethod
+    def findPlayer(world): 
+        for ent, player, in world.get_component(
+            system.gamelogic.player.Player, 
+        ):
+            return ent
 
 
     @staticmethod
@@ -51,7 +58,7 @@ class Utility(object):
             return False
 
     @staticmethod
-    def pointIn(coord1 :Coordinates, location2):
+    def pointIn(coord1 :Coordinates, location2 :ExtCoordinates):
         if coord1.x >= location2.x and coord1.x < location2.x + location2.width and coord1.y >= location2.y and coord1.y < location2.y + location2.height:
             return True
         else: 

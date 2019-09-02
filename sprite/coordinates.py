@@ -7,7 +7,7 @@ class ExtCoordinates(object):
         self.height = height
 
     def __repr__(self): 
-        return "{}/{}".format(self.x, self.y) 
+        return "{}/{} w:{} h:{}".format(self.x, self.y, self.width, self.height) 
 
 
 class Coordinates(object): 

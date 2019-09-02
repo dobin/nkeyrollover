@@ -36,7 +36,7 @@ class Messaging(object):
         ))
         logger.info("Msg {}: {}".format(type.name, data))
 
-    def reset(self): 
+    def reset(self):
         self.messages.clear()
 
     def get(self): 

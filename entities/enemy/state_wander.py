@@ -111,7 +111,8 @@ class StateWander(State):
             type = DirectMessageType.moveEnemy,
             data = {
                 'x': x,
-                'y': y
+                'y': y,
+                'dontChangeDirection': False,
             },
         )            
 

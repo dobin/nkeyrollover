@@ -191,12 +191,8 @@ class Director(object):
             return False
 
 
-    def advanceEnemies(self, deltaTime):
+    def advance(self, deltaTime):
         self.lastEnemyResurrectedTimer.advance(deltaTime)
-
-        for enemy in self.enemies:
-            if enemy.isActive():
-                enemy.advance(deltaTime)
 
 
     def worldUpdate(self):

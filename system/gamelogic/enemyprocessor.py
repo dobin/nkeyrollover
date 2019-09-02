@@ -10,4 +10,4 @@ class EnemyProcessor(esper.Processor):
 
     def process(self, deltaTime):
         for ent, player in self.world.get_component(Enemy):
-            player.advance(deltaTime)                
+            player.advance(deltaTime)

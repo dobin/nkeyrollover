@@ -16,8 +16,8 @@ class EnemyInfo(object):
         self.chaseTimeRnd = 2.0
 
         # movement speed
-        self.wanderStepDelay = 0.75
-        self.chaseStepDelay = 0.5
+        self.wanderStepDelay = 0.3
+        self.chaseStepDelay = 0.2
 
         if Config.devMode:
             self.wanderTime = 0.5

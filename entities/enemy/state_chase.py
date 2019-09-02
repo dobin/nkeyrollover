@@ -31,6 +31,7 @@ class StateChase(State):
             meEnemy.enemyInfo.chaseStepDelay, 
             instant=True )
         self.canAttackTimer = Timer()
+        self.lastKnowsPlayerPosition = None
 
 
     def on_enter(self):
@@ -51,41 +52,58 @@ class StateChase(State):
     def process(self, dt):
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
+        didAttack = False
 
         self.lastInputTimer.advance(dt)
         self.canAttackTimer.advance(dt)
 
-        # manage speed
-        if self.lastInputTimer.timeIsUp():
-            self.getInputChase()
-            self.lastInputTimer.reset()
-        
+        # can attack player - based on playerlocation messages
+        self.checkForNewPlayerPosition()
         if self.canAttackTimer.timeIsUp():
             if self.canAttackPlayer():
                 if meEnemy.world.director.canHaveMoreEnemiesAttacking():
                     self.brain.pop()
                     self.brain.push("attackwindup")
-                    self.canAttackTimer.reset()
+                    didAttack = True
 
+            self.canAttackTimer.reset()
+
+        # note that if we want to attack, as identified a few lines above, 
+        # we will be in state attackWindup, and not reach here
+        if didAttack: 
+            return
+
+        # movement speed, and direction
+        if self.lastInputTimer.timeIsUp():
+            self.getInputChase()
+            self.lastInputTimer.reset()
+
+        # switch to wander if exhausted
         if self.timeIsUp():
             logger.debug("{}: Too long chasing, switching to wander".format(self.owner))
             self.brain.pop()
             self.brain.push("wander")
 
 
-    def canAttackPlayer(self):
+    def checkForNewPlayerPosition(self):
+        # check if there are any new player position messages
         for message in messaging.get(): 
             if message.type is MessageType.PlayerLocation:
-                ret = self.checkHitLocation(message.data)
-                if ret is True: 
-                    return True
-        
-        return False
+                self.lastKnowsPlayerPosition = message.data
 
 
-    def checkHitLocation(self, playerLocation): 
+    def canAttackPlayer(self): 
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
+
+        if self.lastKnowsPlayerPosition is None: 
+            # we may not yet have received a location. find it directly via player entity
+            # this is every time we go into chase state
+            playerEntity = Utility.findPlayer(self.brain.owner.world)
+            playerRenderable = self.brain.owner.world.component_for_entity(
+                playerEntity, system.renderable.Renderable) 
+            self.lastKnowsPlayerPosition = playerRenderable.getLocationAndSize()
+        playerLocation = self.lastKnowsPlayerPosition            
 
         attackRendable = self.brain.owner.world.component_for_entity(
             meEnemy.offensiveAttackEntity, system.renderable.Renderable)
@@ -98,7 +116,7 @@ class StateChase(State):
                 playerLocation)
 
             if canAttack: 
-                logger.debug("Can attack, me {} in {}".format(
+                logger.info("Can attack, me {} in {}".format(
                     hitLocation, playerLocation
                 ))
                 return True
@@ -149,12 +167,14 @@ class StateChase(State):
         elif meWeaponLocation.y > playerLocation.y + meEnemy.player.texture.height - 1: # why -1?
             moveY = -1
 
-        directMessaging.add(
-            groupId = meGroupId.getId(),
-            type = DirectMessageType.moveEnemy,
-            data = {
-                'x': moveX,
-                'y': moveY,
-                'dontChangeDirection': dontChangeDirection
-            },
-        )   
+        # only move if we really move a character
+        if moveX != 0 or moveY != 0: 
+            directMessaging.add(
+                groupId = meGroupId.getId(),
+                type = DirectMessageType.moveEnemy,
+                data = {
+                    'x': moveX,
+                    'y': moveY,
+                    'dontChangeDirection': dontChangeDirection
+                },
+            )   
