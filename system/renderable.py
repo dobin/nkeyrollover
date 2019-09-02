@@ -8,13 +8,11 @@ import logging
 from typing import List
 
 from sprite.coordinates import Coordinates, ExtCoordinates
-from entities.character import Character
 from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
 from utilities.timer import Timer
 from utilities.color import Color
 from sprite.direction import Direction
-from texture.character.characteranimationtype import CharacterAnimationType
 from messaging import messaging, Messaging, Message, MessageType
 from config import Config
 from texture.texture import Texture
