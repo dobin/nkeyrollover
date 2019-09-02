@@ -13,6 +13,7 @@ class DirectMessageType(Enum):
     movePlayer = 1
     moveEnemy = 2
     receiveDamage = 3
+    entityMoved = 4
 
 
 class DirectMessage(object): 

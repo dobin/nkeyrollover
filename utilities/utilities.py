@@ -13,19 +13,31 @@ import system.gamelogic.attackable
 import system.renderable
 import system.groupid
 
-
 logger = logging.getLogger(__name__)
 
 
 class Utility(object):
     @staticmethod
-    def findByGroupId(world, id):
-        for ent, (groupId, renderable) in world.get_components(
+    def findCharacterByGroupId(world, id):
+        for ent, (groupId, renderable, player) in world.get_components(
             system.groupid.GroupId, 
-            system.renderable.Renderable
+            system.renderable.Renderable,
+            system.gamelogic.player.Player,
         ):
             if groupId.getId() == id:
                 return ent
+
+        for ent, (groupId, renderable, enemy) in world.get_components(
+            system.groupid.GroupId, 
+            system.renderable.Renderable,
+            system.gamelogic.enemy.Enemy,
+        ):
+            if groupId.getId() == id:
+                return ent
+
+        logger.error("Could not find entity with groupId: {}".format(
+            id
+        ))
 
     @staticmethod
     def findPlayer(world): 

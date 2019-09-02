@@ -32,17 +32,19 @@ class AttackableProcessor(esper.Processor):
             messageType = DirectMessageType.receiveDamage
         )
         while msg is not None:
-            entity = Utility.findByGroupId(self.world, msg.groupId)
+            entity = Utility.findCharacterByGroupId(self.world, msg.groupId)
             meRenderable = self.world.component_for_entity(
                 entity, Renderable) 
             meAttackable = self.world.component_for_entity(
                 entity, Attackable)
-
             damage = msg.data
+
+            # xxx.changeState(stun)
             meAttackable.handleHit(damage)
             meRenderable.setOverwriteColorFor( 
                 1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
 
+            # get next message
             msg = directMessaging.get(
                 messageType = DirectMessageType.receiveDamage
             )

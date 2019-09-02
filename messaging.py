@@ -8,10 +8,11 @@ class MessageType(Enum):
     PlayerKeypress = 0
     PlayerLocation = 1
     PlayerAttack = 2
+    PlayerMoved = 3
 
-    EnemyAttack = 3
-    EnemyLocation = 4
-    EnemyStateUpdate = 5
+    EnemyAttack = 4
+    EnemyLocation = 5
+    EnemyStateUpdate = 6
 
 
 class Message(object): 

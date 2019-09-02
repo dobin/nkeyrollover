@@ -39,6 +39,7 @@ from system.offensiveattackprocessor import OffensiveAttackProcessor
 from system.movementprocessor import MovementProcessor
 from entities.esperdata import EsperData
 from system.inputprocessor import InputProcessor
+from texture.character.characteranimationtype import CharacterAnimationType
 
 from messaging import messaging, Messaging, Message, MessageType
 
@@ -86,11 +87,12 @@ class World(object):
 
         # p handle:   MessageType         PlayerKeyPress (movement)
         # p generate: DirectMessageType   movePlayer
-        self.esperWorld.add_processor(inputProcessor, priority=3)
+        self.esperWorld.add_processor(inputProcessor)
 
         # p handle:   DirectMessageType   movePlayer
         # p generate: MessageType         PlayerLocation
-        self.esperWorld.add_processor(movementProcessor, priority=2)
+        # x generate: DirectMessageType   entityMoved
+        self.esperWorld.add_processor(movementProcessor)
 
         # p handle:   MessageType         PlayerKeyPress (space/attack, weaponselect)
         # p generate: MessageType         PlayerAttack (via OffensiveAttackEntity)
@@ -100,13 +102,13 @@ class World(object):
         # p generate: MessageType         PlayerAttack
         self.esperWorld.add_processor(offensiveSkillProcessor)
 
-        ## p handle:  MessageType         PlayerLocation
         ## p handle:  MessageType         PlayerAttack
-        self.esperWorld.add_processor(playerProcessor, priority=1) 
+        ## p handle:  DirectMessageType   entityMoved
+        self.esperWorld.add_processor(playerProcessor) 
 
         # e handle:   MessageType         PlayerLocation
         # e generate: MessageType         EnemyAttack
-        self.esperWorld.add_processor(enemyProcessor, priority=1)
+        self.esperWorld.add_processor(enemyProcessor)
 
         self.esperWorld.add_processor(advanceableProcessor)
 
@@ -117,7 +119,6 @@ class World(object):
         # e handle:   MessageType         EnemyAttack
         # x generate: DirectMessageType   ReceiveDamage
         self.esperWorld.add_processor(renderableProcessor)
-        logging.info("ORDER: " + str(self.esperWorld._processors))
 
 
     def addPlayer(self): 
@@ -125,7 +126,10 @@ class World(object):
         myid = 31337
         self.player = self.esperWorld.create_entity()
         esperData = EsperData(self.esperWorld, self.player, 'player')
-        texture = CharacterTexture(parentSprite=None, characterType=CharacterType.player)
+        texture = CharacterTexture(
+            parentSprite=None, 
+            characterType=CharacterType.player,
+            characterAnimationType=CharacterAnimationType.standing)
         coordinates = Coordinates(
             Config.playerSpawnPoint['x'],
             Config.playerSpawnPoint['y']
@@ -146,7 +150,7 @@ class World(object):
         self.esperWorld.add_component(self.player, groupId)
         self.esperWorld.add_component(self.player, characterSkill)
         self.esperWorld.add_component(self.player, renderable)
-        self.esperWorld.add_component(self.player, Player(esperData=esperData))
+        self.esperWorld.add_component(self.player, Player())
         self.esperWorld.add_component(self.player, Attackable(initialHealth=100))
         self.playerRendable = renderable
         # /Player

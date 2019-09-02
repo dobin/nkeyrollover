@@ -71,11 +71,6 @@ class InputProcessor(esper.Processor):
 
 
     def handleKeyPress(self, key, player, playerRenderable, playerEntity):
-        # move to attack animation state
-        if key == ord(' '):
-            player.brain.pop()
-            player.brain.push('attack')
-
         didMove = False
         x = 0
         y = 0

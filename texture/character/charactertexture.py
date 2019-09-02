@@ -27,6 +27,7 @@ class CharacterTexture(AnimationTexture):
         self.characterAnimationManager = CharacterAnimationManager(
             head=head, body=body, characterType=characterType)
 
+        self.characterAnimationType = characterAnimationType
         if characterAnimationType is not None: 
             self.changeAnimation(characterAnimationType, direction)
             self.setActive(True)
@@ -41,6 +42,7 @@ class CharacterTexture(AnimationTexture):
             subtype :int =0
         ):
 
+        self.characterAnimationType = characterAnimationType
         self.animation = self.characterAnimationManager.getAnimation(
             characterAnimationType, direction, subtype)
         self.init()            

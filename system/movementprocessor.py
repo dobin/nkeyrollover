@@ -47,7 +47,7 @@ class MovementProcessor(esper.Processor):
                 messageType = DirectMessageType.movePlayer
             )
             while msg is not None:
-                didMove = self.moveRenderable(renderable, msg.data['x'], msg.data['y'])
+                didMove = self.moveRenderable(renderable, groupId.getId(), msg.data['x'], msg.data['y'])
 
                 if didMove:
                     extcords = ExtCoordinates(
@@ -56,8 +56,8 @@ class MovementProcessor(esper.Processor):
                         renderable.texture.width,
                         renderable.texture.height)
                     messaging.add(
-                        type=MessageType.PlayerLocation, 
-                        data=extcords)
+                        type = MessageType.PlayerLocation, 
+                        data = extcords)
 
                 msg = directMessaging.get(
                     messageType = DirectMessageType.movePlayer
@@ -68,11 +68,12 @@ class MovementProcessor(esper.Processor):
             messageType = DirectMessageType.moveEnemy
         )
         while msg is not None:
-            entity = Utility.findByGroupId(self.world, msg.groupId)
+            entity = Utility.findCharacterByGroupId(self.world, msg.groupId)
             meRenderable = self.world.component_for_entity(
                 entity, system.renderable.Renderable)            
             self.moveRenderable(
-                meRenderable, 
+                meRenderable,
+                msg.groupId,
                 msg.data['x'], 
                 msg.data['y'], 
                 msg.data['dontChangeDirection'])
@@ -82,11 +83,10 @@ class MovementProcessor(esper.Processor):
             )  
 
 
-    def moveRenderable(self, renderable, x :int =0, y :int =0, dontChangeDirection :bool =False):
+    def moveRenderable(self, renderable, groupId, x :int =0, y :int =0, dontChangeDirection :bool =False):
         """Move this renderable in x/y direction, if allowed. Update direction too"""
         didMove = False
-        if x != 0 or y != 0:
-            renderable.texture.advanceStep()
+        didChangeDirection = False
 
         if x > 0:
             #if renderable.coordinates.x < Config.columns - renderable.texture.width - 1:
@@ -96,8 +96,7 @@ class MovementProcessor(esper.Processor):
                 
                 if not dontChangeDirection and renderable.direction is not Direction.right:
                     renderable.direction = Direction.right
-                    renderable.texture.changeAnimation(
-                        CharacterAnimationType.walking, renderable.direction)  
+                    didChangeDirection = True
 
         elif x < 0:
             if renderable.coordinates.x > 1:
@@ -105,8 +104,7 @@ class MovementProcessor(esper.Processor):
                 didMove = True
                 if not dontChangeDirection and renderable.direction is not Direction.left:
                     renderable.direction = Direction.left
-                    renderable.texture.changeAnimation(
-                        CharacterAnimationType.walking, renderable.direction)    
+                    didChangeDirection = True
 
         if y > 0:
             if renderable.coordinates.y < Config.rows - renderable.texture.height - 1:
@@ -117,5 +115,16 @@ class MovementProcessor(esper.Processor):
             if renderable.coordinates.y >  Config.areaMoveable['miny'] - renderable.texture.height + 1:
                 renderable.coordinates.y -= 1
                 didMove = True
+
+        # notify texture manager
+        directMessaging.add(
+            groupId = groupId,
+            type = DirectMessageType.entityMoved,
+            data = {
+                'didChangeDirection': didChangeDirection,
+                'x': x,
+                'y': y,
+            }
+        )
 
         return didMove

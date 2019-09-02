@@ -33,48 +33,32 @@ from messaging import messaging, Messaging, Message, MessageType
 import system.advanceable 
 import system.renderable
 
+from enum import Enum 
+
+
+class PlayerState(Enum): 
+    spawn = 0
+    walking = 1
+    
+    dying = 2
+    idle = 3
+
+    attacking = 4
+    attackskill = 5
+
+
 
 class Player():
-    def __init__(self, esperData):
-        self.esperData = esperData
-
-        # from character
+    def __init__(self):
         self.characterStatus = CharacterStatus()
-
-        # from player
-        self.initAi()
         self.name = 'Player'
         self.points = 0
-
-
-    def initAi(self):
-        self.brain = Brain(self.esperData)
-        self.brain.register(StateIdle)
-        self.brain.register(StateSpawn)
-        self.brain.register(StateAttack)
-        self.brain.register(StateWalking)
-        self.brain.push("spawn")
-
-
-    def announce(self, damage, particleEffectType): 
-        text = ''
-        if particleEffectType is ParticleEffectType.laser:
-            text = 'Cowabunga!'
-
-        if particleEffectType is ParticleEffectType.cleave:
-            text = 'I\'ll be back!'
-
-        if particleEffectType is ParticleEffectType.explosion:
-            text = 'Boom baby!'
-
-        #if damage > Config.announceDamage: 
-        #    self.speechTexture.changeAnimation(text)
+        self.state = PlayerState.spawn
 
 
     def advance(self, deltaTime :float):
         self.characterStatus.advance(deltaTime)
-        self.brain.update(deltaTime)
 
 
     def __repr__(self):
-        return "Player"        
+        return "Player"
