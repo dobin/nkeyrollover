@@ -21,7 +21,12 @@ class RenderableMinimalProcessor(esper.Processor):
 
     def advance(self, dt):
         for ent, rend in self.world.get_component(RenderableMinimal):
+            # advance it
             self.handleTextureChar(rend, dt)
+
+            # remove it if inactive
+            if not rend.isActive():
+                self.world.delete_entity(ent)
 
     
     def handleTextureChar(self, rend, deltaTime):

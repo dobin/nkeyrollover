@@ -239,7 +239,6 @@ class World(object):
     def draw(self):
         # order here is Z axis
         self.map.draw()
-        self.textureEmiter.draw()
         self.particleEmiter.draw() # should be on top
 
         if self.showStats:
@@ -263,7 +262,6 @@ class World(object):
         self.map.advance(deltaTime)
         self.director.advance(deltaTime)
         self.particleEmiter.advance(deltaTime)
-        self.textureEmiter.advance(deltaTime)
         self.director.worldUpdate()
         self.viewport.advance(deltaTime)
 

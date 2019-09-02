@@ -15,7 +15,6 @@ class TextureEmiter(object):
     def __init__(self, viewport :Viewport, esperWorld):
         self.viewport :Viewport = viewport
         self.esperWorld = esperWorld
-        self.textures = []
 
 
     def showCharAtPos(self, char :str, timeout :float, coordinate :Coordinates, color :Color):
@@ -29,7 +28,7 @@ class TextureEmiter(object):
             coordinate=coordinate,
         )
 
-        self.addTexture(renderableMinimal)
+        self.addRenderableMinimal(renderableMinimal)
 
 
     def makeExplode(self, pos, frame, charDirection, data):
@@ -86,7 +85,7 @@ class TextureEmiter(object):
                 texture=textureChar,
                 coordinate=c,
             )
-            self.addTexture(renderableMinimal)
+            self.addRenderableMinimal(renderableMinimal)
 
         # push away
         if effect == 2:
@@ -123,24 +122,9 @@ class TextureEmiter(object):
                 texture=textureChar,
                 coordinate=c
             )
-            self.addTexture(renderableMinimal)
+            self.addRenderableMinimal(renderableMinimal)
 
 
-    def addTexture(self, sprite):
+    def addRenderableMinimal(self, sprite):
         entity = self.esperWorld.create_entity()
         self.esperWorld.add_component(entity, sprite)
-
-        self.textures.append(sprite)
-
-
-    def draw(self):
-        #for texture in self.textures:
-        #    texture.texture.draw(self.viewport, texture.getLocation())
-        pass
-
-
-    def advance(self, deltaTime :float):
-        for texture in self.textures:
-            #texture.texture.advance(deltaTime)
-            if not texture.isActive():
-                self.textures.remove(texture)
