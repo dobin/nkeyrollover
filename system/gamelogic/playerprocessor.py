@@ -37,7 +37,6 @@ import system.gamelogic.player
 from directmessaging import directMessaging, DirectMessage, DirectMessageType
 
 
-
 class PlayerProcessor(esper.Processor):
     def __init__(self):
         super().__init__()

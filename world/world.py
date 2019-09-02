@@ -81,6 +81,9 @@ class World(object):
         movementProcessor = MovementProcessor()
         inputProcessor = InputProcessor()
 
+        # KeyboardInput:getInput
+        # p generate  MessageType         PlayerKeypress
+
         # p handle:   MessageType         PlayerKeyPress (movement)
         # p generate: DirectMessageType   movePlayer
         self.esperWorld.add_processor(inputProcessor, priority=3)
@@ -89,6 +92,16 @@ class World(object):
         # p generate: MessageType         PlayerLocation
         self.esperWorld.add_processor(movementProcessor, priority=2)
 
+        # p handle:   MessageType         PlayerKeyPress (space/attack, weaponselect)
+        # p generate: MessageType         PlayerAttack (via OffensiveAttackEntity)
+        self.esperWorld.add_processor(offensiveAttackProcessor)
+
+        # p handle:   MessageType         PlayerKeyPress (skill activate)
+        # p generate: MessageType         PlayerAttack
+        self.esperWorld.add_processor(offensiveSkillProcessor)
+
+        ## p handle:  MessageType         PlayerLocation
+        ## p handle:  MessageType         PlayerAttack
         self.esperWorld.add_processor(playerProcessor, priority=1) 
 
         # e handle:   MessageType         PlayerLocation
@@ -97,15 +110,12 @@ class World(object):
 
         self.esperWorld.add_processor(advanceableProcessor)
 
-        # x handle:     DirectMessageType receiveDamage
+        # x handle:     DirectMessageType ReceiveDamage
         self.esperWorld.add_processor(attackableProcessor)     
 
-        # p handle:   MessageType         PlayerKeyPress (space)
-        # p generate: MessageType         PlayerAttack (via OffensiveAttackEntity)
-        self.esperWorld.add_processor(offensiveAttackProcessor)
-        self.esperWorld.add_processor(offensiveSkillProcessor)         
-
         # p handle:   MessageType         PlayerAttack
+        # e handle:   MessageType         EnemyAttack
+        # x generate: DirectMessageType   ReceiveDamage
         self.esperWorld.add_processor(renderableProcessor)
         logging.info("ORDER: " + str(self.esperWorld._processors))
 

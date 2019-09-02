@@ -305,6 +305,38 @@ class CharacterAnimationManager(object):
 
             animations.append(animation)
 
+
+        if animationType is CharacterAnimationType.stunned:
+            animation = Animation()
+            animation.width = 3
+            animation.height = 3
+            animation.frameCount = 1
+            animation.frameTime = []
+            animation.advanceByStep = False
+            animation.endless = True
+            animation.frameColors = [
+                color,
+            ]   
+            if direction is direction.right:
+                animation.arr = [
+                    [
+                        [ '|', 'o', '|' ],
+                        [ '', '|', ''],
+                        [ '/', '', '\\']
+                    ]
+                ]
+            else: 
+                animation.arr = [
+                    [
+                        [ '', 'o', '' ],
+                        [ '|', '|', '|'],
+                        [ '/', '', '\\']
+                    ]
+                ]
+
+            animations.append(animation)
+
+
         for animation in animations:
             Utility.checkAnimation(animation, animationType, self.characterType)
 
@@ -431,6 +463,30 @@ class CharacterAnimationManager(object):
             animation.endless = True
 
             animations.append(animation)
+
+        if animationType is CharacterAnimationType.stunned:
+            animation = Animation()
+
+            fileAnimation = self.fileTextureLoader.readAnimation(
+                characterType=CharacterType.cow, characterAnimationType=animationType)
+
+            animation.width = fileAnimation['width']
+            animation.height = fileAnimation['height']
+            animation.arr = fileAnimation['arr']
+            if direction is Direction.left: 
+                self.mirrorFrames(animation.arr)
+
+            animation.frameCount = 2
+            animation.frameColors = [
+                color,
+                color,
+            ]                     
+            animation.frameTime = []
+            animation.advanceByStep = False
+            animation.endless = True
+
+            animations.append(animation)
+
 
         for animation in animations:
             Utility.checkAnimation(animation, animationType, self.characterType)

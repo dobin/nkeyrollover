@@ -7,4 +7,4 @@ class CharacterAnimationType(Enum):
     shrugging = 3
     dying = 4
     hitwindup = 5
-    
+    stunned = 6

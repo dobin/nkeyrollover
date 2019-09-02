@@ -110,18 +110,3 @@ class InputProcessor(esper.Processor):
         return didMove
 
 
-    def movePlayer(self, playerRenderable, player, sameDirection):
-        if not sameDirection:
-            playerRenderable.texture.changeAnimation(
-                CharacterAnimationType.walking, playerRenderable.direction)
-
-        # walking animation
-        playerRenderable.advanceStep()
-
-        currentState = player.brain.state
-        if currentState.name == 'walking': 
-            # keep him walking a bit more
-            currentState.setTimer(1.0)
-        else: 
-            player.brain.pop()
-            player.brain.push('walking')

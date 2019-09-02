@@ -227,7 +227,7 @@ class Director(object):
                 enemy.brain.push('spawn')
                 # if death animation was deluxe, there is no frame in the sprite
                 # upon spawning, and an exception is thrown
-                # change following two when fixed TODO
+                # change following when fixed TODO
                 renderable.texture.changeAnimation(
                     CharacterAnimationType.standing, 
                     renderable.direction)

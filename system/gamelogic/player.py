@@ -71,10 +71,10 @@ class Player():
         #    self.speechTexture.changeAnimation(text)
 
 
-    def advance(self, deltaTime):
+    def advance(self, deltaTime :float):
         self.characterStatus.advance(deltaTime)
         self.brain.update(deltaTime)
 
 
-    def __repr__(self): 
+    def __repr__(self):
         return "Player"        

@@ -10,6 +10,7 @@ from config import Config
 from sprite.coordinates import Coordinates
 
 import system.renderable
+from directmessaging import directMessaging, DirectMessage, DirectMessageType
 
 logger = logging.getLogger(__name__)
 
@@ -39,11 +40,22 @@ class StateSpawn(State):
         self.speechTimer.advance(dt)
 
         if self.speechTimer.timeIsUp(): 
+            meGroupId = self.brain.owner.world.component_for_entity(
+                self.brain.owner.entity, system.groupid.GroupId)
+
             if self.state == 0:
-                #me.speechTexture.changeAnimation('I\'m here to chew gum and kick ass')
+                directMessaging.add(
+                    groupId = meGroupId.getId(),
+                    type = DirectMessageType.activateSpeechBubble,
+                    data = 'I\'m here to chew gum and kick ass',
+                )
                 self.speechTimer.setTimer(1.5)
                 self.speechTimer.reset()
                 self.state += 1
             elif self.state == 1:
-                #me.speechTexture.changeAnimation('And i\'m all out of gum')
+                directMessaging.add(
+                    groupId = meGroupId.getId(),
+                    type = DirectMessageType.activateSpeechBubble,
+                    data = 'And i\'m all out of gum',
+                )
                 self.speechTimer.stop()
