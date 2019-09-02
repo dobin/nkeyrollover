@@ -1,15 +1,7 @@
-import random
 import logging
 
-from ai.brain import Brain
 from ai.states import BaseState as State
-from texture.character.characteranimationtype import CharacterAnimationType
 from utilities.timer import Timer
-from sprite.direction import Direction
-from config import Config
-from sprite.coordinates import Coordinates
-from utilities.utilities import Utility
-from utilities.color import Color
 from system.offensiveattack import OffensiveAttack
 
 import system.gamelogic.enemy

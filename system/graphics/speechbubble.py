@@ -1,12 +1,7 @@
-from enum import Enum
-import curses
 import logging 
-import inspect
 
 from texture.speechanimationmanager import SpeechAnimationManager
 from sprite.direction import Direction
-from texture.animationtexture import AnimationTexture
-from sprite.sprite import Sprite
 
 logger = logging.getLogger(__name__)
 

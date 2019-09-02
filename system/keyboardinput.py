@@ -1,17 +1,9 @@
-import curses
+import logging
 
-from utilities.timer import Timer
-from config import Config
-from sprite.direction import Direction
-from utilities.utilities import Utility
-from texture.character.characteranimationtype import CharacterAnimationType
-
-from system.offensiveattack import OffensiveAttack
-
-from system.renderable import Renderable
 from system.gamelogic.player import Player
+from messaging import messaging, MessageType
 
-from messaging import messaging, Messaging, Message, MessageType
+logger = logging.getLogger(__name__)
 
 
 class KeyboardInput(object):

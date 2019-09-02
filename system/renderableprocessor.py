@@ -3,17 +3,9 @@ import copy
 import logging
 from typing import List
 
-from sprite.coordinates import Coordinates
-from entities.character import Character
-from utilities.colorpalette import ColorPalette
-from utilities.colortype import ColorType
-from utilities.timer import Timer
-from utilities.color import Color
-from sprite.direction import Direction
-from texture.character.characteranimationtype import CharacterAnimationType
 from messaging import messaging, Messaging, Message, MessageType
 from config import Config
-from utilities.utilities import Utility
+from directmessaging import directMessaging, DirectMessageType
 
 import system.gamelogic.attackable
 import system.gamelogic.enemy
@@ -21,7 +13,6 @@ import system.gamelogic.player
 import system.renderable
 import system.groupid
 
-from directmessaging import directMessaging, DirectMessage, DirectMessageType
 
 
 logger = logging.getLogger(__name__)

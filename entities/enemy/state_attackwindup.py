@@ -1,22 +1,12 @@
-import random
 import logging
 
-from ai.brain import Brain
 from ai.states import BaseState as State
-from texture.character.characteranimationtype import CharacterAnimationType
-from utilities.timer import Timer
-from sprite.direction import Direction
-from config import Config
-from sprite.coordinates import Coordinates
-from utilities.utilities import Utility
-from utilities.color import Color
-
-import system.renderable 
 import system.gamelogic.enemy
+import system.groupid
+from messaging import messaging, MessageType
 
 logger = logging.getLogger(__name__)
 
-from messaging import messaging, Messaging, Message, MessageType
 
 
 class StateAttackWindup(State): 

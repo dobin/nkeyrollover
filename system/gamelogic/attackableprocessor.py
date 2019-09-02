@@ -5,9 +5,8 @@ from system.renderable import Renderable
 from system.gamelogic.enemy import Enemy
 from system.gamelogic.attackable import Attackable
 from utilities.utilities import Utility
-from directmessaging import directMessaging, DirectMessage, DirectMessageType
+from directmessaging import directMessaging, DirectMessageType
 from utilities.colorpalette import ColorPalette
-from utilities.colortype import ColorType
 from utilities.color import Color
 from system.gamelogic.ai import Ai
 

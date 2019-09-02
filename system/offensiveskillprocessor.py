@@ -1,8 +1,10 @@
 import esper
 import logging
 
-from messaging import messaging, Messaging, Message, MessageType
+from messaging import messaging, MessageType
 from system.offensiveskill import OffensiveSkill
+
+logger = logging.getLogger(__name__)
 
 
 class OffensiveSkillProcessor(esper.Processor):

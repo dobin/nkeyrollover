@@ -1,36 +1,14 @@
 import esper
-import curses
 import logging
-from enum import Enum
 
-from ai.brain import Brain
-from world.particleeffecttype import ParticleEffectType
 from utilities.utilities import Utility
-from config import Config
-from entities.characterstatus import CharacterStatus
-from sprite.direction import Direction
-from entities.character import Character
-from entities.entitytype import EntityType
-from texture.character.charactertexture import CharacterTexture
 from texture.character.characteranimationtype import CharacterAnimationType
-from entities.weapontype import WeaponType
-from sprite.coordinates import Coordinates, ExtCoordinates
-from world.viewport import Viewport
-#from world.world import World
-#from entity.entity import Entity
-from utilities.timer import Timer
-from utilities.colorpalette import ColorPalette
-from utilities.colortype import ColorType
-from utilities.color import Color
-from texture.character.charactertype import CharacterType
-from messaging import messaging, Messaging, Message, MessageType
-from utilities.utilities import Utility
-
+from messaging import messaging, MessageType
 import system.advanceable 
 import system.renderable
 import system.gamelogic.player
 
-from directmessaging import directMessaging, DirectMessage, DirectMessageType
+logger = logging.getLogger(__name__)
 
 
 class CharacterAnimationProcessor(esper.Processor):
@@ -56,20 +34,20 @@ class CharacterAnimationProcessor(esper.Processor):
         for msg in messages:
             if msg.type == MessageType.EntityMoved:
                 entity = Utility.findCharacterByGroupId(self.world, msg.groupId)
-                playerRenderable = self.world.component_for_entity(
+                renderable = self.world.component_for_entity(
                     entity, system.renderable.Renderable)
 
-                if playerRenderable.texture.characterAnimationType is CharacterAnimationType.walking:
+                if renderable.texture.characterAnimationType is CharacterAnimationType.walking:
                     if msg.data['didChangeDirection']:
-                        playerRenderable.texture.changeAnimation(
+                        renderable.texture.changeAnimation(
                             CharacterAnimationType.walking,
-                            playerRenderable.direction)
+                            renderable.direction)
                     else:
-                        playerRenderable.texture.advanceStep()
+                        renderable.texture.advanceStep()
                 else:
-                    playerRenderable.texture.changeAnimation(
+                    renderable.texture.changeAnimation(
                         CharacterAnimationType.walking,
-                        playerRenderable.direction)
+                        renderable.direction)
 
 
     def animationUpdateAttack(self):
