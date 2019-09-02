@@ -27,9 +27,10 @@ class StateDying(State):
             logger.info(self.name + " Death animation deluxe")
             animationIndex = random.randint(0, 1)
             meEnemy.world.textureEmiter.makeExplode(
-                meRenderable.texture,
-                meRenderable.direction,
-                None)
+                pos=meRenderable.getLocation(),
+                frame=meRenderable.texture.getCurrentFrameCopy(),
+                charDirection=meRenderable.direction,
+                data=None)
             meRenderable.texture.changeAnimation(
                 CharacterAnimationType.dying,
                 meRenderable.direction,

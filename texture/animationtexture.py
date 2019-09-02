@@ -18,16 +18,14 @@ class AnimationTexture(Texture):
     # abstract class
     # cant be used really as no animation is stored in arr
     # initSprite needs to be overwritten to make it work
-    def __init__(self, parentSprite :Sprite =None):
-        super(AnimationTexture, self).__init__(parentSprite=parentSprite)
+    def __init__(self):
+        super(AnimationTexture, self).__init__()
         self.animation :Animation = None
         self.init()
 
 
     def init(self):
         self.setActive(True)
-        self.offset.x = 0
-        self.offset.y = 0
         self.resetAnimation()
 
 
@@ -87,20 +85,20 @@ class AnimationTexture(Texture):
                     self.frameIndex = (self.frameIndex + 1) % self.animation.frameCount
 
 
-    def draw(self, viewport):
+    def draw(self, viewport, pos):
         if not self.isActive():
             # logger.debug("Drawing nonactive sprite")
             return
 
-        pos = self.getLocation()
         if self.frameIndex >= len(self.animation.arr):
             raise Exception("Trying to access frameIndex {} on array with len {}, actual len{}"
                 .format(self.frameIndex, self.animation.frameCount, len(self.animation.arr)))
 
-        if self.parentSprite is not None and self.parentSprite.overwriteColor is not None:
-            color = self.parentSprite.overwriteColor
-        else:
-            color = self.animation.frameColors[ self.frameIndex ]
+        #if self.parentSprite is not None and self.parentSprite.overwriteColor is not None:
+        #    color = self.parentSprite.overwriteColor
+        #else:
+        #    color = self.animation.frameColors[ self.frameIndex ]
+        color = self.animation.frameColors[ self.frameIndex ]
 
         # Note: For performance reason, replace enumerate with a while loop
         y = 0

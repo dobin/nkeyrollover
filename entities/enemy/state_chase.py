@@ -97,7 +97,7 @@ class StateChase(State):
 
         attackRendable = self.brain.owner.world.component_for_entity(
             meEnemy.offensiveAttackEntity, system.renderable.Renderable)
-        hitLocations = attackRendable.texture.getTextureHitCoordinates()
+        hitLocations = attackRendable.getTextureHitCoordinates()
 
         # only one of the hitlocations need to hit
         for hitLocation in hitLocations:

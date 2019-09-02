@@ -9,8 +9,8 @@ logger = logging.getLogger(__name__)
 
 
 class PhenomenaTexture(AnimationTexture):
-    def __init__(self, parentSprite=None, phenomenaType=None, direction=None):
-        super(PhenomenaTexture, self).__init__(parentSprite)
+    def __init__(self, phenomenaType=None, direction=None):
+        super(PhenomenaTexture, self).__init__()
         self.phenomenaAnimationManager = PhenomenaAnimationManager()
 
         if phenomenaType is not None:
@@ -18,7 +18,9 @@ class PhenomenaTexture(AnimationTexture):
 
 
     def changeAnimation(self, phenomenaType, direction):
-        self.animation = self.phenomenaAnimationManager.getAnimation(phenomenaType, direction)
+        self.animation = self.phenomenaAnimationManager.getAnimation(
+            phenomenaType, 
+            direction)
         self.init()
         self.width = self.animation.width
         self.height = self.animation.height

@@ -161,7 +161,7 @@ class Renderable(object):
         if not self.isActive():
             return
 
-        self.texture.draw(self.viewport)
+        self.texture.draw(self.viewport, self.getLocation())
 
 
     def collidesWithPoint(self, hitCoords :Coordinates):
@@ -181,6 +181,27 @@ class Renderable(object):
 
         self.overwriteColorTimer.setTimer(time)
         self.overwriteColorTimer.reset()
+
+
+    def getTextureHitCoordinates(self, animationIdx=0):
+        # ani = self.animation[ animationIdx ]
+        locations = []
+        baseLocation = self.getLocation()
+        x = 0
+        while x < self.texture.width:
+            y = 0
+            while y < self.texture.height:
+                # expensive copy, but its only on-hit
+                loc = copy.copy(baseLocation)
+                loc.x += x
+                loc.y += y
+                locations.append(loc)
+
+                y += 1
+
+            x += 1
+
+        return locations
 
 
     def isActive(self):

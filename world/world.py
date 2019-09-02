@@ -42,6 +42,7 @@ from system.inputprocessor import InputProcessor
 from texture.character.characteranimationtype import CharacterAnimationType
 from system.graphics.characteranimationprocessor import CharacterAnimationProcessor
 from system.gamelogic.aiprocessor import AiProcessor
+from system.renderableminimalprocessor import RenderableMinimalProcessor
 
 from messaging import messaging, Messaging, Message, MessageType
 
@@ -57,7 +58,9 @@ class World(object):
         self.viewport :Viewport =Viewport(win=win, world=self)
         self.worldSprite :Sprite = Sprite(viewport=self.viewport, parentSprite=None)
         self.particleEmiter :ParticleEmiter = ParticleEmiter(viewport=self.viewport)
-        self.textureEmiter :TextureEmiter = TextureEmiter(viewport=self.viewport)
+        self.textureEmiter :TextureEmiter = TextureEmiter(
+            viewport=self.viewport,
+            esperWorld=self.esperWorld)
         self.map :Map = Map(viewport=self.viewport, world=self)
 
         self.addPlayer()
@@ -85,6 +88,7 @@ class World(object):
         )
         movementProcessor = MovementProcessor()
         inputProcessor = InputProcessor()
+        renderableMinimalProcessor = RenderableMinimalProcessor(viewport=self.viewport)
 
         # KeyboardInput:getInput()
         # p generate  MessageType         PlayerKeypress
@@ -125,6 +129,8 @@ class World(object):
         # x handle:   DirectMessageType   receiveDamage
         self.esperWorld.add_processor(attackableProcessor)
 
+        self.esperWorld.add_processor(renderableMinimalProcessor)
+
         # p handle:   MessageType         PlayerAttack
         # e handle:   MessageType         EnemyAttack
         # x generate: DirectMessageType   receiveDamage
@@ -137,7 +143,6 @@ class World(object):
         self.player = self.esperWorld.create_entity()
         esperData = EsperData(self.esperWorld, self.player, 'player')
         texture = CharacterTexture(
-            parentSprite=None,
             characterType=CharacterType.player,
             characterAnimationType=CharacterAnimationType.standing)
         coordinates = Coordinates(
@@ -167,7 +172,8 @@ class World(object):
 
         # CharacterAttack
         characterAttackEntity = self.esperWorld.create_entity()
-        texture :PhenomenaTexture = PhenomenaTexture(phenomenaType=PhenomenaType.hit, parentSprite=self)
+        texture :PhenomenaTexture = PhenomenaTexture(
+            phenomenaType=PhenomenaType.hit)
         coordinates = Coordinates( # for hit
             -1,
             1
@@ -195,7 +201,7 @@ class World(object):
 
         # speech
         speechEntity = self.esperWorld.create_entity()
-        texture = AnimationTexture(parentSprite=None)
+        texture = AnimationTexture()
         coordinates = Coordinates(1, -4)
         renderable = Renderable(
             texture=texture,
@@ -204,7 +210,6 @@ class World(object):
             coordinates=coordinates,
             z=3,
             active=False)
-        texture.parentSprite = renderable
         speechBubble = SpeechBubble(renderable=renderable)
         groupId = GroupId(id=myid)
         self.esperWorld.add_component(

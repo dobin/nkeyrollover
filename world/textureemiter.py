@@ -1,33 +1,38 @@
+import logging
 import random
 
 from world.viewport import Viewport
 from sprite.coordinates import Coordinates
-from texture.specktexture import SpeckTexture
-from texture.statictexture import StaticTexture
 from sprite.direction import Direction
 from utilities.color import Color
 from utilities.colorpalette import ColorPalette
+from system.renderableminimal import RenderableMinimal, TextureChar
+
+logger = logging.getLogger(__name__)
 
 
 class TextureEmiter(object):
-    def __init__(self, viewport :Viewport):
+    def __init__(self, viewport :Viewport, esperWorld):
         self.viewport :Viewport = viewport
+        self.esperWorld = esperWorld
         self.textures = []
 
 
     def showCharAtPos(self, char :str, timeout :float, coordinate :Coordinates, color :Color):
-        staticTexture = StaticTexture(
+        textureChar = TextureChar(
             char=char,
+            colorArr=[ColorPalette.getColorByColor( Color.brightyellow )],
+            timeArr= [ timeout ],
+        )
+        renderableMinimal = RenderableMinimal(
+            texture=textureChar,
             coordinate=coordinate,
-            color=color,
-            time=timeout)
-        self.addTexture(staticTexture)
+        )
+
+        self.addTexture(renderableMinimal)
 
 
-    def makeExplode(self, sprite, charDirection, data):
-        frame = sprite.getCurrentFrameCopy()
-        pos = sprite.getLocation()
-
+    def makeExplode(self, pos, frame, charDirection, data):
         effect = random.randint(1, 2)
 
         columnCount = len(frame)
@@ -71,14 +76,17 @@ class TextureEmiter(object):
                 ColorPalette.getColorByColor( Color.grey ),
             ]
 
-            speckTexture = SpeckTexture(
+            textureChar = TextureChar(
                 char=char,
-                coordinate=c,
                 movementX=movementX,
                 movementY=movementY,
                 timeArr=timeArr,
                 colorArr=colorArr)
-            self.addTexture(speckTexture)
+            renderableMinimal = RenderableMinimal(
+                texture=textureChar,
+                coordinate=c,
+            )
+            self.addTexture(renderableMinimal)
 
         # push away
         if effect == 2:
@@ -105,27 +113,34 @@ class TextureEmiter(object):
                 ColorPalette.getColorByColor( Color.grey ),
             ]
 
-            speckTexture = SpeckTexture(
+            textureChar = TextureChar(
                 char=char,
-                coordinate=c,
                 movementX = d * 2,
                 movementY = 0,
                 timeArr=timeArr,
                 colorArr=colorArr)
-            self.addTexture(speckTexture)
+            renderableMinimal = RenderableMinimal(
+                texture=textureChar,
+                coordinate=c
+            )
+            self.addTexture(renderableMinimal)
 
 
     def addTexture(self, sprite):
+        entity = self.esperWorld.create_entity()
+        self.esperWorld.add_component(entity, sprite)
+
         self.textures.append(sprite)
 
 
     def draw(self):
-        for texture in self.textures:
-            texture.draw(self.viewport)
+        #for texture in self.textures:
+        #    texture.texture.draw(self.viewport, texture.getLocation())
+        pass
 
 
     def advance(self, deltaTime :float):
         for texture in self.textures:
-            texture.advance(deltaTime)
+            #texture.texture.advance(deltaTime)
             if not texture.isActive():
                 self.textures.remove(texture)

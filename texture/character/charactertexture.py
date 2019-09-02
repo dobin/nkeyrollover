@@ -16,13 +16,12 @@ class CharacterTexture(AnimationTexture):
     def __init__(
             self,
             characterType :CharacterType,
-            parentSprite :Sprite =None,
             characterAnimationType :CharacterAnimationType =None,
             direction :Direction =Direction.none,
             head :str =None,
             body :str =None,
         ):
-        super(CharacterTexture, self).__init__(parentSprite)
+        super(CharacterTexture, self).__init__()
 
         self.characterAnimationManager = CharacterAnimationManager(
             head=head, body=body, characterType=characterType)

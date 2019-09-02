@@ -86,13 +86,13 @@ class OffensiveAttack():
 
         if self.weaponType is WeaponType.hit:
             self.renderable.texture.changeAnimation(PhenomenaType.hit, self.renderable.parent.direction)
-            hitLocations = self.renderable.texture.getTextureHitCoordinates()
+            hitLocations = self.renderable.getTextureHitCoordinates()
         elif self.weaponType is WeaponType.hitSquare:
             self.renderable.texture.changeAnimation(PhenomenaType.hitSquare, self.renderable.parent.direction)
-            hitLocations = self.renderable.texture.getTextureHitCoordinates()
+            hitLocations = self.renderable.getTextureHitCoordinates()
         elif self.weaponType is WeaponType.hitLine:
             self.renderable.texture.changeAnimation(PhenomenaType.hitLine, self.renderable.parent.direction)
-            hitLocations = self.renderable.texture.getTextureHitCoordinates()
+            hitLocations = self.renderable.getTextureHitCoordinates()
         elif self.weaponType is WeaponType.jumpKick:
             self.renderable.texture.changeAnimation(PhenomenaType.hit, self.renderable.parent.direction)
             hitLocations = []
