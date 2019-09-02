@@ -89,7 +89,8 @@ class MovementProcessor(esper.Processor):
             renderable.texture.advanceStep()
 
         if x > 0:
-            if renderable.coordinates.x < Config.columns - renderable.texture.width - 1:
+            #if renderable.coordinates.x < Config.columns - renderable.texture.width - 1:
+            if True:
                 renderable.coordinates.x += 1
                 didMove = True
                 

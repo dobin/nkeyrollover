@@ -18,6 +18,7 @@ from system.offensiveattack import OffensiveAttack
 import locale 
 current_milli_time = lambda: int(round(time.time() * 1000))
 
+from messaging import messaging, Messaging, Message, MessageType
 
 class Keyrollover(object): 
     def __init__(self): 
@@ -36,7 +37,7 @@ class Keyrollover(object):
             logging.basicConfig(
                 filename='app.log', 
                 filemode='a', 
-                level=logging.DEBUG,
+                level=logging.INFO,
                 format='%(asctime)s %(levelname)07s %(name)32s: %(message)s')
         else: 
             logging.basicConfig(
@@ -94,7 +95,6 @@ class Keyrollover(object):
 
             # has to be after draw, as getch() does a refresh
             # https://stackoverflow.com/questions/19748685/curses-library-why-does-getch-clear-my-screen
-            # keep inputrate below half FPS (50/s by default)
             self.keyboardInput.getInput()
 
             # fps logistics

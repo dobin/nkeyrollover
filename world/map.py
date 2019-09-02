@@ -68,7 +68,7 @@ class Map(object):
         while x < maxx:
         #for x in range(xp_file_layer['width']):
             #for y in range(xp_file_layer['height']):
-            y = 2
+            y = 1
             while y < 24:
                 cell_data = xp_file_layer['cells'][x][y]
                 if cell_data['keycode'] != '': # dont print empty (space " ") cells

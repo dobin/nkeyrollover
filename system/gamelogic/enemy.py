@@ -24,6 +24,7 @@ from entities.enemy.state_dying import StateDying
 from entities.enemy.state_idle import StateIdle
 from entities.enemy.state_spawn import StateSpawn
 from entities.enemy.state_wander import StateWander
+from entities.enemy.state_stun import StateStun
 from texture.texture import Texture
 from entities.characterstatus import CharacterStatus
 from entities.enemy.enemyinfo import EnemyInfo
@@ -59,6 +60,7 @@ class Enemy():
         self.brain.register(StateAttack)
         self.brain.register(StateChase)
         self.brain.register(StateWander)
+        self.brain.register(StateStun)
         self.brain.register(StateDying)
         self.brain.register(StateAttackWindup)
         self.brain.push("idle")

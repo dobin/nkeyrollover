@@ -185,7 +185,7 @@ class CharacterAnimationManager(object):
                 animation.arr = [
                     [
                         [ '', 'o', '' ],
-                        [ '/', '|', '+'],
+                        [ '\\', '|', '='],
                         [ '/', '', '\\']
                     ],
                     [
@@ -198,7 +198,7 @@ class CharacterAnimationManager(object):
                 animation.arr = [
                     [
                         [ '', 'o', '' ],
-                        [ '+', '|', '\\'],
+                        [ '=', '|', '/'],
                         [ '/', '', '\\']
                     ],
                     [
