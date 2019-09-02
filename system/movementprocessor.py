@@ -117,9 +117,9 @@ class MovementProcessor(esper.Processor):
                 didMove = True
 
         # notify texture manager
-        directMessaging.add(
+        messaging.add(
             groupId = groupId,
-            type = DirectMessageType.entityMoved,
+            type = MessageType.EntityMoved,
             data = {
                 'didChangeDirection': didChangeDirection,
                 'x': x,

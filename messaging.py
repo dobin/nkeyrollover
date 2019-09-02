@@ -8,17 +8,19 @@ class MessageType(Enum):
     PlayerKeypress = 0
     PlayerLocation = 1
     PlayerAttack = 2
-    PlayerMoved = 3
 
     EnemyAttack = 4
     EnemyLocation = 5
     EnemyStateUpdate = 6
 
+    EntityMoved = 7
+
 
 class Message(object): 
-    def __init__(self, type, data): 
+    def __init__(self, type, data, groupId): 
         self.type = type
         self.data = data
+        self.groupId = groupId
 
 
 class Messaging(object):
@@ -30,17 +32,22 @@ class Messaging(object):
     def __init__(self): 
         self.messages = []
 
-    def add(self, type, data):
+
+    def add(self, type, data, groupId=None):
         self.messages.append(Message(
             type=type,
-            data=data
+            data=data,
+            groupId=groupId,
         ))
         logger.info("Msg {}: {}".format(type.name, data))
+
 
     def reset(self):
         self.messages.clear()
 
+
     def get(self): 
         return self.messages
+
 
 messaging = Messaging()
