@@ -91,7 +91,8 @@ class World(object):
 
         # p handle:   DirectMessageType   movePlayer
         # p generate: MessageType         PlayerLocation
-        # x generate: DirectMessageType   entityMoved
+        # x generate: MessageType         EntityMoved
+        # e handle:   DirectMessageType   moveEnemy
         self.esperWorld.add_processor(movementProcessor)
 
         # p handle:   MessageType         PlayerKeyPress (space/attack, weaponselect)
@@ -102,22 +103,23 @@ class World(object):
         # p generate: MessageType         PlayerAttack
         self.esperWorld.add_processor(offensiveSkillProcessor)
 
-        ## p handle:  MessageType         PlayerAttack
-        ## p handle:  DirectMessageType   entityMoved
+        # p handle:  MessageType          PlayerAttack
+        # p handle:  MessageType          EntityMoved
         self.esperWorld.add_processor(playerProcessor) 
 
         # e handle:   MessageType         PlayerLocation
         # e generate: MessageType         EnemyAttack
+        # e generate: DirectMessageType   moveEnemy
         self.esperWorld.add_processor(enemyProcessor)
 
         self.esperWorld.add_processor(advanceableProcessor)
 
-        # x handle:     DirectMessageType ReceiveDamage
+        # x handle:   DirectMessageType   receiveDamage
         self.esperWorld.add_processor(attackableProcessor)     
 
         # p handle:   MessageType         PlayerAttack
         # e handle:   MessageType         EnemyAttack
-        # x generate: DirectMessageType   ReceiveDamage
+        # x generate: DirectMessageType   receiveDamage
         self.esperWorld.add_processor(renderableProcessor)
 
 
