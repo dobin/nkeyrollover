@@ -9,11 +9,12 @@ class MessageType(Enum):
     PlayerLocation = 1
     PlayerAttack = 2
 
-    EnemyAttack = 4
+    EnemyAttack = 4 # for collision detection, damage
     EnemyLocation = 5
-    EnemyStateUpdate = 6
 
-    EntityMoved = 7
+    EntityMoved = 7 # to update walking animation
+    attackWindup = 8 # to start attackWindup animation (on specific enemy)
+    EntityAttack = 9 # to start attack animation (on specific enemy)
 
 
 class Message(object): 
@@ -27,7 +28,7 @@ class Messaging(object):
     """Deliver messages to 0-n recipients
     This queue will be emptied upon each iteration / frame. 
     See world esper processors for the order in which messages can be sent
-    (onyl downward)
+    (only downward)
     """
     def __init__(self): 
         self.messages = []
@@ -39,7 +40,7 @@ class Messaging(object):
             data=data,
             groupId=groupId,
         ))
-        logger.info("Msg {}: {}".format(type.name, data))
+        logger.info("Msg for {} type {}: {}".format(groupId, type.name, data))
 
 
     def reset(self):

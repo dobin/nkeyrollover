@@ -41,6 +41,7 @@ from entities.esperdata import EsperData
 from system.inputprocessor import InputProcessor
 from texture.character.characteranimationtype import CharacterAnimationType
 from system.graphics.characteranimationprocessor import CharacterAnimationProcessor
+from system.gamelogic.aiprocessor import AiProcessor
 
 from messaging import messaging, Messaging, Message, MessageType
 
@@ -69,6 +70,7 @@ class World(object):
         self.showStats = False
         self.showEnemyWanderDestination = False
 
+        aiProcessor = AiProcessor()
         characterAnimationProcessor = CharacterAnimationProcessor()
         renderableProcessor = RenderableProcessor()
         advanceableProcessor = AdvanceableProcessor()
@@ -97,6 +99,12 @@ class World(object):
         # x generate: MessageType         EntityMoved
         self.esperWorld.add_processor(movementProcessor)
 
+        # e handle:   MessageType         PlayerLocation
+        # e generate: MessageType         EnemyAttack
+        # e generate: DirectMessageType   moveEnemy
+        self.esperWorld.add_processor(aiProcessor)
+
+
         # p handle:   MessageType         PlayerKeyPress (space/attack, weaponselect)
         # p generate: MessageType         PlayerAttack (via OffensiveAttackEntity)
         self.esperWorld.add_processor(offensiveAttackProcessor)
@@ -110,13 +118,8 @@ class World(object):
         self.esperWorld.add_processor(characterAnimationProcessor) 
 
         # Nothing
+        self.esperWorld.add_processor(enemyProcessor) 
         self.esperWorld.add_processor(playerProcessor) 
-
-        # e handle:   MessageType         PlayerLocation
-        # e generate: MessageType         EnemyAttack
-        # e generate: DirectMessageType   moveEnemy
-        self.esperWorld.add_processor(enemyProcessor)
-
         self.esperWorld.add_processor(advanceableProcessor)
 
         # x handle:   DirectMessageType   receiveDamage

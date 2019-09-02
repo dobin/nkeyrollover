@@ -16,20 +16,23 @@ import system.gamelogic.enemy
 
 logger = logging.getLogger(__name__)
 
+from messaging import messaging, Messaging, Message, MessageType
+
 
 class StateAttackWindup(State): 
     name = 'attackwindup'
 
     def on_enter(self):
-        meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.renderable.Renderable)
+        meGroupId = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.groupid.GroupId)
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
 
-
-        meRenderable.texture.changeAnimation(
-            CharacterAnimationType.hitwindup, 
-            meRenderable.direction)
+        messaging.add(
+            type=MessageType.attackWindup, 
+            groupId=meGroupId.getId(),
+            data=None
+        )
 
         self.setTimer( meEnemy.enemyInfo.windupTime )
 

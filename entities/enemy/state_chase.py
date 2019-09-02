@@ -35,16 +35,11 @@ class StateChase(State):
 
 
     def on_enter(self):
-        meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.renderable.Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
 
         stateTimeRnd = random.randrange(-100 * meEnemy.enemyInfo.chaseTimeRnd, 100 * meEnemy.enemyInfo.chaseTimeRnd)
         self.setTimer( meEnemy.enemyInfo.chaseTime + (stateTimeRnd / 100) )
-        meRenderable.texture.changeAnimation(
-            CharacterAnimationType.walking, 
-            meRenderable.direction)
         self.canAttackTimer.setTimer(meEnemy.enemyInfo.enemyCanAttackPeriod)
         self.canAttackTimer.reset()
 
@@ -125,8 +120,6 @@ class StateChase(State):
 
 
     def getInputChase(self):
-        meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.renderable.Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
         meGroupId = self.brain.owner.world.component_for_entity(

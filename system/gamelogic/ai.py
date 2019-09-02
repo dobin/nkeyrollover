@@ -9,6 +9,7 @@ from utilities.utilities import Utility
 from texture.character.charactertexture import CharacterTexture
 from entities.character import Character
 from entities.entitytype import EntityType
+from ai.brain import Brain
 from sprite.coordinates import Coordinates
 from sprite.direction import Direction
 from world.viewport import Viewport
@@ -31,7 +32,7 @@ from entities.enemy.enemyinfo import EnemyInfo
 logger = logging.getLogger(__name__)
 
 
-class Enemy():
+class Ai():
     def __init__(self, player, name, esperData, director, world, viewport):
         self.enemyMovement :bool = True
         self.player = player #
@@ -39,18 +40,28 @@ class Enemy():
         self.director = director #
         self.world = world #
         self.viewport = viewport #
-
-        self.characterStatus = CharacterStatus()
+        self.offensiveAttackEntity = None
 
         self.name :str = 'Bot' + name
-        self.active = False
-        self.enemyInfo :EnemyInfo = EnemyInfo()
+        self.initAi()
 
-        self.offensiveAttackEntity = None
+
+    def initAi(self): 
+        self.brain :Brain = Brain(self.esperData)
+
+        self.brain.register(StateIdle)
+        self.brain.register(StateSpawn)
+        self.brain.register(StateAttack)
+        self.brain.register(StateChase)
+        self.brain.register(StateWander)
+        self.brain.register(StateStun)
+        self.brain.register(StateDying)
+        self.brain.register(StateAttackWindup)
+        self.brain.push("idle")
 
 
     def advance(self, deltaTime :float): 
-        pass
+        self.brain.update(deltaTime)
 
 
     def __repr__(self):

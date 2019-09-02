@@ -9,6 +9,7 @@ from directmessaging import directMessaging, DirectMessage, DirectMessageType
 from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
 from utilities.color import Color
+from system.gamelogic.ai import Ai
 
 logger = logging.getLogger(__name__)
 
@@ -20,11 +21,13 @@ class AttackableProcessor(esper.Processor):
 
     def process(self, dt):
         # if enemies have taken enough damage, make them gonna die
-        for ent, (attackable, renderable, enemy) in self.world.get_components(Attackable, Renderable, Enemy):
+        for ent, (attackable, renderable, enemy, ai) in self.world.get_components(
+            Attackable, Renderable, Enemy, Ai
+        ):
             if attackable.getHealth() <= 0:
                 if renderable.isActive(): # and/or: enemy.brain.state.name != 'idle' ?
-                    enemy.brain.pop()
-                    enemy.brain.push('dying')
+                    ai.brain.pop()
+                    ai.brain.push('dying')
             
 
         # damage taken

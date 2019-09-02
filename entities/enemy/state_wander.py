@@ -33,14 +33,9 @@ class StateWander(State):
 
 
     def on_enter(self):
-        meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.renderable.Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
 
-        meRenderable.texture.changeAnimation(
-            CharacterAnimationType.walking, 
-            meRenderable.direction)
         stateTimeRnd = random.randrange(
             -100 * meEnemy.enemyInfo.wanderTimeRnd, 
             100 * meEnemy.enemyInfo.wanderTimeRnd)

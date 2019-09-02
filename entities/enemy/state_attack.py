@@ -13,7 +13,9 @@ from utilities.color import Color
 from system.offensiveattack import OffensiveAttack
 
 import system.gamelogic.enemy
-import system.renderable 
+import system.renderable
+import system.groupid
+from messaging import messaging, Messaging, Message, MessageType
 
 logger = logging.getLogger(__name__)
 
@@ -29,12 +31,16 @@ class StateAttack(State):
     def on_enter(self):
         meRenderable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.renderable.Renderable)
+        meGroupId = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.groupid.GroupId)
 
         self.attackTimer.init()
-        meRenderable.texture.changeAnimation(
-            CharacterAnimationType.hitting, 
-            meRenderable.direction)
-        
+        messaging.add(
+            type=MessageType.EntityAttack, 
+            groupId=meGroupId.getId(),
+            data=None
+        )
+
         self.attackTimer.setTimer(meRenderable.texture.getAnimationTime())
         self.setTimer( meRenderable.texture.getAnimationTime() )
 

@@ -22,11 +22,6 @@ from utilities.timer import Timer
 from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
 from utilities.color import Color
-from entities.player.state_attack import StateAttack
-from entities.player.state_dying import StateDying
-from entities.player.state_idle import StateIdle
-from entities.player.state_spawn import StateSpawn
-from entities.player.state_walking import StateWalking
 from texture.character.charactertype import CharacterType
 from messaging import messaging, Messaging, Message, MessageType
 

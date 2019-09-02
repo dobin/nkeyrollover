@@ -24,17 +24,10 @@ class StateSpawn(State):
 
 
     def on_enter(self):
-        meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.renderable.Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
 
-
         self.setTimer( meEnemy.enemyInfo.spawnTime )
-        meRenderable.texture.changeAnimation(
-            CharacterAnimationType.standing, 
-            meRenderable.direction)
-        meRenderable.setActive(True)
 
 
     def process(self, dt):

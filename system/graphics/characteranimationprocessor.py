@@ -22,13 +22,9 @@ from utilities.timer import Timer
 from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
 from utilities.color import Color
-from entities.player.state_attack import StateAttack
-from entities.player.state_dying import StateDying
-from entities.player.state_idle import StateIdle
-from entities.player.state_spawn import StateSpawn
-from entities.player.state_walking import StateWalking
 from texture.character.charactertype import CharacterType
 from messaging import messaging, Messaging, Message, MessageType
+from utilities.utilities import Utility
 
 import system.advanceable 
 import system.renderable
@@ -43,7 +39,8 @@ class CharacterAnimationProcessor(esper.Processor):
     Accesses events: 
     * MessageType.EntityMoved
     * MessageType.PlayerAttack
-    * MessageType.EnemyAttack
+    * MessageType.attackWindup
+    * MessageType.EntityAttack
     """
     def __init__(self):
         super().__init__()
@@ -86,3 +83,21 @@ class CharacterAnimationProcessor(esper.Processor):
                 playerRenderable.texture.changeAnimation(
                     CharacterAnimationType.hitting,
                     playerRenderable.direction)
+
+            if message.type == MessageType.attackWindup:
+                entity = Utility.findCharacterByGroupId(self.world, message.groupId)
+                entityRenderable = self.world.component_for_entity(
+                    entity, system.renderable.Renderable)
+                
+                entityRenderable.texture.changeAnimation(
+                    CharacterAnimationType.hitwindup, 
+                    entityRenderable.direction)
+
+            if message.type == MessageType.EntityAttack:
+                entity = Utility.findCharacterByGroupId(self.world, message.groupId)
+                entityRenderable = self.world.component_for_entity(
+                    entity, system.renderable.Renderable)
+
+                entityRenderable.texture.changeAnimation(
+                    CharacterAnimationType.hitting,
+                    entityRenderable.direction)

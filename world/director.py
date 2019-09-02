@@ -23,6 +23,7 @@ from texture.phenomena.phenomenatype import PhenomenaType
 from system.offensiveattack import OffensiveAttack
 from messaging import messaging, Messaging, Message, MessageType
 from entities.esperdata import EsperData
+from system.gamelogic.ai import Ai
 
 logger = logging.getLogger(__name__)
 
@@ -89,8 +90,17 @@ class Director(object):
             director=self,
             world=self.world,
             viewport=self.viewport)
+        ai = Ai(
+            player=self.world.playerRendable,
+            name=name,
+            esperData=esperData, 
+            director=self,
+            world=self.world,
+            viewport=self.viewport)
+        self.world.esperWorld.add_component(enemy, ai)
+
         self.world.esperWorld.add_component(enemy, tenemy)
-        self.enemies.append(tenemy)
+        self.enemies.append(ai)
         self.world.esperWorld.add_component(enemy, Attackable(initialHealth=100))
         enemyRenderable = renderable
         # /Enemy
@@ -151,27 +161,27 @@ class Director(object):
     def numEnemiesAttacking(self) -> int:
         n = 0
         for enemy in self.enemies:
-            if enemy.isActive():
-                if enemy.brain.state.name == 'attack' or enemy.brain.state.name == 'attackwindup':
-                    n += 1
+            #if enemy.isActive():
+            if enemy.brain.state.name == 'attack' or enemy.brain.state.name == 'attackwindup':
+                n += 1
         return n
 
 
     def numEnemiesWandering(self) -> int:
         n = 0
         for enemy in self.enemies:
-            if enemy.isActive():
-                if enemy.brain.state.name == 'wander':
-                    n += 1
+            #if enemy.isActive():
+            if enemy.brain.state.name == 'wander':
+                n += 1
         return n
 
 
     def numEnemiesChasing(self) -> int:
         n = 0
         for enemy in self.enemies:
-            if enemy.isActive():
-                if enemy.brain.state.name == 'chase':
-                    n += 1
+            #if enemy.isActive():
+            if enemy.brain.state.name == 'chase':
+                n += 1
         return n
 
 
@@ -204,7 +214,6 @@ class Director(object):
                     self.lastEnemyResurrectedTimer.reset()
 
 
-
     def findDeadEnemy(self): 
         for enemy in self.enemies:
             if not enemy.isActive():
@@ -212,25 +221,27 @@ class Director(object):
 
 
     def makeEnemyAlive(self): 
-        for ent, (attackable, renderable, enemy) in self.world.esperWorld.get_components(
-            Attackable, Renderable, Enemy
+        for ent, (attackable, ai, renderable, enemy) in self.world.esperWorld.get_components(
+            Attackable, Ai, Renderable, Enemy
         ):
-            if enemy.brain.state.name == 'idle':
+            logging.info("Make enemy alive")
+            if ai.brain.state.name == 'idle':
                 spawnCoords = self.getRandomSpawnCoords(renderable)
                 renderable.setLocation(spawnCoords)
 
                 logger.info("Ressurect enemy {} at {}".format(enemy, renderable.coordinates))
                 attackable.resetHealth()
-                enemy.setActive(True)
 
-                enemy.brain.pop()
-                enemy.brain.push('spawn')
+                ai.brain.pop()
+                ai.brain.push('spawn')
+
                 # if death animation was deluxe, there is no frame in the sprite
                 # upon spawning, and an exception is thrown
                 # change following when fixed TODO
                 renderable.texture.changeAnimation(
                     CharacterAnimationType.standing, 
                     renderable.direction)
+                renderable.setActive(True)
 
                 break
 
