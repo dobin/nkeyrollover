@@ -1,7 +1,7 @@
 from enum import Enum, IntEnum
 
 
-class Color(IntEnum): 
+class Color(IntEnum):
     brightwhite = 1     # 255 255 255
     white = 2           # 229 229 229
     grey = 3            # 077 077 077

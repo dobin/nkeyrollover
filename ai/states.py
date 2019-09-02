@@ -18,19 +18,19 @@ class BaseState(object):
 		self.brain.pop()
 
 
-	def setTimer(self, time): 
+	def setTimer(self, time):
 		self.timer = time
 
-	def updateTimer(self, dt): 
-		if self.timer > 0.0: 
+	def updateTimer(self, dt):
+		if self.timer > 0.0:
 			self.timer -= dt
 
-	def timeIsUp(self): 
-		if self.timer <= 0.0: 
+	def timeIsUp(self):
+		if self.timer <= 0.0:
 			return True
-		else: 
+		else:
 			return False
-		
+
 
 	# What follows is empty methods to be overloaded.
 	def on_enter(self):

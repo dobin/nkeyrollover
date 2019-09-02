@@ -27,7 +27,7 @@ class AttackableProcessor(esper.Processor):
                 if renderable.isActive(): # and/or: enemy.brain.state.name != 'idle' ?
                     ai.brain.pop()
                     ai.brain.push('dying')
-            
+
 
         # damage taken
         msg = directMessaging.get(
@@ -36,14 +36,14 @@ class AttackableProcessor(esper.Processor):
         while msg is not None:
             entity = Utility.findCharacterByGroupId(self.world, msg.groupId)
             meRenderable = self.world.component_for_entity(
-                entity, Renderable) 
+                entity, Renderable)
             meAttackable = self.world.component_for_entity(
                 entity, Attackable)
             damage = msg.data
 
             # xxx.changeState(stun)
             meAttackable.handleHit(damage)
-            meRenderable.setOverwriteColorFor( 
+            meRenderable.setOverwriteColorFor(
                 1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
 
             # get next message

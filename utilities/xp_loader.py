@@ -1,19 +1,19 @@
 # https://github.com/Edern76/XPLoaderPy3/
 #
 # The MIT License (MIT)
-# 
+#
 # Copyright (c) 2015 Sean Hagar
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,19 +26,19 @@
 
 ##################################
 # In-memory XP format is as follows:
-# Returned structure is a dictionary with the keys version, layers, width, height, 
+# Returned structure is a dictionary with the keys version, layers, width, height,
 # and layer_data
 ## Version is stored in case it's useful for someone, but as mentioned in the
 #  format description it probably won't be unless format changes happen
-## Layers is a full 32 bit int, though right now REXPaint only exports or manages 
+## Layers is a full 32 bit int, though right now REXPaint only exports or manages
 # up to 4 layers
-## Width and height are extracted from the layer with largest width and height - 
+## Width and height are extracted from the layer with largest width and height -
 # this value will hold true for all layers for now as per the format description
-## layer_data is a list of individual layers, which are stored in the following 
+## layer_data is a list of individual layers, which are stored in the following
 # format
-### Each layer is a dictionary with keys width, height (see above), and cells. 
-### Cells is a row major 2d array of, again, dictionaries with the values 
-# 'keycode' (ascii keycode), 'fore_r/g/b', and 'back_r/g/b' (technically 
+### Each layer is a dictionary with keys width, height (see above), and cells.
+### Cells is a row major 2d array of, again, dictionaries with the values
+# 'keycode' (ascii keycode), 'fore_r/g/b', and 'back_r/g/b' (technically
 # ints but in value 0-255)
 ##################################
 
@@ -46,7 +46,7 @@ import struct
 import logging
 
 ##################################
-# Used primarily internally to parse the data, feel free to reference them externally if it's useful. 
+# Used primarily internally to parse the data, feel free to reference them externally if it's useful.
 # Changing these programattically will, of course, screw up the parsing (unless the format changes and you're using an old copy of this file)
 ##################################
 
@@ -74,7 +74,7 @@ transparent_cell_back_b = 255
 # START LIBTCOD SPECIFIC CODE
 
 ##################################
-# Used primarily internally to parse the data, feel free to reference them externally if it's useful. 
+# Used primarily internally to parse the data, feel free to reference them externally if it's useful.
 # Changing these programattically will, of course, screw up the parsing (unless the format changes and you're using an old copy of this file)
 ##################################
 
@@ -101,7 +101,7 @@ def get_position_key_xy(xp_file_layer, poskey_color):
 
 ##################################
 # loads in an xp file from an unzipped string (gained from opening a .xp file with gzip and calling .read())
-# reverse_endian controls whether the slices containing data for things like layer width, height, number of layers, etc. is reversed 
+# reverse_endian controls whether the slices containing data for things like layer width, height, number of layers, etc. is reversed
 # so far as I can tell Python is doing int conversions in big-endian, while the .xp format stores them in little-endian
 # I may just not be aware of it being unneeded, but have it there in case
 ##################################

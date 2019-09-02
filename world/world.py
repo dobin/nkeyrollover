@@ -1,6 +1,6 @@
 import logging
 import random
-import curses 
+import curses
 
 from sprite.coordinates import Coordinates
 from sprite.direction import Direction
@@ -48,7 +48,7 @@ from messaging import messaging, Messaging, Message, MessageType
 logger = logging.getLogger(__name__)
 
 
-class World(object): 
+class World(object):
     """The game world in which all game object live"""
 
     def __init__(self, win):
@@ -115,15 +115,15 @@ class World(object):
 
         # p handle:  MessageType          PlayerAttack
         # p handle:  MessageType          EntityMoved
-        self.esperWorld.add_processor(characterAnimationProcessor) 
+        self.esperWorld.add_processor(characterAnimationProcessor)
 
         # Nothing
-        self.esperWorld.add_processor(enemyProcessor) 
-        self.esperWorld.add_processor(playerProcessor) 
+        self.esperWorld.add_processor(enemyProcessor)
+        self.esperWorld.add_processor(playerProcessor)
         self.esperWorld.add_processor(advanceableProcessor)
 
         # x handle:   DirectMessageType   receiveDamage
-        self.esperWorld.add_processor(attackableProcessor)     
+        self.esperWorld.add_processor(attackableProcessor)
 
         # p handle:   MessageType         PlayerAttack
         # e handle:   MessageType         EnemyAttack
@@ -131,13 +131,13 @@ class World(object):
         self.esperWorld.add_processor(renderableProcessor)
 
 
-    def addPlayer(self): 
+    def addPlayer(self):
         # Player
         myid = 31337
         self.player = self.esperWorld.create_entity()
         esperData = EsperData(self.esperWorld, self.player, 'player')
         texture = CharacterTexture(
-            parentSprite=None, 
+            parentSprite=None,
             characterType=CharacterType.player,
             characterAnimationType=CharacterAnimationType.standing)
         coordinates = Coordinates(
@@ -151,7 +151,7 @@ class World(object):
             coordinates=coordinates)
         texture.parentSprite = renderable
         characterSkill = OffensiveSkill(
-            esperData=esperData, 
+            esperData=esperData,
             particleEmiter=self.particleEmiter,
             viewport=self.viewport)
         self.characterSkillEntity = characterSkill
@@ -184,7 +184,7 @@ class World(object):
         texture.parentSprite = renderable
         self.esperWorld.add_component(characterAttackEntity, renderable)
         offensiveAttack = OffensiveAttack(
-            isPlayer=True, 
+            isPlayer=True,
             world=self,
             renderable=renderable)
         groupId = GroupId(id=myid)
@@ -208,26 +208,26 @@ class World(object):
         speechBubble = SpeechBubble(renderable=renderable)
         groupId = GroupId(id=myid)
         self.esperWorld.add_component(
-            speechEntity, 
+            speechEntity,
             groupId)
         self.esperWorld.add_component(
-            speechEntity, 
+            speechEntity,
             renderable)
         self.esperWorld.add_component(
-            speechEntity, 
+            speechEntity,
             speechBubble)
         # /speech
 
 
-    def togglePause(self): 
+    def togglePause(self):
         self.pause = not self.pause
 
 
-    def toggleStats(self): 
+    def toggleStats(self):
         self.showStats = not self.showStats
 
 
-    def toggleShowEnemyWanderDestination(self): 
+    def toggleShowEnemyWanderDestination(self):
         self.showEnemyWanderDestination = not self.showEnemyWanderDestination
 
 
@@ -240,11 +240,11 @@ class World(object):
         if self.showStats:
             self.drawStats()
 
-        if self.pause: 
+        if self.pause:
             self.win.addstr(12, 40, "Paused", curses.color_pair(7))
 
 
-    def getGameTime(self): 
+    def getGameTime(self):
         return self.gameTime
 
 
@@ -265,7 +265,7 @@ class World(object):
         messaging.reset()
 
 
-    def drawStats(self): 
+    def drawStats(self):
         x = 4
         y = 4
 
@@ -276,7 +276,7 @@ class World(object):
         o.append('  Attacking : ' + str( self.director.numEnemiesAttacking() ))
         o.append('  Chasing   : ' + str( self.director.numEnemiesChasing() ))
         o.append('  Wadndering: ' + str( self.director.numEnemiesWandering() ))
-        
+
         o.append('Player:')
         o.append('  Location:' + str( self.playerRendable.getLocation() ) )
 
@@ -286,5 +286,5 @@ class World(object):
             n += 1
 
 
-    def quitGame(self): 
+    def quitGame(self):
         self.gameRunning = False

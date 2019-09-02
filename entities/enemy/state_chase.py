@@ -20,10 +20,10 @@ class StateChase(State):
     def __init__(self, brain):
         State.__init__(self, brain)
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy)
 
-        self.lastInputTimer = Timer( 
-            meEnemy.enemyInfo.chaseStepDelay, 
+        self.lastInputTimer = Timer(
+            meEnemy.enemyInfo.chaseStepDelay,
             instant=True )
         self.canAttackTimer = Timer()
         self.lastKnowsPlayerPosition = None
@@ -31,7 +31,7 @@ class StateChase(State):
 
     def on_enter(self):
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy)
 
         stateTimeRnd = random.randrange(-100 * meEnemy.enemyInfo.chaseTimeRnd, 100 * meEnemy.enemyInfo.chaseTimeRnd)
         self.setTimer( meEnemy.enemyInfo.chaseTime + (stateTimeRnd / 100) )
@@ -41,7 +41,7 @@ class StateChase(State):
 
     def process(self, dt):
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy)
         didAttack = False
 
         self.lastInputTimer.advance(dt)
@@ -58,9 +58,9 @@ class StateChase(State):
 
             self.canAttackTimer.reset()
 
-        # note that if we want to attack, as identified a few lines above, 
+        # note that if we want to attack, as identified a few lines above,
         # we will be in state attackWindup, and not reach here
-        if didAttack: 
+        if didAttack:
             return
 
         # movement speed, and direction
@@ -77,23 +77,23 @@ class StateChase(State):
 
     def checkForNewPlayerPosition(self):
         # check if there are any new player position messages
-        for message in messaging.get(): 
+        for message in messaging.get():
             if message.type is MessageType.PlayerLocation:
                 self.lastKnowsPlayerPosition = message.data
 
 
-    def canAttackPlayer(self): 
+    def canAttackPlayer(self):
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy)
 
-        if self.lastKnowsPlayerPosition is None: 
+        if self.lastKnowsPlayerPosition is None:
             # we may not yet have received a location. find it directly via player entity
             # this is every time we go into chase state
             playerEntity = Utility.findPlayer(self.brain.owner.world)
             playerRenderable = self.brain.owner.world.component_for_entity(
-                playerEntity, system.renderable.Renderable) 
+                playerEntity, system.renderable.Renderable)
             self.lastKnowsPlayerPosition = playerRenderable.getLocationAndSize()
-        playerLocation = self.lastKnowsPlayerPosition            
+        playerLocation = self.lastKnowsPlayerPosition
 
         attackRendable = self.brain.owner.world.component_for_entity(
             meEnemy.offensiveAttackEntity, system.renderable.Renderable)
@@ -102,10 +102,10 @@ class StateChase(State):
         # only one of the hitlocations need to hit
         for hitLocation in hitLocations:
             canAttack = Utility.pointIn(
-                hitLocation, 
+                hitLocation,
                 playerLocation)
 
-            if canAttack: 
+            if canAttack:
                 logger.info("Can attack, me {} in {}".format(
                     hitLocation, playerLocation
                 ))
@@ -116,11 +116,11 @@ class StateChase(State):
 
     def getInputChase(self):
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy)
         meGroupId = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.groupid.GroupId)
 
-        if not meEnemy.enemyMovement: 
+        if not meEnemy.enemyMovement:
             return
 
         meOffensiveWeaponRenderable = self.brain.owner.world.component_for_entity(
@@ -156,7 +156,7 @@ class StateChase(State):
             moveY = -1
 
         # only move if we really move a character
-        if moveX != 0 or moveY != 0: 
+        if moveX != 0 or moveY != 0:
             directMessaging.add(
                 groupId = meGroupId.getId(),
                 type = DirectMessageType.moveEnemy,
@@ -165,4 +165,4 @@ class StateChase(State):
                     'y': moveY,
                     'dontChangeDirection': dontChangeDirection
                 },
-            )   
+            )

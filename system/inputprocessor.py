@@ -6,7 +6,7 @@ from enum import Enum
 from utilities.timer import Timer
 from messaging import messaging, Messaging, Message, MessageType
 from config import Config
-import system.advanceable 
+import system.advanceable
 import system.renderable
 import system.gamelogic.player
 from directmessaging import directMessaging, DirectMessage, DirectMessageType
@@ -34,16 +34,16 @@ class InputProcessor(esper.Processor):
             system.renderable.Renderable, system.gamelogic.player.Player
         ):
             didMove = False
-            
+
             for message in messaging.get():
                 if message.type is MessageType.PlayerKeypress:
                     didMoveTmp = self.handleKeyPress(message.data, player, renderable, ent)
-                    if didMoveTmp: 
+                    if didMoveTmp:
                         didMove = True
 
             # to allow diagonal movement, we allow multiple movement keys per input
             # cycle, without resetting the timer.
-            if didMove: 
+            if didMove:
                 self.movementTimer.reset()
 
 
@@ -51,12 +51,12 @@ class InputProcessor(esper.Processor):
         didMove = False
         x = 0
         y = 0
-        if self.movementTimer.timeIsUp(): 
+        if self.movementTimer.timeIsUp():
             if key == curses.KEY_LEFT:
                 x=-1
                 didMove = True
 
-            elif key == curses.KEY_RIGHT: 
+            elif key == curses.KEY_RIGHT:
                 x=1
                 didMove = True
 
@@ -64,7 +64,7 @@ class InputProcessor(esper.Processor):
                 y=-1
                 didMove = True
 
-            elif key == curses.KEY_DOWN: 
+            elif key == curses.KEY_DOWN:
                 y=1
                 didMove = True
 

@@ -7,9 +7,9 @@ from utilities.utilities import Utility
 
 class PlayerSkillTest(unittest.TestCase):
     """check if area skill hits enemy"""
-    def test_playerskill(self): 
+    def test_playerskill(self):
         Utility.setupLogger()
-        
+
         win = None
         world = FakeWorld(win, fakeViewPort=True)
 
@@ -18,7 +18,7 @@ class PlayerSkillTest(unittest.TestCase):
         world.getPlayer().direction = Direction.left
 
         # enemy
-        enemy = Enemy(viewport=world.viewport, parent=world.worldSprite, 
+        enemy = Enemy(viewport=world.viewport, parent=world.worldSprite,
             spawnBoundaries=None, world=world, name='bot')
         enemy.setLocation(Coordinates(10-2, 10))
         world.director.enemiesAlive.append(enemy)

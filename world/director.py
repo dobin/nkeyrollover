@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 class Director(object):
     """Create and manage the enemies"""
-    
+
     def __init__(self, viewport :Viewport, world):
         self.viewport = viewport
         self.world = world
@@ -42,10 +42,10 @@ class Director(object):
         self.maxEnemiesChasing = 4
 
 
-    # we split this from the constructor, so we can initialize a Director 
+    # we split this from the constructor, so we can initialize a Director
     # without enemies in the unit test
     def init(self):
-        if Config.devMode: 
+        if Config.devMode:
             characterType = CharacterType.cow
             self.createEnemy(characterType, 0)
         else:
@@ -58,16 +58,16 @@ class Director(object):
                 n += 1
 
 
-    def createEnemy(self, characterType, id): 
+    def createEnemy(self, characterType, id):
         name = "Bot " + str(id)
         # Enemy
         groupId = GroupId(id=id)
         enemy = self.world.esperWorld.create_entity()
         esperData = EsperData(self.world.esperWorld, enemy, name)
         texture = CharacterTexture(
-            parentSprite=None, 
+            parentSprite=None,
             characterAnimationType=CharacterAnimationType.standing,
-            head=self.getRandomHead(), 
+            head=self.getRandomHead(),
             body=self.getRandomBody(),
             characterType=characterType)
         coordinates = Coordinates(0, 0)
@@ -86,14 +86,14 @@ class Director(object):
         tenemy = Enemy(
             player=self.world.playerRendable,
             name=name,
-            esperData=esperData, 
+            esperData=esperData,
             director=self,
             world=self.world,
             viewport=self.viewport)
         ai = Ai(
             player=self.world.playerRendable,
             name=name,
-            esperData=esperData, 
+            esperData=esperData,
             director=self,
             world=self.world,
             viewport=self.viewport)
@@ -123,7 +123,7 @@ class Director(object):
         texture.parentSprite = renderable
         self.world.esperWorld.add_component(characterAttackEntity, renderable)
         offensiveAttack = OffensiveAttack(
-            isPlayer=False, 
+            isPlayer=False,
             world=self.world,
             renderable=renderable)
         self.world.esperWorld.add_component(characterAttackEntity, groupId)
@@ -131,21 +131,21 @@ class Director(object):
         self.characterAttackEntity = characterAttackEntity
         offensiveAttack.switchWeapon(WeaponType.hitLine)
         tenemy.offensiveAttackEntity = characterAttackEntity
-        # /CharacterAttack    
+        # /CharacterAttack
 
 
     def getRandomHead(self):
         return random.choice([ '^', 'o', 'O', 'v', 'V'])
 
 
-    def getRandomBody(self): 
+    def getRandomBody(self):
         return random.choice([ 'X', 'o', 'O', 'v', 'V', 'M', 'm' ])
 
 
     def numEnemiesAlive(self) -> int:
         n = 0
         for enemy in self.enemies:
-            if enemy.brain.state.name != 'idle': 
+            if enemy.brain.state.name != 'idle':
                 n += 1
         return n
 
@@ -157,7 +157,7 @@ class Director(object):
                 n += 1
         return n
 
-    
+
     def numEnemiesAttacking(self) -> int:
         n = 0
         for enemy in self.enemies:
@@ -189,15 +189,15 @@ class Director(object):
         n = self.numEnemiesAttacking()
         if n <= self.maxEnemiesAttacking:
             return True
-        else: 
+        else:
             return False
 
-    
+
     def canHaveMoreEnemiesChasing(self) -> bool:
         n = self.numEnemiesChasing()
         if n <= self.maxEnemiesChasing:
             return True
-        else: 
+        else:
             return False
 
 
@@ -214,13 +214,13 @@ class Director(object):
                     self.lastEnemyResurrectedTimer.reset()
 
 
-    def findDeadEnemy(self): 
+    def findDeadEnemy(self):
         for enemy in self.enemies:
             if not enemy.isActive():
                 return enemy
 
 
-    def makeEnemyAlive(self): 
+    def makeEnemyAlive(self):
         for ent, (attackable, ai, renderable, enemy) in self.world.esperWorld.get_components(
             Attackable, Ai, Renderable, Enemy
         ):
@@ -239,7 +239,7 @@ class Director(object):
                 # upon spawning, and an exception is thrown
                 # change following when fixed TODO
                 renderable.texture.changeAnimation(
-                    CharacterAnimationType.standing, 
+                    CharacterAnimationType.standing,
                     renderable.direction)
                 renderable.setActive(True)
 
@@ -247,18 +247,18 @@ class Director(object):
 
 
     def getRandomSpawnCoords(self, enemy):
-        if Config.devMode: 
+        if Config.devMode:
             coordinates = Coordinates(
-                x=40, 
+                x=40,
                 y=15,
             )
             return coordinates
 
         side = random.choice([True, False])
         myx = 0
-        if side: 
+        if side:
             myx = self.viewport.getx() + Config.columns + 1
-        else: 
+        else:
             myx = self.viewport.getx() - 1 - enemy.texture.width
 
         minY = Config.areaMoveable['miny']

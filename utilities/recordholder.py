@@ -1,4 +1,4 @@
-import logging 
+import logging
 
 from entities.weapontype import WeaponType
 from texture.character.charactertype import CharacterType
@@ -6,7 +6,7 @@ from texture.character.charactertype import CharacterType
 logger = logging.getLogger(__name__)
 
 
-class RecordHolder(object): 
+class RecordHolder(object):
     @staticmethod
     def recordAttack(weaponType :WeaponType, damage :int, name :str, characterType :CharacterType):
         l = "{} name {} attack {} damage {}".format(characterType.name, name, weaponType, damage)

@@ -4,7 +4,7 @@ import logging
 from utilities.utilities import Utility
 from texture.character.characteranimationtype import CharacterAnimationType
 from messaging import messaging, MessageType
-import system.advanceable 
+import system.advanceable
 import system.renderable
 import system.gamelogic.player
 
@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 class CharacterAnimationProcessor(esper.Processor):
     """Update the texture of renderable which are CharacterAnimations.
 
-    Accesses events: 
+    Accesses events:
     * MessageType.EntityMoved
     * MessageType.PlayerAttack
     * MessageType.attackWindup
@@ -52,7 +52,7 @@ class CharacterAnimationProcessor(esper.Processor):
 
     def animationUpdateAttack(self):
         messages = messaging.get()
-        for message in messages: 
+        for message in messages:
             if message.type == MessageType.PlayerAttack:
                 playerEntity = Utility.findPlayer(self.world)
                 playerRenderable = self.world.component_for_entity(
@@ -66,9 +66,9 @@ class CharacterAnimationProcessor(esper.Processor):
                 entity = Utility.findCharacterByGroupId(self.world, message.groupId)
                 entityRenderable = self.world.component_for_entity(
                     entity, system.renderable.Renderable)
-                
+
                 entityRenderable.texture.changeAnimation(
-                    CharacterAnimationType.hitwindup, 
+                    CharacterAnimationType.hitwindup,
                     entityRenderable.direction)
 
             if message.type == MessageType.EntityAttack:

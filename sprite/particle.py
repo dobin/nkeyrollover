@@ -16,9 +16,9 @@ class Particle(object):
         self,
         viewport =None,
         x :int =0,
-        y :int =0, 
+        y :int =0,
         life :int =0,
-        angle :float =0, 
+        angle :float =0,
         speed :int =1,
         fadeout :bool =True,
         charType :int =0,
@@ -28,16 +28,16 @@ class Particle(object):
         self.viewport = viewport
         self.movementTimer = Timer()
         self.init(
-            x=x, y=y, life=life, angle=angle, speed=speed, fadeout=fadeout, 
+            x=x, y=y, life=life, angle=angle, speed=speed, fadeout=fadeout,
             byStep=byStep, charType=charType, active=active)
-        
+
 
     def init(
         self,
         x :int =0,
-        y :int =0, 
+        y :int =0,
         life :int =0,
-        angle :float =0, 
+        angle :float =0,
         speed :int =1,
         fadeout :bool =True,
         byStep :bool =False,
@@ -73,10 +73,10 @@ class Particle(object):
 
 
     def advance(self, dt):
-        if self.active is False: 
+        if self.active is False:
             return
 
-        if self.byStep: 
+        if self.byStep:
             return
 
         self.movementTimer.advance(dt)
@@ -84,22 +84,22 @@ class Particle(object):
         self.makeStep(dt)
 
 
-    def setColor(self): 
+    def setColor(self):
         self.color = ColorPalette.getColorByColorType(ColorType.particle, self.viewport)
 
         if self.life > (self.originalLife / 2):
             self.colorOpt = curses.A_BOLD
-        else: 
+        else:
             self.colorOpt = 0
 
 
-    def setChar(self): 
-        if self.charType == 0: 
+    def setChar(self):
+        if self.charType == 0:
             if self.life > ((self.originalLife / 3) * 2):
                 self.char = 'O'
             elif self.life < ((self.originalLife / 3) * 1):
                 self.char = '.'
-            else: 
+            else:
                 self.char = 'o'
 
 
@@ -121,7 +121,7 @@ class Particle(object):
 
             # accumulate pos we could not handle yet
             changeRestX = xFloat - xChange - self.rx
-            changeRestY = yFloat - yChange - self.ry 
+            changeRestY = yFloat - yChange - self.ry
 
             self.rx += changeRestX
             self.ry += changeRestY
@@ -138,7 +138,7 @@ class Particle(object):
                 print("New    Rest:  X: {}  Y: {}".format(self.rx, self.ry))
                 print("New    Pos:   X: {}  Y: {}".format(self.x, self.y))
                 print("")
-                
+
         self.life -= 1
 
 
@@ -146,5 +146,5 @@ class Particle(object):
         self.viewport.addstr(self.y, self.x, self.char, self.color | self.colorOpt)
 
 
-    def isActive(self): 
+    def isActive(self):
         return self.active

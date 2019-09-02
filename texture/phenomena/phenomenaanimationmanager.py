@@ -11,7 +11,7 @@ from utilities.utilities import Utility
 logger = logging.getLogger("phenomentaanimationmanager")
 
 
-class PhenomenaAnimationManager(object): 
+class PhenomenaAnimationManager(object):
     def __init__(self):
         self.animationsLeft = {}
         self.animationsRight = {}
@@ -24,10 +24,10 @@ class PhenomenaAnimationManager(object):
             self.animationsRight[phenomenatype] = self.createAnimation(phenomenatype, Direction.right)
 
 
-    def getAnimation(self, phenomenaType, direction): 
+    def getAnimation(self, phenomenaType, direction):
         if direction is Direction.left:
             return self.animationsLeft[phenomenaType]
-        else: 
+        else:
             return self.animationsRight[phenomenaType]
 
 
@@ -63,7 +63,7 @@ class PhenomenaAnimationManager(object):
                 ],
                 [
                     [ '.', ],
-                ]                                
+                ]
             ]
 
         if phenomenaType is PhenomenaType.hitSquare:
@@ -112,7 +112,7 @@ class PhenomenaAnimationManager(object):
             animation.frameTime = [
                 0.1,
                 0.1,
-                0.1, 
+                0.1,
             ]
 
             if direction is Direction.right:
@@ -125,7 +125,7 @@ class PhenomenaAnimationManager(object):
                     ],
                     [
                         [ '.', 'o', 'O', 'O'],
-                    ]                                
+                    ]
                 ]
             else:
                 animation.arr = [
@@ -137,10 +137,10 @@ class PhenomenaAnimationManager(object):
                     ],
                     [
                         [ 'O', 'O', 'o', '.'],
-                    ]                                
+                    ]
                 ]
 
-        if phenomenaType is PhenomenaType.roflcopter: 
+        if phenomenaType is PhenomenaType.roflcopter:
             animation.frameCount = 2
             animation.endless = True
             animation.advanceByStep = False
@@ -158,7 +158,7 @@ class PhenomenaAnimationManager(object):
             animation.height = t['height']
             animation.arr = t['arr']
 
-        if phenomenaType is PhenomenaType.intro: 
+        if phenomenaType is PhenomenaType.intro:
             animation.frameCount = 2
             animation.endless = True
             animation.advanceByStep = False
@@ -178,7 +178,7 @@ class PhenomenaAnimationManager(object):
             animation.arr = t['arr']
 
 
-        if phenomenaType is PhenomenaType.tree1: 
+        if phenomenaType is PhenomenaType.tree1:
             animation.frameCount = 1
             animation.endless = True
             animation.advanceByStep = False
@@ -190,7 +190,7 @@ class PhenomenaAnimationManager(object):
             animation.height = t['height']
             animation.arr = t['arr']
 
-        if phenomenaType is PhenomenaType.tree2: 
+        if phenomenaType is PhenomenaType.tree2:
             animation.frameCount = 1
             animation.endless = True
             animation.advanceByStep = False
@@ -202,7 +202,7 @@ class PhenomenaAnimationManager(object):
             animation.height = t['height']
             animation.arr = t['arr']
 
-        if phenomenaType is PhenomenaType.tree3: 
+        if phenomenaType is PhenomenaType.tree3:
             animation.frameCount = 1
             animation.endless = True
             animation.advanceByStep = False
@@ -214,7 +214,7 @@ class PhenomenaAnimationManager(object):
             animation.height = t['height']
             animation.arr = t['arr']
 
-        if phenomenaType is PhenomenaType.tree4: 
+        if phenomenaType is PhenomenaType.tree4:
             animation.frameCount = 2
             animation.endless = True
             animation.advanceByStep = False

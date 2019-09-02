@@ -6,10 +6,10 @@ curses.initscr()
 win = curses.newwin(25, 80)
 curses.noecho()
 curses.cbreak()
-win.keypad(1) 
-curses.curs_set(0)    
+win.keypad(1)
+curses.curs_set(0)
 win.nodelay(1) # make getch() nonblocking
-curses.start_color()    
+curses.start_color()
 curses.init_pair(1, curses.COLOR_GREEN, 0)
 
 win.clear()

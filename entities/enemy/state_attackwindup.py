@@ -9,17 +9,17 @@ logger = logging.getLogger(__name__)
 
 
 
-class StateAttackWindup(State): 
+class StateAttackWindup(State):
     name = 'attackwindup'
 
     def on_enter(self):
         meGroupId = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.groupid.GroupId)
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy)
 
         messaging.add(
-            type=MessageType.attackWindup, 
+            type=MessageType.attackWindup,
             groupId=meGroupId.getId(),
             data=None
         )

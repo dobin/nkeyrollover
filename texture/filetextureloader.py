@@ -6,13 +6,13 @@ from texture.character.charactertype import CharacterType
 logger = logging.getLogger(__name__)
 
 
-class FileTextureLoader(object): 
-    def __init__(self): 
+class FileTextureLoader(object):
+    def __init__(self):
         pass
 
 
     def readAnimation(
-        self, characterType :CharacterType, 
+        self, characterType :CharacterType,
         characterAnimationType :CharacterAnimationType
     ):
         ct = characterType.name
@@ -28,21 +28,21 @@ class FileTextureLoader(object):
 
         # find longest line to make animation
         maxWidth = 0
-        for line in lineList: 
-            if len(line) > maxWidth: 
+        for line in lineList:
+            if len(line) > maxWidth:
                 maxWidth = len(line)
 
         maxHeight = 0
         tmp = []
         for line in lineList:
-            if line == '': 
+            if line == '':
                 # empty line, means new animation.
                 # collect previous lines as a single animation frame
                 res.append(tmp)
-                if len(tmp) > maxHeight: 
+                if len(tmp) > maxHeight:
                     maxHeight = len(tmp)
                 tmp = []
-            else: 
+            else:
                 # make all lines same length
                 if not len(line) == maxWidth:
                     line += ' ' * (maxWidth - len(line))
@@ -56,15 +56,15 @@ class FileTextureLoader(object):
         # replace whitespace ' ' with ''
         for (z, anim) in enumerate(res):
             for (y, rows) in enumerate(anim):
-                for (x, column) in enumerate(rows): 
-                    if res[z][y][x] == ' ': 
+                for (x, column) in enumerate(rows):
+                    if res[z][y][x] == ' ':
                         res[z][y][x] = ''
-                    if res[z][y][x] == '€': 
+                    if res[z][y][x] == '€':
                         res[z][y][x] = ' '
 
         d = {
             'arr': res,
-            'width': maxWidth, 
+            'width': maxWidth,
             'height': maxHeight,
             'frameCount': len(res),
         }

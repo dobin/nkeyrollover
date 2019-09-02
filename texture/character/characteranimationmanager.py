@@ -12,9 +12,9 @@ from utilities.utilities import Utility
 logger = logging.getLogger(__name__)
 
 
-class CharacterAnimationManager(object): 
+class CharacterAnimationManager(object):
     def __init__(
-        self, characterType :CharacterType, head=None, body=None, 
+        self, characterType :CharacterType, head=None, body=None,
     ):
         self.animationsLeft = {}
         self.animationsRight = {}
@@ -29,7 +29,7 @@ class CharacterAnimationManager(object):
                 self.animationsRight[animationType] = self.createAnimationStickfigure(
                     animationType, Direction.right)
 
-            if head is not None: 
+            if head is not None:
                 self.updateAllAnimations(1, 0, head, skip=CharacterAnimationType.dying)
 
             if body is not None:
@@ -42,7 +42,7 @@ class CharacterAnimationManager(object):
             for animationType in CharacterAnimationType:
                 self.animationsRight[animationType] = self.createAnimationCow(
                     animationType, Direction.right)
-                    
+
         else:
             logger.error("Unknown character type: " + str(characterType))
 
@@ -53,11 +53,11 @@ class CharacterAnimationManager(object):
 
 
     def updateAllAnimationsIn(self, x, y, char, animations, skip=None):
-        for key in animations: 
+        for key in animations:
             if key == skip:
                 continue
 
-            for animation in animations[key]: 
+            for animation in animations[key]:
                 for animation in animation.arr:
                     animation[y][x] = char
 
@@ -68,7 +68,7 @@ class CharacterAnimationManager(object):
                 logger.error("Animation {} tried to access subtype no {} of animation with len {}"
                     .format(characterAnimationType, subtype, len(self.animationsLeft[characterAnimationType])))
             return self.animationsLeft[characterAnimationType][subtype]
-        else: 
+        else:
             if subtype >= len(self.animationsRight[characterAnimationType]):
                 logger.error("Animation {} Tried to access subtype no {} of animation with len {}"
                     .format(characterAnimationType, subtype, len(self.animationsRight[characterAnimationType])))
@@ -79,9 +79,9 @@ class CharacterAnimationManager(object):
         animations = []
         if self.characterType is CharacterType.player:
             color = ColorPalette.getColorByColor(Color.brightwhite)
-        else: 
+        else:
             color = ColorPalette.getColorByColor(Color.white)
-        
+
         if animationType is CharacterAnimationType.standing:
             animation = Animation()
             animation.width = 3
@@ -138,9 +138,9 @@ class CharacterAnimationManager(object):
                         [ '', 'o', '' ],
                         [ '/', '|', '\\'],
                         [ '/', '', '\\']
-                    ]                    
+                    ]
                 ]
-            else: 
+            else:
                 animation.arr = [
                     [
                         [ '', 'o', '' ],
@@ -163,7 +163,7 @@ class CharacterAnimationManager(object):
                         [ '/', '', '\\']
                     ]
                 ]
-            animations.append(animation)            
+            animations.append(animation)
 
         if animationType is CharacterAnimationType.hitting:
             animation = Animation()
@@ -172,13 +172,13 @@ class CharacterAnimationManager(object):
             animation.endless = False
             animation.frameCount = 2
             animation.frameTime = [
-                0.8, 
+                0.8,
                 0.2
             ]
             animation.frameColors = [
                 color,
                 color,
-            ]            
+            ]
             animation.advanceByStep = False
 
             if direction is Direction.right:
@@ -194,7 +194,7 @@ class CharacterAnimationManager(object):
                         [ '/', '', '\\']
                     ]
                 ]
-            else: 
+            else:
                 animation.arr = [
                     [
                         [ '', 'o', '' ],
@@ -219,7 +219,7 @@ class CharacterAnimationManager(object):
             animation.frameColors = [
                 color,
                 color,
-            ]   
+            ]
             animation.frameTime = [
                 0.1,
                 0.5
@@ -235,7 +235,7 @@ class CharacterAnimationManager(object):
                     [ '', 'o', '' ],
                     [ '^', '|', '^'],
                     [ '/', '', '\\']
-                ]                
+                ]
             ]
             animations.append(animation)
 
@@ -253,7 +253,7 @@ class CharacterAnimationManager(object):
                 animation.endless = True
                 animation.frameColors = [
                     ColorPalette.getColorByColor(Color.grey),
-                ]   
+                ]
                 if n == 0:
                     animation.arr = [
                         [
@@ -262,7 +262,7 @@ class CharacterAnimationManager(object):
                             [ '/', '', '\\']
                         ]
                     ]
-                elif n == 1: 
+                elif n == 1:
                     animation.arr = [
                         [
                             [ '', 'X', '' ],
@@ -270,7 +270,7 @@ class CharacterAnimationManager(object):
                             [ '/', '', '\\']
                         ]
                     ]
-                    
+
                 animations.append(animation)
                 n += 1
 
@@ -285,7 +285,7 @@ class CharacterAnimationManager(object):
             animation.endless = True
             animation.frameColors = [
                 color,
-            ]   
+            ]
             if direction is direction.right:
                 animation.arr = [
                     [
@@ -294,7 +294,7 @@ class CharacterAnimationManager(object):
                         [ '/', '', '\\']
                     ]
                 ]
-            else: 
+            else:
                 animation.arr = [
                     [
                         [ '', 'o', '/' ],
@@ -316,7 +316,7 @@ class CharacterAnimationManager(object):
             animation.endless = True
             animation.frameColors = [
                 color,
-            ]   
+            ]
             if direction is direction.right:
                 animation.arr = [
                     [
@@ -325,7 +325,7 @@ class CharacterAnimationManager(object):
                         [ '/', '', '\\']
                     ]
                 ]
-            else: 
+            else:
                 animation.arr = [
                     [
                         [ '', 'o', '' ],
@@ -356,7 +356,7 @@ class CharacterAnimationManager(object):
             animation.width = fileAnimation['width']
             animation.height = fileAnimation['height']
             animation.arr = fileAnimation['arr']
-            if direction is Direction.left: 
+            if direction is Direction.left:
                 self.mirrorFrames(animation.arr)
             animation.frameCount = 1
             animation.frameTime = []
@@ -364,7 +364,7 @@ class CharacterAnimationManager(object):
             animation.endless = True
             animation.frameColors = [
                 color,
-            ]   
+            ]
             animations.append(animation)
 
         if animationType is CharacterAnimationType.walking:
@@ -376,14 +376,14 @@ class CharacterAnimationManager(object):
             animation.width = fileAnimation['width']
             animation.height = fileAnimation['height']
             animation.arr = fileAnimation['arr']
-            if direction is Direction.left: 
+            if direction is Direction.left:
                 self.mirrorFrames(animation.arr)
 
             animation.frameCount = 2
             animation.frameColors = [
                 color,
                 color,
-            ]               
+            ]
             animation.frameTime = None
             animation.endless = True
             animation.advanceByStep = True
@@ -399,19 +399,19 @@ class CharacterAnimationManager(object):
             animation.width = fileAnimation['width']
             animation.height = fileAnimation['height']
             animation.arr = fileAnimation['arr']
-            if direction is Direction.left: 
+            if direction is Direction.left:
                 self.mirrorFrames(animation.arr)
 
             animation.endless = False
             animation.frameCount = 2
             animation.frameTime = [
-                0.8, 
+                0.8,
                 0.2
             ]
             animation.frameColors = [
                 color,
                 color,
-            ]                     
+            ]
             animation.advanceByStep = False
 
             animations.append(animation)
@@ -426,13 +426,13 @@ class CharacterAnimationManager(object):
             animation.width = fileAnimation['width']
             animation.height = fileAnimation['height']
             animation.arr = fileAnimation['arr']
-            if direction is Direction.left: 
+            if direction is Direction.left:
                 self.mirrorFrames(animation.arr)
 
             animation.frameCount = 1
             animation.frameColors = [
                 color,
-            ]                     
+            ]
             animation.frameTime = []
             animation.advanceByStep = False
             animation.frameTime = None
@@ -450,14 +450,14 @@ class CharacterAnimationManager(object):
             animation.width = fileAnimation['width']
             animation.height = fileAnimation['height']
             animation.arr = fileAnimation['arr']
-            if direction is Direction.left: 
+            if direction is Direction.left:
                 self.mirrorFrames(animation.arr)
 
             animation.frameCount = 2
             animation.frameColors = [
                 color,
                 color,
-            ]                     
+            ]
             animation.frameTime = []
             animation.advanceByStep = False
             animation.endless = True
@@ -473,14 +473,14 @@ class CharacterAnimationManager(object):
             animation.width = fileAnimation['width']
             animation.height = fileAnimation['height']
             animation.arr = fileAnimation['arr']
-            if direction is Direction.left: 
+            if direction is Direction.left:
                 self.mirrorFrames(animation.arr)
 
             animation.frameCount = 2
             animation.frameColors = [
                 color,
                 color,
-            ]                     
+            ]
             animation.frameTime = []
             animation.advanceByStep = False
             animation.endless = True
@@ -510,7 +510,7 @@ class CharacterAnimationManager(object):
                     n += 1
 
 
-    def swapChar(self, char): 
+    def swapChar(self, char):
         if char == ')':
             return '('
         elif char == '(':

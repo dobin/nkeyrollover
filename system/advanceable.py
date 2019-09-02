@@ -11,4 +11,3 @@ class AdvanceableProcessor(esper.Processor):
     def process(self, dt):
         for ent, rend in self.world.get_component(Advanceable):
             rend.r.advance(dt)
-            

@@ -1,5 +1,4 @@
 import esper
-from enum import Enum 
 import logging
 
 from messaging import messaging, Messaging, Message, MessageType
@@ -18,7 +17,7 @@ class OffensiveAttackProcessor(esper.Processor):
         self.handleAttackKeyPress()
         self.advance(dt)
 
-    
+
     def advance(self, dt):
         for ent, offensiveAttack in self.world.get_component(OffensiveAttack):
             offensiveAttack.advance(dt)

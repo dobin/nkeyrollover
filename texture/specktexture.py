@@ -10,11 +10,11 @@ from utilities.colortype import ColorType
 from utilities.timer import Timer
 
 
-class SpeckTexture(Texture): 
+class SpeckTexture(Texture):
     def __init__(
-        self, char :str, coordinate :Coordinates, movementX :int, movementY :int, 
+        self, char :str, coordinate :Coordinates, movementX :int, movementY :int,
         timeArr, colorArr
-    ): 
+    ):
         super(SpeckTexture, self).__init__(
             parentSprite=None, width=1, height=1, offset=coordinate)
 
@@ -35,7 +35,7 @@ class SpeckTexture(Texture):
         if self.timer.timeIsUp():
             self.idx += 1
 
-            if self.idx == len(self.timeArr): 
+            if self.idx == len(self.timeArr):
                 self.setActive(False)
                 return
 
@@ -45,20 +45,20 @@ class SpeckTexture(Texture):
             self.offset.x += self.movementX
             self.offset.y += self.movementY
 
-    
+
     def draw(self, viewport :Viewport):
-        if not self.isActive(): 
+        if not self.isActive():
             return
 
         c = self.getLocation()
-        if self.colorArr is None: 
+        if self.colorArr is None:
             color = self.color
         else:
             color = self.colorArr[ self.idx ]
 
         viewport.addstr(
-                c.y, 
+                c.y,
                 c.x,
-                self.char, 
+                self.char,
                 color)
 

@@ -1,4 +1,3 @@
-import curses
 import logging
 import math
 
@@ -20,7 +19,7 @@ class Utility(object):
     @staticmethod
     def findCharacterByGroupId(world, id):
         for ent, (groupId, renderable, player) in world.get_components(
-            system.groupid.GroupId, 
+            system.groupid.GroupId,
             system.renderable.Renderable,
             system.gamelogic.player.Player,
         ):
@@ -28,7 +27,7 @@ class Utility(object):
                 return ent
 
         for ent, (groupId, renderable, enemy) in world.get_components(
-            system.groupid.GroupId, 
+            system.groupid.GroupId,
             system.renderable.Renderable,
             system.gamelogic.enemy.Enemy,
         ):
@@ -40,9 +39,9 @@ class Utility(object):
         ))
 
     @staticmethod
-    def findPlayer(world): 
+    def findPlayer(world):
         for ent, player, in world.get_component(
-            system.gamelogic.player.Player, 
+            system.gamelogic.player.Player,
         ):
             return ent
 
@@ -60,27 +59,27 @@ class Utility(object):
         res['sum'] = math.sqrt(res['x'] ** 2 + res['y'] ** 2)
         return res
 
-    
+
     @staticmethod
     def pointInSprite(coord1 :Coordinates, sprite2 :Sprite):
         coord2 = sprite2.getLocation()
         if coord1.x >= coord2.x and coord1.x < coord2.x + sprite2.texture.width and coord1.y >= coord2.y and coord1.y < coord2.y + sprite2.texture.height:
             return True
-        else: 
+        else:
             return False
 
     @staticmethod
     def pointIn(coord1 :Coordinates, location2 :ExtCoordinates):
         if coord1.x >= location2.x and coord1.x < location2.x + location2.width and coord1.y >= location2.y and coord1.y < location2.y + location2.height:
             return True
-        else: 
+        else:
             return False
 
 
     @staticmethod
     def getBorder(loc :Coordinates, distance :int =1, width :int =1, thicc :int =1):
         locs = []
-        basex = loc.x - distance 
+        basex = loc.x - distance
         basey = loc.y - distance
         dd = distance * 2
         y = basey
@@ -89,7 +88,7 @@ class Utility(object):
         while y <= basey + dd:
             x = basex
             while x <= basex + dd:
-                if y >= basey and y <= basey + dd + thicc: 
+                if y >= basey and y <= basey + dd + thicc:
                     locs.append( Coordinates(
                         x = x,
                         y = y
@@ -102,13 +101,13 @@ class Utility(object):
                 x += 1
             y += 1
 
-        return locs 
+        return locs
 
 
     @staticmethod
     def getBorderHalf(loc :Coordinates, distance :int =1, width :int =1, partRight=True):
         locs = []
-        basex = loc.x - distance 
+        basex = loc.x - distance
         basey = loc.y - distance
         dd = distance * 2
         y = basey
@@ -116,7 +115,7 @@ class Utility(object):
         while y <= basey + dd:
             x = basex
             while x <= basex + dd:
-                if y == basey or y == basey + dd: 
+                if y == basey or y == basey + dd:
                     locs.append( Coordinates(
                         x = x,
                         y = y
@@ -135,18 +134,18 @@ class Utility(object):
     def setupLogger():
         # RECORD debug level is used to record/indicate statistical relevant
         # game events
-        DEBUG_LEVELV_NUM = logging.WARN + 1 
+        DEBUG_LEVELV_NUM = logging.WARN + 1
         logging.addLevelName(DEBUG_LEVELV_NUM, "RECORD")
         def __record(self, message, *args, **kws):
             if self.isEnabledFor(DEBUG_LEVELV_NUM):
                 # Yes, logger takes its '*args' as 'args'.
-                self._log(DEBUG_LEVELV_NUM, message, args, **kws) 
+                self._log(DEBUG_LEVELV_NUM, message, args, **kws)
         logging.Logger.record = __record
 
 
     @staticmethod
     def isIdentical(coord1 :Coordinates, coord2: Coordinates) -> bool:
-        if coord1.x == coord2.x and coord1.y == coord2.y: 
+        if coord1.x == coord2.x and coord1.y == coord2.y:
             return True
         else:
             return False
@@ -154,9 +153,9 @@ class Utility(object):
 
     @staticmethod
     def checkAnimation(
-        animation: Animation, animationType :CharacterAnimationType, 
+        animation: Animation, animationType :CharacterAnimationType,
         characterType :CharacterType
-    ): 
+    ):
         if len(animation.arr) != animation.frameCount:
             raise Exception("Animation {} / {} invalid: frameCount={}, but array contains {}"
                 .format(characterType, animationType.name, animation.frameCount, len(animation.arr)))
@@ -171,10 +170,10 @@ class Utility(object):
                     raise Exception("Animation {} / {} invalid: width={}, but array contains {}"
                         .format(characterType, animationType.name, animation.width, len(line)))
 
-        if animation.advanceByStep and animation.frameTime != None: 
+        if animation.advanceByStep and animation.frameTime != None:
             raise Exception("Animation {} / {} advanceByStep=True, but frameTime array given"
                 .format(characterType, animationType.name))
 
-        if len(animation.frameColors) != animation.frameCount: 
+        if len(animation.frameColors) != animation.frameCount:
             raise Exception("Animation {} / {} frameColor count {} does not match frameCount {}"
                 .format(characterType, animationType.name, len(animation.frameColors), animation.frameCount))

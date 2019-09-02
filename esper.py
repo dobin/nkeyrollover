@@ -278,7 +278,7 @@ class World:
 
     def _clear_dead_entities(self):
         """Finalize deletion of any Entities that are marked dead.
-        
+
         In the interest of performance, this method duplicates code from the
         `delete_entity` method. If that method is changed, those changes should
         be duplicated here as well.

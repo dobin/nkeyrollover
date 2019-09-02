@@ -1,9 +1,9 @@
 
 
-class Timer(object): 
+class Timer(object):
     def __init__(
         self, timerValue :float =0.0, instant :bool =False, active :bool =True
-    ): 
+    ):
         self.timeLeft :float = 0.0
         self.timerValue :float = timerValue
         self.instant :bool = instant
@@ -13,17 +13,17 @@ class Timer(object):
 
 
     def init(self):
-        if not self.instant: 
+        if not self.instant:
             self.timeLeft = self.timerValue
-        else: 
+        else:
             self.timeLeft = 0.0
-        
 
-    def setTimer(self, timerValue: float): 
+
+    def setTimer(self, timerValue: float):
         self.timerValue = timerValue
 
 
-    def reset(self): 
+    def reset(self):
         self.timeLeft = self.timerValue
         self.active = True
 
@@ -42,20 +42,20 @@ class Timer(object):
         return self.active
 
 
-    def start(self): 
+    def start(self):
         self.active = True
 
 
-    def stop(self): 
+    def stop(self):
         self.active = False
 
 
-    def getTimeLeft(self): 
+    def getTimeLeft(self):
         return self.timeLeft
 
 
     def advance(self, dt: float):
-        if not self.active: 
+        if not self.active:
             return
 
         if self.timeLeft > 0:

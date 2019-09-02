@@ -19,7 +19,7 @@ class Character(object):
     """ A character is either a player or an enemy"""
 
     def __init__(
-        self, viewport :Viewport, parent, 
+        self, viewport :Viewport, parent,
         world, entityType :Entity
     ):
         self.parent = parent
@@ -32,11 +32,11 @@ class Character(object):
         self.characterInfo = None # filled by children
 
 
-    def getInput(self, playerLocation): 
+    def getInput(self, playerLocation):
         raise NotImplementedError('subclasses must override this abstract method')
 
 
-    def gmRessurectMe(self): 
+    def gmRessurectMe(self):
         raise NotImplementedError('subclasses must override this abstract method')
 
 
@@ -64,6 +64,6 @@ class Character(object):
         return random.choice([ '^', 'o', 'O', 'v', 'V'])
 
 
-    def getRandomBody(self): 
+    def getRandomBody(self):
         return random.choice([ 'X', 'o', 'O', 'v', 'V', 'M', 'm' ])
 

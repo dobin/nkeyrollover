@@ -49,7 +49,7 @@ class Enemy():
         self.offensiveAttackEntity = None
 
 
-    def advance(self, deltaTime :float): 
+    def advance(self, deltaTime :float):
         pass
 
 

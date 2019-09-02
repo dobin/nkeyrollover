@@ -46,7 +46,7 @@ class Ai():
         self.initAi()
 
 
-    def initAi(self): 
+    def initAi(self):
         self.brain :Brain = Brain(self.esperData)
 
         self.brain.register(StateIdle)
@@ -60,7 +60,7 @@ class Ai():
         self.brain.push("idle")
 
 
-    def advance(self, deltaTime :float): 
+    def advance(self, deltaTime :float):
         self.brain.update(deltaTime)
 
 

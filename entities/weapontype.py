@@ -1,6 +1,6 @@
 from enum import Enum
 
-class WeaponType(Enum): 
+class WeaponType(Enum):
     default = 0
     hit = 1
     hitSquare = 2
@@ -13,4 +13,3 @@ class WeaponType(Enum):
 
     heal = 8
     switchside = 9
-    

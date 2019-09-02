@@ -25,16 +25,16 @@ from utilities.color import Color
 from texture.character.charactertype import CharacterType
 from messaging import messaging, Messaging, Message, MessageType
 
-import system.advanceable 
+import system.advanceable
 import system.renderable
 
-from enum import Enum 
+from enum import Enum
 
 
-class PlayerState(Enum): 
+class PlayerState(Enum):
     spawn = 0
     walking = 1
-    
+
     dying = 2
     idle = 3
 

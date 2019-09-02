@@ -11,20 +11,20 @@ def colornum(fg, bg):
 def curs_color(fg):
     a = 7 & fg
 
-    if a == 0: 
+    if a == 0:
         return curses.COLOR_BLACK
-    if a == 1: 
+    if a == 1:
         return curses.COLOR_BLUE
-    if a == 2: 
+    if a == 2:
         return curses.COLOR_GREEN
-    if a == 3: 
+    if a == 3:
         return curses.COLOR_CYAN
-    if a == 4: 
+    if a == 4:
         return curses.COLOR_RED
-    if a == 5: 
+    if a == 5:
         return curses.COLOR_MAGENTA
-    if a == 6: 
+    if a == 6:
         return curses.COLOR_YELLOW
-    if a == 7: 
+    if a == 7:
         return curses.COLOR_WHITE
 

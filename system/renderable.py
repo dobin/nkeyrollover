@@ -27,12 +27,12 @@ logger = logging.getLogger(__name__)
 
 class Renderable(object):
     def __init__(
-        self, 
-        texture :Texture, 
-        viewport :Viewport, 
-        parent :Renderable =None, 
-        coordinates :Coordinates =None, 
-        z :int =0, 
+        self,
+        texture :Texture,
+        viewport :Viewport,
+        parent :Renderable =None,
+        coordinates :Coordinates =None,
+        z :int =0,
         active :bool =True,
         useParentDirection =False,
     ):
@@ -48,7 +48,7 @@ class Renderable(object):
         self.useParentDirection = useParentDirection
 
         # if this is being rendered
-        self.active :bool = active 
+        self.active :bool = active
 
         # coordinates
         self.coordinates :Coordinates = Coordinates(0, 0)
@@ -72,56 +72,56 @@ class Renderable(object):
         for hitLocation in hitLocations:
             if self.collidesWithPoint(hitLocation):
                 return True
-        
+
         return False
 
 
-    def __repr__(self): 
+    def __repr__(self):
         return self.name
 
 
-    def getLocationAndSize(self): 
+    def getLocationAndSize(self):
         loc = self.getLocation()
 
         d = ExtCoordinates(
-            x = loc.x, 
+            x = loc.x,
             y = loc.y,
             width = self.texture.width,
             height = self.texture.height
         )
         return d
 
-    def getLocation(self): 
+    def getLocation(self):
         """Get a reference to our location.
-        
+
         The location may depend on the parentSprite, if it is not None
-        Note that we dont return a copy of the coordinates, but a reference 
+        Note that we dont return a copy of the coordinates, but a reference
         to an internal var.
         """
-        if self.parent is None: 
+        if self.parent is None:
             return self.coordinates
         else:
             parentLocation = self.parent.getLocation()
             if self.parent.direction is Direction.left or not self.useParentDirection:
                 self.coordinatesRel.x = parentLocation.x + self.coordinates.x
                 self.coordinatesRel.y = parentLocation.y + self.coordinates.y
-            else: 
+            else:
                 self.coordinatesRel.x = parentLocation.x + (-1 * self.coordinates.x) + self.parent.texture.width - self.texture.width
-                self.coordinatesRel.y = parentLocation.y + self.coordinates.y         
+                self.coordinatesRel.y = parentLocation.y + self.coordinates.y
             return self.coordinatesRel
 
 
     def getLocationDirectionInverted(self):
-        if self.parent is None: 
+        if self.parent is None:
             return self.coordinates
         else:
             parentLocation = self.parent.getLocation()
             if self.parent.direction is Direction.right:
                 self.coordinatesRel2.x = parentLocation.x + self.coordinates.x
                 self.coordinatesRel2.y = parentLocation.y + self.coordinates.y
-            else: 
+            else:
                 self.coordinatesRel2.x = parentLocation.x + (-1 * self.coordinates.x) + self.parent.texture.width - self.texture.width
-                self.coordinatesRel2.y = parentLocation.y + self.coordinates.y         
+                self.coordinatesRel2.y = parentLocation.y + self.coordinates.y
             return self.coordinatesRel2
 
 
@@ -130,7 +130,7 @@ class Renderable(object):
         self.coordinates.y = coordinates.y
 
 
-    def getLocationCenter(self): 
+    def getLocationCenter(self):
         # slow, but its currently only used by rare events like skillExplosion
         loc = copy.copy(self.getLocation())
         # this will round down
@@ -141,12 +141,12 @@ class Renderable(object):
 
     def advanceStep(self):
         if not self.isActive():
-            return 
+            return
 
         self.texture.advanceStep()
 
 
-    def advance(self, deltaTime :float): 
+    def advance(self, deltaTime :float):
         if not self.isActive():
             return
 
@@ -156,12 +156,12 @@ class Renderable(object):
         if self.overwriteColorTimer.timeIsUp():
             self.overwriteColor = None
             self.overwriteColorTimer.stop()
-        self.overwriteColorTimer.advance(deltaTime)        
+        self.overwriteColorTimer.advance(deltaTime)
 
 
-    def draw(self): 
+    def draw(self):
         if not self.isActive():
-            return 
+            return
 
         self.texture.draw(self.viewport)
 
@@ -177,7 +177,7 @@ class Renderable(object):
     def setOverwriteColorFor(self, time :float, color :Color):
         if self.overwriteColorTimer.isActive():
             logger.debug("Color already active on new set color")
-            #return 
+            #return
 
         self.overwriteColor = color
 
@@ -185,7 +185,7 @@ class Renderable(object):
         self.overwriteColorTimer.reset()
 
 
-    def isActive(self): 
+    def isActive(self):
         return self.active
 
 

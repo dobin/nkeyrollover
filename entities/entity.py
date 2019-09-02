@@ -1,5 +1,5 @@
 import logging
-import curses 
+import curses
 from .entitytype import EntityType
 from sprite.direction import Direction
 from utilities.timer import Timer

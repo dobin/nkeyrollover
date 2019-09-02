@@ -1,7 +1,7 @@
 from config import Config
 
-class EnemyInfo(object): 
-    def __init__(self): 
+class EnemyInfo(object):
+    def __init__(self):
         # static lenghts
         self.windupTime = 0.5
         self.spawnTime = 1.0

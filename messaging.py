@@ -4,7 +4,7 @@ from enum import Enum
 logger = logging.getLogger(__name__)
 
 
-class MessageType(Enum): 
+class MessageType(Enum):
     PlayerKeypress = 0
     PlayerLocation = 1
     PlayerAttack = 2
@@ -17,8 +17,8 @@ class MessageType(Enum):
     EntityAttack = 9 # to start attack animation (on specific enemy)
 
 
-class Message(object): 
-    def __init__(self, type, data, groupId): 
+class Message(object):
+    def __init__(self, type, data, groupId):
         self.type = type
         self.data = data
         self.groupId = groupId
@@ -26,11 +26,11 @@ class Message(object):
 
 class Messaging(object):
     """Deliver messages to 0-n recipients
-    This queue will be emptied upon each iteration / frame. 
+    This queue will be emptied upon each iteration / frame.
     See world esper processors for the order in which messages can be sent
     (only downward)
     """
-    def __init__(self): 
+    def __init__(self):
         self.messages = []
 
 
@@ -47,7 +47,7 @@ class Messaging(object):
         self.messages.clear()
 
 
-    def get(self): 
+    def get(self):
         return self.messages
 
 

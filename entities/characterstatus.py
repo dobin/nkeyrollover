@@ -1,5 +1,5 @@
 import logging
-import math 
+import math
 
 from utilities.apm import Apm
 from entities.weapontype import WeaponType
@@ -7,8 +7,8 @@ from entities.weapontype import WeaponType
 logger = logging.getLogger(__name__)
 
 
-class CharacterStatus(object): 
-    def __init__(self): 
+class CharacterStatus(object):
+    def __init__(self):
         self.init()
 
     def init(self):
@@ -33,16 +33,16 @@ class CharacterStatus(object):
         }
 
         self.apm = Apm()
-    
 
-    def getDamage(self, weaponType :WeaponType): 
+
+    def getDamage(self, weaponType :WeaponType):
         return self.weaponDamage[weaponType]
 
-    def advance(self, deltaTime): 
+    def advance(self, deltaTime):
         pass
 
     def handleKeyPress(self, time :float):
         self.apm.tick(time)
 
-    def getApm(self): 
+    def getApm(self):
         return self.apm

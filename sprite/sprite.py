@@ -15,9 +15,9 @@ logger = logging.getLogger(__name__)
 
 class Sprite(object):
     def __init__(
-            self, 
-            viewport :Viewport, 
-            parentSprite, 
+            self,
+            viewport :Viewport,
+            parentSprite,
             coordinates :Coordinates =None,
             direction :Direction =Direction.none
     ):
@@ -44,7 +44,8 @@ class Sprite(object):
     def setOverwriteColorFor(self, time :float, color :Color):
         if self.overwriteColorTimer.isActive():
             logger.debug("Color already active on new set color")
-            return 
+            ##self.overwriteColorTimer.setTimer(time)
+            #return
 
         self.overwriteColor = color
 
@@ -52,14 +53,14 @@ class Sprite(object):
         self.overwriteColorTimer.reset()
 
 
-    def getLocation(self): 
+    def getLocation(self):
         """Get a reference to our location.
-        
+
         The location may depend on the parentSprite, if it is not None
-        Note that we dont return a copy of the coordinates, but a reference 
+        Note that we dont return a copy of the coordinates, but a reference
         to an internal var.
         """
-        if self.parentSprite is None: 
+        if self.parentSprite is None:
             return self.coordinates
         else:
             parentLocation = self.parentSprite.getLocation()
@@ -75,12 +76,12 @@ class Sprite(object):
 
     def advanceStep(self):
         if not self.isActive():
-            return 
+            return
 
         self.texture.advanceStep()
 
 
-    def advance(self, deltaTime :float): 
+    def advance(self, deltaTime :float):
         if not self.isActive():
             return
 
@@ -90,12 +91,12 @@ class Sprite(object):
         if self.overwriteColorTimer.timeIsUp():
             self.overwriteColor = None
             self.overwriteColorTimer.stop()
-        self.overwriteColorTimer.advance(deltaTime)        
+        self.overwriteColorTimer.advance(deltaTime)
 
 
-    def draw(self): 
+    def draw(self):
         if not self.isActive():
-            return 
+            return
 
         if not self.isRendered():
             return
@@ -111,7 +112,7 @@ class Sprite(object):
         return False
 
 
-    def isActive(self): 
+    def isActive(self):
         return self.active
 
 
@@ -119,5 +120,5 @@ class Sprite(object):
         self.active = active
 
 
-    def isRendered(self): 
+    def isRendered(self):
         return self.rendered

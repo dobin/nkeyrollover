@@ -17,7 +17,7 @@ class TextureEmiter(object):
 
     def showCharAtPos(self, char :str, timeout :float, coordinate :Coordinates, color :Color):
         staticTexture = StaticTexture(
-            char=char, 
+            char=char,
             coordinate=coordinate,
             color=color,
             time=timeout)
@@ -38,21 +38,21 @@ class TextureEmiter(object):
                 if column is not '':
                     self.makeEffect(effect, pos, x, y, column, columnCount, rowCnt, charDirection)
 
-        
-    def makeEffect(self, effect, pos, x, y, char, columnCount, rowCnt, charDirection): 
+
+    def makeEffect(self, effect, pos, x, y, char, columnCount, rowCnt, charDirection):
         # explode
-        if effect == 1: 
+        if effect == 1:
             movementX = 0
             movementY = 0
 
             if y == 0:
                 movementY = -1
-            if x == 0: 
+            if x == 0:
                 movementX = -1
 
             if y == columnCount - 1:
                 movementY = 1
-            if x == rowCnt - 1: 
+            if x == rowCnt - 1:
                 movementX = 1
 
             c = Coordinates(
@@ -60,31 +60,31 @@ class TextureEmiter(object):
                 y = pos.y + y,
             )
 
-            timeArr = [ 
-                0.1, 
-                0.1, 
-                0.1 
+            timeArr = [
+                0.1,
+                0.1,
+                0.1
             ]
-            colorArr = [ 
+            colorArr = [
                 ColorPalette.getColorByColor( Color.brightyellow ),
                 ColorPalette.getColorByColor( Color.yellow ),
                 ColorPalette.getColorByColor( Color.grey ),
             ]
 
             speckTexture = SpeckTexture(
-                char=char, 
+                char=char,
                 coordinate=c,
-                movementX=movementX, 
-                movementY=movementY, 
-                timeArr=timeArr, 
+                movementX=movementX,
+                movementY=movementY,
+                timeArr=timeArr,
                 colorArr=colorArr)
             self.addTexture(speckTexture)
 
         # push away
         if effect == 2:
-            if charDirection is Direction.right: 
+            if charDirection is Direction.right:
                 d = -1
-            else: 
+            else:
                 d = 1
 
             c = Coordinates(
@@ -92,13 +92,13 @@ class TextureEmiter(object):
                 y = pos.y + y,
             )
 
-            timeArr = [ 
-                0.05, 
-                0.1, 
-                0.2, 
-                0.4 
+            timeArr = [
+                0.05,
+                0.1,
+                0.2,
+                0.4
             ]
-            colorArr = [ 
+            colorArr = [
                 ColorPalette.getColorByColor( Color.white ),
                 ColorPalette.getColorByColor( Color.white ),
                 ColorPalette.getColorByColor( Color.grey ),
@@ -106,26 +106,26 @@ class TextureEmiter(object):
             ]
 
             speckTexture = SpeckTexture(
-                char=char, 
+                char=char,
                 coordinate=c,
-                movementX = d * 2, 
-                movementY = 0, 
-                timeArr=timeArr, 
+                movementX = d * 2,
+                movementY = 0,
+                timeArr=timeArr,
                 colorArr=colorArr)
             self.addTexture(speckTexture)
 
 
-    def addTexture(self, sprite): 
+    def addTexture(self, sprite):
         self.textures.append(sprite)
 
 
-    def draw(self): 
-        for texture in self.textures: 
+    def draw(self):
+        for texture in self.textures:
             texture.draw(self.viewport)
 
 
     def advance(self, deltaTime :float):
-        for texture in self.textures: 
+        for texture in self.textures:
             texture.advance(deltaTime)
-            if not texture.isActive(): 
+            if not texture.isActive():
                 self.textures.remove(texture)

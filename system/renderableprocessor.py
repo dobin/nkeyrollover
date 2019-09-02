@@ -1,7 +1,5 @@
-import esper
-import copy
 import logging
-from typing import List
+import esper
 
 from messaging import messaging, Messaging, Message, MessageType
 from config import Config
@@ -12,8 +10,6 @@ import system.gamelogic.enemy
 import system.gamelogic.player
 import system.renderable
 import system.groupid
-
-
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +37,7 @@ class RenderableProcessor(esper.Processor):
         )
         while msg is not None:
             for ent, (renderable, speechBubble, groupId) in self.world.get_components(
-                system.renderable.Renderable, 
+                system.renderable.Renderable,
                 system.graphics.speechbubble.SpeechBubble,
                 system.groupid.GroupId
             ):
@@ -62,14 +58,14 @@ class RenderableProcessor(esper.Processor):
         for message in messaging.get():
             damageSum = 0
 
-            if message.type is MessageType.PlayerAttack: 
+            if message.type is MessageType.PlayerAttack:
                 hitLocations = message.data['hitLocations']
                 damage = message.data['damage']
 
                 for ent, (groupId, renderable, attackable, enemy) in self.world.get_components(
                     system.groupid.GroupId,
-                    system.renderable.Renderable, 
-                    system.gamelogic.attackable.Attackable, 
+                    system.renderable.Renderable,
+                    system.gamelogic.attackable.Attackable,
                     system.gamelogic.enemy.Enemy
                 ):
                     if renderable.isHitBy(hitLocations):
@@ -98,8 +94,8 @@ class RenderableProcessor(esper.Processor):
 
                 for ent, (groupId, renderable, attackable, player) in self.world.get_components(
                     system.groupid.GroupId,
-                    system.renderable.Renderable, 
-                    system.gamelogic.attackable.Attackable, 
+                    system.renderable.Renderable,
+                    system.gamelogic.attackable.Attackable,
                     system.gamelogic.player.Player
                 ):
                     if renderable.isHitBy(hitLocations):
@@ -107,17 +103,17 @@ class RenderableProcessor(esper.Processor):
                             groupId=groupId.id,
                             type=DirectMessageType.receiveDamage,
                             data=damage
-                        )                        
+                        )
 
         #RecordHolder.recordAttack(
-        #    weaponType=self.weaponType, damage=damage, name=self.renderable.parent.name, 
+        #    weaponType=self.weaponType, damage=damage, name=self.renderable.parent.name,
         #    characterType=self.renderable.parent.entityType)
-        
+
 
     def render(self):
-        for l in self.renderOrder: 
+        for l in self.renderOrder:
             l.clear()
-        
+
         # add all elements to draw in the correct Z order
         # which is by y coordinates
         for ent, rend in self.world.get_component(system.renderable.Renderable):
@@ -125,7 +121,7 @@ class RenderableProcessor(esper.Processor):
                 #logging.info("REND: {} {} {}".format(rend, rend.z, rend.coordinates))
                 loc = rend.getLocation()
                 self.renderOrder[ loc.y + rend.z ].append(rend)
-            
+
         for l in self.renderOrder:
             for rend in l:
                 rend.draw()

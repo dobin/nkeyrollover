@@ -1,7 +1,7 @@
 from config import Config
 import sys
 
-class MockWin(object): 
+class MockWin(object):
     def __init__(self, rows, columns):
         self.space = 10
         self.initialRows = rows
@@ -12,26 +12,26 @@ class MockWin(object):
 
 
     def addstr(self, y, x, string, color=None):
-        for i, ch in enumerate(string): 
+        for i, ch in enumerate(string):
             self.addChInternal(y, x+i, ch, color)
         #print("addStr")
-    
 
-    def getCh(self): 
+
+    def getCh(self):
         print("GetCh")
 
 
-    def border(self): 
+    def border(self):
         y = self.space
 
-        if True: 
+        if True:
             # make border
             while y <= self.initialRows + self.space:
                 x = self.space
 
-                while x <= self.initialColumns + self.space: 
+                while x <= self.initialColumns + self.space:
 
-                    if y == self.space or y == self.space + self.initialRows: 
+                    if y == self.space or y == self.space + self.initialRows:
                         self.win[y][x] = '.'
                     elif x == self.space or x == self.space + self.initialColumns:
                         self.win[y][x] = '.'
@@ -44,7 +44,7 @@ class MockWin(object):
             while y <= self.initialRows + self.space:
 
                 x = self.space
-                while x <= self.initialColumns + self.space: 
+                while x <= self.initialColumns + self.space:
                     self.win[y][x] = '.'
 
                     x += 1
@@ -56,70 +56,70 @@ class MockWin(object):
         return self.win[ pos['y'] ][ pos['x'] ]
 
 
-    def addCh(self, y, x, char, color=None): 
+    def addCh(self, y, x, char, color=None):
         self.addChInternal(y, x, char, color)
 
 
-    def addChInternal(self, y, x, char, color=None): 
+    def addChInternal(self, y, x, char, color=None):
         self.win[ y+10 ][ x + 10] = char
 
 
     def getInternalPosFor(self, x, y):
         pos = {
-            'x': x+10, 
+            'x': x+10,
             'y': y+10
         }
         return pos
 
 
-    def draw(self): 
+    def draw(self):
         self.internalPrint()
 
 
-    def refresh(self): 
+    def refresh(self):
         pass
 
 
     def internalPrint(self):
         print("")
-        for xArr in self.win: 
+        for xArr in self.win:
             print("")
             for char in xArr:
-                if char is '': 
+                if char is '':
                     sys.stdout.write(' ')
-                else: 
+                else:
                     sys.stdout.write(char)
 
 
 
-    def keypad(self, n): 
+    def keypad(self, n):
         pass
 
 
-    def nodelay(self, n): 
+    def nodelay(self, n):
         pass
 
 
-    def clear(self): 
-        for y, yrow in enumerate(self.win): 
+    def clear(self):
+        for y, yrow in enumerate(self.win):
             for x, _ in enumerate(yrow):
                 self.win[y][x] = ''
 
     # used by hasttr() to check if unit test is being run
-    def isUnitTest(self): 
+    def isUnitTest(self):
         pass
 
 
 #class MockCurses(object):
-    
-def color_pair(self, n): 
+
+def color_pair(self, n):
     return n
 
-def initscr(self): 
+def initscr(self):
     pass
 
-def noecho(self): 
+def noecho(self):
     pass
 
-def cbreak(self): 
+def cbreak(self):
     pass

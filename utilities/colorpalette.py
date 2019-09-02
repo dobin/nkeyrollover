@@ -13,8 +13,8 @@ class ColorPalette(object):
     @staticmethod
     def cursesInitColor():
         # Initialize color pairs
-        curses.start_color()    
-        
+        curses.start_color()
+
         curses.init_pair(1, curses.COLOR_GREEN, 0)
         curses.init_pair(2, curses.COLOR_MAGENTA, 0)
         curses.init_pair(3, curses.COLOR_RED, 0)
@@ -34,44 +34,44 @@ class ColorPalette(object):
 
     @staticmethod
     def getColorByColor(color :Color):
-        if color is Color.brightwhite: 
+        if color is Color.brightwhite:
             return curses.color_pair(7) | curses.A_BOLD
-        elif color is Color.white: 
+        elif color is Color.white:
             return curses.color_pair(7)
-        elif color is Color.grey: 
+        elif color is Color.grey:
             return curses.color_pair(8) | curses.A_BOLD
-        elif color is Color.black: 
+        elif color is Color.black:
             return curses.color_pair(8)
 
-        elif color is Color.brightblue: 
+        elif color is Color.brightblue:
             return curses.color_pair(5) | curses.A_BOLD
-        elif color is Color.blue: 
+        elif color is Color.blue:
             return curses.color_pair(5)
-        elif color is Color.brightcyan: 
+        elif color is Color.brightcyan:
             return curses.color_pair(6) | curses.A_BOLD
-        elif color is Color.cyan: 
+        elif color is Color.cyan:
             return curses.color_pair(6)
 
-        elif color is Color.brightyellow: 
+        elif color is Color.brightyellow:
             return curses.color_pair(4) | curses.A_BOLD
-        elif color is Color.yellow: 
+        elif color is Color.yellow:
             return curses.color_pair(4)
 
-        elif color is Color.brightred: 
+        elif color is Color.brightred:
             return curses.color_pair(3) | curses.A_BOLD
-        elif color is Color.red: 
+        elif color is Color.red:
             return curses.color_pair(3)
-        elif color is Color.brightmagenta: 
+        elif color is Color.brightmagenta:
             return curses.color_pair(2) | curses.A_BOLD
-        elif color is Color.magenta: 
+        elif color is Color.magenta:
             return curses.color_pair(2)
 
-        elif color is Color.brightgreen: 
+        elif color is Color.brightgreen:
             return curses.color_pair(1) | curses.A_BOLD
-        elif color is Color.green: 
+        elif color is Color.green:
             return curses.color_pair(1)
 
-        else: 
+        else:
             logger.error("Unknown color: " + str(color))
             return curses.color_pair(1)
 
@@ -88,26 +88,26 @@ class ColorPalette(object):
 
         if colorType is ColorType.particle:
             color = ColorPalette.getColorByColor(Color.brightmagenta)
-        
+
         elif colorType is ColorType.sprite: # only init?
             color = ColorPalette.getColorByColor(Color.green)
-        
+
         elif colorType is ColorType.specktexture:
             color = ColorPalette.getColorByColor(Color.grey)
-        
+
         elif colorType is ColorType.worldmap:
             color = ColorPalette.getColorByColor(Color.grey)
-        
+
         elif colorType is ColorType.scene:
             color = ColorPalette.getColorByColor(Color.white)
-        
+
         elif colorType is ColorType.world:
             color = ColorPalette.getColorByColor(Color.grey)
-        
+
         elif colorType is ColorType.menu:
             color = ColorPalette.getColorByColor(Color.white)
-        
-        else: 
+
+        else:
             logger.error("Unknown colortype " + str(colorType))
 
         return color
@@ -160,7 +160,7 @@ class ColorPalette(object):
             return None
 
 
-    @staticmethod 
+    @staticmethod
     def getColorByEntityType(entityType: EntityType, viewport :Viewport):
         color = 0
 
@@ -170,14 +170,14 @@ class ColorPalette(object):
         if hasattr(viewport, 'isUnitTest'):
             return color
 
-        if entityType is EntityType.player: 
-            return curses.color_pair(7) | curses.A_BOLD 
+        if entityType is EntityType.player:
+            return curses.color_pair(7) | curses.A_BOLD
         elif entityType is EntityType.enemy:
             return curses.color_pair(5)
         elif entityType is EntityType.takedamage:
             return curses.color_pair(3)
         elif entityType is EntityType.weapon:
             return curses.color_pair(4)
-        else: 
+        else:
             logger.error("unknown color type: " + str(entityType))
             return curses.color_pair(1)

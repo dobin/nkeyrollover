@@ -1,6 +1,6 @@
 from enum import Enum
 
-class PhenomenaType(Enum): 
+class PhenomenaType(Enum):
     hit = 0
     roflcopter = 1
     hitSquare = 2
@@ -11,4 +11,3 @@ class PhenomenaType(Enum):
     tree2 = 6
     tree3 = 7
     tree4 = 8
-    

@@ -1,6 +1,6 @@
 
 def getUnicode(idx):
-    table = [ 
+    table = [
         0x0000,
         0x0001,
         0x0002,

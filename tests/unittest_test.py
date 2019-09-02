@@ -21,8 +21,8 @@ logger = logging.getLogger(__name__)
 
 def test_weaponHit():
     logging.basicConfig(
-        filename='app.log', 
-        filemode='a', 
+        filename='app.log',
+        filemode='a',
         level=logging.DEBUG,
         format='%(asctime)s %(levelname)07s %(name)32s: %(message)s')
 
@@ -33,11 +33,11 @@ def test_weaponHit():
         win = curses.newwin(Config.rows, Config.columns)
         curses.noecho()
         curses.cbreak()
-        win.keypad(1) 
-        curses.curs_set(0)    
+        win.keypad(1)
+        curses.curs_set(0)
         win.nodelay(1) # make getch() nonblocking
         # Initialize color pairs
-        curses.start_color()    
+        curses.start_color()
         curses.init_pair(1, curses.COLOR_GREEN, 0)
         curses.init_pair(2, curses.COLOR_MAGENTA, 0)
         curses.init_pair(3, curses.COLOR_RED, 0)
@@ -48,7 +48,7 @@ def test_weaponHit():
         win.clear()
         win.border()
         # end curses
-    else: 
+    else:
         win = None
 
     world = FakeWorld(win)
@@ -77,8 +77,8 @@ def test_weaponHit():
     if doCurses:
         enemy.draw()
         world.getPlayer().draw()
-        for loc in locs: 
-            win.addstr(loc.y, loc.x, ',') 
+        for loc in locs:
+            win.addstr(loc.y, loc.x, ',')
 
         win.refresh()
         time.sleep(2)

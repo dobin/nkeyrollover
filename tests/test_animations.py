@@ -1,5 +1,5 @@
 import unittest
-import logging 
+import logging
 
 from tests.fakeworld import FakeWorld
 import tests.mockcurses as curses
@@ -13,21 +13,21 @@ from sprite.sprite import Sprite
 
 
 class AnimationTest(unittest.TestCase):
-    def test_animationParticle(self): 
-        # check if area skill hits enemy 
+    def test_animationParticle(self):
+        # check if area skill hits enemy
         win = curses.newwin(Config.rows, Config.columns)
         world = FakeWorld(win)
 
         logging.basicConfig(
-            filename='app.log', 
-            filemode='a', 
+            filename='app.log',
+            filemode='a',
             level=logging.DEBUG,
             format='%(asctime)s %(levelname)07s %(name)32s: %(message)s')
 
         basex = 20
         basey = 20
 
-        p = Particle(viewport=world.viewport, x=basex, y=basey, life=30, 
+        p = Particle(viewport=world.viewport, x=basex, y=basey, life=30,
             angle=180, speed=0.2, active=True)
         win.border()
 
@@ -57,9 +57,9 @@ class AnimationTest(unittest.TestCase):
         self.assertTrue( win.peek(basex, basey) == '' )
         self.assertTrue( win.peek(basex-1, basey) == '' )
         self.assertFalse( win.peek(basex-2, basey) == '' )
-        
 
-    def test_texturecoordinates(self): 
+
+    def test_texturecoordinates(self):
         win = curses.newwin(Config.rows, Config.columns)
         world = FakeWorld(win)
 
@@ -68,7 +68,7 @@ class AnimationTest(unittest.TestCase):
 
 
         texture :PhenomenaTexture = PhenomenaTexture(
-            phenomenaType=PhenomenaType.hit, 
+            phenomenaType=PhenomenaType.hit,
             parentSprite=sprite)
         texture.changeAnimation(PhenomenaType.hit, Direction.left)
         coords = texture.getTextureHitCoordinates()
@@ -85,7 +85,7 @@ class AnimationTest(unittest.TestCase):
         self.assertTrue(coords[1].x == 0 and coords[1].y == 1)
         self.assertTrue(coords[2].x == 1 and coords[2].y == 0)
         self.assertTrue(coords[3].x == 1 and coords[3].y == 1)
-        
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,6 +1,6 @@
 from enum import Enum
 
-class ColorType(Enum): 
+class ColorType(Enum):
     particle = 0
     sprite = 1
     specktexture = 2

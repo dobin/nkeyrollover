@@ -1,30 +1,13 @@
-import esper
-
-from enum import Enum 
 import logging
 
-from utilities.recordholder import RecordHolder
 from sprite.coordinates import Coordinates
-from utilities.timer import Timer
-from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
 from config import Config
-from entities.entity import Entity
-from entities.entitytype import EntityType
-from entities.character import Character
-from sprite.direction import Direction
-from entities.character import Character
 from entities.weapontype import WeaponType
-from world.viewport import Viewport
-from typing import List
-from utilities.colorpalette import ColorPalette
-from utilities.color import Color
-
-import system.renderable
-import system.gamelogic.attackable 
+from utilities.recordholder import RecordHolder
+from utilities.timer import Timer
 
 from messaging import messaging, Messaging, Message, MessageType
-
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +30,7 @@ class OffensiveAttack():
         self.selectedWeaponKey :str = '1'
 
         self.damage = {
-            WeaponType.hit: 50, 
+            WeaponType.hit: 50,
             WeaponType.hitSquare: 50,
             WeaponType.hitLine: 50,
             WeaponType.jumpKick: 50
@@ -86,9 +69,9 @@ class OffensiveAttack():
             return PhenomenaType.hit
         elif self.weaponType is WeaponType.hitSquare:
             return PhenomenaType.hitSquare
-        elif self.weaponType is WeaponType.hitLine: 
+        elif self.weaponType is WeaponType.hitLine:
             return PhenomenaType.hitLine
-        elif self.weaponType is WeaponType.jumpKick: 
+        elif self.weaponType is WeaponType.jumpKick:
             return PhenomenaType.hit
 
 
@@ -106,22 +89,22 @@ class OffensiveAttack():
             hitLocations = self.renderable.texture.getTextureHitCoordinates()
         elif self.weaponType is WeaponType.hitSquare:
             self.renderable.texture.changeAnimation(PhenomenaType.hitSquare, self.renderable.parent.direction)
-            hitLocations = self.renderable.texture.getTextureHitCoordinates()        
-        elif self.weaponType is WeaponType.hitLine: 
+            hitLocations = self.renderable.texture.getTextureHitCoordinates()
+        elif self.weaponType is WeaponType.hitLine:
             self.renderable.texture.changeAnimation(PhenomenaType.hitLine, self.renderable.parent.direction)
             hitLocations = self.renderable.texture.getTextureHitCoordinates()
-        elif self.weaponType is WeaponType.jumpKick: 
+        elif self.weaponType is WeaponType.jumpKick:
             self.renderable.texture.changeAnimation(PhenomenaType.hit, self.renderable.parent.direction)
             hitLocations = []
-        
+
         messageType = None
         if self.isPlayer:
             messageType = MessageType.PlayerAttack
-        else: 
+        else:
             messageType = MessageType.EnemyAttack
 
         messaging.add(
-            type=messageType, 
+            type=messageType,
             data= {
                 'hitLocations': hitLocations,
                 'damage': self.damage[ self.weaponType ]
@@ -136,7 +119,7 @@ class OffensiveAttack():
         if self.durationTimer.isActive() and self.durationTimer.timeIsUp():
             self.renderable.setActive(False)
 
-    def getWeaponStr(self): 
+    def getWeaponStr(self):
         return self.selectedWeaponKey
 
 

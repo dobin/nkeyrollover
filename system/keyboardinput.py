@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 class KeyboardInput(object):
-    def __init__(self, world): 
+    def __init__(self, world):
         self.world = world
         self.viewport = world.viewport
 
@@ -35,10 +35,10 @@ class KeyboardInput(object):
                 self.world.toggleStats()
 
             if key == 266: # f2
-                self.world.toggleShowEnemyWanderDestination()                
+                self.world.toggleShowEnemyWanderDestination()
 
             messaging.add(
-                type=MessageType.PlayerKeypress, 
+                type=MessageType.PlayerKeypress,
                 data=key)
 
             player = self.world.esperWorld.component_for_entity(self.world.player, Player)

@@ -22,8 +22,8 @@ class AnimationTexture(Texture):
         super(AnimationTexture, self).__init__(parentSprite=parentSprite)
         self.animation :Animation = None
         self.init()
-        
-    
+
+
     def init(self):
         self.setActive(True)
         self.offset.x = 0
@@ -31,7 +31,7 @@ class AnimationTexture(Texture):
         self.resetAnimation()
 
 
-    def resetAnimation(self): 
+    def resetAnimation(self):
         """Start animation from the beginning"""
         self.frameIndex = 0
         self.frameTimeLeft = 0
@@ -49,14 +49,14 @@ class AnimationTexture(Texture):
             return
 
         self.frameIndex = (self.frameIndex + 1) % self.animation.frameCount
- 
+
 
     def advance(self, deltaTime):
-        if self.animation is None: 
+        if self.animation is None:
             return
 
         # no need to advance stuff which is forever
-        if (self.animation.frameTime is None or len(self.animation.frameTime) == 0) and self.animation.endless == True: 
+        if (self.animation.frameTime is None or len(self.animation.frameTime) == 0) and self.animation.endless == True:
             return
 
         # not active, no work
@@ -64,12 +64,12 @@ class AnimationTexture(Texture):
             return
 
         # done in advanceStep()
-        if self.animation.advanceByStep: 
+        if self.animation.advanceByStep:
             return
 
         self.frameTimeLeft -= deltaTime
         if self.frameTimeLeft <= 0:
-            # animation ended, check if we need to restart it, 
+            # animation ended, check if we need to restart it,
             # or take the next one
             if self.animation.endless:
                 # endless, just advance
@@ -80,12 +80,12 @@ class AnimationTexture(Texture):
                 if self.frameIndex == self.animation.frameCount - 1:
                     self.setActive(False)
                     return
-                else: 
-                    if self.frameIndex >= len( self.animation.frameTime ): 
+                else:
+                    if self.frameIndex >= len( self.animation.frameTime ):
                         logger.error("Frameindex {} larget than frametime arr {}".format(self.frameIndex, self.animation.frameTime))
                     self.frameTimeLeft = self.animation.frameTime[ self.frameIndex ]
                     self.frameIndex = (self.frameIndex + 1) % self.animation.frameCount
-    
+
 
     def draw(self, viewport):
         if not self.isActive():
@@ -93,7 +93,7 @@ class AnimationTexture(Texture):
             return
 
         pos = self.getLocation()
-        if self.frameIndex >= len(self.animation.arr): 
+        if self.frameIndex >= len(self.animation.arr):
             raise Exception("Trying to access frameIndex {} on array with len {}, actual len{}"
                 .format(self.frameIndex, self.animation.frameCount, len(self.animation.arr)))
 
@@ -114,20 +114,20 @@ class AnimationTexture(Texture):
                     viewport.addstr(
                         pos.y + y,
                         pos.x + x,
-                        column, 
+                        column,
                         color)
 
                 x += 1
             y += 1
 
 
-    def getCurrentFrameCopy(self): 
+    def getCurrentFrameCopy(self):
         return self.animation.arr[self.frameIndex].copy()
 
 
     def getAnimationTime(self) -> float:
         """Return sum of all animation times in current sprite"""
         n = 0.0
-        for time in self.animation.frameTime: 
+        for time in self.animation.frameTime:
             n += time
-        return n        
+        return n

@@ -30,7 +30,7 @@ class Config:
         'y': 13,
     }
 
-    devMode = False
+    devMode = True
     enemyMovement = True # freeze enemies for tests?
     showEnemyWanderDest = True
 
@@ -39,7 +39,7 @@ class Config:
     announceDamage = 350 # min amount of damage done
     maxParticles = 128
     movementKeysPerSec = 20.0
-    
+
     playerAttacksCd = 0.2
 
     version = str(0.02)

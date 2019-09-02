@@ -1,27 +1,18 @@
-import esper
-import copy
 import logging
-from typing import List
+import esper
 
-from sprite.coordinates import Coordinates, ExtCoordinates
-from entities.character import Character
-from utilities.colorpalette import ColorPalette
-from utilities.colortype import ColorType
-from utilities.timer import Timer
-from utilities.color import Color
-from sprite.direction import Direction
-from texture.character.characteranimationtype import CharacterAnimationType
-from messaging import messaging, Messaging, Message, MessageType
 from config import Config
-from utilities.utilities import Utility
-
+from sprite.coordinates import Coordinates, ExtCoordinates
+from sprite.direction import Direction
 import system.gamelogic.attackable
 import system.gamelogic.enemy
 import system.gamelogic.player
 import system.renderable
 import system.groupid
+from messaging import messaging, MessageType
+from utilities.utilities import Utility
 
-from directmessaging import directMessaging, DirectMessage, DirectMessageType
+from directmessaging import directMessaging, DirectMessageType
 
 
 logger = logging.getLogger(__name__)
@@ -36,11 +27,11 @@ class MovementProcessor(esper.Processor):
         self.move()
 
 
-    def move(self): 
+    def move(self):
         # findplayer
         for ent, (groupId, player, renderable) in self.world.get_components(
-            system.groupid.GroupId, 
-            system.gamelogic.player.Player, 
+            system.groupid.GroupId,
+            system.gamelogic.player.Player,
             system.renderable.Renderable
         ):
             msg = directMessaging.get(
@@ -56,12 +47,12 @@ class MovementProcessor(esper.Processor):
                         renderable.texture.width,
                         renderable.texture.height)
                     messaging.add(
-                        type = MessageType.PlayerLocation, 
+                        type = MessageType.PlayerLocation,
                         data = extcords)
 
                 msg = directMessaging.get(
                     messageType = DirectMessageType.movePlayer
-                )  
+                )
 
         # enemies
         msg = directMessaging.get(
@@ -70,17 +61,17 @@ class MovementProcessor(esper.Processor):
         while msg is not None:
             entity = Utility.findCharacterByGroupId(self.world, msg.groupId)
             meRenderable = self.world.component_for_entity(
-                entity, system.renderable.Renderable)            
+                entity, system.renderable.Renderable)
             self.moveRenderable(
                 meRenderable,
                 msg.groupId,
-                msg.data['x'], 
-                msg.data['y'], 
+                msg.data['x'],
+                msg.data['y'],
                 msg.data['dontChangeDirection'])
 
             msg = directMessaging.get(
                 messageType = DirectMessageType.moveEnemy
-            )  
+            )
 
 
     def moveRenderable(self, renderable, groupId, x :int =0, y :int =0, dontChangeDirection :bool =False):
@@ -93,7 +84,7 @@ class MovementProcessor(esper.Processor):
             if True:
                 renderable.coordinates.x += 1
                 didMove = True
-                
+
                 if not dontChangeDirection and renderable.direction is not Direction.right:
                     renderable.direction = Direction.right
                     didChangeDirection = True
@@ -110,7 +101,7 @@ class MovementProcessor(esper.Processor):
             if renderable.coordinates.y < Config.rows - renderable.texture.height - 1:
                 renderable.coordinates.y += 1
                 didMove = True
-        
+
         elif y < 0:
             if renderable.coordinates.y >  Config.areaMoveable['miny'] - renderable.texture.height + 1:
                 renderable.coordinates.y -= 1

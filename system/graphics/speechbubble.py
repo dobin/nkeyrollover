@@ -1,4 +1,4 @@
-import logging 
+import logging
 
 from texture.speechanimationmanager import SpeechAnimationManager
 from sprite.direction import Direction
@@ -6,12 +6,12 @@ from sprite.direction import Direction
 logger = logging.getLogger(__name__)
 
 
-class SpeechBubble(object): 
+class SpeechBubble(object):
     def __init__(
         self, renderable
     ):
         self.renderable = renderable
-        self.speechAnimationManager = SpeechAnimationManager() 
+        self.speechAnimationManager = SpeechAnimationManager()
 
 
     def changeText(self, displayText=None, direction=Direction.right):

@@ -15,10 +15,10 @@ from texture.texture import Texture
 from world.viewport import Viewport
 
 
-class Map(object): 
+class Map(object):
     """Draws the map on the screen"""
 
-    def __init__(self, viewport :Viewport, world): 
+    def __init__(self, viewport :Viewport, world):
         self.viewport :Viewport = viewport
         self.playerInMapX :int = 0
         self.world = world
@@ -41,7 +41,7 @@ class Map(object):
             x += 1
 
 
-    def draw(self): 
+    def draw(self):
         self.drawXp()
         self.drawTextures()
 
@@ -79,7 +79,7 @@ class Map(object):
             x += 1
 
 
-    def loadMapTextures(self, map): 
+    def loadMapTextures(self, map):
         t = PhenomenaTexture(parentSprite=None, phenomenaType=PhenomenaType.tree1)
         t.setLocation(50, 8 - t.height)
         self.addTextureToMap(t)
@@ -97,19 +97,19 @@ class Map(object):
         self.mapTextures[x].append(texture)
 
 
-    def openXpMap(self, filename): 
-        with gzip.open(filename, "rb") as f: 
+    def openXpMap(self, filename):
+        with gzip.open(filename, "rb") as f:
             data = f.read()
         xpData = xp_loader.load_xp_string(data)
         self.xpmap = xpData
         self.convertMapAnsiToUnicode()
 
 
-    def convertMapAnsiToUnicode(self): 
+    def convertMapAnsiToUnicode(self):
         xp_file_layer = self.xpmap['layer_data'][0]
         for x in range(xp_file_layer['width']):
             for y in range(xp_file_layer['height']):
-                # {'keycode': 65, 'fore_r': 178, 'fore_g': 134, 'fore_b': 0, 'back_r': 0, 
+                # {'keycode': 65, 'fore_r': 178, 'fore_g': 134, 'fore_b': 0, 'back_r': 0,
                 # 'back_g': 0, 'back_b': 0}
                 char = xp_file_layer['cells'][x][y]['keycode']
                 color = ColorPalette.getColorByRgb(
@@ -119,11 +119,11 @@ class Map(object):
                 )
                 # we only accept official palette colors. if it is not recognized, ignore
                 # character completely (artefact? misclick?)
-                if color is not None: 
+                if color is not None:
                     xp_file_layer['cells'][x][y]['color'] = color
                     if char != 32 and char != 0:
                         xp_file_layer['cells'][x][y]['keycode'] = chr(ansitounicode.getUnicode(char))
-                    else: 
+                    else:
                         xp_file_layer['cells'][x][y]['keycode'] = ''
-                else: 
-                    xp_file_layer['cells'][x][y]['keycode'] = ''                        
+                else:
+                    xp_file_layer['cells'][x][y]['keycode'] = ''

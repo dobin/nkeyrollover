@@ -7,7 +7,7 @@ class SpeechAnimationManager(object):
     def __init__(self):
         pass
 
-    def getAnimation(self, displayText=None, direction=Direction.right): 
+    def getAnimation(self, displayText=None, direction=Direction.right):
         animation = Animation()
 
         animation.width = len(displayText) + 2
@@ -18,7 +18,7 @@ class SpeechAnimationManager(object):
         ]
         animation.frameColors = [
             ColorPalette.getColorByColor(Color.white)
-        ]           
+        ]
         animation.endless = False
         animation.advanceByStep = False
 

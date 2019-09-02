@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import curses, random, time, signal, sys
+import curses, time, signal, sys
 import logging
 
 from world.scene import Scene
@@ -15,13 +15,12 @@ from system.gamelogic.attackable import Attackable
 from system.gamelogic.player import Player
 from system.offensiveattack import OffensiveAttack
 
-import locale 
+import locale
 current_milli_time = lambda: int(round(time.time() * 1000))
 
-from messaging import messaging, Messaging, Message, MessageType
 
-class Keyrollover(object): 
-    def __init__(self): 
+class Keyrollover(object):
+    def __init__(self):
         self.win = None         # canvas to draw
         self.menuwin = None
         self.world = None       # the world, with all textures and units
@@ -29,20 +28,20 @@ class Keyrollover(object):
         self.init()
 
 
-    def init(self): 
+    def init(self):
         locale.setlocale(locale.LC_ALL, '')
         Utility.setupLogger()
 
         if Config.devMode:
             logging.basicConfig(
-                filename='app.log', 
-                filemode='a', 
+                filename='app.log',
+                filemode='a',
                 level=logging.INFO,
                 format='%(asctime)s %(levelname)07s %(name)32s: %(message)s')
-        else: 
+        else:
             logging.basicConfig(
-                filename='app.log', 
-                filemode='a', 
+                filename='app.log',
+                filemode='a',
                 level=logging.INFO,
                 format='%(asctime)s %(levelname)07s %(name)32s: %(message)s')
 
@@ -55,8 +54,8 @@ class Keyrollover(object):
         self.win = curses.newwin(Config.rows, Config.columns, 2, 0)
         curses.noecho()
         curses.cbreak()
-        self.win.keypad(1) 
-        curses.curs_set(0)    
+        self.win.keypad(1)
+        curses.curs_set(0)
         self.win.nodelay(1) # make getch() nonblocking
         ColorPalette.cursesInitColor()
 
@@ -76,7 +75,7 @@ class Keyrollover(object):
         self.currentTime = self.startTime
         self.workTime = 0
 
-    def loop(self): 
+    def loop(self):
         n = 0
         targetFrameTime = 1.0 / Config.fps
         deltaTime = targetFrameTime # we try to keep it...
@@ -109,7 +108,7 @@ class Keyrollover(object):
                 logging.error("Sleep for negative amount: " + str(targetSleepTime))
             else:
                 time.sleep(targetSleepTime)
-            n = n + 1 
+            n = n + 1
 
         # Clean up before exiting
         curses.nocbreak()
@@ -120,7 +119,7 @@ class Keyrollover(object):
 
     def drawStatusbar(self, n):
         # fps = 0
-        # if n > 100: 
+        # if n > 100:
         #    fps = 1000 * (float)(n) / (float)(current_milli_time() - self.startTime)
         #    #fps = self.workTime * 1000.0
 
@@ -148,10 +147,10 @@ class Keyrollover(object):
 
         basex = 54
         n = 0
-        for skill in skills.skillStatus: 
-            if skills.isRdy(skill): 
+        for skill in skills.skillStatus:
+            if skills.isRdy(skill):
                 self.menuwin.addstr(1, basex + n, skill, curses.color_pair(9))
-            else: 
+            else:
                 self.menuwin.addstr(1, basex + n, skill, curses.color_pair(10))
 
             n += 1
@@ -163,15 +162,15 @@ class Keyrollover(object):
             self.world.player, Player)
 
         weaponIdx = 62
-        self.menuwin.addstr(1, 
-            weaponIdx, 
-            'W:' + playerOffensiveAttack.getWeaponStr(), 
+        self.menuwin.addstr(1,
+            weaponIdx,
+            'W:' + playerOffensiveAttack.getWeaponStr(),
             color)
 
         weaponIdx = 62
-        self.menuwin.addstr(1, 
-            weaponIdx, 
-            'APM:' + str(int(player.characterStatus.getApm().getApm() * 60)), 
+        self.menuwin.addstr(1,
+            weaponIdx,
+            'APM:' + str(int(player.characterStatus.getApm().getApm() * 60)),
             color)
 
 
@@ -189,7 +188,7 @@ def main(stdscr):
     signal.signal(signal.SIGINT, signal_handler)
     keyrollover = Keyrollover()
     keyrollover.loop()
-    
+
 
 if __name__ == '__main__':
     curses.wrapper(main)

@@ -20,26 +20,26 @@ class StateDying(State):
         meRenderable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.renderable.Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy)
 
 
-        if random.choice([True, False]): 
+        if random.choice([True, False]):
             logger.info(self.name + " Death animation deluxe")
             animationIndex = random.randint(0, 1)
             meEnemy.world.textureEmiter.makeExplode(
-                meRenderable.texture, 
-                meRenderable.direction, 
+                meRenderable.texture,
+                meRenderable.direction,
                 None)
             meRenderable.texture.changeAnimation(
-                CharacterAnimationType.dying, 
-                meRenderable.direction, 
+                CharacterAnimationType.dying,
+                meRenderable.direction,
                 animationIndex)
             meRenderable.setActive(False)
-        else: 
+        else:
             animationIndex = random.randint(0, 1)
             meRenderable.texture.changeAnimation(
-                CharacterAnimationType.dying, 
-                meRenderable.direction, 
+                CharacterAnimationType.dying,
+                meRenderable.direction,
                 animationIndex)
 
 

@@ -2,30 +2,30 @@ from .mockwin import MockWin
 
 win = None
 
-def color_pair(n): 
+def color_pair(n):
     return n
 
-def initscr(): 
+def initscr():
     pass
 
-def noecho(): 
+def noecho():
     pass
 
-def cbreak(): 
+def cbreak():
     pass
 
 
-def newwin(rows, columns): 
+def newwin(rows, columns):
     win = MockWin(rows, columns)
     return win
 
-def start_color(): 
+def start_color():
     pass
 
-def init_pair(n, color, i): 
+def init_pair(n, color, i):
     pass
 
-def curs_set(n): 
+def curs_set(n):
     pass
 
 COLOR_GREEN = 0

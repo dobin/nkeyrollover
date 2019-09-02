@@ -17,7 +17,7 @@ class StateSpawn(State):
 
     def on_enter(self):
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy)
 
         self.setTimer( meEnemy.enemyInfo.spawnTime )
 
@@ -26,8 +26,8 @@ class StateSpawn(State):
         if self.timeIsUp():
             self.brain.pop()
 
-            if Config.devMode: 
+            if Config.devMode:
                 # make him come straight at us, sucker
                 self.brain.push("chase")
-            else: 
+            else:
                 self.brain.push("wander")

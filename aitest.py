@@ -3,7 +3,7 @@ import entities.enemy.aifsm as aifsm
 from utilities.timer import Timer
 
 import sys
-import select 
+import select
 
 
 class Agent:
@@ -13,14 +13,14 @@ class Agent:
 
         ###
         self.brain = Brain(self)
-        
+
         self.stateData = {
             'spawn': {
                 'state_time': 1.5,
             },
             'chase': {
                 'state_time': 1.5,
-            }, 
+            },
             'attack': {
                 'state_time': 2.0,
             },
@@ -42,7 +42,7 @@ class Agent:
         self.attackTimer.init()
 
     def sAttack(self):
-    	if self.attackTimer.timeIsUp(): 
+    	if self.attackTimer.timeIsUp():
             print("I'm attacking!")
             self.attackTimer.reset()
 
@@ -50,8 +50,8 @@ class Agent:
     def sWanderInit(self):
         self.wanderTimer.init()
 
-    def sWander(self): 
-        if self.wanderTimer.timeIsUp(): 
+    def sWander(self):
+        if self.wanderTimer.timeIsUp():
             print("I'm moving / wander!")
             self.wanderTimer.reset()
 
@@ -59,20 +59,20 @@ class Agent:
     def sChaseInit(self):
         self.chaseTimer.init()
 
-    def sChase(self): 
-        if self.chaseTimer.timeIsUp(): 
+    def sChase(self):
+        if self.chaseTimer.timeIsUp():
             print("I'm moving / chasing!")
             self.chaseTimer.reset()
 
 
     # Game Mechanics
-    def gmKill(self): 
+    def gmKill(self):
         self.brain.pop()
         self.brain.push("dying")
 
 
     # Other
-    def setActive(self, active): 
+    def setActive(self, active):
         self.active = active
 
     def isPlayerClose(self):
@@ -89,11 +89,11 @@ class Agent:
 
 
 
-def getInput(): 
+def getInput():
     line = None
     if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
         line = sys.stdin.readline()
-    
+
     return line
 
 
@@ -107,13 +107,13 @@ if __name__ == "__main__":
     a.brain.register(aifsm.Wander)
     a.brain.register(aifsm.Dying)
     a.brain.push("spawn")
-    
+
     while True:
         a.advance(0.1)
         time.sleep(0.1)
 
         i = getInput()
-        if i is not None: 
+        if i is not None:
             if 'c' in i:
                 a.playerClose = not a.playerClose
                 print("Playerclose: " + str(a.playerClose))

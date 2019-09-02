@@ -14,11 +14,11 @@ logger = logging.getLogger(__name__)
 
 class CharacterTexture(AnimationTexture):
     def __init__(
-            self, 
+            self,
             characterType :CharacterType,
-            parentSprite :Sprite =None, 
-            characterAnimationType :CharacterAnimationType =None, 
-            direction :Direction =Direction.none, 
+            parentSprite :Sprite =None,
+            characterAnimationType :CharacterAnimationType =None,
+            direction :Direction =Direction.none,
             head :str =None,
             body :str =None,
         ):
@@ -28,23 +28,23 @@ class CharacterTexture(AnimationTexture):
             head=head, body=body, characterType=characterType)
 
         self.characterAnimationType = characterAnimationType
-        if characterAnimationType is not None: 
+        if characterAnimationType is not None:
             self.changeAnimation(characterAnimationType, direction)
             self.setActive(True)
-        else: 
+        else:
             self.setActive(False)
 
 
     def changeAnimation(
-            self, 
-            characterAnimationType :CharacterAnimationType, 
-            direction :Direction, 
+            self,
+            characterAnimationType :CharacterAnimationType,
+            direction :Direction,
             subtype :int =0
         ):
 
         self.characterAnimationType = characterAnimationType
         self.animation = self.characterAnimationManager.getAnimation(
             characterAnimationType, direction, subtype)
-        self.init()            
+        self.init()
         self.width = self.animation.width
         self.height = self.animation.height

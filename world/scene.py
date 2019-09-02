@@ -1,6 +1,6 @@
 import curses
 import time
-import logging 
+import logging
 from enum import Enum
 
 from config import Config
@@ -28,7 +28,7 @@ class IntroSceneState(Enum):
     flyup = 4       # fly up
     done = 5        # start the game
 
-            
+
 
 class Scene(object):
     """Play predefined scripts on the screen"""
@@ -41,11 +41,11 @@ class Scene(object):
     def titleScene(self):
         targetFrameTime = 1.0 / Config.fps
         deltaTime = targetFrameTime # we try to keep it..
-        
+
         worldSprite = Sprite(viewport=self.viewport, parentSprite=None)
 
         entityIntro = Entity(
-            viewport=self.viewport, parentSprite=worldSprite, 
+            viewport=self.viewport, parentSprite=worldSprite,
             entityType=EntityType.player)
         textureIntro = PhenomenaTexture(
             phenomenaType=PhenomenaType.intro, parentSprite=entityIntro)
@@ -55,12 +55,12 @@ class Scene(object):
         # entityIntro.setColor( curses.color_pair(10) )
 
         myTimer = Timer(3)
-            
+
         while True:
             self.win.erase()
             #self.win.border()
 
-            if myTimer.timeIsUp(): 
+            if myTimer.timeIsUp():
                 break
 
             self.win.addstr(24, 75,  Config.version, curses.color_pair(1))
@@ -80,31 +80,31 @@ class Scene(object):
     def introScene(self):
         self.win.clear()
         self.win.border()
-        self.win.refresh()    
+        self.win.refresh()
 
         timeStart = 0
         timeEnd = 0
         workTime = 0
-        n = 0         
+        n = 0
         targetFrameTime = 1.0 / Config.fps
         deltaTime = targetFrameTime # we try to keep it...
 
         worldSprite = Sprite(viewport=self.viewport, parentSprite=None)
 
         entityCopter = Entity(
-            viewport=self.viewport, parentSprite=worldSprite, 
+            viewport=self.viewport, parentSprite=worldSprite,
             entityType=EntityType.player)
         textureCopter = PhenomenaTexture(
             phenomenaType=PhenomenaType.roflcopter, parentSprite=entityCopter)
-        entityCopter.setLocation(Coordinates(13, -5))        
+        entityCopter.setLocation(Coordinates(13, -5))
         textureCopter.setActive(False)
 
         entityPlayer = Entity(
-            viewport=self.viewport, parentSprite=worldSprite, 
+            viewport=self.viewport, parentSprite=worldSprite,
             entityType=EntityType.player)
         texturePlayer = CharacterTexture(
-            characterAnimationType=CharacterAnimationType.standing, 
-            parentSprite=entityPlayer, 
+            characterAnimationType=CharacterAnimationType.standing,
+            parentSprite=entityPlayer,
             characterType=CharacterType.player)
         texturePlayer.setActive(False)
 
@@ -139,15 +139,15 @@ class Scene(object):
                     entityCopter.coordinates.y += 1
 
                 # for next scene: Drop
-                if entityCopter.coordinates.y == 8: 
+                if entityCopter.coordinates.y == 8:
                     myTimer.setTimer(0.1)
                     logger.debug("Scene: Go to State: Drop")
                     state = IntroSceneState.drop
                     entityPlayer.coordinates.x = 24
                     entityPlayer.coordinates.y = 13
-                    texturePlayer.setActive(True)                    
+                    texturePlayer.setActive(True)
 
-            elif state is IntroSceneState.drop: 
+            elif state is IntroSceneState.drop:
                 # for next scene: Flyup
                 if myTimer.timeIsUp():
                     myTimer.reset()
@@ -156,12 +156,12 @@ class Scene(object):
                 if entityCopter.coordinates.y == -5:
                     state = IntroSceneState.done
 
-            elif state is IntroSceneState.done: 
+            elif state is IntroSceneState.done:
                 break
 
             # elements
             texturePlayer.advance(deltaTime)
-            texturePlayer.draw(self.viewport)            
+            texturePlayer.draw(self.viewport)
             textureCopter.advance(deltaTime)
             textureCopter.draw(self.viewport)
 

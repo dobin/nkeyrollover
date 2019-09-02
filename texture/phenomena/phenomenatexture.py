@@ -8,12 +8,12 @@ from texture.animationtexture import AnimationTexture
 logger = logging.getLogger(__name__)
 
 
-class PhenomenaTexture(AnimationTexture): 
+class PhenomenaTexture(AnimationTexture):
     def __init__(self, parentSprite=None, phenomenaType=None, direction=None):
         super(PhenomenaTexture, self).__init__(parentSprite)
         self.phenomenaAnimationManager = PhenomenaAnimationManager()
 
-        if phenomenaType is not None: 
+        if phenomenaType is not None:
             self.changeAnimation(phenomenaType, direction)
 
 

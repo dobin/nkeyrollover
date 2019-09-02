@@ -28,7 +28,7 @@ class StateAttack(State):
 
         self.attackTimer.init()
         messaging.add(
-            type=MessageType.EntityAttack, 
+            type=MessageType.EntityAttack,
             groupId=meGroupId.getId(),
             data=None
         )
@@ -36,17 +36,17 @@ class StateAttack(State):
         self.attackTimer.setTimer(meRenderable.texture.getAnimationTime())
         self.setTimer( meRenderable.texture.getAnimationTime() )
 
- 
+
     def process(self, dt):
         self.attackTimer.advance(dt)
         meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.enemy.Enemy) 
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy)
 
-        if self.attackTimer.timeIsUp(): 
+        if self.attackTimer.timeIsUp():
             logger.warning(self.name + " I'm attacking!")
             self.attackTimer.reset()
             offensiveAttack = self.brain.owner.world.component_for_entity(
-                meEnemy.offensiveAttackEntity, 
+                meEnemy.offensiveAttackEntity,
                 OffensiveAttack)
             offensiveAttack.attack()
 

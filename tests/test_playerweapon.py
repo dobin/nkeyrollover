@@ -20,7 +20,7 @@ class PlayerWeaponTest(unittest.TestCase):
     def test_weaponHit(self):
         """Simple hitting an enemy right of the player with standard weapon"""
         Utility.setupLogger()
-        
+
         win = None
         world = FakeWorld(win, fakeViewPort=True)
 
@@ -29,7 +29,7 @@ class PlayerWeaponTest(unittest.TestCase):
         world.getPlayer().direction = Direction.right
 
         # set enemies
-        enemy = Enemy(viewport=world.viewport, parent=world.worldSprite, 
+        enemy = Enemy(viewport=world.viewport, parent=world.worldSprite,
             spawnBoundaries=None, world=world, name='bot')
         enemy.setLocation(Coordinates(13, 10))
         world.director.enemiesAlive.append(enemy)
@@ -47,7 +47,7 @@ class PlayerWeaponTest(unittest.TestCase):
     def test_weaponHitLine(self):
         """hitting an enemy left of the player with the line gun"""
         Utility.setupLogger()
-        
+
         win = None
         world = FakeWorld(win)
 
@@ -56,7 +56,7 @@ class PlayerWeaponTest(unittest.TestCase):
         world.getPlayer().direction = Direction.left
 
         # enemy
-        enemy = Enemy(viewport=world.viewport, parent=world.worldSprite, 
+        enemy = Enemy(viewport=world.viewport, parent=world.worldSprite,
             spawnBoundaries=None, world=world, name='bot')
         enemy.setLocation(Coordinates(4, 10))
         world.director.enemiesAlive.append(enemy)
