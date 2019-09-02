@@ -8,11 +8,9 @@ logger = logging.getLogger(__name__)
 
 
 class Enemy():
-    def __init__(self, player, name, esperData, director, world, viewport):
+    def __init__(self, player, name, world, viewport):
         self.enemyMovement :bool = True
         self.player = player #
-        self.esperData = esperData
-        self.director = director #
         self.world = world #
         self.viewport = viewport #
 

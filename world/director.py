@@ -86,17 +86,12 @@ class Director(object):
         tenemy = Enemy(
             player=self.world.playerRendable,
             name=name,
-            esperData=esperData,
-            director=self,
             world=self.world,
             viewport=self.viewport)
         ai = Ai(
-            player=self.world.playerRendable,
             name=name,
             esperData=esperData,
-            director=self,
-            world=self.world,
-            viewport=self.viewport)
+            director=self)
         self.world.esperWorld.add_component(enemy, ai)
 
         self.world.esperWorld.add_component(enemy, tenemy)

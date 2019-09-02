@@ -15,13 +15,9 @@ logger = logging.getLogger(__name__)
 
 
 class Ai():
-    def __init__(self, player, name, esperData, director, world, viewport):
-        self.enemyMovement :bool = True
-        self.player = player #
+    def __init__(self, esperData, director, name):
         self.esperData = esperData
         self.director = director #
-        self.world = world #
-        self.viewport = viewport #
         self.offensiveAttackEntity = None
 
         self.name :str = 'Bot' + name
