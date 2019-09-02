@@ -44,8 +44,6 @@ class PlayerProcessor(esper.Processor):
 
     def process(self, deltaTime):
         self.advance(deltaTime)
-        self.animationUpdateMove()
-        self.animationUpdateAttack()
 
 
     def advance(self, deltaTime):
@@ -53,37 +51,3 @@ class PlayerProcessor(esper.Processor):
             system.gamelogic.player.Player
         ):
             player.advance(deltaTime)
-
-
-    def animationUpdateMove(self):
-        messages = messaging.get()
-        for msg in messages:
-            if msg.type == MessageType.EntityMoved:
-                entity = Utility.findCharacterByGroupId(self.world, msg.groupId)
-                playerRenderable = self.world.component_for_entity(
-                    entity, system.renderable.Renderable)
-
-                if playerRenderable.texture.characterAnimationType is CharacterAnimationType.walking:
-                    if msg.data['didChangeDirection']:
-                        playerRenderable.texture.changeAnimation(
-                            CharacterAnimationType.walking,
-                            playerRenderable.direction)
-                    else:
-                        playerRenderable.texture.advanceStep()
-                else:
-                    playerRenderable.texture.changeAnimation(
-                        CharacterAnimationType.walking,
-                        playerRenderable.direction)
-
-
-    def animationUpdateAttack(self):
-        messages = messaging.get()
-        for message in messages: 
-            if message.type == MessageType.PlayerAttack:
-                playerEntity = Utility.findPlayer(self.world)
-                playerRenderable = self.world.component_for_entity(
-                    playerEntity, system.renderable.Renderable)
-
-                playerRenderable.texture.changeAnimation(
-                    CharacterAnimationType.hitting,
-                    playerRenderable.direction)

@@ -40,6 +40,7 @@ from system.movementprocessor import MovementProcessor
 from entities.esperdata import EsperData
 from system.inputprocessor import InputProcessor
 from texture.character.characteranimationtype import CharacterAnimationType
+from system.graphics.characteranimationprocessor import CharacterAnimationProcessor
 
 from messaging import messaging, Messaging, Message, MessageType
 
@@ -68,6 +69,7 @@ class World(object):
         self.showStats = False
         self.showEnemyWanderDestination = False
 
+        characterAnimationProcessor = CharacterAnimationProcessor()
         renderableProcessor = RenderableProcessor()
         advanceableProcessor = AdvanceableProcessor()
         playerProcessor = PlayerProcessor()
@@ -82,7 +84,7 @@ class World(object):
         movementProcessor = MovementProcessor()
         inputProcessor = InputProcessor()
 
-        # KeyboardInput:getInput
+        # KeyboardInput:getInput()
         # p generate  MessageType         PlayerKeypress
 
         # p handle:   MessageType         PlayerKeyPress (movement)
@@ -90,9 +92,9 @@ class World(object):
         self.esperWorld.add_processor(inputProcessor)
 
         # p handle:   DirectMessageType   movePlayer
+        # e handle:   DirectMessageType   moveEnemy
         # p generate: MessageType         PlayerLocation
         # x generate: MessageType         EntityMoved
-        # e handle:   DirectMessageType   moveEnemy
         self.esperWorld.add_processor(movementProcessor)
 
         # p handle:   MessageType         PlayerKeyPress (space/attack, weaponselect)
@@ -105,6 +107,9 @@ class World(object):
 
         # p handle:  MessageType          PlayerAttack
         # p handle:  MessageType          EntityMoved
+        self.esperWorld.add_processor(characterAnimationProcessor) 
+
+        # Nothing
         self.esperWorld.add_processor(playerProcessor) 
 
         # e handle:   MessageType         PlayerLocation
