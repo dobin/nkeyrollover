@@ -8,16 +8,11 @@ import logging
 from typing import List
 
 from sprite.coordinates import Coordinates, ExtCoordinates
-from utilities.colorpalette import ColorPalette
-from utilities.colortype import ColorType
-from utilities.timer import Timer
-from utilities.color import Color
 from sprite.direction import Direction
 from messaging import messaging, Messaging, Message, MessageType
 from config import Config
 from texture.texture import Texture
 from world.viewport import Viewport
-
 import system.gamelogic.attackable
 
 logger = logging.getLogger(__name__)
@@ -57,10 +52,6 @@ class Renderable(object):
         self.coordinatesRel :Coordinates = Coordinates(0, 0)
         self.coordinatesRel2 :Coordinates = Coordinates(0, 0)
         self.z :int = z
-
-        # color related
-        self.overwriteColorTimer = Timer(0.25, active=False)
-        self.overwriteColor = None
 
         self.direction = Direction.left
         self.name = 'none'
@@ -150,12 +141,6 @@ class Renderable(object):
 
         self.texture.advance(deltaTime)
 
-        # reset overwrite color
-        if self.overwriteColorTimer.timeIsUp():
-            self.overwriteColor = None
-            self.overwriteColorTimer.stop()
-        self.overwriteColorTimer.advance(deltaTime)
-
 
     def draw(self):
         if not self.isActive():
@@ -170,17 +155,6 @@ class Renderable(object):
                 return True
 
         return False
-
-
-    def setOverwriteColorFor(self, time :float, color :Color):
-        if self.overwriteColorTimer.isActive():
-            logger.debug("Color already active on new set color")
-            #return
-
-        self.overwriteColor = color
-
-        self.overwriteColorTimer.setTimer(time)
-        self.overwriteColorTimer.reset()
 
 
     def getTextureHitCoordinates(self, animationIdx=0):

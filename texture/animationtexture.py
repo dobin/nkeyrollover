@@ -25,6 +25,7 @@ class AnimationTexture(Texture):
 
 
     def init(self):
+        super().init()
         self.setActive(True)
         self.resetAnimation()
 
@@ -52,6 +53,9 @@ class AnimationTexture(Texture):
     def advance(self, deltaTime):
         if self.animation is None:
             return
+
+        # also advance texture object
+        super().advance(deltaTime)
 
         # no need to advance stuff which is forever
         if (self.animation.frameTime is None or len(self.animation.frameTime) == 0) and self.animation.endless == True:
@@ -94,11 +98,10 @@ class AnimationTexture(Texture):
             raise Exception("Trying to access frameIndex {} on array with len {}, actual len{}"
                 .format(self.frameIndex, self.animation.frameCount, len(self.animation.arr)))
 
-        #if self.parentSprite is not None and self.parentSprite.overwriteColor is not None:
-        #    color = self.parentSprite.overwriteColor
-        #else:
-        #    color = self.animation.frameColors[ self.frameIndex ]
-        color = self.animation.frameColors[ self.frameIndex ]
+        if self.overwriteColor is not None:
+            color = self.overwriteColor
+        else:
+            color = self.animation.frameColors[ self.frameIndex ]
 
         # Note: For performance reason, replace enumerate with a while loop
         y = 0

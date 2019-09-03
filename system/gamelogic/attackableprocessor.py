@@ -43,7 +43,7 @@ class AttackableProcessor(esper.Processor):
 
             # xxx.changeState(stun)
             meAttackable.handleHit(damage)
-            meRenderable.setOverwriteColorFor(
+            meRenderable.texture.setOverwriteColorFor(
                 1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
 
             # get next message
