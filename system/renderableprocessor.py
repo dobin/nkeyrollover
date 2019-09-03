@@ -42,7 +42,9 @@ class RenderableProcessor(esper.Processor):
                 system.groupid.GroupId
             ):
                 if groupId.getId() == msg.groupId:
-                    speechBubble.changeText(msg.data)
+                    speechBubble.showText(
+                        displayText=msg.data['text'],
+                        time=msg.data['time'])
 
             msg = directMessaging.get(
                 messageType = DirectMessageType.activateSpeechBubble

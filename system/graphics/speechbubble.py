@@ -14,9 +14,12 @@ class SpeechBubble(object):
         self.speechAnimationManager = SpeechAnimationManager()
 
 
-    def changeText(self, displayText=None, direction=Direction.right):
+    def showText(self, displayText=None, time=1.5, direction=Direction.right):
         logger.info("Speechsprite change!")
-        animation = self.speechAnimationManager.getAnimation(displayText, direction)
+        animation = self.speechAnimationManager.getAnimation(
+            displayText=displayText, 
+            time=time,
+            direction=direction)
         self.renderable.texture.animation = animation
         self.renderable.texture.width = animation.width
         self.renderable.texture.height = animation.height

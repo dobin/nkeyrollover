@@ -7,14 +7,14 @@ class SpeechAnimationManager(object):
     def __init__(self):
         pass
 
-    def getAnimation(self, displayText=None, direction=Direction.right):
+    def getAnimation(self, displayText=None, direction=Direction.right, time=1.5):
         animation = Animation()
 
         animation.width = len(displayText) + 2
         animation.height = 4
         animation.frameCount = 1
         animation.frameTime = [
-            1.5,
+            time,
         ]
         animation.frameColors = [
             ColorPalette.getColorByColor(Color.white)

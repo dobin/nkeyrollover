@@ -139,7 +139,11 @@ class OffensiveSkill(object):
         directMessaging.add(
             groupId = meGroupId.getId(),
             type = DirectMessageType.activateSpeechBubble,
-            data = 'hoi',
+            data = {
+                'text': 'hoi',
+                'time': 0.5,
+                'waitTime': 0,
+            }
         )
 
         #self.player.actionCtrl.changeTo(
