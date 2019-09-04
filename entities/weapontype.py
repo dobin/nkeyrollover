@@ -12,4 +12,4 @@ class WeaponType(Enum):
     cleave = 7
 
     heal = 8
-    switchside = 9
+    port = 9

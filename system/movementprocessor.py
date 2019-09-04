@@ -38,7 +38,11 @@ class MovementProcessor(esper.Processor):
                 messageType = DirectMessageType.movePlayer
             )
             while msg is not None:
-                didMove = self.moveRenderable(renderable, groupId.getId(), msg.data['x'], msg.data['y'])
+                didMove = self.moveRenderable(
+                    renderable, 
+                    groupId.getId(), 
+                    msg.data['x'], 
+                    msg.data['y'])
 
                 if didMove:
                     extcords = ExtCoordinates(
@@ -74,7 +78,9 @@ class MovementProcessor(esper.Processor):
             )
 
 
-    def moveRenderable(self, renderable, groupId, x :int =0, y :int =0, dontChangeDirection :bool =False):
+    def moveRenderable(
+        self, renderable, groupId, x :int =0, y :int =0, dontChangeDirection :bool =False
+    ):
         """Move this renderable in x/y direction, if allowed. Update direction too"""
         didMove = False
         didChangeDirection = False
@@ -82,7 +88,7 @@ class MovementProcessor(esper.Processor):
         if x > 0:
             #if renderable.coordinates.x < Config.columns - renderable.texture.width - 1:
             if True:
-                renderable.coordinates.x += 1
+                renderable.coordinates.x += x
                 didMove = True
 
                 if not dontChangeDirection and renderable.direction is not Direction.right:
@@ -91,7 +97,7 @@ class MovementProcessor(esper.Processor):
 
         elif x < 0:
             if renderable.coordinates.x > 1:
-                renderable.coordinates.x -= 1
+                renderable.coordinates.x += x
                 didMove = True
                 if not dontChangeDirection and renderable.direction is not Direction.left:
                     renderable.direction = Direction.left
@@ -99,12 +105,12 @@ class MovementProcessor(esper.Processor):
 
         if y > 0:
             if renderable.coordinates.y < Config.rows - renderable.texture.height - 1:
-                renderable.coordinates.y += 1
+                renderable.coordinates.y += y
                 didMove = True
 
         elif y < 0:
             if renderable.coordinates.y >  Config.areaMoveable['miny'] - renderable.texture.height + 1:
-                renderable.coordinates.y -= 1
+                renderable.coordinates.y += y
                 didMove = True
 
         # notify texture manager

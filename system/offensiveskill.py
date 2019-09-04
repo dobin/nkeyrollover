@@ -9,14 +9,14 @@ from utilities.utilities import Utility
 from entities.weapontype import WeaponType
 from utilities.colorpalette import ColorPalette
 from utilities.color import Color
-
 import system.gamelogic.attackable
 import system.renderable
 import system.graphics.speechbubble
 import system.groupid
-
 from messaging import messaging, Messaging, Message, MessageType
 from directmessaging import directMessaging, DirectMessage, DirectMessageType
+from sprite.direction import Direction
+
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +45,12 @@ class OffensiveSkill(object):
             WeaponType.laser: 100,
             WeaponType.cleave: 100,
             WeaponType.heal: 0,
-            WeaponType.switchside: 0,
+            WeaponType.port: 0,
+        }
+        self.data = {
+            WeaponType.port: {
+                'distance': 10,
+            }
         }
 
 
@@ -58,8 +63,8 @@ class OffensiveSkill(object):
             self.skillCleave()
         elif weaponType is WeaponType.heal:
             self.skillHeal()
-        elif weaponType is WeaponType.switchside:
-            self.skillSwitchSide()
+        elif weaponType is WeaponType.port:
+            self.skillPort()
         else:
             logger.error("Unknown skill {}".format(weaponType))
 
@@ -84,7 +89,7 @@ class OffensiveSkill(object):
                 isCooldown = True
 
         if key == 'g':
-            weaponType = WeaponType.switchside
+            weaponType = WeaponType.port
             if self.isRdy(key):
                 self.doSkillType(weaponType)
                 self.cooldownTimers[key].reset()
@@ -108,7 +113,7 @@ class OffensiveSkill(object):
                 isCooldown = True
 
         if key == 'e':
-            weaponType = WeaponType.switchside
+            weaponType = WeaponType.port
             if self.isRdy(key):
                 self.doSkillType(weaponType)
                 self.cooldownTimers[key].reset()
@@ -157,19 +162,26 @@ class OffensiveSkill(object):
         meAttackable.heal(50)
 
 
-    def skillSwitchSide(self):
+    def skillPort(self):
         meRenderable = self.esperData.world.component_for_entity(
             self.esperData.entity, system.renderable.Renderable)
+        meGroupId = self.esperData.world.component_for_entity(
+            self.esperData.entity, system.groupid.GroupId)
 
-        screenCoordinates = self.viewport.getScreenCoords(
-            meRenderable.getLocation())
+        moveX = 0
+        if meRenderable.direction is Direction.left: 
+            moveX = -self.data[WeaponType.port]['distance']
+        if meRenderable.direction is Direction.right: 
+            moveX = self.data[WeaponType.port]['distance']
 
-        if screenCoordinates.x < (Config.columns / 2):
-            diff = 80 - 2 * screenCoordinates.x
-            meRenderable.coordinates.x += diff
-        else:
-            diff = Config.areaMoveable['maxx'] - 2 * (Config.areaMoveable['maxx'] - screenCoordinates.x)
-            meRenderable.coordinates.x -= diff
+        directMessaging.add(
+            type = DirectMessageType.movePlayer,
+            groupId = meGroupId.getId(),
+            data = {
+                'x': moveX,
+                'y': 0,
+            }
+        )
 
 
     def skillExplosion(self):
