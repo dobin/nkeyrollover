@@ -27,6 +27,7 @@ class CharacterAnimationProcessor(esper.Processor):
     def process(self, deltaTime):
         self.animationUpdateMove()
         self.animationUpdateAttack()
+        self.animationUpdateStun()
 
 
     def animationUpdateMove(self):
@@ -78,4 +79,17 @@ class CharacterAnimationProcessor(esper.Processor):
 
                 entityRenderable.texture.changeAnimation(
                     CharacterAnimationType.hitting,
+                    entityRenderable.direction)
+
+
+    def animationUpdateStun(self): 
+        # stun
+        for message in messaging.get():
+            if message.type is MessageType.EntityStun:
+                entity = Utility.findCharacterByGroupId(self.world, message.groupId)
+                entityRenderable = self.world.component_for_entity(
+                    entity, system.renderable.Renderable)
+
+                entityRenderable.texture.changeAnimation(
+                    CharacterAnimationType.stun,
                     entityRenderable.direction)

@@ -56,7 +56,7 @@ class World(object):
         self.esperWorld = esper.World()
         self.win = win
         self.viewport :Viewport =Viewport(win=win, world=self)
-        self.worldSprite :Sprite = Sprite(viewport=self.viewport, parentSprite=None)
+        #self.worldSprite :Sprite = Sprite(viewport=self.viewport, parentSprite=None)
         self.particleEmiter :ParticleEmiter = ParticleEmiter(viewport=self.viewport)
         self.textureEmiter :TextureEmiter = TextureEmiter(
             viewport=self.viewport,
@@ -117,8 +117,15 @@ class World(object):
         # p generate: MessageType         PlayerAttack
         self.esperWorld.add_processor(offensiveSkillProcessor)
 
+        # x handle:   DirectMessageType   receiveDamage
+        # x generate: MessageType         EntityStun
+        self.esperWorld.add_processor(attackableProcessor)
+
         # p handle:  MessageType          PlayerAttack
-        # p handle:  MessageType          EntityMoved
+        # x handle:  MessageType          AttackWindup
+        # x handle:  MessageType          EntityAttack
+        # x handle:  MessageType          EntityMoved
+        # x handle:  MessageType          EntityStun
         self.esperWorld.add_processor(characterAnimationProcessor)
 
         # Nothing
@@ -126,8 +133,6 @@ class World(object):
         self.esperWorld.add_processor(playerProcessor)
         self.esperWorld.add_processor(advanceableProcessor)
 
-        # x handle:   DirectMessageType   receiveDamage
-        self.esperWorld.add_processor(attackableProcessor)
 
         self.esperWorld.add_processor(renderableMinimalProcessor)
 
@@ -154,7 +159,6 @@ class World(object):
             viewport=self.viewport,
             parent=None,
             coordinates=coordinates)
-        texture.parentSprite = renderable
         characterSkill = OffensiveSkill(
             esperData=esperData,
             particleEmiter=self.particleEmiter,
@@ -187,7 +191,6 @@ class World(object):
             active=False,
             useParentDirection=True)
         renderable.name = "PlayerWeapon"
-        texture.parentSprite = renderable
         self.esperWorld.add_component(characterAttackEntity, renderable)
         offensiveAttack = OffensiveAttack(
             isPlayer=True,

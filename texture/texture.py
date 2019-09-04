@@ -23,7 +23,7 @@ class Texture(object):
 
 
     def init(self):
-        self.overwriteColor = None
+        pass
 
 
     def draw(self, viewport):

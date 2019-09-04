@@ -19,6 +19,8 @@ class EnemyInfo(object):
         self.wanderStepDelay = 0.3
         self.chaseStepDelay = 0.2
 
+        self.stunTime = 1.0
+
         if Config.devMode:
             self.wanderTime = 0.5
             self.spawnTime = 0.2

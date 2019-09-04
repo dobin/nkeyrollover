@@ -306,7 +306,7 @@ class CharacterAnimationManager(object):
             animations.append(animation)
 
 
-        if animationType is CharacterAnimationType.stunned:
+        if animationType is CharacterAnimationType.stun:
             animation = Animation()
             animation.width = 3
             animation.height = 3
@@ -464,7 +464,7 @@ class CharacterAnimationManager(object):
 
             animations.append(animation)
 
-        if animationType is CharacterAnimationType.stunned:
+        if animationType is CharacterAnimationType.stun:
             animation = Animation()
 
             fileAnimation = self.fileTextureLoader.readAnimation(

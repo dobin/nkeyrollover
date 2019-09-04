@@ -16,7 +16,6 @@ import system.renderable
 import system.gamelogic.enemy
 from directmessaging import directMessaging, DirectMessage, DirectMessageType
 
-
 logger = logging.getLogger(__name__)
 
 

@@ -35,6 +35,7 @@ class Ai():
         self.brain.register(StateStun)
         self.brain.register(StateDying)
         self.brain.register(StateAttackWindup)
+        self.brain.register(StateStun)
         self.brain.push("idle")
 
 

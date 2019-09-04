@@ -4,7 +4,6 @@ import esper
 from messaging import messaging, Messaging, Message, MessageType
 from config import Config
 from directmessaging import directMessaging, DirectMessageType
-
 import system.gamelogic.attackable
 import system.gamelogic.enemy
 import system.gamelogic.player
@@ -60,6 +59,7 @@ class RenderableProcessor(esper.Processor):
         for message in messaging.get():
             damageSum = 0
 
+            # handle Player Attacks
             if message.type is MessageType.PlayerAttack:
                 hitLocations = message.data['hitLocations']
                 damage = message.data['damage']
@@ -90,6 +90,7 @@ class RenderableProcessor(esper.Processor):
                             data = 'Cowabunga!',
                         )
 
+            # handle Enemy Attacks
             if message.type is MessageType.EnemyAttack:
                 hitLocations = message.data['hitLocations']
                 damage = message.data['damage']

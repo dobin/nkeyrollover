@@ -29,5 +29,9 @@ class Player():
         self.characterStatus.advance(deltaTime)
 
 
+    def setState(self, state): 
+        self.state = state
+
+
     def __repr__(self):
         return "Player"
