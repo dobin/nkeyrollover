@@ -46,7 +46,7 @@ class Director(object):
     # without enemies in the unit test
     def init(self):
         if Config.devMode:
-            characterType = CharacterType.cow
+            characterType = CharacterType.stickfigure
             self.createEnemy(characterType, 0)
         else:
             n = 0
@@ -104,8 +104,8 @@ class Director(object):
             phenomenaType=PhenomenaType.hit)
         texture.name = "EnemyWeapon " + name
         coordinates = Coordinates( # for hit
-            -1,
-            1
+            -1 * renderable.texture.width,
+            -1
         )
         renderable = Renderable(
             texture=texture,

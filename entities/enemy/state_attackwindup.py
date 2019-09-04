@@ -23,7 +23,7 @@ class StateAttackWindup(State):
             data=None
         )
 
-        self.setTimer( meEnemy.enemyInfo.windupTime )
+        self.setTimer( meEnemy.enemyInfo.attackWindupTime )
 
     def process(self, dt):
         meAttackable = self.brain.owner.world.component_for_entity(
@@ -33,6 +33,6 @@ class StateAttackWindup(State):
             self.brain.push("chase")            
 
         if self.timeIsUp():
-            # windup animation done, lets do the attack
+            # windup time done, lets do the attack
             self.brain.pop()
             self.brain.push("attack")

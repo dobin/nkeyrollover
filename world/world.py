@@ -193,7 +193,7 @@ class World(object):
             phenomenaType=PhenomenaType.hit)
         coordinates = Coordinates( # for hit
             -1,
-            1
+            -1
         )
         texture.name = "Playerweapon"
         renderable = Renderable(

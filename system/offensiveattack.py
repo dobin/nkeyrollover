@@ -68,7 +68,7 @@ class OffensiveAttack():
         self.renderable.texture.changeAnimation(self.weaponTypeToAnimationType(weaponType), self.renderable.parent.direction)
         coordinates = Coordinates( # for hit
             -1 * self.renderable.texture.width,
-            1
+            -1
         )
         self.renderable.setLocation(coordinates)
 
