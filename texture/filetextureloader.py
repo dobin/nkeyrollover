@@ -1,8 +1,12 @@
 import logging
+import yaml
+import io
 
 from texture.character.characteranimationtype import CharacterAnimationType
 from texture.character.charactertype import CharacterType
 from texture.animation import Animation
+from sprite.direction import Direction
+from utilities.colorpalette import ColorPalette
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +25,10 @@ class FileTextureLoader(object):
         filename = "data/textures/{}/{}_{}.ascii".format(ct, ct, cat)
         animation = self.readAnimationFile(filename)
         animation.name = "{}_{}".format(ct, cat)
+
+        filenameYaml = "data/textures/{}/{}_{}.yaml".format(ct, ct, cat)
+        self.loadYamlIntoAnimation(filenameYaml, animation)
+
         return animation
 
 
@@ -31,7 +39,42 @@ class FileTextureLoader(object):
         filename = "data/textures/{}.ascii".format(phenomenaName)
         animation = self.readAnimationFile(filename)
         animation.name = phenomenaName
-        return animation
+
+        filenameYaml = "data/textures/{}.yaml".format(phenomenaName)
+        self.loadYamlIntoAnimation(filenameYaml, animation)
+        return animation 
+
+
+    def loadYamlIntoAnimation(self, filename, animation): 
+        with open(filename, 'r') as stream:
+            data = yaml.safe_load(stream)
+
+        animation.endless = data['endless']
+        animation.advanceByStep = data['advanceByStep']
+        animation.frameColors = data['frameColors']
+
+        # FrameTime can be non-existing, e.g. if 'advanceByStep' = True
+        # Therefore, frameTime will be None
+        if 'frameTime' in data:
+            animation.frameTime = data['frameTime']
+
+        if 'direction' in data:
+            if data['direction'] == 'left':
+                animation.direction = Direction.left
+            if data['direction'] == 'right':
+                animation.direction = Direction.right
+
+        # colors: 
+        # - Color: white, brightblue, ...
+        # - ColorType: mapColor
+        for (n, color) in enumerate(data['frameColors']):
+            if color.startswith('ColorType.'):
+                color = color.split('.')[1]
+                colorType = ColorPalette.getColorTypeByStr(color)
+                animation.frameColors[n] = ColorPalette.getColorByColorType(colorType, viewport=None)
+            else:
+                color = ColorPalette.getColorByStr(color)
+                animation.frameColors[n] = ColorPalette.getColorByColor(color)
 
 
     def readAnimationFile(self, filename :str) -> Animation:

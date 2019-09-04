@@ -33,6 +33,15 @@ class ColorPalette(object):
 
 
     @staticmethod
+    def getColorByStr(s): 
+        return Color[s]
+
+    @staticmethod
+    def getColorTypeByStr(s): 
+        return ColorType[s]
+
+
+    @staticmethod
     def getColorByColor(color :Color):
         if color is Color.brightwhite:
             return curses.color_pair(7) | curses.A_BOLD
@@ -83,7 +92,7 @@ class ColorPalette(object):
         # for unittests using MockWin
         # we always import 'curses', and dont know if we are being unittested
         # in the unittest, we use Viewport, which has method isUnitTest
-        if hasattr(viewport, 'isUnitTest'):
+        if viewport is not None and hasattr(viewport, 'isUnitTest'):
             return color
 
         if colorType is ColorType.particle:
@@ -106,6 +115,10 @@ class ColorPalette(object):
 
         elif colorType is ColorType.menu:
             color = ColorPalette.getColorByColor(Color.white)
+
+        elif colorType is ColorType.background:
+            color = ColorPalette.getColorByColor(Color.grey)
+
 
         else:
             logger.error("Unknown colortype " + str(colorType))

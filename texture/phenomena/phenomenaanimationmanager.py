@@ -143,59 +143,21 @@ class PhenomenaAnimationManager(object):
 
         if phenomenaType is PhenomenaType.roflcopter:
             animation = self.fileTextureLoader.readPhenomena('roflcopter')
-            animation.endless = True
-            animation.advanceByStep = False
-            animation.frameColors = [
-                ColorPalette.getColorByColor(Color.white),
-                ColorPalette.getColorByColor(Color.white),
-            ]
-            animation.frameTime = [
-                0.2,
-                0.2
-            ]
 
         if phenomenaType is PhenomenaType.intro:
             animation = self.fileTextureLoader.readPhenomena('intro')
-            animation.endless = True
-            animation.advanceByStep = False
-
-            animation.frameTime = [
-                0.1,
-                0.5,
-            ]
-            animation.frameColors = [
-                ColorPalette.getColorByColor(Color.brightblue),
-                ColorPalette.getColorByColor(Color.white),
-            ]
 
         if phenomenaType is PhenomenaType.tree1:
             animation = self.fileTextureLoader.readPhenomena('tree1')
-            animation.endless = True
-            animation.advanceByStep = False
-            animation.frameTime = None
-            animation.frameColors = [ mapColor, ]
 
         if phenomenaType is PhenomenaType.tree2:
             animation = self.fileTextureLoader.readPhenomena('tree2')
-            animation.endless = True
-            animation.advanceByStep = False
-            animation.frameTime = None
-            animation.frameColors = [ mapColor, ]
 
         if phenomenaType is PhenomenaType.tree3:
             animation = self.fileTextureLoader.readPhenomena('tree3')
-            animation.endless = True
-            animation.advanceByStep = False
-            animation.frameTime = None
-            animation.frameColors = [ mapColor, ]
 
         if phenomenaType is PhenomenaType.tree4:
             animation = self.fileTextureLoader.readPhenomena('tree4')
-            animation.frameCount = 2
-            animation.endless = True
-            animation.advanceByStep = False
-            animation.frameTime = [ 2.0, 2.0 ]
-            animation.frameColors = [ mapColor, mapColor ]
 
         Utility.checkAnimation(animation, phenomenaType, None)
 
