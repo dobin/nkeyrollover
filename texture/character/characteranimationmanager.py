@@ -348,16 +348,11 @@ class CharacterAnimationManager(object):
         color = ColorPalette.getColorByColor(Color.white)
 
         if animationType is CharacterAnimationType.standing:
-            animation = Animation()
-            fileAnimation = self.fileTextureLoader.readAnimation(
+            animation = self.fileTextureLoader.readAnimation(
                 characterType=CharacterType.cow, characterAnimationType=animationType)
 
-            animation.width = fileAnimation['width']
-            animation.height = fileAnimation['height']
-            animation.arr = fileAnimation['arr']
             if direction is Direction.left:
                 self.mirrorFrames(animation.arr)
-            animation.frameCount = fileAnimation['frameCount']
             animation.frameTime = []
             animation.advanceByStep = False
             animation.endless = True
@@ -367,17 +362,11 @@ class CharacterAnimationManager(object):
             animations.append(animation)
 
         if animationType is CharacterAnimationType.walking:
-            animation = Animation()
-            fileAnimation = self.fileTextureLoader.readAnimation(
+            animation = self.fileTextureLoader.readAnimation(
                 characterType=CharacterType.cow, characterAnimationType=animationType)
 
-            animation.width = fileAnimation['width']
-            animation.height = fileAnimation['height']
-            animation.arr = fileAnimation['arr']
             if direction is Direction.left:
                 self.mirrorFrames(animation.arr)
-
-            animation.frameCount = fileAnimation['frameCount']
             animation.frameColors = [
                 color,
                 color,
@@ -389,18 +378,12 @@ class CharacterAnimationManager(object):
             animations.append(animation)
 
         if animationType is CharacterAnimationType.hitting:
-            animation = Animation()
-            fileAnimation = self.fileTextureLoader.readAnimation(
+            animation = self.fileTextureLoader.readAnimation(
                 characterType=CharacterType.cow, characterAnimationType=animationType)
 
-            animation.width = fileAnimation['width']
-            animation.height = fileAnimation['height']
-            animation.arr = fileAnimation['arr']
             if direction is Direction.left:
                 self.mirrorFrames(animation.arr)
-
             animation.endless = False
-            animation.frameCount = fileAnimation['frameCount']
             animation.frameTime = [
                 0.8,
                 0.2
@@ -414,17 +397,11 @@ class CharacterAnimationManager(object):
             animations.append(animation)
 
         if animationType is CharacterAnimationType.dying:
-            animation = Animation()
-            fileAnimation = self.fileTextureLoader.readAnimation(
+            animation = self.fileTextureLoader.readAnimation(
                 characterType=CharacterType.cow, characterAnimationType=animationType)
 
-            animation.width = fileAnimation['width']
-            animation.height = fileAnimation['height']
-            animation.arr = fileAnimation['arr']
             if direction is Direction.left:
                 self.mirrorFrames(animation.arr)
-
-            animation.frameCount = fileAnimation['frameCount']
             animation.frameColors = [
                 color,
             ]
@@ -437,17 +414,11 @@ class CharacterAnimationManager(object):
             animations.append(animation)
 
         if animationType is CharacterAnimationType.hitwindup:
-            animation = Animation()
-            fileAnimation = self.fileTextureLoader.readAnimation(
+            animation = self.fileTextureLoader.readAnimation(
                 characterType=CharacterType.cow, characterAnimationType=animationType)
 
-            animation.width = fileAnimation['width']
-            animation.height = fileAnimation['height']
-            animation.arr = fileAnimation['arr']
             if direction is Direction.left:
                 self.mirrorFrames(animation.arr)
-
-            animation.frameCount = fileAnimation['frameCount']
             animation.frameColors = [
                 color,
                 color,
@@ -459,17 +430,11 @@ class CharacterAnimationManager(object):
             animations.append(animation)
 
         if animationType is CharacterAnimationType.stun:
-            animation = Animation()
-            fileAnimation = self.fileTextureLoader.readAnimation(
+            animation = self.fileTextureLoader.readAnimation(
                 characterType=CharacterType.cow, characterAnimationType=animationType)
 
-            animation.width = fileAnimation['width']
-            animation.height = fileAnimation['height']
-            animation.arr = fileAnimation['arr']
             if direction is Direction.left:
                 self.mirrorFrames(animation.arr)
-
-            animation.frameCount = fileAnimation['frameCount']
             animation.frameColors = [
                 color,
                 color,

@@ -2,6 +2,7 @@ import logging
 
 from texture.character.characteranimationtype import CharacterAnimationType
 from texture.character.charactertype import CharacterType
+from texture.animation import Animation
 
 logger = logging.getLogger(__name__)
 
@@ -14,23 +15,26 @@ class FileTextureLoader(object):
     def readAnimation(
         self, characterType :CharacterType,
         characterAnimationType :CharacterAnimationType
-    ):
+    ) -> Animation:
         ct = characterType.name
         cat = characterAnimationType.name
-
         filename = "data/textures/{}/{}_{}.ascii".format(ct, ct, cat)
-        return self.readAnimationFile(filename)
+        animation = self.readAnimationFile(filename)
+        animation.name = "{}_{}".format(ct, cat)
+        return animation
 
 
     def readPhenomena(
         self,
         phenomenaName :str,
-    ):
+    ) -> Animation:
         filename = "data/textures/{}.ascii".format(phenomenaName)
-        return self.readAnimationFile(filename)
+        animation = self.readAnimationFile(filename)
+        animation.name = phenomenaName
+        return animation
 
 
-    def readAnimationFile(self, filename :str) -> {}:
+    def readAnimationFile(self, filename :str) -> Animation:
         lineList = [line.rstrip('\n') for line in open(filename)]
         res = []
 
@@ -70,12 +74,19 @@ class FileTextureLoader(object):
                     if res[z][y][x] == '€':
                         res[z][y][x] = ' '
 
-        d = {
-            'arr': res,
-            'width': maxWidth,
-            'height': maxHeight,
-            'frameCount': len(res),
-        }
+        animation = Animation()
+        animation.arr = res
+        animation.width = maxWidth
+        animation.height = maxHeight
+        animation.frameCount = len(res)
+#        d = {
+#            'arr': res,
+#            'width': maxWidth,
+#            'height': maxHeight,
+#            'frameCount': len(res),
+#        }
 
-        logger.debug("Loaded {}: width={} height={} animations={}".format(filename, maxWidth, maxHeight, len(res)))
-        return d
+        logger.debug("Loaded {}: width={} height={} animations={}".format(
+            filename, animation.width, animation.height, animation.frameCount))
+
+        return animation

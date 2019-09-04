@@ -12,3 +12,8 @@ class Animation(object):
 
         self.width = 0
         self.height = 0
+
+        self.name = None
+
+    def __repr__(self): 
+        return str(self.name)
