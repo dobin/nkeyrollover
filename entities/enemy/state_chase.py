@@ -42,6 +42,12 @@ class StateChase(State):
     def process(self, dt):
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.enemy.Enemy)
+        meAttackable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.attackable.Attackable)
+
+        if meAttackable.isStunned:
+            return
+
         didAttack = False
 
         self.lastInputTimer.advance(dt)

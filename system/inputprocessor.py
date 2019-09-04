@@ -9,6 +9,7 @@ from config import Config
 import system.advanceable
 import system.renderable
 import system.gamelogic.player
+import system.gamelogic.attackable
 from directmessaging import directMessaging, DirectMessage, DirectMessageType
 
 logger = logging.getLogger(__name__)
@@ -30,10 +31,14 @@ class InputProcessor(esper.Processor):
 
 
     def handleKeyboardInput(self):
-        for ent, (renderable, player) in self.world.get_components(
-            system.renderable.Renderable, system.gamelogic.player.Player
+        for ent, (renderable, player, attackable) in self.world.get_components(
+            system.renderable.Renderable, 
+            system.gamelogic.player.Player,
+            system.gamelogic.attackable.Attackable
         ):
             didMove = False
+            if attackable.isStunned:
+                return
 
             for message in messaging.get():
                 if message.type is MessageType.PlayerKeypress:

@@ -21,6 +21,8 @@ class Texture(object):
         self.overwriteColorTimer = Timer(0.25, active=False)
         self.overwriteColor = None
 
+        self.name = None
+
 
     def init(self):
         pass
@@ -40,7 +42,7 @@ class Texture(object):
 
     def setOverwriteColorFor(self, time :float, color :Color):
         if self.overwriteColorTimer.isActive():
-            logger.debug("Color already active on new set color")
+            logger.debug("{} Color already active on new set color".format(self.name))
             #return
 
         self.overwriteColor = color

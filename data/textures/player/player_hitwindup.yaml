@@ -1,4 +1,4 @@
-endless: True
+endless: False
 advanceByStep: False
 frameColors:
   - white

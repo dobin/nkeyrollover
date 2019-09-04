@@ -158,6 +158,7 @@ class World(object):
         texture = CharacterTexture(
             characterType=CharacterType.player,
             characterAnimationType=CharacterAnimationType.standing)
+        texture.name = "Player"
         coordinates = Coordinates(
             Config.playerSpawnPoint['x'],
             Config.playerSpawnPoint['y']
@@ -190,6 +191,7 @@ class World(object):
             -1,
             1
         )
+        texture.name = "Playerweapon"
         renderable = Renderable(
             texture=texture,
             viewport=self.viewport,

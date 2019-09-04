@@ -37,13 +37,13 @@ class Keyrollover(object):
                 filename='app.log',
                 filemode='a',
                 level=logging.INFO,
-                format='%(asctime)s %(levelname)07s %(name)32s: %(message)s')
+                format='%(asctime)s %(levelname)-07s %(name)-32s: %(message)s')
         else:
             logging.basicConfig(
                 filename='app.log',
                 filemode='a',
                 level=logging.INFO,
-                format='%(asctime)s %(levelname)07s %(name)32s: %(message)s')
+                format='%(asctime)s %(levelname)-07s %(name)-32s: %(message)s')
 
         logger = logging.getLogger(__name__)
         logger.record("-----------------Start------------------------")

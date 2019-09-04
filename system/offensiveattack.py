@@ -29,12 +29,20 @@ class OffensiveAttack():
         self.weaponType :WeaponType = WeaponType.hit
         self.selectedWeaponKey :str = '1'
 
-        self.damage = {
-            WeaponType.hit: 50,
-            WeaponType.hitSquare: 50,
-            WeaponType.hitLine: 50,
-            WeaponType.jumpKick: 50
-        }
+        if isPlayer:
+            self.damage = {
+                WeaponType.hit: 50,
+                WeaponType.hitSquare: 50,
+                WeaponType.hitLine: 50,
+                WeaponType.jumpKick: 50
+            }
+        else: 
+            self.damage = {
+                WeaponType.hit: 20,
+                WeaponType.hitSquare: 20,
+                WeaponType.hitLine: 20,
+                WeaponType.jumpKick: 20
+            }
 
 
     def switchWeaponByKey(self, key :str):

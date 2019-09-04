@@ -44,7 +44,6 @@ class RenderableMinimalProcessor(esper.Processor):
                 return
 
             rend.texture.timer.setTimer(rend.texture.timeArr[ rend.texture.idx ])
-            rend.texture.timer.reset()
             rend.texture.timer.start()
             rend.coordinates.x += rend.texture.movementX
             rend.coordinates.y += rend.texture.movementY

@@ -8,7 +8,6 @@ from messaging import messaging, MessageType
 logger = logging.getLogger(__name__)
 
 
-
 class StateAttackWindup(State):
     name = 'attackwindup'
 
@@ -27,6 +26,12 @@ class StateAttackWindup(State):
         self.setTimer( meEnemy.enemyInfo.windupTime )
 
     def process(self, dt):
+        meAttackable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.attackable.Attackable)
+        if meAttackable.isStunned:
+            self.brain.pop()
+            self.brain.push("chase")            
+
         if self.timeIsUp():
             # windup animation done, lets do the attack
             self.brain.pop()

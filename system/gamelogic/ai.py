@@ -9,7 +9,6 @@ from entities.enemy.state_dying import StateDying
 from entities.enemy.state_idle import StateIdle
 from entities.enemy.state_spawn import StateSpawn
 from entities.enemy.state_wander import StateWander
-from entities.enemy.state_stun import StateStun
 
 logger = logging.getLogger(__name__)
 
@@ -32,10 +31,8 @@ class Ai():
         self.brain.register(StateAttack)
         self.brain.register(StateChase)
         self.brain.register(StateWander)
-        self.brain.register(StateStun)
         self.brain.register(StateDying)
         self.brain.register(StateAttackWindup)
-        self.brain.register(StateStun)
         self.brain.push("idle")
 
 

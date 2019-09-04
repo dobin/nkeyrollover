@@ -47,7 +47,11 @@ class StateWander(State):
             self.brain.owner.entity, system.renderable.Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.enemy.Enemy)
+        meAttackable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.attackable)
 
+        if meAttackable.isStunned:
+            return
 
         self.lastInputTimer.advance(dt)
 

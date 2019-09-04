@@ -3,6 +3,7 @@ import logging
 import random
 
 from system.renderable import Renderable
+from system.groupid import GroupId
 from system.gamelogic.enemy import Enemy
 from system.gamelogic.attackable import Attackable
 from system.gamelogic.player import Player
@@ -24,7 +25,25 @@ class AttackableProcessor(esper.Processor):
 
     def process(self, dt):
         self.checkHealth()
-        self.checkReceiveDamage()
+        self.checkReceiveDamage() # dont stun if he has no health left..
+                
+        self.advance(dt)
+
+
+    def advance(self, dt): 
+        for ent, meAttackable in self.world.get_component(
+            Attackable
+        ):
+            # advance timers
+            meAttackable.advance(dt)
+
+            # check if stun is finished
+            if meAttackable.stunTimer.timeIsUp(): 
+                meAttackable.isStunned = False
+                meAttackable.stunTimer.stop()
+
+                # generate end stun message (for animation)
+                # ?
 
 
     def checkHealth(self):
@@ -71,31 +90,29 @@ class AttackableProcessor(esper.Processor):
                 entity, Renderable)
             meAttackable = self.world.component_for_entity(
                 entity, Attackable)
+            meGroupId = self.world.component_for_entity(
+                entity, GroupId)
             damage = msg.data                
-
-            if self.world.has_component(entity, Ai):
-                meAi = self.world.component_for_entity(
-                    entity, Ai)
-                
-                # put enemy it into state stun
-                if meAi is not None:
-                    if meAi.brain.state.name != 'stun':
-                        meAi.brain.push('stun')
-            else: 
-                mePlayer = self.world.component_for_entity(
-                    entity, Player)
-                mePlayer.setState('stun')
-
-            # play stun animation
-            messaging.add(
-                type=MessageType.EntityStun,
-                data=None, 
-                groupId=msg.groupId)
 
             # change health
             meAttackable.handleHit(damage)
 
-            # color the texture
+            # dont stun if there is no health left
+            if meAttackable.getHealth() > 0.0:
+                stunTime = 0.5
+                meAttackable.stunTimer.setTimer(timerValue=stunTime)
+                meAttackable.stunTimer.start()
+                meAttackable.isStunned = True
+
+                messaging.add(
+                    type=MessageType.EntityStun,
+                    data={
+                        'timerValue': stunTime,
+                    },
+                    groupId = meGroupId.getId(),
+                )
+
+            # color the texture, even if we are dead
             meRenderable.texture.setOverwriteColorFor(
                 1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
 

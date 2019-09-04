@@ -42,7 +42,7 @@ class Messaging(object):
             data=data,
             groupId=groupId,
         ))
-        logger.info("Msg for {} type {}: {}".format(groupId, type.name, data))
+        logger.info("{}({}): {}".format(type.name, groupId, data))
 
 
     def reset(self):

@@ -1,4 +1,4 @@
-
+import logging
 
 class Timer(object):
     def __init__(
@@ -9,6 +9,7 @@ class Timer(object):
         self.instant :bool = instant
         self.active :bool = active
 
+        self.rearm :bool = False
         self.init()
 
 
@@ -29,6 +30,7 @@ class Timer(object):
 
 
     def timeIsUp(self) -> bool:
+        # time cant be up if we dont count it / we are disabled
         if not self.active:
             return False
 
@@ -41,8 +43,12 @@ class Timer(object):
     def isActive(self) -> bool:
         return self.active
 
+    def setActive(self, active):
+        self.active = active
+
 
     def start(self):
+        self.timeLeft = self.timerValue
         self.active = True
 
 

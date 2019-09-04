@@ -69,6 +69,7 @@ class Director(object):
             head=self.getRandomHead(),
             body=self.getRandomBody(),
             characterType=characterType)
+        texture.name = name
         coordinates = Coordinates(0, 0)
         renderable = Renderable(
             texture=texture,
@@ -76,7 +77,7 @@ class Director(object):
             parent=None,
             coordinates=coordinates,
             active=False)
-        renderable.name = "Enemy "
+        renderable.name = name
         renderable.world = self.world
         renderable.enemyMovement = True
         self.world.esperWorld.add_component(enemy, groupId)
@@ -102,6 +103,7 @@ class Director(object):
         characterAttackEntity = self.world.esperWorld.create_entity()
         texture :PhenomenaTexture = PhenomenaTexture(
             phenomenaType=PhenomenaType.hit)
+        texture.name = "EnemyWeapon " + name
         coordinates = Coordinates( # for hit
             -1,
             1
@@ -113,7 +115,7 @@ class Director(object):
             coordinates=coordinates,
             z=2,
             useParentDirection=True)
-        renderable.name = "EnemyWeapon "
+        renderable.name = "EnemyWeapon " + name
         texture.parentSprite = renderable
         self.world.esperWorld.add_component(characterAttackEntity, renderable)
         offensiveAttack = OffensiveAttack(
