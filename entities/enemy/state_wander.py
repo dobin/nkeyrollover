@@ -48,7 +48,7 @@ class StateWander(State):
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.enemy.Enemy)
         meAttackable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.attackable)
+            self.brain.owner.entity, system.gamelogic.attackable.Attackable)
 
         if meAttackable.isStunned:
             return
@@ -60,7 +60,7 @@ class StateWander(State):
             self.lastInputTimer.reset()
 
         if self.timeIsUp():
-            if meEnemy.director.canHaveMoreEnemiesChasing():
+            if meEnemy.world.director.canHaveMoreEnemiesChasing():
                 logger.info("{}: Too long wandering, chase again a bit".format(self.owner))
                 self.brain.pop()
                 self.brain.push("chase")
