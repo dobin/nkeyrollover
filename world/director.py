@@ -105,7 +105,7 @@ class Director(object):
         texture.name = "EnemyWeapon " + name
         coordinates = Coordinates( # for hit
             -1 * renderable.texture.width,
-            -1
+            1
         )
         renderable = Renderable(
             texture=texture,

@@ -67,7 +67,7 @@ class OffensiveAttack():
         # TODO: This is ugly..
         self.renderable.texture.changeAnimation(self.weaponTypeToAnimationType(weaponType), self.renderable.parent.direction)
         coordinates = Coordinates( # for hit
-            -1 * self.renderable.texture.width,
+            -1 * (self.renderable.texture.width - 2),
             -1
         )
         self.renderable.setLocation(coordinates)
