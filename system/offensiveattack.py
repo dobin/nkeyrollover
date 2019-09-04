@@ -31,10 +31,10 @@ class OffensiveAttack():
 
         if isPlayer:
             self.damage = {
-                WeaponType.hit: 50,
-                WeaponType.hitSquare: 50,
-                WeaponType.hitLine: 50,
-                WeaponType.jumpKick: 50
+                WeaponType.hit: 35,
+                WeaponType.hitSquare: 35,
+                WeaponType.hitLine: 35,
+                WeaponType.jumpKick: 30
             }
         else: 
             self.damage = {

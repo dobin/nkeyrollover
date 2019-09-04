@@ -52,7 +52,7 @@ class AttackableProcessor(esper.Processor):
             Attackable, Renderable, Enemy, Ai
         ):
             if attackable.getHealth() <= 0:
-                if meRenderable.isActive() and ai.brain.state.name is not 'dying':
+                if ai.brain.state.name is not 'idle' and ai.brain.state.name is not 'dying':
                     # update state
                     ai.brain.pop()
                     ai.brain.push('dying')
@@ -99,7 +99,7 @@ class AttackableProcessor(esper.Processor):
 
             # dont stun if there is no health left
             if meAttackable.getHealth() > 0.0:
-                stunTime = 0.5
+                stunTime = 0.75
                 meAttackable.stunTimer.setTimer(timerValue=stunTime)
                 meAttackable.stunTimer.start()
                 meAttackable.isStunned = True

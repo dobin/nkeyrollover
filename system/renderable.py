@@ -80,6 +80,7 @@ class Renderable(object):
         )
         return d
 
+
     def getLocation(self):
         """Get a reference to our location.
 
