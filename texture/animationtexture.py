@@ -33,7 +33,7 @@ class AnimationTexture(Texture):
     def resetAnimation(self):
         """Start animation from the beginning"""
         self.frameIndex = 0
-        self.frameTimeLeft = 0
+        self.frameTimeLeft = 0.0
 
         # set the initial frametime
         # therefore, this init() has to be called after changeTexture()

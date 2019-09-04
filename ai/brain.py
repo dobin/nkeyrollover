@@ -33,6 +33,9 @@ class Brain:
 	def states(self):
 		return [k for k in self.avail_states]
 
+	def emptyStack(self): 
+		self.stack.clear()
+
 	def __repr__(self):
 		if self.state:
 			return "{0}: brain in \"{1}\" state>".format(

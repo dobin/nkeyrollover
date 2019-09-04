@@ -226,7 +226,7 @@ class Director(object):
                 logger.info("Ressurect enemy {} at {}".format(enemy, renderable.coordinates))
                 attackable.resetHealth()
 
-                ai.brain.pop()
+                ai.brain.emptyStack() # clear out any remaining states there possibly are
                 ai.brain.push('spawn')
 
                 # if death animation was deluxe, there is no frame in the sprite

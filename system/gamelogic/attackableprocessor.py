@@ -33,7 +33,7 @@ class AttackableProcessor(esper.Processor):
             Attackable, Renderable, Enemy, Ai
         ):
             if attackable.getHealth() <= 0:
-                if meRenderable.isActive(): # and/or: enemy.brain.state.name != 'idle' ?
+                if meRenderable.isActive() and ai.brain.state.name is not 'dying':
                     # update state
                     ai.brain.pop()
                     ai.brain.push('dying')
@@ -58,8 +58,6 @@ class AttackableProcessor(esper.Processor):
                             CharacterAnimationType.dying,
                             meRenderable.direction,
                             animationIndex)
-
-    
 
 
     def checkReceiveDamage(self):

@@ -73,6 +73,10 @@ class FileTextureLoader(object):
         # Therefore, frameTime will be None, as defined in Animation
         if 'frameTime' in data:
             animation.frameTime = data['frameTime']
+            # convert to float
+            for (idx, frameTimeEntry) in enumerate(animation.frameTime):
+                if frameTimeEntry != 'None':
+                    animation.frameTime[idx] = float(frameTimeEntry)
 
         if 'direction' in data:
             if data['direction'] == 'left':
