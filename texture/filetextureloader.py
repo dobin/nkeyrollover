@@ -67,8 +67,9 @@ class FileTextureLoader(object):
         animation.advanceByStep = data['advanceByStep']
         animation.frameColors = data['frameColors']
 
-        # FrameTime can be non-existing, e.g. if 'advanceByStep' = True
-        # Therefore, frameTime will be None
+        # FrameTime can be non-existing, e.g. if 'advanceByStep' = True,
+        # or if it is one frame and endless...
+        # Therefore, frameTime will be None, as defined in Animation
         if 'frameTime' in data:
             animation.frameTime = data['frameTime']
 
@@ -81,8 +82,8 @@ class FileTextureLoader(object):
                 animation.originalDirection = Direction.none
 
         # colors: 
-        # - Color: white, brightblue, ...
-        # - ColorType: mapColor
+        # - <Color>: white, brightblue, ...
+        # - ColorType.<ColorType>: background, world, ...
         for (n, color) in enumerate(data['frameColors']):
             if color.startswith('ColorType.'):
                 color = color.split('.')[1]
