@@ -48,8 +48,9 @@ class AttackableProcessor(esper.Processor):
                     entity, Ai)
                 
                 # put enemy it into state stun
-                if meAi is not None: 
-                    meAi.brain.push('stun')
+                if meAi is not None:
+                    if meAi.brain.state.name != 'stun':
+                        meAi.brain.push('stun')
             else: 
                 mePlayer = self.world.component_for_entity(
                     entity, Player)
