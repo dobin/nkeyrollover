@@ -87,7 +87,9 @@ class RenderableProcessor(esper.Processor):
                         directMessaging.add(
                             groupId = groupId.getId(),
                             type = DirectMessageType.activateSpeechBubble,
-                            data = 'Cowabunga!',
+                            data = {
+                                'text': 'Cowabunga!',
+                                'time': 1.0,
                         )
 
             # handle Enemy Attacks
