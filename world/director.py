@@ -104,8 +104,8 @@ class Director(object):
             phenomenaType=PhenomenaType.hit)
         texture.name = "EnemyWeapon " + name
         coordinates = Coordinates( # for hit
-            -1 * renderable.texture.width,
-            1
+            0,
+            0
         )
         renderable = Renderable(
             texture=texture,
@@ -114,6 +114,9 @@ class Director(object):
             coordinates=coordinates,
             z=2,
             useParentDirection=True)
+        renderable.setLocation(
+           Coordinates(-1 * (renderable.texture.width - 2), 1)
+        )
         renderable.name = "EnemyWeapon " + name
         texture.parentSprite = renderable
         self.world.esperWorld.add_component(characterAttackEntity, renderable)

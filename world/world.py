@@ -192,8 +192,8 @@ class World(object):
         texture :PhenomenaTexture = PhenomenaTexture(
             phenomenaType=PhenomenaType.hit)
         coordinates = Coordinates( # for hit
-            -1,
-            1
+            0,
+            0
         )
         texture.name = "Playerweapon"
         renderable = Renderable(
@@ -204,6 +204,9 @@ class World(object):
             z=3,
             active=False,
             useParentDirection=True)
+        renderable.setLocation(
+           Coordinates(-1 * (renderable.texture.width - 2), -1)
+        )            
         renderable.name = "PlayerWeapon"
         self.esperWorld.add_component(characterAttackEntity, renderable)
         offensiveAttack = OffensiveAttack(

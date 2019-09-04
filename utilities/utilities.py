@@ -213,10 +213,10 @@ class Utility(object):
         elif char == '\'':
             return '`'
 
-        elif char == '>':
-            return '<'
-        elif char == '<':
-            return '>'
+        elif char == 'D':
+            return 'Ɑ'
+        elif char == 'Ɑ':
+            return 'D'
 
         else:
             return char
