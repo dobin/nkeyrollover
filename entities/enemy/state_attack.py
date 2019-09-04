@@ -21,8 +21,8 @@ class StateAttack(State):
 
 
     def on_enter(self):
-        meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.renderable.Renderable)
+        meEnemy = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy)
         meGroupId = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.groupid.GroupId)
 
@@ -33,8 +33,8 @@ class StateAttack(State):
             data=None
         )
 
-        self.attackTimer.setTimer(meRenderable.texture.getAnimationTime())
-        self.setTimer( meRenderable.texture.getAnimationTime() )
+        self.attackTimer.setTimer(meEnemy.enemyInfo.attackTime)
+        self.setTimer(meEnemy.enemyInfo.attackTime)
 
 
     def process(self, dt):

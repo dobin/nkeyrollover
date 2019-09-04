@@ -83,259 +83,62 @@ class CharacterAnimationManager(object):
             color = ColorPalette.getColorByColor(Color.white)
 
         if animationType is CharacterAnimationType.standing:
-            animation = Animation()
-            animation.width = 3
-            animation.height = 3
-            animation.frameCount = 1
-            animation.frameTime = []
-            animation.advanceByStep = False
-            animation.endless = True
-            animation.frameColors = [
-                color,
-            ]
-            animation.arr = [
-                [
-                    [ '', 'o', '' ],
-                    [ '/', '|', '\\'],
-                    [ '/', '', '\\']
-                ]
-            ]
+            animation = self.fileTextureLoader.readAnimation(
+                characterType=CharacterType.stickfigure, 
+                characterAnimationType=animationType)
             animations.append(animation)
 
         if animationType is CharacterAnimationType.walking:
-            animation = Animation()
-            animation.width = 3
-            animation.height = 3
-            animation.frameCount = 4
-            animation.frameTime = None # by step
-            animation.endless = True
-            animation.advanceByStep = True
-            animation.frameColors = [
-                color,
-                color,
-                color,
-                color,
-            ]
-
-            if direction is Direction.right:
-                animation.arr = [
-                    [
-                        [ '', 'o', '' ],
-                        [ '/', '|', '\\'],
-                        [ '', '>', '\\']
-                    ],
-                    [
-                        [ '', 'o', '' ],
-                        [ '/', '|', '\\'],
-                        [ '', '|', '\\']
-                    ],
-                    [
-                        [ '', 'o', '' ],
-                        [ '/', '|', '\\'],
-                        [ '', '|', '>']
-                    ],
-                    [
-                        [ '', 'o', '' ],
-                        [ '/', '|', '\\'],
-                        [ '/', '', '\\']
-                    ]
-                ]
-            else:
-                animation.arr = [
-                    [
-                        [ '', 'o', '' ],
-                        [ '/', '|', '\\'],
-                        [ '/', '<', '']
-                    ],
-                    [
-                        [ '', 'o', '' ],
-                        [ '/', '|', '\\'],
-                        [ '/', '|', '']
-                    ],
-                    [
-                        [ '', 'o', '' ],
-                        [ '/', '|', '\\'],
-                        [ '<', '|', '']
-                    ],
-                    [
-                        [ '', 'o', '' ],
-                        [ '/', '|', '\\'],
-                        [ '/', '', '\\']
-                    ]
-                ]
+            animation = self.fileTextureLoader.readAnimation(
+                characterType=CharacterType.stickfigure, 
+                characterAnimationType=animationType)
+            if direction is Direction.left:
+                self.mirrorFrames(animation.arr)
             animations.append(animation)
 
         if animationType is CharacterAnimationType.hitting:
-            animation = Animation()
-            animation.width = 3
-            animation.height = 3
-            animation.endless = False
-            animation.frameCount = 2
-            animation.frameTime = [
-                0.8,
-                0.2
-            ]
-            animation.frameColors = [
-                color,
-                color,
-            ]
-            animation.advanceByStep = False
-
-            if direction is Direction.right:
-                animation.arr = [
-                    [
-                        [ '', 'o', '' ],
-                        [ '\\', '|', '='],
-                        [ '/', '', '\\']
-                    ],
-                    [
-                        [ '', 'o', '' ],
-                        [ '/', '|', '-'],
-                        [ '/', '', '\\']
-                    ]
-                ]
-            else:
-                animation.arr = [
-                    [
-                        [ '', 'o', '' ],
-                        [ '=', '|', '/'],
-                        [ '/', '', '\\']
-                    ],
-                    [
-                        [ '', 'o', '' ],
-                        [ '-', '|', '\\'],
-                        [ '/', '', '\\']
-                    ]
-                ]
+            animation = self.fileTextureLoader.readAnimation(
+                characterType=CharacterType.stickfigure, 
+                characterAnimationType=animationType)
+            if direction is Direction.left:
+                self.mirrorFrames(animation.arr)
             animations.append(animation)
 
         if animationType is CharacterAnimationType.shrugging:
-            animation = Animation()
-            animation.width = 3
-            animation.height = 3
-            animation.frameCount = 2
-            animation.endless = True
-            animation.advanceByStep = False
-            animation.frameColors = [
-                color,
-                color,
-            ]
-            animation.frameTime = [
-                0.1,
-                0.5
-            ]
-
-            animation.arr = [
-                [
-                    [ '', 'o', '' ],
-                    [ '/', '|', '\\'],
-                    [ '/', '', '\\']
-                ],
-                [
-                    [ '', 'o', '' ],
-                    [ '^', '|', '^'],
-                    [ '/', '', '\\']
-                ]
-            ]
+            animation = self.fileTextureLoader.readAnimation(
+                characterType=CharacterType.stickfigure, 
+                characterAnimationType=animationType)
+            if direction is Direction.left:
+                self.mirrorFrames(animation.arr)
             animations.append(animation)
-
 
         if animationType is CharacterAnimationType.dying:
             n = 0
             while n < 2:
-                animation = Animation()
-                animation.width = 3
-                animation.height = 3
-                animation.frameCount = 1
-                animation.frameTime = []
-                animation.advanceByStep = False
-                animation.frameTime = None
-                animation.endless = True
-                animation.frameColors = [
-                    ColorPalette.getColorByColor(Color.grey),
-                ]
-                if n == 0:
-                    animation.arr = [
-                        [
-                            [ '', 'x', '' ],
-                            [ '/', '|', '\\'],
-                            [ '/', '', '\\']
-                        ]
-                    ]
-                elif n == 1:
-                    animation.arr = [
-                        [
-                            [ '', 'X', '' ],
-                            [ '/', '|', '\\'],
-                            [ '/', '', '\\']
-                        ]
-                    ]
+                animation = self.fileTextureLoader.readAnimation(
+                    characterType=CharacterType.stickfigure, 
+                    characterAnimationType=animationType)
+                if direction is Direction.left:
+                    self.mirrorFrames(animation.arr)
 
                 animations.append(animation)
                 n += 1
 
-
         if animationType is CharacterAnimationType.hitwindup:
-            animation = Animation()
-            animation.width = 3
-            animation.height = 3
-            animation.frameCount = 1
-            animation.frameTime = []
-            animation.advanceByStep = False
-            animation.endless = True
-            animation.frameColors = [
-                color,
-            ]
-            if direction is direction.right:
-                animation.arr = [
-                    [
-                        [ '\\', 'o', '' ],
-                        [ '', '|', '\\'],
-                        [ '/', '', '\\']
-                    ]
-                ]
-            else:
-                animation.arr = [
-                    [
-                        [ '', 'o', '/' ],
-                        [ '/', '|', ''],
-                        [ '/', '', '\\']
-                    ]
-                ]
-
+            animation = self.fileTextureLoader.readAnimation(
+                characterType=CharacterType.stickfigure, 
+                characterAnimationType=animationType)
+            if direction is Direction.left:
+                self.mirrorFrames(animation.arr)
             animations.append(animation)
-
 
         if animationType is CharacterAnimationType.stun:
-            animation = Animation()
-            animation.width = 3
-            animation.height = 3
-            animation.frameCount = 1
-            animation.frameTime = []
-            animation.advanceByStep = False
-            animation.endless = True
-            animation.frameColors = [
-                color,
-            ]
-            if direction is direction.right:
-                animation.arr = [
-                    [
-                        [ '|', 'o', '|' ],
-                        [ '', '|', ''],
-                        [ '/', '', '\\']
-                    ]
-                ]
-            else:
-                animation.arr = [
-                    [
-                        [ '', 'o', '' ],
-                        [ '|', '|', '|'],
-                        [ '/', '', '\\']
-                    ]
-                ]
-
+            animation = self.fileTextureLoader.readAnimation(
+                characterType=CharacterType.stickfigure, 
+                characterAnimationType=animationType)
+            if direction is Direction.left:
+                self.mirrorFrames(animation.arr)
             animations.append(animation)
-
 
         for animation in animations:
             Utility.checkAnimation(animation, animationType, self.characterType)
@@ -349,28 +152,28 @@ class CharacterAnimationManager(object):
         if animationType is CharacterAnimationType.standing:
             animation = self.fileTextureLoader.readAnimation(
                 characterType=CharacterType.cow, characterAnimationType=animationType)
-            if direction is Direction.left:
+            if animation.originalDirection is not direction:
                 self.mirrorFrames(animation.arr)
             animations.append(animation)
 
         if animationType is CharacterAnimationType.walking:
             animation = self.fileTextureLoader.readAnimation(
                 characterType=CharacterType.cow, characterAnimationType=animationType)
-            if direction is Direction.left:
+            if animation.originalDirection is not direction:
                 self.mirrorFrames(animation.arr)
             animations.append(animation)
 
         if animationType is CharacterAnimationType.hitting:
             animation = self.fileTextureLoader.readAnimation(
                 characterType=CharacterType.cow, characterAnimationType=animationType)
-            if direction is Direction.left:
+            if animation.originalDirection is not direction:
                 self.mirrorFrames(animation.arr)
             animations.append(animation)
 
         if animationType is CharacterAnimationType.dying:
             animation = self.fileTextureLoader.readAnimation(
                 characterType=CharacterType.cow, characterAnimationType=animationType)
-            if direction is Direction.left:
+            if animation.originalDirection is not direction:
                 self.mirrorFrames(animation.arr)
             animations.append(animation)
             animations.append(animation)
@@ -378,14 +181,14 @@ class CharacterAnimationManager(object):
         if animationType is CharacterAnimationType.hitwindup:
             animation = self.fileTextureLoader.readAnimation(
                 characterType=CharacterType.cow, characterAnimationType=animationType)
-            if direction is Direction.left:
+            if animation.originalDirection is not direction:
                 self.mirrorFrames(animation.arr)
             animations.append(animation)
 
         if animationType is CharacterAnimationType.stun:
             animation = self.fileTextureLoader.readAnimation(
                 characterType=CharacterType.cow, characterAnimationType=animationType)
-            if direction is Direction.left:
+            if animation.originalDirection is not direction:
                 self.mirrorFrames(animation.arr)
             animations.append(animation)
 
@@ -426,6 +229,11 @@ class CharacterAnimationManager(object):
             return '\''
         elif char == '\'':
             return '`'
+
+        elif char == '>':
+            return '<'
+        elif char == '<':
+            return '>'
 
         else:
             return char

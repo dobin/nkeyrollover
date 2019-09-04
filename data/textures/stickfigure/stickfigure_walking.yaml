@@ -1,0 +1,8 @@
+endless: True
+advanceByStep: True
+frameColors:
+  - white
+  - white
+  - white
+  - white
+direction: right

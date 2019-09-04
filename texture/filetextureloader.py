@@ -60,9 +60,11 @@ class FileTextureLoader(object):
 
         if 'direction' in data:
             if data['direction'] == 'left':
-                animation.direction = Direction.left
-            if data['direction'] == 'right':
-                animation.direction = Direction.right
+                animation.originalDirection = Direction.left
+            elif data['direction'] == 'right':
+                animation.originalDirection = Direction.right
+            else: 
+                animation.originalDirection = Direction.none
 
         # colors: 
         # - Color: white, brightblue, ...
