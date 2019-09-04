@@ -31,6 +31,7 @@ from system.offensiveskill import OffensiveSkill
 from system.offensiveskillprocessor import OffensiveSkillProcessor
 from system.graphics.speechbubble import SpeechBubble
 from system.groupid import GroupId
+from system.sceneprocessor import SceneProcessor
 
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
@@ -89,6 +90,11 @@ class World(object):
         movementProcessor = MovementProcessor()
         inputProcessor = InputProcessor()
         renderableMinimalProcessor = RenderableMinimalProcessor(viewport=self.viewport)
+        sceneProcessor = SceneProcessor(viewport=self.viewport)
+
+        # Lots of comments to check if the order of the processors really work,
+        # as Messaging looses all messages on every iteration (use DirectMessaging 
+        # instead)
 
         # KeyboardInput:getInput()
         # p generate  MessageType         PlayerKeypress
@@ -108,7 +114,7 @@ class World(object):
         # e generate: DirectMessageType   moveEnemy
         self.esperWorld.add_processor(aiProcessor)
 
-
+        # e handle:   DirectMessageType   moveEnemy
         # p handle:   MessageType         PlayerKeyPress (space/attack, weaponselect)
         # p generate: MessageType         PlayerAttack (via OffensiveAttackEntity)
         self.esperWorld.add_processor(offensiveAttackProcessor)
@@ -116,6 +122,9 @@ class World(object):
         # p handle:   MessageType         PlayerKeyPress (skill activate)
         # p generate: MessageType         PlayerAttack
         self.esperWorld.add_processor(offensiveSkillProcessor)
+
+        # p handle:   MessageType         PlayerLocation
+        self.esperWorld.add_processor(sceneProcessor)
 
         # x handle:   DirectMessageType   receiveDamage
         # x generate: MessageType         EntityStun
@@ -132,7 +141,6 @@ class World(object):
         self.esperWorld.add_processor(enemyProcessor)
         self.esperWorld.add_processor(playerProcessor)
         self.esperWorld.add_processor(advanceableProcessor)
-
 
         self.esperWorld.add_processor(renderableMinimalProcessor)
 
@@ -266,7 +274,6 @@ class World(object):
         self.director.advance(deltaTime)
         self.particleEmiter.advance(deltaTime)
         self.director.worldUpdate()
-        self.viewport.advance(deltaTime)
 
         messaging.reset()
 

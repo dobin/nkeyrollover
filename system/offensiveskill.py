@@ -49,7 +49,7 @@ class OffensiveSkill(object):
         }
         self.data = {
             WeaponType.port: {
-                'distance': 10,
+                'distance': 20,
             }
         }
 
