@@ -43,7 +43,7 @@ class StateAttack(State):
             self.brain.owner.entity, system.gamelogic.enemy.Enemy)
 
         if self.attackTimer.timeIsUp():
-            logger.warning(self.name + " I'm attacking!")
+            logger.info(self.name + " I'm attacking, via offensiveattack!")
             self.attackTimer.reset()
             offensiveAttack = self.brain.owner.world.component_for_entity(
                 meEnemy.offensiveAttackEntity,
@@ -52,6 +52,6 @@ class StateAttack(State):
 
         if self.timeIsUp():
             # too long attacking. lets switch to chasing
-            logger.debug("{}: Too long attacking, switch to chasing".format(self.owner))
+            logger.info("{}: Too long attacking, switch to chasing".format(self.owner))
             self.brain.pop()
             self.brain.push("chase")

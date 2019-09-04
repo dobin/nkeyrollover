@@ -57,7 +57,7 @@ class StateWander(State):
 
         if self.timeIsUp():
             if meEnemy.director.canHaveMoreEnemiesChasing():
-                logger.debug("{}: Too long wandering, chase again a bit".format(self.owner))
+                logger.info("{}: Too long wandering, chase again a bit".format(self.owner))
                 self.brain.pop()
                 self.brain.push("chase")
 

@@ -129,6 +129,8 @@ class AnimationTexture(Texture):
     def getAnimationTime(self) -> float:
         """Return sum of all animation times in current sprite"""
         n = 0.0
+        if self.animation.frameTime is None: 
+            logger.error("Texture {} does not have frametime".format(self.animation))
         for time in self.animation.frameTime:
             n += time
         return n

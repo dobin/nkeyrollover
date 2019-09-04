@@ -106,8 +106,8 @@ class StateChase(State):
                 playerLocation)
 
             if canAttack:
-                logger.info("Can attack, me {} in {}".format(
-                    hitLocation, playerLocation
+                logger.info("{} Can attack, me {} in {}".format(
+                    self.name, hitLocation, playerLocation
                 ))
                 return True
 
@@ -141,7 +141,7 @@ class StateChase(State):
         meWeaponLocationInverted = meOffensiveWeaponRenderable.getLocationDirectionInverted()
         distanceNormal = Utility.distance(playerLocation, meWeaponLocation)
         distanceInverted = Utility.distance(playerLocation, meWeaponLocationInverted)
-        #logging.info("CC Dir: {}  X: {}   Normal: {}  Inverted: {}".format(
+        #logger.info("CC Dir: {}  X: {}   Normal: {}  Inverted: {}".format(
         #    meRenderable.direction, moveX,
         #    distanceNormal['sum'],
         #    distanceInverted['sum']

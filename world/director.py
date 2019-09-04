@@ -218,7 +218,7 @@ class Director(object):
         for ent, (attackable, ai, renderable, enemy) in self.world.esperWorld.get_components(
             Attackable, Ai, Renderable, Enemy
         ):
-            logging.info("Make enemy alive")
+            logger.info("Make enemy alive")
             if ai.brain.state.name == 'idle':
                 spawnCoords = self.getRandomSpawnCoords(renderable)
                 renderable.setLocation(spawnCoords)

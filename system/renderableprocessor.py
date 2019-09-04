@@ -121,7 +121,7 @@ class RenderableProcessor(esper.Processor):
         # which is by y coordinates
         for ent, rend in self.world.get_component(system.renderable.Renderable):
             if rend.isActive():
-                #logging.info("REND: {} {} {}".format(rend, rend.z, rend.coordinates))
+                #logger.info("REND: {} {} {}".format(rend, rend.z, rend.coordinates))
                 loc = rend.getLocation()
                 self.renderOrder[ loc.y + rend.z ].append(rend)
 

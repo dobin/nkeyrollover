@@ -28,6 +28,7 @@ class StateSpawn(State):
 
             if Config.devMode:
                 # make him come straight at us, sucker
+                logger.info("{} From Spawn To Chase".format(self.owner))
                 self.brain.push("chase")
             else:
                 self.brain.push("wander")

@@ -42,7 +42,7 @@ def colorTest():
         for color in Color:
             colorIdx = int(color)
             curseColor = ColorPalette.getColorByColor(color)
-            # logging.info("Color: {} id {} is: {}".format(color, colorIdx, curseColor))
+            # logger.info("Color: {} id {} is: {}".format(color, colorIdx, curseColor))
             # win.addstr(7, x + (colorIdx * 4), '###', curseColor )
             world.viewport.addstr(y, x + (colorIdx * 8), '###', curseColor )
             world.viewport.addstr(y+1, x + (colorIdx * 8), str(color)[6:], curseColor )
