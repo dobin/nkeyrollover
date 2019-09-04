@@ -1,0 +1,5 @@
+endless: True
+advanceByStep: False
+frameColors:
+  - white
+direction: symmetrical

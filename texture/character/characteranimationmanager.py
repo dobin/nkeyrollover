@@ -21,30 +21,20 @@ class CharacterAnimationManager(object):
         self.fileTextureLoader = FileTextureLoader()
         self.characterType = characterType
 
-        if characterType is CharacterType.stickfigure or characterType is CharacterType.player:
-            for animationType in CharacterAnimationType:
-                self.animationsLeft[animationType] = self.createAnimationStickfigure(
-                    animationType, Direction.left)
-            for animationType in CharacterAnimationType:
-                self.animationsRight[animationType] = self.createAnimationStickfigure(
-                    animationType, Direction.right)
+        for animationType in CharacterAnimationType:
+            self.animationsLeft[animationType] = self.createAnimations(
+                animationType, characterType, Direction.left)
+        for animationType in CharacterAnimationType:
+            self.animationsRight[animationType] = self.createAnimations(
+                animationType, characterType, Direction.right)
 
+        # update head, bodies of stickfigure enemies
+        if characterType is CharacterType.stickfigure:
             if head is not None:
                 self.updateAllAnimations(1, 0, head, skip=CharacterAnimationType.dying)
 
             if body is not None:
                 self.updateAllAnimations(1, 1, body)
-
-        elif characterType is CharacterType.cow:
-            for animationType in CharacterAnimationType:
-                self.animationsLeft[animationType] = self.createAnimationCow(
-                    animationType, Direction.left)
-            for animationType in CharacterAnimationType:
-                self.animationsRight[animationType] = self.createAnimationCow(
-                    animationType, Direction.right)
-
-        else:
-            logger.error("Unknown character type: " + str(characterType))
 
 
     def updateAllAnimations(self, x, y, char, skip=None):
@@ -75,121 +65,26 @@ class CharacterAnimationManager(object):
             return self.animationsRight[characterAnimationType][subtype]
 
 
-    def createAnimationStickfigure(self, animationType, direction):
+    def createAnimations(self, animationType, characterType, direction):
         animations = []
-        if self.characterType is CharacterType.player:
-            color = ColorPalette.getColorByColor(Color.brightwhite)
-        else:
-            color = ColorPalette.getColorByColor(Color.white)
-
-        if animationType is CharacterAnimationType.standing:
-            animation = self.fileTextureLoader.readAnimation(
-                characterType=CharacterType.stickfigure, 
-                characterAnimationType=animationType)
-            animations.append(animation)
-
-        if animationType is CharacterAnimationType.walking:
-            animation = self.fileTextureLoader.readAnimation(
-                characterType=CharacterType.stickfigure, 
-                characterAnimationType=animationType)
-            if direction is Direction.left:
-                self.mirrorFrames(animation.arr)
-            animations.append(animation)
-
-        if animationType is CharacterAnimationType.hitting:
-            animation = self.fileTextureLoader.readAnimation(
-                characterType=CharacterType.stickfigure, 
-                characterAnimationType=animationType)
-            if direction is Direction.left:
-                self.mirrorFrames(animation.arr)
-            animations.append(animation)
-
-        if animationType is CharacterAnimationType.shrugging:
-            animation = self.fileTextureLoader.readAnimation(
-                characterType=CharacterType.stickfigure, 
-                characterAnimationType=animationType)
-            if direction is Direction.left:
-                self.mirrorFrames(animation.arr)
-            animations.append(animation)
 
         if animationType is CharacterAnimationType.dying:
             n = 0
             while n < 2:
                 animation = self.fileTextureLoader.readAnimation(
-                    characterType=CharacterType.stickfigure, 
+                    characterType=characterType,
                     characterAnimationType=animationType)
                 if direction is Direction.left:
                     self.mirrorFrames(animation.arr)
 
                 animations.append(animation)
                 n += 1
-
-        if animationType is CharacterAnimationType.hitwindup:
+        else:
             animation = self.fileTextureLoader.readAnimation(
-                characterType=CharacterType.stickfigure, 
+                characterType=characterType,
                 characterAnimationType=animationType)
             if direction is Direction.left:
-                self.mirrorFrames(animation.arr)
-            animations.append(animation)
-
-        if animationType is CharacterAnimationType.stun:
-            animation = self.fileTextureLoader.readAnimation(
-                characterType=CharacterType.stickfigure, 
-                characterAnimationType=animationType)
-            if direction is Direction.left:
-                self.mirrorFrames(animation.arr)
-            animations.append(animation)
-
-        for animation in animations:
-            Utility.checkAnimation(animation, animationType, self.characterType)
-
-        return animations
-
-
-    def createAnimationCow(self, animationType, direction):
-        animations = []
-
-        if animationType is CharacterAnimationType.standing:
-            animation = self.fileTextureLoader.readAnimation(
-                characterType=CharacterType.cow, characterAnimationType=animationType)
-            if animation.originalDirection is not direction:
-                self.mirrorFrames(animation.arr)
-            animations.append(animation)
-
-        if animationType is CharacterAnimationType.walking:
-            animation = self.fileTextureLoader.readAnimation(
-                characterType=CharacterType.cow, characterAnimationType=animationType)
-            if animation.originalDirection is not direction:
-                self.mirrorFrames(animation.arr)
-            animations.append(animation)
-
-        if animationType is CharacterAnimationType.hitting:
-            animation = self.fileTextureLoader.readAnimation(
-                characterType=CharacterType.cow, characterAnimationType=animationType)
-            if animation.originalDirection is not direction:
-                self.mirrorFrames(animation.arr)
-            animations.append(animation)
-
-        if animationType is CharacterAnimationType.dying:
-            animation = self.fileTextureLoader.readAnimation(
-                characterType=CharacterType.cow, characterAnimationType=animationType)
-            if animation.originalDirection is not direction:
-                self.mirrorFrames(animation.arr)
-            animations.append(animation)
-            animations.append(animation)
-
-        if animationType is CharacterAnimationType.hitwindup:
-            animation = self.fileTextureLoader.readAnimation(
-                characterType=CharacterType.cow, characterAnimationType=animationType)
-            if animation.originalDirection is not direction:
-                self.mirrorFrames(animation.arr)
-            animations.append(animation)
-
-        if animationType is CharacterAnimationType.stun:
-            animation = self.fileTextureLoader.readAnimation(
-                characterType=CharacterType.cow, characterAnimationType=animationType)
-            if animation.originalDirection is not direction:
-                self.mirrorFrames(animation.arr)
+                self.mirrorFrames(animation.arr)                
             animations.append(animation)
 
         for animation in animations:

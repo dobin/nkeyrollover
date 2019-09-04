@@ -1,12 +1,14 @@
 import logging
 import yaml
 import io
+import os
 
 from texture.character.characteranimationtype import CharacterAnimationType
 from texture.character.charactertype import CharacterType
 from texture.animation import Animation
 from sprite.direction import Direction
 from utilities.colorpalette import ColorPalette
+from utilities.color import Color
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +25,18 @@ class FileTextureLoader(object):
         ct = characterType.name
         cat = characterAnimationType.name
         filename = "data/textures/{}/{}_{}.ascii".format(ct, ct, cat)
+
+        # return fake animation if file does not exist(yet)
+        if not os.path.isfile(filename):
+            animation = Animation()
+            animation.arr = [ [ [ 'X' ] ] ]
+            animation.height = 1
+            animation.width = 1
+            animation.frameCount = 1
+            animation.frameTime = [ 10.0 ]
+            animation.frameColors = [ ColorPalette.getColorByColor(Color.white) ]
+            return animation
+
         animation = self.readAnimationFile(filename)
         animation.name = "{}_{}".format(ct, cat)
 
