@@ -14,6 +14,7 @@ from system.keyboardinput import KeyboardInput
 from system.gamelogic.attackable import Attackable
 from system.gamelogic.player import Player
 from system.offensiveattack import OffensiveAttack
+from system.offensiveskill import OffensiveSkill
 
 import locale
 current_milli_time = lambda: int(round(time.time() * 1000))
@@ -137,18 +138,19 @@ class Keyrollover(object):
         color = ColorPalette.getColorByColorType(ColorType.menu, None)
         self.menuwin.addstr(1, 2, s, color )
 
-        #self.printSkillbar(color)
+        self.printSkillbar(color)
         self.printAttackbar(color)
         self.menuwin.refresh()
 
 
     def printSkillbar(self, color):
-        skills = self.world.getPlayer().skills
+        playerOffensiveSkill = self.world.esperWorld.component_for_entity(
+            self.world.player, OffensiveSkill)
 
         basex = 54
         n = 0
-        for skill in skills.skillStatus:
-            if skills.isRdy(skill):
+        for skill in playerOffensiveSkill.skillStatus:
+            if playerOffensiveSkill.isRdy(skill):
                 self.menuwin.addstr(1, basex + n, skill, curses.color_pair(9))
             else:
                 self.menuwin.addstr(1, basex + n, skill, curses.color_pair(10))

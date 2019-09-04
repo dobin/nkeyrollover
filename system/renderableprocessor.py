@@ -90,6 +90,7 @@ class RenderableProcessor(esper.Processor):
                             data = {
                                 'text': 'Cowabunga!',
                                 'time': 1.0,
+                            }
                         )
 
             # handle Enemy Attacks
