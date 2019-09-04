@@ -26,7 +26,7 @@ class Map(object):
         self.mapTextures = None
         self.color :Color = ColorPalette.getColorByColor(Color.grey)
 
-        self.openXpMap('texture/textures/map/map02.xp')
+        self.openXpMap('data/map/map02.xp')
         self.mapTextures = [ None ] * self.xpmap['width'] # array of len(mapwidth), with arrays
         #self.loadMapTextures('map01')
 

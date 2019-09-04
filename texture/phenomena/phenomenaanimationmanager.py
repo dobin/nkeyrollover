@@ -153,7 +153,7 @@ class PhenomenaAnimationManager(object):
                 0.2
             ]
 
-            t = self.fileTextureLoader.readAnimationFile('texture/textures/roflcopter.ascii')
+            t = self.fileTextureLoader.readPhenomena('roflcopter')
             animation.width = t['width']
             animation.height = t['height']
             animation.arr = t['arr']
@@ -172,7 +172,7 @@ class PhenomenaAnimationManager(object):
                 ColorPalette.getColorByColor(Color.white),
             ]
 
-            t = self.fileTextureLoader.readAnimationFile('texture/textures/intro.ascii')
+            t = self.fileTextureLoader.readPhenomena('intro')
             animation.width = t['width']
             animation.height = t['height']
             animation.arr = t['arr']
@@ -185,7 +185,7 @@ class PhenomenaAnimationManager(object):
             animation.frameTime = None
             animation.frameColors = [ mapColor, ]
 
-            t = self.fileTextureLoader.readAnimationFile('texture/textures/tree1.ascii')
+            t = self.fileTextureLoader.readPhenomena('tree1')
             animation.width = t['width']
             animation.height = t['height']
             animation.arr = t['arr']
@@ -197,7 +197,7 @@ class PhenomenaAnimationManager(object):
             animation.frameTime = None
             animation.frameColors = [ mapColor, ]
 
-            t = self.fileTextureLoader.readAnimationFile('texture/textures/tree2.ascii')
+            t = self.fileTextureLoader.readPhenomena('tree2')
             animation.width = t['width']
             animation.height = t['height']
             animation.arr = t['arr']
@@ -209,7 +209,7 @@ class PhenomenaAnimationManager(object):
             animation.frameTime = None
             animation.frameColors = [ mapColor, ]
 
-            t = self.fileTextureLoader.readAnimationFile('texture/textures/tree3.ascii')
+            t = self.fileTextureLoader.readPhenomena('tree3')
             animation.width = t['width']
             animation.height = t['height']
             animation.arr = t['arr']
@@ -221,7 +221,7 @@ class PhenomenaAnimationManager(object):
             animation.frameTime = [ 2.0, 2.0 ]
             animation.frameColors = [ mapColor, mapColor ]
 
-            t = self.fileTextureLoader.readAnimationFile('texture/textures/tree4.ascii')
+            t = self.fileTextureLoader.readPhenomena('tree4')
             animation.width = t['width']
             animation.height = t['height']
             animation.arr = t['arr']

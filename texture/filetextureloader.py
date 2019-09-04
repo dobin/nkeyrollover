@@ -18,7 +18,15 @@ class FileTextureLoader(object):
         ct = characterType.name
         cat = characterAnimationType.name
 
-        filename = "texture/textures/{}/{}_{}.ascii".format(ct, ct, cat)
+        filename = "data/textures/{}/{}_{}.ascii".format(ct, ct, cat)
+        return self.readAnimationFile(filename)
+
+
+    def readPhenomena(
+        self,
+        phenomenaName :str,
+    ):
+        filename = "data/textures/{}.ascii".format(phenomenaName)
         return self.readAnimationFile(filename)
 
 
