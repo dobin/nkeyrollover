@@ -1,5 +1,6 @@
 import esper
 import logging
+import random
 
 from system.renderable import Renderable
 from system.gamelogic.enemy import Enemy
@@ -11,6 +12,7 @@ from utilities.color import Color
 from system.gamelogic.ai import Ai
 from messaging import messaging, MessageType
 from directmessaging import directMessaging, DirectMessageType
+from texture.character.characteranimationtype import CharacterAnimationType
 
 logger = logging.getLogger(__name__)
 
@@ -21,16 +23,46 @@ class AttackableProcessor(esper.Processor):
 
 
     def process(self, dt):
+        self.checkHealth()
+        self.checkReceiveDamage()
+
+
+    def checkHealth(self):
         # if enemies have less than 0 health, make them gonna die
-        for ent, (attackable, renderable, enemy, ai) in self.world.get_components(
+        for ent, (attackable, meRenderable, meEnemy, ai) in self.world.get_components(
             Attackable, Renderable, Enemy, Ai
         ):
             if attackable.getHealth() <= 0:
-                if renderable.isActive(): # and/or: enemy.brain.state.name != 'idle' ?
+                if meRenderable.isActive(): # and/or: enemy.brain.state.name != 'idle' ?
+                    # update state
                     ai.brain.pop()
                     ai.brain.push('dying')
 
+                    # update animation
+                    if random.choice([True, False]):
+                        logger.info(meRenderable.name + " Death animation deluxe")
+                        animationIndex = random.randint(0, 1)
+                        meEnemy.world.textureEmiter.makeExplode(
+                            pos=meRenderable.getLocation(),
+                            frame=meRenderable.texture.getCurrentFrameCopy(),
+                            charDirection=meRenderable.direction,
+                            data=None)
+                        meRenderable.texture.changeAnimation(
+                            CharacterAnimationType.dying,
+                            meRenderable.direction,
+                            animationIndex)
+                        meRenderable.setActive(False)
+                    else:
+                        animationIndex = random.randint(0, 1)
+                        meRenderable.texture.changeAnimation(
+                            CharacterAnimationType.dying,
+                            meRenderable.direction,
+                            animationIndex)
 
+    
+
+
+    def checkReceiveDamage(self):
         # damage taken
         msg = directMessaging.get(
             messageType = DirectMessageType.receiveDamage

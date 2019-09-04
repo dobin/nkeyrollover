@@ -17,7 +17,6 @@ from messaging import messaging, Messaging, Message, MessageType
 from directmessaging import directMessaging, DirectMessage, DirectMessageType
 from sprite.direction import Direction
 
-
 logger = logging.getLogger(__name__)
 
 
