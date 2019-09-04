@@ -8,4 +8,5 @@ class ColorType(Enum):
     scene = 4
     world = 5
     menu = 6
+
     background = 7

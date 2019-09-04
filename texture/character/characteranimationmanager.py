@@ -74,8 +74,8 @@ class CharacterAnimationManager(object):
                 animation = self.fileTextureLoader.readAnimation(
                     characterType=characterType,
                     characterAnimationType=animationType)
-                if direction is Direction.left:
-                    self.mirrorFrames(animation.arr)
+                if animation.originalDirection is not direction:
+                    Utility.mirrorFrames(animation.arr)
 
                 animations.append(animation)
                 n += 1
@@ -83,8 +83,8 @@ class CharacterAnimationManager(object):
             animation = self.fileTextureLoader.readAnimation(
                 characterType=characterType,
                 characterAnimationType=animationType)
-            if direction is Direction.left:
-                self.mirrorFrames(animation.arr)                
+            if animation.originalDirection is not direction:
+                Utility.mirrorFrames(animation.arr)                
             animations.append(animation)
 
         for animation in animations:
@@ -93,42 +93,3 @@ class CharacterAnimationManager(object):
         return animations
 
 
-    def mirrorFrames(self, arr):
-        for a in arr:
-            for line in a:
-                n = 0
-                while n < len(line) / 2:
-                    cl = line[n]
-                    cr = line[ len(line) - 1 - n ]
-
-                    cl = self.swapChar(cl)
-                    cr = self.swapChar(cr)
-
-                    line[n] = cr
-                    line[ len(line) - 1 - n ] = cl
-                    n += 1
-
-
-    def swapChar(self, char):
-        if char == ')':
-            return '('
-        elif char == '(':
-            return ')'
-
-        elif char == '/':
-            return '\\'
-        elif char == '\\':
-            return '/'
-
-        elif char == '`':
-            return '\''
-        elif char == '\'':
-            return '`'
-
-        elif char == '>':
-            return '<'
-        elif char == '<':
-            return '>'
-
-        else:
-            return char

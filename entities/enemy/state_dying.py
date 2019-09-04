@@ -22,7 +22,6 @@ class StateDying(State):
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.enemy.Enemy)
 
-
         if random.choice([True, False]):
             logger.info(self.name + " Death animation deluxe")
             animationIndex = random.randint(0, 1)
@@ -42,7 +41,6 @@ class StateDying(State):
                 CharacterAnimationType.dying,
                 meRenderable.direction,
                 animationIndex)
-
 
         self.setTimer( meEnemy.enemyInfo.dyingTime )
 

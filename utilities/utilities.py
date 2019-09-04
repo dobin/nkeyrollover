@@ -177,3 +177,47 @@ class Utility(object):
         if len(animation.frameColors) != animation.frameCount:
             raise Exception("Animation {} / {} frameColor count {} does not match frameCount {}"
                 .format(characterType, animationType.name, len(animation.frameColors), animation.frameCount))
+
+
+    @staticmethod
+    def mirrorFrames(arr):
+        for a in arr:
+            for line in a:
+                n = 0
+                while n < len(line) / 2:
+                    cl = line[n]
+                    cr = line[ len(line) - 1 - n ]
+
+                    cl = Utility.swapChar(cl)
+                    cr = Utility.swapChar(cr)
+
+                    line[n] = cr
+                    line[ len(line) - 1 - n ] = cl
+                    n += 1
+
+
+    @staticmethod
+    def swapChar(char):
+        if char == ')':
+            return '('
+        elif char == '(':
+            return ')'
+
+        elif char == '/':
+            return '\\'
+        elif char == '\\':
+            return '/'
+
+        elif char == '`':
+            return '\''
+        elif char == '\'':
+            return '`'
+
+        elif char == '>':
+            return '<'
+        elif char == '<':
+            return '>'
+
+        else:
+            return char
+

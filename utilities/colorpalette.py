@@ -36,6 +36,7 @@ class ColorPalette(object):
     def getColorByStr(s): 
         return Color[s]
 
+
     @staticmethod
     def getColorTypeByStr(s): 
         return ColorType[s]

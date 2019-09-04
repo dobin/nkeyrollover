@@ -48,8 +48,9 @@ class FileTextureLoader(object):
 
     def readPhenomena(
         self,
-        phenomenaName :str,
+        phenomenaType,
     ) -> Animation:
+        phenomenaName = phenomenaType.name
         filename = "data/textures/{}.ascii".format(phenomenaName)
         animation = self.readAnimationFile(filename)
         animation.name = phenomenaName
