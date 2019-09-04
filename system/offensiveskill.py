@@ -209,7 +209,7 @@ class OffensiveSkill(object):
             self.esperData.entity, system.renderable.Renderable)
 
         hitLocations = self.particleEmiter.emit(
-            meRenderable.getLocation(),
+            meRenderable.getLocationCenter(),
             ParticleEffectType.laser,
             direction=meRenderable.direction)
 
@@ -228,7 +228,7 @@ class OffensiveSkill(object):
             self.esperData.entity, system.renderable.Renderable)
 
         hitLocations = self.particleEmiter.emit(
-            meRenderable.getLocation(),
+            meRenderable.getLocationCenter(),
             ParticleEffectType.cleave,
             direction=meRenderable.direction)
 
