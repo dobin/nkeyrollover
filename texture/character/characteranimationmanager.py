@@ -349,7 +349,6 @@ class CharacterAnimationManager(object):
 
         if animationType is CharacterAnimationType.standing:
             animation = Animation()
-
             fileAnimation = self.fileTextureLoader.readAnimation(
                 characterType=CharacterType.cow, characterAnimationType=animationType)
 
@@ -358,7 +357,7 @@ class CharacterAnimationManager(object):
             animation.arr = fileAnimation['arr']
             if direction is Direction.left:
                 self.mirrorFrames(animation.arr)
-            animation.frameCount = 1
+            animation.frameCount = fileAnimation['frameCount']
             animation.frameTime = []
             animation.advanceByStep = False
             animation.endless = True
@@ -369,7 +368,6 @@ class CharacterAnimationManager(object):
 
         if animationType is CharacterAnimationType.walking:
             animation = Animation()
-
             fileAnimation = self.fileTextureLoader.readAnimation(
                 characterType=CharacterType.cow, characterAnimationType=animationType)
 
@@ -379,7 +377,7 @@ class CharacterAnimationManager(object):
             if direction is Direction.left:
                 self.mirrorFrames(animation.arr)
 
-            animation.frameCount = 2
+            animation.frameCount = fileAnimation['frameCount']
             animation.frameColors = [
                 color,
                 color,
@@ -392,7 +390,6 @@ class CharacterAnimationManager(object):
 
         if animationType is CharacterAnimationType.hitting:
             animation = Animation()
-
             fileAnimation = self.fileTextureLoader.readAnimation(
                 characterType=CharacterType.cow, characterAnimationType=animationType)
 
@@ -403,7 +400,7 @@ class CharacterAnimationManager(object):
                 self.mirrorFrames(animation.arr)
 
             animation.endless = False
-            animation.frameCount = 2
+            animation.frameCount = fileAnimation['frameCount']
             animation.frameTime = [
                 0.8,
                 0.2
@@ -417,9 +414,7 @@ class CharacterAnimationManager(object):
             animations.append(animation)
 
         if animationType is CharacterAnimationType.dying:
-            animations = []
             animation = Animation()
-
             fileAnimation = self.fileTextureLoader.readAnimation(
                 characterType=CharacterType.cow, characterAnimationType=animationType)
 
@@ -429,7 +424,7 @@ class CharacterAnimationManager(object):
             if direction is Direction.left:
                 self.mirrorFrames(animation.arr)
 
-            animation.frameCount = 1
+            animation.frameCount = fileAnimation['frameCount']
             animation.frameColors = [
                 color,
             ]
@@ -443,7 +438,6 @@ class CharacterAnimationManager(object):
 
         if animationType is CharacterAnimationType.hitwindup:
             animation = Animation()
-
             fileAnimation = self.fileTextureLoader.readAnimation(
                 characterType=CharacterType.cow, characterAnimationType=animationType)
 
@@ -453,7 +447,7 @@ class CharacterAnimationManager(object):
             if direction is Direction.left:
                 self.mirrorFrames(animation.arr)
 
-            animation.frameCount = 2
+            animation.frameCount = fileAnimation['frameCount']
             animation.frameColors = [
                 color,
                 color,
@@ -466,7 +460,6 @@ class CharacterAnimationManager(object):
 
         if animationType is CharacterAnimationType.stun:
             animation = Animation()
-
             fileAnimation = self.fileTextureLoader.readAnimation(
                 characterType=CharacterType.cow, characterAnimationType=animationType)
 
@@ -476,7 +469,7 @@ class CharacterAnimationManager(object):
             if direction is Direction.left:
                 self.mirrorFrames(animation.arr)
 
-            animation.frameCount = 2
+            animation.frameCount = fileAnimation['frameCount']
             animation.frameColors = [
                 color,
                 color,
