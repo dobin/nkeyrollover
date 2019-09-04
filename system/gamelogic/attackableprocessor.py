@@ -48,8 +48,8 @@ class AttackableProcessor(esper.Processor):
 
     def checkHealth(self):
         # if enemies have less than 0 health, make them gonna die
-        for ent, (attackable, meRenderable, meEnemy, ai) in self.world.get_components(
-            Attackable, Renderable, Enemy, Ai
+        for ent, (attackable, meRenderable, meEnemy, ai, meGroupId) in self.world.get_components(
+            Attackable, Renderable, Enemy, Ai, GroupId
         ):
             if attackable.getHealth() <= 0:
                 if ai.brain.state.name is not 'idle' and ai.brain.state.name is not 'dying':
@@ -57,26 +57,11 @@ class AttackableProcessor(esper.Processor):
                     ai.brain.pop()
                     ai.brain.push('dying')
 
-                    # update animation
-                    if random.choice([True, False]):
-                        logger.info(meRenderable.name + " Death animation deluxe")
-                        animationIndex = random.randint(0, 1)
-                        meEnemy.world.textureEmiter.makeExplode(
-                            pos=meRenderable.getLocation(),
-                            frame=meRenderable.texture.getCurrentFrameCopy(),
-                            charDirection=meRenderable.direction,
-                            data=None)
-                        meRenderable.texture.changeAnimation(
-                            CharacterAnimationType.dying,
-                            meRenderable.direction,
-                            animationIndex)
-                        meRenderable.setActive(False)
-                    else:
-                        animationIndex = random.randint(0, 1)
-                        meRenderable.texture.changeAnimation(
-                            CharacterAnimationType.dying,
-                            meRenderable.direction,
-                            animationIndex)
+                    messaging.add(
+                        type = MessageType.EntityDying,
+                        groupId = meGroupId.getId(),
+                        data = {}
+                    )
 
 
     def checkReceiveDamage(self):

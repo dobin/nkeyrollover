@@ -1,5 +1,6 @@
 import esper
 import logging
+import random
 
 from utilities.utilities import Utility
 from texture.character.characteranimationtype import CharacterAnimationType
@@ -20,14 +21,46 @@ class CharacterAnimationProcessor(esper.Processor):
     * MessageType.attackWindup
     * MessageType.EntityAttack
     """
-    def __init__(self):
+    def __init__(self, textureEmiter):
         super().__init__()
+        self.textureEmiter = textureEmiter
 
 
     def process(self, deltaTime):
         self.animationUpdateMove()
         self.animationUpdateAttack()
         self.animationUpdateStun()
+        self.animationUpdateDying()
+
+
+    def animationUpdateDying(self):
+        messages = messaging.get()
+        for msg in messages:
+            if msg.type == MessageType.EntityDying:
+                entity = Utility.findCharacterByGroupId(self.world, msg.groupId)
+                meRenderable = self.world.component_for_entity(
+                    entity, system.renderable.Renderable)
+
+                # update animation
+                if random.choice([True, False]):
+                    logger.info(meRenderable.name + " Death animation deluxe")
+                    animationIndex = random.randint(0, 1)
+                    self.textureEmiter.makeExplode(
+                        pos=meRenderable.getLocation(),
+                        frame=meRenderable.texture.getCurrentFrameCopy(),
+                        charDirection=meRenderable.direction,
+                        data=None)
+                    meRenderable.texture.changeAnimation(
+                        CharacterAnimationType.dying,
+                        meRenderable.direction,
+                        animationIndex)
+                    meRenderable.setActive(False)
+                else:
+                    animationIndex = random.randint(0, 1)
+                    meRenderable.texture.changeAnimation(
+                        CharacterAnimationType.dying,
+                        meRenderable.direction,
+                        animationIndex)
 
 
     def animationUpdateMove(self):

@@ -17,6 +17,7 @@ class MessageType(Enum):
     EntityAttack = 9 # to start attack animation (on specific enemy)
 
     EntityStun = 10 # to play stun animation
+    EntityDying = 11 # to play death animation
 
 
 class Message(object):

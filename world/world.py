@@ -75,7 +75,9 @@ class World(object):
         self.showEnemyWanderDestination = False
 
         aiProcessor = AiProcessor()
-        characterAnimationProcessor = CharacterAnimationProcessor()
+        characterAnimationProcessor = CharacterAnimationProcessor(
+            textureEmiter=self.textureEmiter
+        )
         renderableProcessor = RenderableProcessor()
         advanceableProcessor = AdvanceableProcessor()
         playerProcessor = PlayerProcessor()
@@ -128,8 +130,10 @@ class World(object):
 
         # x handle:   DirectMessageType   receiveDamage
         # x generate: MessageType         EntityStun
+        # e generate: MessageType         EntityDying
         self.esperWorld.add_processor(attackableProcessor)
 
+        # e handle:  MessageType          EntityDying
         # p handle:  MessageType          PlayerAttack
         # x handle:  MessageType          AttackWindup
         # x handle:  MessageType          EntityAttack
