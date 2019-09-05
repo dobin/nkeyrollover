@@ -56,15 +56,17 @@ class Messaging(object):
 
     def getByType(self, messageType):
         n = 0
-        if self.messages[n].messageType is messageType: 
-            yield self.messages[n]
+        while n < len(self.messages):
+            if self.messages[n].type is messageType: 
+                yield self.messages[n]
             n += 1
 
 
     def getByGroupId(self, groupId):
         n = 0
-        if self.messages[n].groupId is groupId: 
-            yield self.messages[n]
+        while n < len(self.messages):
+            if self.messages[n].groupId is groupId: 
+                yield self.messages[n]
             n += 1
 
 
