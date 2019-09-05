@@ -3,14 +3,16 @@ import logging
 
 from messaging import messaging, MessageType
 from system.offensiveskill import OffensiveSkill
+from utilities.utilities import Utility
+import system.groupid
+from utilities.entityfinder import EntityFinder
 
 logger = logging.getLogger(__name__)
 
 
 class OffensiveSkillProcessor(esper.Processor):
-    def __init__(self, player):
+    def __init__(self):
         super().__init__()
-        self.player = player
 
 
     def process(self, dt):
@@ -29,7 +31,10 @@ class OffensiveSkillProcessor(esper.Processor):
 
 
     def handlePlayerKeypress(self, key):
-        playerSkill = self.world.component_for_entity(self.player, OffensiveSkill)
+        playerSkill = self.getPlayerSkill()
+        if playerSkill is None: 
+            # no player here yet
+            return
 
         if key == ord('c'):
             playerSkill.doSkill('c')
@@ -51,3 +56,19 @@ class OffensiveSkillProcessor(esper.Processor):
 
         if key == ord('r'):
             playerSkill.doSkill('r')
+
+
+    def getPlayerSkill(self):
+        playerEntity = EntityFinder.findPlayer(self.world)
+        if playerEntity is None: 
+            return None
+
+        meGroupId = self.world.component_for_entity(
+            playerEntity, system.groupid.GroupId)
+
+        offensiveSkillEntity = EntityFinder.findOffensiveSkillByGroupId(
+            self.world, 
+            meGroupId.getId())
+
+        return offensiveSkillEntity
+        

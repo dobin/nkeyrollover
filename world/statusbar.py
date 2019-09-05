@@ -7,6 +7,8 @@ from system.gamelogic.attackable import Attackable
 from system.gamelogic.player import Player
 from system.offensiveattack import OffensiveAttack
 from system.offensiveskill import OffensiveSkill
+from system.groupid import GroupId
+from utilities.entityfinder import EntityFinder
 
 
 class StatusBar(object):
@@ -21,12 +23,18 @@ class StatusBar(object):
         #    fps = 1000 * (float)(n) / (float)(current_milli_time() - self.startTime)
         #    #fps = self.workTime * 1000.0
 
+        playerEntity = EntityFinder.findPlayer(self.world.esperWorld)
+        if playerEntity is None: 
+            # No player here yet
+            return
+
+
         #self.menuwin.erase()
         #self.menuwin.border()
         playerAttackable = self.world.esperWorld.component_for_entity(
-            self.world.player, Attackable)
+            playerEntity, Attackable)
         player = self.world.esperWorld.component_for_entity(
-            self.world.player, Player)
+            playerEntity, Player)
 
         s = "Health: " + str(playerAttackable.getHealth())
         s += "  Points: " + str(player.points)
@@ -35,14 +43,14 @@ class StatusBar(object):
         color = ColorPalette.getColorByColorType(ColorType.menu, None)
         self.menuwin.addstr(1, 2, s, color )
 
-        self.printSkillbar(color)
-        self.printAttackbar(color)
+        self.printSkillbar(color, playerEntity)
+        self.printAttackbar(color, playerEntity)
         self.menuwin.refresh()
 
 
-    def printSkillbar(self, color):
+    def printSkillbar(self, color, playerEntity):
         playerOffensiveSkill = self.world.esperWorld.component_for_entity(
-            self.world.player, OffensiveSkill)
+            playerEntity, OffensiveSkill)
 
         basex = 54
         n = 0
@@ -54,11 +62,15 @@ class StatusBar(object):
 
             n += 1
 
-    def printAttackbar(self, color):
-        playerOffensiveAttack = self.world.esperWorld.component_for_entity(
-            self.world.characterAttackEntity, OffensiveAttack)
+    def printAttackbar(self, color, playerEntity):
+        playerGroupId = self.world.esperWorld.component_for_entity(
+            playerEntity, GroupId)
+        playerOffensiveAttack = EntityFinder.findOffensiveAttackByGroupId(
+            self.world.esperWorld,
+            playerGroupId.getId())
+        
         player = self.world.esperWorld.component_for_entity(
-            self.world.player, Player)
+            playerEntity, Player)
 
         weaponIdx = 62
         self.menuwin.addstr(1,

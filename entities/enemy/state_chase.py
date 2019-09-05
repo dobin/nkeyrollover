@@ -9,7 +9,7 @@ from messaging import messaging, MessageType
 from directmessaging import directMessaging, DirectMessage, DirectMessageType
 import system.renderable
 import system.gamelogic.enemy
-
+from utilities.entityfinder import EntityFinder
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +57,8 @@ class StateChase(State):
         self.checkForNewPlayerPosition()
         if self.canAttackTimer.timeIsUp():
             if self.canAttackPlayer():
-                if meEnemy.world.director.canHaveMoreEnemiesAttacking():
+                #if meEnemy.world.director.canHaveMoreEnemiesAttacking():
+                if True:
                     self.brain.pop()
                     self.brain.push("attackwindup")
                     didAttack = True
@@ -94,7 +95,7 @@ class StateChase(State):
         if self.lastKnowsPlayerPosition is None:
             # we may not yet have received a location. find it directly via player entity
             # this is every time we go into chase state
-            playerEntity = Utility.findPlayer(self.brain.owner.world)
+            playerEntity = EntityFinder.findPlayer(self.brain.owner.world)
             playerRenderable = self.brain.owner.world.component_for_entity(
                 playerEntity, system.renderable.Renderable)
             self.lastKnowsPlayerPosition = playerRenderable.getLocationAndSize()
@@ -131,7 +132,11 @@ class StateChase(State):
         meOffensiveWeaponRenderable = self.brain.owner.world.component_for_entity(
             meEnemy.offensiveAttackEntity, system.renderable.Renderable)
         meWeaponLocation = meOffensiveWeaponRenderable.getLocation()
-        playerLocation = meEnemy.player.getLocation()
+
+        playerEntity = EntityFinder.findPlayer(self.brain.owner.world)
+        playerRenderable = self.brain.owner.world.component_for_entity(
+            playerEntity, system.renderable.Renderable)
+        playerLocation = playerRenderable.getLocation()
 
         moveX = 0
         moveY = 0
@@ -157,7 +162,7 @@ class StateChase(State):
         # we can walk diagonally, no elif here
         if meWeaponLocation.y < playerLocation.y:
             moveY = 1
-        elif meWeaponLocation.y > playerLocation.y + meEnemy.player.texture.height - 1: # why -1?
+        elif meWeaponLocation.y > playerLocation.y + playerRenderable.texture.height - 1: # why -1?
             moveY = -1
 
         # only move if we really move a character

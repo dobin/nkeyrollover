@@ -4,7 +4,6 @@ import curses
 
 from sprite.coordinates import Coordinates
 from sprite.direction import Direction
-from world.director import Director
 from config import Config
 from entities.entity import Entity
 from entities.entitytype import EntityType
@@ -70,10 +69,6 @@ class World(object):
             viewport=self.viewport,
             esperWorld=self.esperWorld)
 
-        self.addPlayer()
-        self.director :Director = Director(self.viewport, self)
-        self.director.init()
-
         self.pause :bool = False
         self.gameRunning :bool = True
         self.gameTime :float =0.0
@@ -86,15 +81,11 @@ class World(object):
         )
         renderableProcessor = RenderableProcessor()
         advanceableProcessor = AdvanceableProcessor()
-        playerProcessor = PlayerProcessor()
-        enemyProcessor = EnemyProcessor()
+        playerProcessor = PlayerProcessor(viewport=self.viewport, particleEmiter=self.particleEmiter)
+        enemyProcessor = EnemyProcessor(viewport=self.viewport)
         attackableProcessor = AttackableProcessor()
-        offensiveAttackProcessor = OffensiveAttackProcessor(
-            playerAttackEntity=self.characterAttackEntity
-        )
-        offensiveSkillProcessor = OffensiveSkillProcessor(
-            player=self.player,
-        )
+        offensiveAttackProcessor = OffensiveAttackProcessor()
+        offensiveSkillProcessor = OffensiveSkillProcessor()
         movementProcessor = MovementProcessor()
         inputProcessor = InputProcessor()
         renderableMinimalProcessor = RenderableMinimalProcessor(viewport=self.viewport)
@@ -163,96 +154,6 @@ class World(object):
         self.esperWorld.add_processor(renderableProcessor)
 
 
-    def addPlayer(self):
-        # Player
-        myid = 31337
-        self.player = self.esperWorld.create_entity()
-        esperData = EsperData(self.esperWorld, self.player, 'player')
-        texture = CharacterTexture(
-            characterType=CharacterType.player,
-            characterAnimationType=CharacterAnimationType.standing)
-        texture.name = "Player"
-        coordinates = Coordinates(
-            Config.playerSpawnPoint['x'],
-            Config.playerSpawnPoint['y']
-        )
-        renderable = Renderable(
-            texture=texture,
-            viewport=self.viewport,
-            parent=None,
-            coordinates=coordinates)
-        characterSkill = OffensiveSkill(
-            esperData=esperData,
-            particleEmiter=self.particleEmiter,
-            viewport=self.viewport)
-        self.characterSkillEntity = characterSkill
-        renderable.name = "Player"
-        groupId = GroupId(id=myid)
-        self.esperWorld.add_component(self.player, groupId)
-        self.esperWorld.add_component(self.player, characterSkill)
-        self.esperWorld.add_component(self.player, renderable)
-        self.esperWorld.add_component(self.player, Player())
-        self.esperWorld.add_component(self.player, Attackable(initialHealth=100))
-        self.playerRendable = renderable
-        renderable.setActive(False)
-        # /Player
-
-        # CharacterAttack
-        characterAttackEntity = self.esperWorld.create_entity()
-        texture :PhenomenaTexture = PhenomenaTexture(
-            phenomenaType=PhenomenaType.hit)
-        coordinates = Coordinates( # for hit
-            0,
-            0
-        )
-        texture.name = "Playerweapon"
-        renderable = Renderable(
-            texture=texture,
-            viewport=self.viewport,
-            parent=self.playerRendable,
-            coordinates=coordinates,
-            z=3,
-            active=False,
-            useParentDirection=True)
-        renderable.setLocation(
-           Coordinates(-1 * (renderable.texture.width - 2), -1)
-        )            
-        renderable.name = "PlayerWeapon"
-        self.esperWorld.add_component(characterAttackEntity, renderable)
-        offensiveAttack = OffensiveAttack(
-            isPlayer=True,
-            world=self,
-            renderable=renderable)
-        groupId = GroupId(id=myid)
-        self.esperWorld.add_component(characterAttackEntity, groupId)
-        self.esperWorld.add_component(characterAttackEntity, offensiveAttack)
-        self.characterAttackEntity = characterAttackEntity
-        # /CharacterAttack
-
-        # speech
-        speechEntity = self.esperWorld.create_entity()
-        texture = AnimationTexture()
-        coordinates = Coordinates(1, -4)
-        renderable = Renderable(
-            texture=texture,
-            viewport=self.viewport,
-            parent=self.playerRendable,
-            coordinates=coordinates,
-            z=3,
-            active=False)
-        speechBubble = SpeechBubble(renderable=renderable)
-        groupId = GroupId(id=myid)
-        self.esperWorld.add_component(
-            speechEntity,
-            groupId)
-        self.esperWorld.add_component(
-            speechEntity,
-            renderable)
-        self.esperWorld.add_component(
-            speechEntity,
-            speechBubble)
-        # /speech
-
 
     def togglePause(self):
         self.pause = not self.pause
@@ -276,7 +177,8 @@ class World(object):
         self.particleEmiter.draw()
 
         if self.showStats:
-            self.drawStats()
+            #self.drawStats()
+            pass
 
 
         if self.pause:
@@ -295,9 +197,7 @@ class World(object):
 
         self.gameTime += deltaTime
         self.map.advance(deltaTime)
-        self.director.advance(deltaTime)
         self.particleEmiter.advance(deltaTime)
-        self.director.worldUpdate()
 
         messaging.reset()
 

@@ -11,7 +11,7 @@ from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 from utilities.color import Color
 from messaging import messaging, Messaging, Message, MessageType
-
+from utilities.entityfinder import EntityFinder
 import system.renderable
 import system.gamelogic.enemy
 from directmessaging import directMessaging, DirectMessage, DirectMessageType
@@ -60,7 +60,8 @@ class StateWander(State):
             self.lastInputTimer.reset()
 
         if self.timeIsUp():
-            if meEnemy.world.director.canHaveMoreEnemiesChasing():
+            #if meEnemy.world.director.canHaveMoreEnemiesChasing():
+            if True:
                 logger.info("{}: Too long wandering, chase again a bit".format(self.owner))
                 self.brain.pop()
                 self.brain.push("chase")
@@ -126,12 +127,16 @@ class StateWander(State):
         #self.destIsPoint = random.choice([True, False])
 
         # note that getLocation() will return a reference. we need to copy it here.
-        self.destCoord.x = meEnemy.player.getLocation().x
-        self.destCoord.y = meEnemy.player.getLocation().y
+        playerEntity = EntityFinder.findPlayer(self.brain.owner.world)
+        playerRenderable = self.brain.owner.world.component_for_entity(
+            playerEntity, system.renderable.Renderable)
+
+        self.destCoord.x = playerRenderable.getLocation().x
+        self.destCoord.y = playerRenderable.getLocation().y
         self.destCoord = self.pickDestAroundPlayer(self.destCoord, meRenderable)
-        if meEnemy.world.showEnemyWanderDestination:
-            meEnemy.world.textureEmiter.showCharAtPos(
-                char='.', timeout=self.timer, coordinate=self.destCoord, color=Color.grey)
+        #if self.brain.owner.world.showEnemyWanderDestination:
+        #    meEnemy.world.textureEmiter.showCharAtPos(
+        #        char='.', timeout=self.timer, coordinate=self.destCoord, color=Color.grey)
 
 
     def pickDestAroundPlayer(self, coord :Coordinates, meRenderable):

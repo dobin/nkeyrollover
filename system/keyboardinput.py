@@ -41,9 +41,8 @@ class KeyboardInput(object):
                 type=MessageType.PlayerKeypress,
                 data=key)
 
-            player = self.world.esperWorld.component_for_entity(self.world.player, Player)
-            player.characterStatus.handleKeyPress(time=self.world.getGameTime())
-
+            #player = self.world.esperWorld.component_for_entity(self.world.player, Player)
+            #player.characterStatus.handleKeyPress(time=self.world.getGameTime())
 
 
     def advance(self, deltaTime):

@@ -11,9 +11,8 @@ import system.renderable
 import system.groupid
 from messaging import messaging, MessageType
 from utilities.utilities import Utility
-
+from utilities.entityfinder import EntityFinder
 from directmessaging import directMessaging, DirectMessageType
-
 
 logger = logging.getLogger(__name__)
 
@@ -63,7 +62,7 @@ class MovementProcessor(esper.Processor):
             messageType = DirectMessageType.moveEnemy
         )
         while msg is not None:
-            entity = Utility.findCharacterByGroupId(self.world, msg.groupId)
+            entity = EntityFinder.findCharacterByGroupId(self.world, msg.groupId)
             meRenderable = self.world.component_for_entity(
                 entity, system.renderable.Renderable)
             self.moveRenderable(

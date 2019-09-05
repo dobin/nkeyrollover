@@ -8,44 +8,10 @@ from config import Config
 from sprite.coordinates import Coordinates, ExtCoordinates
 from sprite.sprite import Sprite
 
-import system.gamelogic.attackable
-import system.renderable
-import system.groupid
-
 logger = logging.getLogger(__name__)
 
 
 class Utility(object):
-    @staticmethod
-    def findCharacterByGroupId(world, id):
-        for ent, (groupId, renderable, player) in world.get_components(
-            system.groupid.GroupId,
-            system.renderable.Renderable,
-            system.gamelogic.player.Player,
-        ):
-            if groupId.getId() == id:
-                return ent
-
-        for ent, (groupId, renderable, enemy) in world.get_components(
-            system.groupid.GroupId,
-            system.renderable.Renderable,
-            system.gamelogic.enemy.Enemy,
-        ):
-            if groupId.getId() == id:
-                return ent
-
-        logger.error("Could not find entity with groupId: {}".format(
-            id
-        ))
-
-    @staticmethod
-    def findPlayer(world):
-        for ent, player, in world.get_component(
-            system.gamelogic.player.Player,
-        ):
-            return ent
-
-
     @staticmethod
     def distance(coord1 :Coordinates, coord2 :Coordinates):
         res = {

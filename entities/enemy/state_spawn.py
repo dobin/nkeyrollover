@@ -16,10 +16,7 @@ class StateSpawn(State):
 
 
     def on_enter(self):
-        meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.enemy.Enemy)
-
-        self.setTimer( meEnemy.enemyInfo.spawnTime )
+        self.setTimer(0.1)
 
 
     def process(self, dt):
@@ -29,6 +26,8 @@ class StateSpawn(State):
             if Config.devMode:
                 # make him come straight at us, sucker
                 logger.info("{} From Spawn To Chase".format(self.owner))
+                self.brain.pop()
                 self.brain.push("chase")
             else:
+                self.brain.pop()
                 self.brain.push("wander")

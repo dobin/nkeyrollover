@@ -14,9 +14,8 @@ logger = logging.getLogger(__name__)
 
 
 class Ai():
-    def __init__(self, esperData, director, name):
+    def __init__(self, esperData, name):
         self.esperData = esperData
-        self.director = director #
         self.offensiveAttackEntity = None
 
         self.name :str = 'Bot' + name
@@ -33,7 +32,7 @@ class Ai():
         self.brain.register(StateWander)
         self.brain.register(StateDying)
         self.brain.register(StateAttackWindup)
-        self.brain.push("idle")
+        self.brain.push("spawn")
 
 
     def advance(self, deltaTime :float):

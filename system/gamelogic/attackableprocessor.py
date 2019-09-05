@@ -14,6 +14,7 @@ from system.gamelogic.ai import Ai
 from messaging import messaging, MessageType
 from directmessaging import directMessaging, DirectMessageType
 from texture.character.characteranimationtype import CharacterAnimationType
+from utilities.entityfinder import EntityFinder
 
 logger = logging.getLogger(__name__)
 
@@ -70,7 +71,7 @@ class AttackableProcessor(esper.Processor):
             messageType = DirectMessageType.receiveDamage
         )
         while msg is not None:
-            entity = Utility.findCharacterByGroupId(self.world, msg.groupId)
+            entity = EntityFinder.findCharacterByGroupId(self.world, msg.groupId)
             meRenderable = self.world.component_for_entity(
                 entity, Renderable)
             meAttackable = self.world.component_for_entity(

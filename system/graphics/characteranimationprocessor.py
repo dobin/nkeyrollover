@@ -8,6 +8,7 @@ from messaging import messaging, MessageType
 import system.advanceable
 import system.renderable
 import system.gamelogic.player
+from utilities.entityfinder import EntityFinder
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +36,7 @@ class CharacterAnimationProcessor(esper.Processor):
 
     def animationUpdateDying(self):
         for message in messaging.getByType(MessageType.EntityDying):
-            entity = Utility.findCharacterByGroupId(self.world, message.groupId)
+            entity = EntityFinder.findCharacterByGroupId(self.world, message.groupId)
             meRenderable = self.world.component_for_entity(
                 entity, system.renderable.Renderable)
 
@@ -63,7 +64,7 @@ class CharacterAnimationProcessor(esper.Processor):
 
     def animationUpdateMove(self):
         for message in messaging.getByType(MessageType.EntityMoved):
-            entity = Utility.findCharacterByGroupId(self.world, message.groupId)
+            entity = EntityFinder.findCharacterByGroupId(self.world, message.groupId)
             renderable = self.world.component_for_entity(
                 entity, system.renderable.Renderable)
 
@@ -84,7 +85,7 @@ class CharacterAnimationProcessor(esper.Processor):
         messages = messaging.get()
         for message in messages:
             if message.type == MessageType.PlayerAttack:
-                playerEntity = Utility.findPlayer(self.world)
+                playerEntity = EntityFinder.findPlayer(self.world)
                 playerRenderable = self.world.component_for_entity(
                     playerEntity, system.renderable.Renderable)
 
@@ -93,7 +94,7 @@ class CharacterAnimationProcessor(esper.Processor):
                     playerRenderable.direction)
 
             if message.type == MessageType.attackWindup:
-                entity = Utility.findCharacterByGroupId(self.world, message.groupId)
+                entity = EntityFinder.findCharacterByGroupId(self.world, message.groupId)
                 entityRenderable = self.world.component_for_entity(
                     entity, system.renderable.Renderable)
 
@@ -102,7 +103,7 @@ class CharacterAnimationProcessor(esper.Processor):
                     entityRenderable.direction)
 
             if message.type == MessageType.EntityAttack:
-                entity = Utility.findCharacterByGroupId(self.world, message.groupId)
+                entity = EntityFinder.findCharacterByGroupId(self.world, message.groupId)
                 entityRenderable = self.world.component_for_entity(
                     entity, system.renderable.Renderable)
 
@@ -113,7 +114,7 @@ class CharacterAnimationProcessor(esper.Processor):
 
     def animationUpdateStun(self): 
         for message in messaging.getByType(MessageType.EntityStun):
-            entity = Utility.findCharacterByGroupId(self.world, message.groupId)
+            entity = EntityFinder.findCharacterByGroupId(self.world, message.groupId)
             entityRenderable = self.world.component_for_entity(
                 entity, system.renderable.Renderable)
 
