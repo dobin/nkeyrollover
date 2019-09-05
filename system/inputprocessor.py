@@ -40,11 +40,10 @@ class InputProcessor(esper.Processor):
             if attackable.isStunned:
                 return
 
-            for message in messaging.get():
-                if message.type is MessageType.PlayerKeypress:
-                    didMoveTmp = self.handleKeyPress(message.data, player, renderable, ent)
-                    if didMoveTmp:
-                        didMove = True
+            for message in messaging.getByType(MessageType.PlayerKeypress):
+                didMoveTmp = self.handleKeyPress(message.data, player, renderable, ent)
+                if didMoveTmp:
+                    didMove = True
 
             # to allow diagonal movement, we allow multiple movement keys per input
             # cycle, without resetting the timer.

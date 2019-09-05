@@ -34,54 +34,50 @@ class CharacterAnimationProcessor(esper.Processor):
 
 
     def animationUpdateDying(self):
-        messages = messaging.get()
-        for msg in messages:
-            if msg.type == MessageType.EntityDying:
-                entity = Utility.findCharacterByGroupId(self.world, msg.groupId)
-                meRenderable = self.world.component_for_entity(
-                    entity, system.renderable.Renderable)
+        for message in messaging.getByType(MessageType.EntityDying):
+            entity = Utility.findCharacterByGroupId(self.world, message.groupId)
+            meRenderable = self.world.component_for_entity(
+                entity, system.renderable.Renderable)
 
-                # update animation
-                if random.choice([True, False]):
-                    logger.info(meRenderable.name + " Death animation deluxe")
-                    animationIndex = random.randint(0, 1)
-                    self.textureEmiter.makeExplode(
-                        pos=meRenderable.getLocation(),
-                        frame=meRenderable.texture.getCurrentFrameCopy(),
-                        charDirection=meRenderable.direction,
-                        data=None)
-                    meRenderable.texture.changeAnimation(
-                        CharacterAnimationType.dying,
-                        meRenderable.direction,
-                        animationIndex)
-                    meRenderable.setActive(False)
-                else:
-                    animationIndex = random.randint(0, 1)
-                    meRenderable.texture.changeAnimation(
-                        CharacterAnimationType.dying,
-                        meRenderable.direction,
-                        animationIndex)
+            # update animation
+            if random.choice([True, False]):
+                logger.info(meRenderable.name + " Death animation deluxe")
+                animationIndex = random.randint(0, 1)
+                self.textureEmiter.makeExplode(
+                    pos=meRenderable.getLocation(),
+                    frame=meRenderable.texture.getCurrentFrameCopy(),
+                    charDirection=meRenderable.direction,
+                    data=None)
+                meRenderable.texture.changeAnimation(
+                    CharacterAnimationType.dying,
+                    meRenderable.direction,
+                    animationIndex)
+                meRenderable.setActive(False)
+            else:
+                animationIndex = random.randint(0, 1)
+                meRenderable.texture.changeAnimation(
+                    CharacterAnimationType.dying,
+                    meRenderable.direction,
+                    animationIndex)
 
 
     def animationUpdateMove(self):
-        messages = messaging.get()
-        for msg in messages:
-            if msg.type == MessageType.EntityMoved:
-                entity = Utility.findCharacterByGroupId(self.world, msg.groupId)
-                renderable = self.world.component_for_entity(
-                    entity, system.renderable.Renderable)
+        for message in messaging.getByType(MessageType.EntityMoved):
+            entity = Utility.findCharacterByGroupId(self.world, message.groupId)
+            renderable = self.world.component_for_entity(
+                entity, system.renderable.Renderable)
 
-                if renderable.texture.characterAnimationType is CharacterAnimationType.walking:
-                    if msg.data['didChangeDirection']:
-                        renderable.texture.changeAnimation(
-                            CharacterAnimationType.walking,
-                            renderable.direction)
-                    else:
-                        renderable.texture.advanceStep()
-                else:
+            if renderable.texture.characterAnimationType is CharacterAnimationType.walking:
+                if message.data['didChangeDirection']:
                     renderable.texture.changeAnimation(
                         CharacterAnimationType.walking,
                         renderable.direction)
+                else:
+                    renderable.texture.advanceStep()
+            else:
+                renderable.texture.changeAnimation(
+                    CharacterAnimationType.walking,
+                    renderable.direction)
 
 
     def animationUpdateAttack(self):
@@ -116,13 +112,11 @@ class CharacterAnimationProcessor(esper.Processor):
 
 
     def animationUpdateStun(self): 
-        # stun
-        for message in messaging.get():
-            if message.type is MessageType.EntityStun:
-                entity = Utility.findCharacterByGroupId(self.world, message.groupId)
-                entityRenderable = self.world.component_for_entity(
-                    entity, system.renderable.Renderable)
+        for message in messaging.getByType(MessageType.EntityStun):
+            entity = Utility.findCharacterByGroupId(self.world, message.groupId)
+            entityRenderable = self.world.component_for_entity(
+                entity, system.renderable.Renderable)
 
-                entityRenderable.texture.changeAnimation(
-                    CharacterAnimationType.stun,
-                    entityRenderable.direction)
+            entityRenderable.texture.changeAnimation(
+                CharacterAnimationType.stun,
+                entityRenderable.direction)

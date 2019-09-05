@@ -21,8 +21,7 @@ class SceneProcessor(esper.Processor):
 
     def process(self, dt):
         # Check if we need to scroll the window
-        for message in messaging.get():
-            if message.type is MessageType.PlayerLocation:
+        for message in messaging.getByType(MessageType.PlayerLocation):
                 playerScreenCoords = self.viewport.getScreenCoords (
                     message.data )
                 if playerScreenCoords.x >= Config.moveBorderRight:

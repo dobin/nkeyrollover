@@ -71,16 +71,15 @@ class StateWander(State):
 
         else:
             # check if player is close
-            for message in messaging.get():
-                if message.type is MessageType.PlayerLocation:
-                    distance = Utility.distance(
-                        message.data,
-                        meRenderable.getLocation())
+            for message in messaging.getByType(MessageType.PlayerLocation):
+                distance = Utility.distance(
+                    message.data,
+                    meRenderable.getLocation())
 
-                    if distance['sum'] < 10:
-                        logger.info("{}: Player is close, chasing".format(self.owner))
-                        self.brain.pop()
-                        self.brain.push("chase")
+                if distance['sum'] < 10:
+                    logger.info("{}: Player is close, chasing".format(self.owner))
+                    self.brain.pop()
+                    self.brain.push("chase")
 
 
     def getInputWander(self):

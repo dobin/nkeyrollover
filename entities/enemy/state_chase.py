@@ -83,9 +83,8 @@ class StateChase(State):
 
     def checkForNewPlayerPosition(self):
         # check if there are any new player position messages
-        for message in messaging.get():
-            if message.type is MessageType.PlayerLocation:
-                self.lastKnowsPlayerPosition = message.data
+        for message in messaging.getByType(MessageType.PlayerLocation):
+            self.lastKnowsPlayerPosition = message.data
 
 
     def canAttackPlayer(self):
