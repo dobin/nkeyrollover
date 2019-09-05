@@ -53,10 +53,3 @@ class TextureChar(object):
     def advance(self, dt):
         self.timer.advance(dt)
 
-
-class RenderablePhenomena(RenderableMinimal): 
-    def __init__(self, texture, coordinate):
-        super(RenderablePhenomena, self).__init__(
-            texture=texture,
-            coordinate=coordinate
-        )

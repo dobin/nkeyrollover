@@ -2,21 +2,14 @@
 
 import curses, time, signal, sys
 import logging
+import locale
 
-from world.scene import Scene
 from config import Config
 from world.world import World
-from utilities.colorpalette import ColorPalette
-from utilities.colortype import ColorType
 from utilities.utilities import Utility
 from system.keyboardinput import KeyboardInput
+from utilities.colorpalette import ColorPalette
 
-from system.gamelogic.attackable import Attackable
-from system.gamelogic.player import Player
-from system.offensiveattack import OffensiveAttack
-from system.offensiveskill import OffensiveSkill
-
-import locale
 current_milli_time = lambda: int(round(time.time() * 1000))
 
 
@@ -60,16 +53,10 @@ class Keyrollover(object):
         self.win.nodelay(1) # make getch() nonblocking
         ColorPalette.cursesInitColor()
 
-        self.scene = Scene(self.win)
-
-        if not Config.devMode:
-            self.scene.titleScene()
-            self.scene.introScene()
-
         self.win.clear()
         self.win.border()
 
-        self.world = World(win=self.win)
+        self.world = World(win=self.win, menuwin=self.menuwin)
         self.keyboardInput = KeyboardInput(world=self.world)
 
         self.startTime = current_milli_time()
@@ -88,7 +75,6 @@ class Keyrollover(object):
             self.win.erase()
             self.win.border()
 
-            self.drawStatusbar(n)
             self.world.draw()
             self.world.advance(deltaTime)
             self.keyboardInput.advance(deltaTime)
@@ -116,65 +102,6 @@ class Keyrollover(object):
         self.win.keypad(0)
         curses.echo()
         curses.endwin()
-
-
-    def drawStatusbar(self, n):
-        # fps = 0
-        # if n > 100:
-        #    fps = 1000 * (float)(n) / (float)(current_milli_time() - self.startTime)
-        #    #fps = self.workTime * 1000.0
-
-        #self.menuwin.erase()
-        #self.menuwin.border()
-        playerAttackable = self.world.esperWorld.component_for_entity(
-            self.world.player, Attackable)
-        player = self.world.esperWorld.component_for_entity(
-            self.world.player, Player)
-
-        s = "Health: " + str(playerAttackable.getHealth())
-        s += "  Points: " + str(player.points)
-
-        #s += "  FPS: %.0f" % (fps)
-        color = ColorPalette.getColorByColorType(ColorType.menu, None)
-        self.menuwin.addstr(1, 2, s, color )
-
-        self.printSkillbar(color)
-        self.printAttackbar(color)
-        self.menuwin.refresh()
-
-
-    def printSkillbar(self, color):
-        playerOffensiveSkill = self.world.esperWorld.component_for_entity(
-            self.world.player, OffensiveSkill)
-
-        basex = 54
-        n = 0
-        for skill in playerOffensiveSkill.skillStatus:
-            if playerOffensiveSkill.isRdy(skill):
-                self.menuwin.addstr(1, basex + n, skill, curses.color_pair(9))
-            else:
-                self.menuwin.addstr(1, basex + n, skill, curses.color_pair(10))
-
-            n += 1
-
-    def printAttackbar(self, color):
-        playerOffensiveAttack = self.world.esperWorld.component_for_entity(
-            self.world.characterAttackEntity, OffensiveAttack)
-        player = self.world.esperWorld.component_for_entity(
-            self.world.player, Player)
-
-        weaponIdx = 62
-        self.menuwin.addstr(1,
-            weaponIdx,
-            'W:' + playerOffensiveAttack.getWeaponStr(),
-            color)
-
-        weaponIdx = 62
-        self.menuwin.addstr(1,
-            weaponIdx,
-            'APM:' + str(int(player.characterStatus.getApm().getApm() * 60)),
-            color)
-
 
 
 def signal_handler(sig, frame):

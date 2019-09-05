@@ -19,6 +19,9 @@ class MessageType(Enum):
     EntityStun = 10 # to play stun animation
     EntityDying = 11 # to play death animation
 
+    SpawnPlayer = 12
+    SpawnEnemy = 13
+
 
 class Message(object):
     def __init__(self, type, data, groupId):

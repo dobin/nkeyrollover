@@ -44,6 +44,8 @@ from texture.character.characteranimationtype import CharacterAnimationType
 from system.graphics.characteranimationprocessor import CharacterAnimationProcessor
 from system.gamelogic.aiprocessor import AiProcessor
 from system.renderableminimalprocessor import RenderableMinimalProcessor
+from world.scenemanager import SceneManager
+from world.statusbar import StatusBar
 
 from messaging import messaging, Messaging, Message, MessageType
 
@@ -53,9 +55,10 @@ logger = logging.getLogger(__name__)
 class World(object):
     """The game world in which all game object live"""
 
-    def __init__(self, win):
+    def __init__(self, win, menuwin):
         self.esperWorld = esper.World()
         self.win = win
+        self.statusBar = StatusBar(world=self, menuwin=menuwin)
         self.viewport :Viewport =Viewport(win=win, world=self)
         #self.worldSprite :Sprite = Sprite(viewport=self.viewport, parentSprite=None)
         self.particleEmiter :ParticleEmiter = ParticleEmiter(viewport=self.viewport)
@@ -63,6 +66,9 @@ class World(object):
             viewport=self.viewport,
             esperWorld=self.esperWorld)
         self.map :Map = Map(viewport=self.viewport, world=self)
+        self.sceneManager = SceneManager(
+            viewport=self.viewport,
+            esperWorld=self.esperWorld)
 
         self.addPlayer()
         self.director :Director = Director(self.viewport, self)
@@ -92,7 +98,10 @@ class World(object):
         movementProcessor = MovementProcessor()
         inputProcessor = InputProcessor()
         renderableMinimalProcessor = RenderableMinimalProcessor(viewport=self.viewport)
-        sceneProcessor = SceneProcessor(viewport=self.viewport)
+        sceneProcessor = SceneProcessor(
+            viewport=self.viewport,
+            sceneManager=self.sceneManager,
+        )
 
         # Lots of comments to check if the order of the processors really work,
         # as Messaging looses all messages on every iteration (use DirectMessaging 
@@ -185,6 +194,7 @@ class World(object):
         self.esperWorld.add_component(self.player, Player())
         self.esperWorld.add_component(self.player, Attackable(initialHealth=100))
         self.playerRendable = renderable
+        renderable.setActive(False)
         # /Player
 
         # CharacterAttack
@@ -257,12 +267,17 @@ class World(object):
 
 
     def draw(self):
-        # order here is Z axis
-        self.map.draw()
-        self.particleEmiter.draw() # should be on top
+        # order here is relevant, as it is Z order 
+
+        if self.sceneManager.currentScene.showMap():
+            self.statusBar.drawStatusbar()
+            self.map.draw()
+
+        self.particleEmiter.draw()
 
         if self.showStats:
             self.drawStats()
+
 
         if self.pause:
             self.win.addstr(12, 40, "Paused", curses.color_pair(7))
