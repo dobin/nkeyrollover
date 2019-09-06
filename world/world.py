@@ -77,9 +77,7 @@ class World(object):
         self.showEnemyWanderDestination = False
 
         aiProcessor = AiProcessor()
-        characterAnimationProcessor = CharacterAnimationProcessor(
-            textureEmiter=self.textureEmiter
-        )
+        characterAnimationProcessor = CharacterAnimationProcessor()
         renderableProcessor = RenderableProcessor()
         advanceableProcessor = AdvanceableProcessor()
         playerProcessor = PlayerProcessor(viewport=self.viewport, particleEmiter=self.particleEmiter)

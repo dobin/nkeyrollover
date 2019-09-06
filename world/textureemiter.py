@@ -1,5 +1,6 @@
 import logging
 import random
+from enum import Enum
 
 from world.viewport import Viewport
 from sprite.coordinates import Coordinates
@@ -10,6 +11,11 @@ from system.renderableminimal import RenderableMinimal
 from system.textureminimal import TextureMinimal
 
 logger = logging.getLogger(__name__)
+
+
+class TextureEmiterEffect(Enum): 
+    explode = 0
+    pushback = 1
 
 
 class TextureEmiter(object):
@@ -32,9 +38,7 @@ class TextureEmiter(object):
         self.addRenderableMinimal(renderableMinimal)
 
 
-    def makeExplode(self, pos, frame, charDirection, data):
-        effect = random.randint(1, 2)
-
+    def showEffect(self, pos, frame, charDirection, effect):
         columnCount = len(frame)
         for (y, rows) in enumerate(frame):
             rowCnt = len(rows)
@@ -45,8 +49,7 @@ class TextureEmiter(object):
 
 
     def makeEffect(self, effect, pos, x, y, char, columnCount, rowCnt, charDirection):
-        # explode
-        if effect == 1:
+        if effect is TextureEmiterEffect.explode:
             movementX = 0
             movementY = 0
 
@@ -89,7 +92,7 @@ class TextureEmiter(object):
             self.addRenderableMinimal(renderableMinimal)
 
         # push away
-        if effect == 2:
+        if effect is TextureEmiterEffect.pushback:
             if charDirection is Direction.right:
                 d = -1
             else:

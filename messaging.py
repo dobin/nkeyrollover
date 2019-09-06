@@ -23,6 +23,7 @@ class MessageType(Enum):
     SpawnEnemy = 13
 
     EmitTextureMinimal = 14
+    EmitTexture = 15
 
 
 class Message(object):

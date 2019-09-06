@@ -35,6 +35,14 @@ class RenderableMinimalProcessor(esper.Processor):
                 color = message.data['color'],
             )
 
+        for message in messaging.getByType(MessageType.EmitTexture):
+            self.textureEmiter.showEffect(
+                effect = message.data['effect'],
+                pos = message.data['pos'],
+                frame = message.data['frame'],
+                charDirection = message.data['charDirection'],
+            )
+
 
     def advance(self, dt):
         for ent, rend in self.world.get_component(RenderableMinimal):

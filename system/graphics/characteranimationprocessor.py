@@ -9,6 +9,7 @@ import system.advanceable
 import system.renderable
 import system.gamelogic.player
 from utilities.entityfinder import EntityFinder
+from world.textureemiter import TextureEmiterEffect
 
 logger = logging.getLogger(__name__)
 
@@ -22,9 +23,8 @@ class CharacterAnimationProcessor(esper.Processor):
     * MessageType.attackWindup
     * MessageType.EntityAttack
     """
-    def __init__(self, textureEmiter):
+    def __init__(self):
         super().__init__()
-        self.textureEmiter = textureEmiter
 
 
     def process(self, deltaTime):
@@ -40,20 +40,29 @@ class CharacterAnimationProcessor(esper.Processor):
             meRenderable = self.world.component_for_entity(
                 entity, system.renderable.Renderable)
 
-            # update animation
             if random.choice([True, False]):
                 logger.info(meRenderable.name + " Death animation deluxe")
                 animationIndex = random.randint(0, 1)
-                self.textureEmiter.makeExplode(
-                    pos=meRenderable.getLocation(),
-                    frame=meRenderable.texture.getCurrentFrameCopy(),
-                    charDirection=meRenderable.direction,
-                    data=None)
+
+                effect = random.choice([TextureEmiterEffect.explode, TextureEmiterEffect.pushback])
+                messaging.add(
+                    type=MessageType.EmitTexture,
+                    data = {
+                        'effect': effect,
+                        'pos': meRenderable.getLocation(),
+                        'frame': meRenderable.texture.getCurrentFrameCopy(),
+                        'charDirection': meRenderable.direction,                        
+                    }
+                )
+
+                # really necessary? it is disabled..
+                # should be before message add, to get frame copy of dead animation?
                 meRenderable.texture.changeAnimation(
                     CharacterAnimationType.dying,
                     meRenderable.direction,
                     animationIndex)
                 meRenderable.setActive(False)
+
             else:
                 animationIndex = random.randint(0, 1)
                 meRenderable.texture.changeAnimation(
