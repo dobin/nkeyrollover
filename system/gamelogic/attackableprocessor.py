@@ -43,7 +43,7 @@ class AttackableProcessor(esper.Processor):
                 meAttackable.isStunned = False
                 meAttackable.stunTimer.stop()
 
-                # generate end stun message (for animation)
+                # generate end-stun message (for animation)
                 # ?
 
 

@@ -27,7 +27,8 @@ from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
 from system.offensiveattack import OffensiveAttack
 import world.uniqueid
-
+from utilities.entityfinder import EntityFinder
+from system.gamelogic.player import Player
 
 logger = logging.getLogger(__name__)
 
@@ -51,10 +52,13 @@ class PlayerProcessor(esper.Processor):
 
 
     def advance(self, deltaTime):
-        for ent, player in self.world.get_component(
-            system.gamelogic.player.Player
-        ):
-            player.advance(deltaTime)
+        playerEntity = EntityFinder.findPlayer(self.world)
+        if playerEntity is None: 
+            return
+        player = self.world.component_for_entity(
+                playerEntity, Player)
+                
+        player.advance(deltaTime)
 
 
     def spawnPlayer(self):

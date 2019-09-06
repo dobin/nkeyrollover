@@ -12,6 +12,7 @@ import system.gamelogic.player
 import system.gamelogic.attackable
 from directmessaging import directMessaging, DirectMessage, DirectMessageType
 from utilities.apm import Apm
+from utilities.entityfinder import EntityFinder
 
 logger = logging.getLogger(__name__)
 
@@ -33,25 +34,32 @@ class InputProcessor(esper.Processor):
 
 
     def handleKeyboardInput(self):
-        for ent, (renderable, player, attackable) in self.world.get_components(
-            system.renderable.Renderable, 
-            system.gamelogic.player.Player,
-            system.gamelogic.attackable.Attackable
-        ):
-            didMove = False
-            if attackable.isStunned:
-                return
+        playerEntity = EntityFinder.findPlayer(self.world)
+        if playerEntity is None: 
+            return
 
-            for message in messaging.getByType(MessageType.PlayerKeypress):
-                self.apm.tick(message.data['time'])
-                didMoveTmp = self.handleKeyPress(message.data['key'], player, renderable, ent)
-                if didMoveTmp:
-                    didMove = True
+        player = self.world.component_for_entity(
+                playerEntity, system.gamelogic.player.Player)
+        renderable = self.world.component_for_entity(
+                playerEntity, system.renderable.Renderable)
+        attackable = self.world.component_for_entity(
+                playerEntity, system.gamelogic.attackable.Attackable)
 
-            # to allow diagonal movement, we allow multiple movement keys per input
-            # cycle, without resetting the timer.
-            if didMove:
-                self.movementTimer.reset()
+        didMove = False
+        if attackable.isStunned:
+            return
+
+        for message in messaging.getByType(MessageType.PlayerKeypress):
+            self.apm.tick(message.data['time'])
+            didMoveTmp = self.handleKeyPress(
+                message.data['key'], player, renderable, playerEntity)
+            if didMoveTmp:
+                didMove = True
+
+        # to allow diagonal movement, we allow multiple movement keys per input
+        # cycle, without resetting the timer.
+        if didMove:
+            self.movementTimer.reset()
 
 
     def handleKeyPress(self, key, player, playerRenderable, playerEntity):

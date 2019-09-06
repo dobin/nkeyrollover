@@ -23,41 +23,44 @@ class MovementProcessor(esper.Processor):
 
 
     def process(self, dt):
-        self.move()
+        self.movePlayer()
+        self.moveEnemy()
 
 
-    def move(self):
-        # findplayer
-        for ent, (groupId, player, renderable) in self.world.get_components(
-            system.groupid.GroupId,
-            system.gamelogic.player.Player,
-            system.renderable.Renderable
-        ):
+    def movePlayer(self):
+        playerEntity = EntityFinder.findPlayer(self.world)
+        if playerEntity is None:
+            return
+        playerGroupId = self.world.component_for_entity(
+                playerEntity, system.groupid.GroupId)
+        playerRenderable = self.world.component_for_entity(
+                playerEntity, system.renderable.Renderable)
+
+        msg = directMessaging.get(
+            messageType = DirectMessageType.movePlayer
+        )
+        while msg is not None:
+            didMove = self.moveRenderable(
+                playerRenderable, 
+                playerGroupId.getId(), 
+                msg.data['x'], 
+                msg.data['y'])
+
+            if didMove:
+                extcords = ExtCoordinates(
+                    playerRenderable.coordinates.x,
+                    playerRenderable.coordinates.y,
+                    playerRenderable.texture.width,
+                    playerRenderable.texture.height)
+                messaging.add(
+                    type = MessageType.PlayerLocation,
+                    data = extcords)
+
             msg = directMessaging.get(
                 messageType = DirectMessageType.movePlayer
             )
-            while msg is not None:
-                didMove = self.moveRenderable(
-                    renderable, 
-                    groupId.getId(), 
-                    msg.data['x'], 
-                    msg.data['y'])
 
-                if didMove:
-                    extcords = ExtCoordinates(
-                        renderable.coordinates.x,
-                        renderable.coordinates.y,
-                        renderable.texture.width,
-                        renderable.texture.height)
-                    messaging.add(
-                        type = MessageType.PlayerLocation,
-                        data = extcords)
-
-                msg = directMessaging.get(
-                    messageType = DirectMessageType.movePlayer
-                )
-
-        # enemies
+    def moveEnemy(self):
         msg = directMessaging.get(
             messageType = DirectMessageType.moveEnemy
         )
