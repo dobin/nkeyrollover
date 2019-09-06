@@ -3,10 +3,6 @@ from enum import Enum
 
 logger = logging.getLogger(__name__)
 
-#uniqueId = 0
-#def getUniqueId():
-#    uniqueId += 1
-#    return uniqueId
 
 class DirectMessageType(Enum):
     activateSpeechBubble = 0

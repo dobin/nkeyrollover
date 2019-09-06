@@ -26,6 +26,7 @@ from system.gamelogic.attackable import Attackable
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
 from system.offensiveattack import OffensiveAttack
+import world.uniqueid
 
 
 logger = logging.getLogger(__name__)
@@ -58,7 +59,7 @@ class PlayerProcessor(esper.Processor):
 
     def spawnPlayer(self):
         # Player
-        myid = 99
+        myid = 0
         self.player = self.world.create_entity()
         esperData = EsperData(self.world, self.player, 'player')
         texture = CharacterTexture(
