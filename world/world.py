@@ -118,7 +118,7 @@ class World(object):
         # e handle:   MessageType         PlayerLocation
         # e generate: MessageType         EnemyAttack
         # e generate: DirectMessageType   moveEnemy
-        # x generate: MessageType         EmitTextureChar
+        # x generate: MessageType         EmitTextureMinimal
         self.esperWorld.add_processor(aiProcessor)
 
         # e handle:   DirectMessageType   moveEnemy
@@ -151,7 +151,7 @@ class World(object):
         self.esperWorld.add_processor(playerProcessor)
         self.esperWorld.add_processor(advanceableProcessor)
 
-        # x handle:  MessageType           EmitTextureChar
+        # x handle:  MessageType           EmitTextureMinimal
         self.esperWorld.add_processor(renderableMinimalProcessor)
 
         # p handle:   MessageType         PlayerAttack

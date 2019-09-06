@@ -132,7 +132,7 @@ class StateWander(State):
         self.destCoord = self.pickDestAroundPlayer(self.destCoord, meRenderable)
         if Config.showEnemyWanderDest:
             messaging.add(
-                type=MessageType.EmitTextureChar,
+                type=MessageType.EmitTextureMinimal,
                 data={
                     'char': '.',
                     'timeout': self.timer,

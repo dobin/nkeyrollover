@@ -6,7 +6,8 @@ from sprite.coordinates import Coordinates
 from sprite.direction import Direction
 from utilities.color import Color
 from utilities.colorpalette import ColorPalette
-from system.renderableminimal import RenderableMinimal, TextureChar
+from system.renderableminimal import RenderableMinimal
+from system.textureminimal import TextureMinimal
 
 logger = logging.getLogger(__name__)
 
@@ -18,13 +19,13 @@ class TextureEmiter(object):
 
 
     def showCharAtPos(self, char :str, timeout :float, coordinate :Coordinates, color :Color):
-        textureChar = TextureChar(
+        textureMinimal = TextureMinimal(
             char=char,
             colorArr=[ColorPalette.getColorByColor( color )],
             timeArr= [ timeout ],
         )
         renderableMinimal = RenderableMinimal(
-            texture=textureChar,
+            texture=textureMinimal,
             coordinate=coordinate,
         )
 
@@ -75,14 +76,14 @@ class TextureEmiter(object):
                 ColorPalette.getColorByColor( Color.grey ),
             ]
 
-            textureChar = TextureChar(
+            textureMinimal = TextureMinimal(
                 char=char,
                 movementX=movementX,
                 movementY=movementY,
                 timeArr=timeArr,
                 colorArr=colorArr)
             renderableMinimal = RenderableMinimal(
-                texture=textureChar,
+                texture=textureMinimal,
                 coordinate=c,
             )
             self.addRenderableMinimal(renderableMinimal)
@@ -112,14 +113,14 @@ class TextureEmiter(object):
                 ColorPalette.getColorByColor( Color.grey ),
             ]
 
-            textureChar = TextureChar(
+            textureMinimal = TextureMinimal(
                 char=char,
                 movementX = d * 2,
                 movementY = 0,
                 timeArr=timeArr,
                 colorArr=colorArr)
             renderableMinimal = RenderableMinimal(
-                texture=textureChar,
+                texture=textureMinimal,
                 coordinate=c
             )
             self.addRenderableMinimal(renderableMinimal)

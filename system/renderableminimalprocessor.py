@@ -27,7 +27,7 @@ class RenderableMinimalProcessor(esper.Processor):
 
 
     def handleMessages(self):
-        for message in messaging.getByType(MessageType.EmitTextureChar):
+        for message in messaging.getByType(MessageType.EmitTextureMinimal):
             self.textureEmiter.showCharAtPos(
                 char = message.data['char'],
                 timeout = message.data['timeout'],
@@ -39,14 +39,14 @@ class RenderableMinimalProcessor(esper.Processor):
     def advance(self, dt):
         for ent, rend in self.world.get_component(RenderableMinimal):
             # advance it
-            self.handleTextureChar(rend, dt)
+            self.handleTextureMinimal(rend, dt)
 
             # remove it if inactive
             if not rend.isActive():
                 self.world.delete_entity(ent)
 
     
-    def handleTextureChar(self, rend, deltaTime):
+    def handleTextureMinimal(self, rend, deltaTime):
         if not rend.isActive():
             return
 
