@@ -1,7 +1,6 @@
 import esper
 import logging
 
-from entities.characterstatus import CharacterStatus
 from entities.enemy.enemyinfo import EnemyInfo
 
 logger = logging.getLogger(__name__)
@@ -11,10 +10,7 @@ class Enemy():
     def __init__(self, name):
         self.enemyMovement :bool = True
 
-        self.characterStatus = CharacterStatus()
-
         self.name :str = 'Bot' + name
-        self.active = False
         self.enemyInfo :EnemyInfo = EnemyInfo()
 
         self.offensiveAttackEntity = None
