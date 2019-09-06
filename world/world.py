@@ -31,7 +31,7 @@ from system.offensiveskillprocessor import OffensiveSkillProcessor
 from system.graphics.speechbubble import SpeechBubble
 from system.groupid import GroupId
 from system.sceneprocessor import SceneProcessor
-
+from system.renderableminimal import RenderableMinimal
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
 from system.offensiveattack import OffensiveAttack
@@ -185,9 +185,26 @@ class World(object):
         if self.showStats and frame % 10 == 0:
             self.drawStats()
 
+        if frame % 100 == 0:
+            self.printEntityStats()
+
 
         if self.pause:
             self.win.addstr(12, 40, "Paused", curses.color_pair(7))
+
+
+    def printEntityStats(self): 
+        renderableMinimal = 0
+        for ent, rend in self.esperWorld.get_component(RenderableMinimal):
+            renderableMinimal += 1
+
+        renderable = 0
+        for ent, rend in self.esperWorld.get_component(Renderable):
+            renderable += 1
+
+        logger.info("Stats: Renderable: {}  RenderableMinimal: {}".format(
+            renderable, renderableMinimal
+        ))
 
 
     def getGameTime(self):
