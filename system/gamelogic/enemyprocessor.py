@@ -71,9 +71,7 @@ class EnemyProcessor(esper.Processor):
         renderable.enemyMovement = True
         self.world.add_component(enemy, groupId)
         self.world.add_component(enemy, renderable)
-        tenemy = Enemy(
-            name=name,
-            world=self.world)
+        tenemy = Enemy(name=name)
         ai = Ai(
             name=name,
             esperData=esperData)

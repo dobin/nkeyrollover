@@ -30,7 +30,7 @@ class Config:
         'y': 13,
     }
 
-    devMode = True
+    devMode = False
     enemyMovement = True # freeze enemies for tests?
     showEnemyWanderDest = True
 
