@@ -10,6 +10,8 @@ from directmessaging import directMessaging, DirectMessage, DirectMessageType
 import system.renderable
 import system.gamelogic.enemy
 from utilities.entityfinder import EntityFinder
+from config import Config
+from utilities.entityfinder import EntityFinder
 
 logger = logging.getLogger(__name__)
 
@@ -57,8 +59,7 @@ class StateChase(State):
         self.checkForNewPlayerPosition()
         if self.canAttackTimer.timeIsUp():
             if self.canAttackPlayer():
-                #if meEnemy.world.director.canHaveMoreEnemiesAttacking():
-                if True:
+                if EntityFinder.numEnemiesInState(self.brain.owner.world, 'attack') < Config.enemiesInStateAttacking:
                     self.brain.pop()
                     self.brain.push("attackwindup")
                     didAttack = True

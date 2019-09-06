@@ -69,9 +69,6 @@ class StatusBar(object):
             self.world.esperWorld,
             playerGroupId.getId())
         
-        player = self.world.esperWorld.component_for_entity(
-            playerEntity, Player)
-
         weaponIdx = 62
         self.menuwin.addstr(1,
             weaponIdx,
@@ -81,5 +78,5 @@ class StatusBar(object):
         weaponIdx = 62
         self.menuwin.addstr(1,
             weaponIdx,
-            'APM:' + str(int(player.characterStatus.getApm().getApm() * 60)),
+            'APM:' + str(int(self.world.inputProcessor.apm.getApm() * 60)),
             color)

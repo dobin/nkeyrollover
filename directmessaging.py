@@ -35,7 +35,7 @@ class DirectMessaging(object):
             type = type,
             data = data
         ))
-        logger.info("DirectMsg for {} type {}: {}".format(groupId, type.name, data))
+        logger.info("DirectMsg for %6i: type %s: %s" % (groupId, type.name, data))
 
     def get(self, messageType):
         for message in self.messages:

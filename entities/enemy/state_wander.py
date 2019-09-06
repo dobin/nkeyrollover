@@ -60,8 +60,7 @@ class StateWander(State):
             self.lastInputTimer.reset()
 
         if self.timeIsUp():
-            #if meEnemy.world.director.canHaveMoreEnemiesChasing():
-            if True:
+            if EntityFinder.numEnemiesInState(self.brain.owner.world, 'chase') < Config.enemiesInStateChase:
                 logger.info("{}: Too long wandering, chase again a bit".format(self.owner))
                 self.brain.pop()
                 self.brain.push("chase")
@@ -116,9 +115,6 @@ class StateWander(State):
 
 
     def chooseDestination(self):
-        meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.enemy.Enemy)
-
         meRenderable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.renderable.Renderable)
 
@@ -134,9 +130,16 @@ class StateWander(State):
         self.destCoord.x = playerRenderable.getLocation().x
         self.destCoord.y = playerRenderable.getLocation().y
         self.destCoord = self.pickDestAroundPlayer(self.destCoord, meRenderable)
-        #if self.brain.owner.world.showEnemyWanderDestination:
-        #    meEnemy.world.textureEmiter.showCharAtPos(
-        #        char='.', timeout=self.timer, coordinate=self.destCoord, color=Color.grey)
+        if Config.showEnemyWanderDest:
+            messaging.add(
+                type=MessageType.EmitTextureChar,
+                data={
+                    'char': '.',
+                    'timeout': self.timer,
+                    'coordinate': self.destCoord,
+                    'color': Color.grey
+                }
+            )
 
 
     def pickDestAroundPlayer(self, coord :Coordinates, meRenderable):

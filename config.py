@@ -30,7 +30,7 @@ class Config:
         'y': 13,
     }
 
-    devMode = False
+    devMode = True
     enemyMovement = True # freeze enemies for tests?
     showEnemyWanderDest = True
 
@@ -43,3 +43,6 @@ class Config:
     playerAttacksCd = 0.2
 
     version = str(0.02)
+
+    enemiesInStateAttacking = 1
+    enemiesInStateChase = 2

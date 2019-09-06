@@ -26,7 +26,7 @@ class OffensiveAttackProcessor(esper.Processor):
 
     def handleAttackKeyPress(self):
         for message in messaging.getByType(MessageType.PlayerKeypress):
-            self.handlePlayerKeypress(message.data)
+            self.handlePlayerKeypress(message.data['key'])
 
 
     def handlePlayerKeypress(self, key):

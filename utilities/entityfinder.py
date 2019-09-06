@@ -69,3 +69,26 @@ class EntityFinder(object):
             system.gamelogic.player.Player,
         ):
             return ent
+
+
+    @staticmethod
+    def numEnemiesInState(world, state): 
+        num = 0
+        for ent, ai in world.get_component(
+            system.gamelogic.ai.Ai,
+        ):
+            if ai.brain.state.name == state: 
+                num += 1
+
+        return num
+
+    @staticmethod
+    def numEnemies(world): 
+        num = 0
+        for ent, ai in world.get_component(
+            system.gamelogic.ai.Ai,
+        ):
+            num += 1
+
+        return num
+

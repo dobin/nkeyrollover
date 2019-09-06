@@ -32,8 +32,6 @@ class CharacterStatus(object):
             WeaponType.cleave: 100,
         }
 
-        self.apm = Apm()
-
 
     def getDamage(self, weaponType :WeaponType):
         return self.weaponDamage[weaponType]
@@ -41,8 +39,4 @@ class CharacterStatus(object):
     def advance(self, deltaTime):
         pass
 
-    def handleKeyPress(self, time :float):
-        self.apm.tick(time)
 
-    def getApm(self):
-        return self.apm

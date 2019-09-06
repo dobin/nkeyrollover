@@ -6,9 +6,9 @@ from entities.enemy.state_attack import StateAttack
 from entities.enemy.state_attackwindup import StateAttackWindup
 from entities.enemy.state_chase import StateChase
 from entities.enemy.state_dying import StateDying
-from entities.enemy.state_idle import StateIdle
 from entities.enemy.state_spawn import StateSpawn
 from entities.enemy.state_wander import StateWander
+from entities.enemy.state_dead import StateDead
 
 logger = logging.getLogger(__name__)
 
@@ -25,12 +25,12 @@ class Ai():
     def initAi(self):
         self.brain :Brain = Brain(self.esperData)
 
-        self.brain.register(StateIdle)
         self.brain.register(StateSpawn)
         self.brain.register(StateAttack)
         self.brain.register(StateChase)
         self.brain.register(StateWander)
         self.brain.register(StateDying)
+        self.brain.register(StateDead)
         self.brain.register(StateAttackWindup)
         self.brain.push("spawn")
 

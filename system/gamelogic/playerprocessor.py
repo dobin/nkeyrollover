@@ -58,7 +58,7 @@ class PlayerProcessor(esper.Processor):
 
     def spawnPlayer(self):
         # Player
-        myid = 31337
+        myid = 99
         self.player = self.world.create_entity()
         esperData = EsperData(self.world, self.player, 'player')
         texture = CharacterTexture(

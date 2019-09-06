@@ -20,7 +20,7 @@ class TextureEmiter(object):
     def showCharAtPos(self, char :str, timeout :float, coordinate :Coordinates, color :Color):
         textureChar = TextureChar(
             char=char,
-            colorArr=[ColorPalette.getColorByColor( Color.brightyellow )],
+            colorArr=[ColorPalette.getColorByColor( color )],
             timeArr= [ timeout ],
         )
         renderableMinimal = RenderableMinimal(

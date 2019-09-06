@@ -72,6 +72,15 @@ class Particle(object):
         self.active = active
 
 
+    def __repr__(self): 
+        #return "{}/{}  vel: {}/{}  life: {}".format(
+        #    self.x, self.y, self.velocity['x'], self.velocity['y'], self.life
+        #)
+        return "Particle {}/{}".format(
+            self.x, self.y
+        )
+
+
     def advance(self, dt):
         if self.active is False:
             return

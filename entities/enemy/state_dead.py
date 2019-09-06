@@ -5,8 +5,8 @@ from ai.states import BaseState as State
 logger = logging.getLogger(__name__)
 
 
-class StateIdle(State):
-    name = "idle"
+class StateDead(State):
+    name = "dead"
 
     def __init__(self, brain):
         State.__init__(self, brain)

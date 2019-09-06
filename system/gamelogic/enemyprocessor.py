@@ -99,7 +99,8 @@ class EnemyProcessor(esper.Processor):
             parent=enemyRenderable,
             coordinates=coordinates,
             z=2,
-            useParentDirection=True)
+            useParentDirection=True,
+            active=False)
         renderable.setLocation(
            Coordinates(-1 * (renderable.texture.width - 2), 1)
         )
@@ -116,7 +117,6 @@ class EnemyProcessor(esper.Processor):
         offensiveAttack.switchWeapon(WeaponType.hitLine)
         tenemy.offensiveAttackEntity = characterAttackEntity
         # /CharacterAttack
-
 
 
     def getRandomHead(self):

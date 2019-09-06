@@ -29,5 +29,5 @@ class StateDying(State):
         if self.timeIsUp():
             logger.info("{}: Died enough, set to inactive".format(self.owner))
             self.brain.pop()
-            self.brain.push("idle")
+            self.brain.push("dead")
             meRenderable.setActive(False)

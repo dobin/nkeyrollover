@@ -159,22 +159,13 @@ class Renderable(object):
 
 
     def getTextureHitCoordinates(self, animationIdx=0):
-        # ani = self.animation[ animationIdx ]
-        locations = []
+        locations = self.texture.getTextureHitCoordinates(animationIdx=0)
         baseLocation = self.getLocation()
-        x = 0
-        while x < self.texture.width:
-            y = 0
-            while y < self.texture.height:
-                # expensive copy, but its only on-hit
-                loc = copy.copy(baseLocation)
-                loc.x += x
-                loc.y += y
-                locations.append(loc)
 
-                y += 1
-
-            x += 1
+        # make relative coordinates absolute
+        for location in locations: 
+            location.x += baseLocation.x
+            location.y += baseLocation.y
 
         return locations
 

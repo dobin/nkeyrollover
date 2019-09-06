@@ -22,6 +22,8 @@ class MessageType(Enum):
     SpawnPlayer = 12
     SpawnEnemy = 13
 
+    EmitTextureChar = 14
+
 
 class Message(object):
     def __init__(self, type, data, groupId):
@@ -46,7 +48,10 @@ class Messaging(object):
             data=data,
             groupId=groupId,
         ))
-        logger.info("{}({}): {}".format(type.name, groupId, data))
+        if groupId is None:
+            logger.info("%-20s: %s" % (type.name, data))
+        else:
+            logger.info("%-16s%4i: %s" % (type.name, groupId, data))
 
 
     def reset(self):

@@ -45,6 +45,7 @@ from system.gamelogic.aiprocessor import AiProcessor
 from system.renderableminimalprocessor import RenderableMinimalProcessor
 from world.scenemanager import SceneManager
 from world.statusbar import StatusBar
+from utilities.entityfinder import EntityFinder
 
 from messaging import messaging, Messaging, Message, MessageType
 
@@ -88,7 +89,10 @@ class World(object):
         offensiveSkillProcessor = OffensiveSkillProcessor()
         movementProcessor = MovementProcessor()
         inputProcessor = InputProcessor()
-        renderableMinimalProcessor = RenderableMinimalProcessor(viewport=self.viewport)
+        self.inputProcessor = inputProcessor # for Statusbar:APM
+        renderableMinimalProcessor = RenderableMinimalProcessor(
+            viewport=self.viewport,
+            textureEmiter=self.textureEmiter)
         sceneProcessor = SceneProcessor(
             viewport=self.viewport,
             sceneManager=self.sceneManager,
@@ -114,6 +118,7 @@ class World(object):
         # e handle:   MessageType         PlayerLocation
         # e generate: MessageType         EnemyAttack
         # e generate: DirectMessageType   moveEnemy
+        # x generate: MessageType         EmitTextureChar
         self.esperWorld.add_processor(aiProcessor)
 
         # e handle:   DirectMessageType   moveEnemy
@@ -146,6 +151,7 @@ class World(object):
         self.esperWorld.add_processor(playerProcessor)
         self.esperWorld.add_processor(advanceableProcessor)
 
+        # x handle:  MessageType           EmitTextureChar
         self.esperWorld.add_processor(renderableMinimalProcessor)
 
         # p handle:   MessageType         PlayerAttack
@@ -167,7 +173,7 @@ class World(object):
         self.showEnemyWanderDestination = not self.showEnemyWanderDestination
 
 
-    def draw(self):
+    def draw(self, frame):
         # order here is relevant, as it is Z order 
 
         if self.sceneManager.currentScene.showMap():
@@ -176,9 +182,8 @@ class World(object):
 
         self.particleEmiter.draw()
 
-        if self.showStats:
-            #self.drawStats()
-            pass
+        if self.showStats and frame % 10 == 0:
+            self.drawStats()
 
 
         if self.pause:
@@ -209,13 +214,21 @@ class World(object):
         o = []
 
         o.append('Enemies:')
-        o.append('  Alive     : ' + str( self.director.numEnemiesAlive() ))
-        o.append('  Attacking : ' + str( self.director.numEnemiesAttacking() ))
-        o.append('  Chasing   : ' + str( self.director.numEnemiesChasing() ))
-        o.append('  Wadndering: ' + str( self.director.numEnemiesWandering() ))
+        o.append('  Alive     : ' 
+            + str( EntityFinder.numEnemies(world=self.esperWorld)) )
+        o.append('  Attacking : ' 
+            + str( EntityFinder.numEnemiesInState(world=self.esperWorld, state='attack')) )
+        o.append('  Chasing   : ' 
+            + str( EntityFinder.numEnemiesInState(world=self.esperWorld, state='chase')) )
+        o.append('  Wadndering: ' 
+            + str( EntityFinder.numEnemiesInState(world=self.esperWorld, state='wander')) )
+
+        playerEntity = EntityFinder.findPlayer(self.esperWorld)
+        playerRenderable = self.esperWorld.component_for_entity(
+            playerEntity, Renderable)
 
         o.append('Player:')
-        o.append('  Location:' + str( self.playerRendable.getLocation() ) )
+        o.append('  Location:' + str( playerRenderable.getLocation() ) )
 
         n = 0
         while n < len(o):

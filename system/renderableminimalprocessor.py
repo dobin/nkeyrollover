@@ -8,16 +8,33 @@ from utilities.colortype import ColorType
 from world.viewport import Viewport
 from sprite.coordinates import Coordinates
 from system.renderableminimal import RenderableMinimal
+from messaging import messaging, MessageType
+
+logger = logging.getLogger(__name__)
 
 
 class RenderableMinimalProcessor(esper.Processor):
-    def __init__(self, viewport :Viewport): 
+    def __init__(self, viewport :Viewport, textureEmiter): 
         super().__init__()
         self.viewport = viewport
+        self.textureEmiter = textureEmiter
+
 
     def process(self, dt):
+        self.handleMessages()
         self.advance(dt)
         self.draw()
+
+
+    def handleMessages(self):
+        for message in messaging.getByType(MessageType.EmitTextureChar):
+            self.textureEmiter.showCharAtPos(
+                char = message.data['char'],
+                timeout = message.data['timeout'],
+                coordinate = message.data['coordinate'],
+                color = message.data['color'],
+            )
+
 
     def advance(self, dt):
         for ent, rend in self.world.get_component(RenderableMinimal):

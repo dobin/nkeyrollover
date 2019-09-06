@@ -53,7 +53,7 @@ class AttackableProcessor(esper.Processor):
             Attackable, Renderable, Enemy, Ai, GroupId
         ):
             if attackable.getHealth() <= 0:
-                if ai.brain.state.name is not 'idle' and ai.brain.state.name is not 'dying':
+                if ai.brain.state.name is not 'dead' and ai.brain.state.name is not 'dying':
                     # update state
                     ai.brain.pop()
                     ai.brain.push('dying')

@@ -40,7 +40,7 @@ class CharacterTexture(AnimationTexture):
             direction :Direction,
             subtype :int =0
         ):
-        logging.info("{} Change texture to: {}".format(self.name, characterAnimationType))
+        logger.debug("{} Change texture to: {}".format(self.name, characterAnimationType))
 
         self.characterAnimationType = characterAnimationType
         self.animation = self.characterAnimationManager.getAnimation(

@@ -57,6 +57,9 @@ class Scene2(SceneBase):
     def prepareEnemies(self): 
         waveIdx = 0
         waveCount = 3
+        if Config.devMode: 
+            waveCount = 1
+
         while waveIdx < waveCount:
             self.prepareWave(waveIdx, self.enemyQueue)
             waveIdx += 1
@@ -66,9 +69,15 @@ class Scene2(SceneBase):
         intraWaveSpawnTime = 3
         intraWaveXoffset = 50
 
+        numStickfigures = 10
+        numCows = 2
+        if Config.devMode: 
+            numStickfigures = 1
+            numCows = 0
+
         # stickfigures
         n = 0
-        while n < 10:
+        while n < numStickfigures:
             playerTrapX = waveIdx * intraWaveXoffset 
             spawnLocation = self.getRandomSpawnCoords()
             enemyCell = EnemyCell(
@@ -84,12 +93,12 @@ class Scene2(SceneBase):
 
         # cows
         n = 0
-        while n < 2:
+        while n < numCows:
             playerTrapX = waveIdx * intraWaveXoffset 
             spawnLocation = self.getRandomSpawnCoords()
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                characterType = CharacterType.stickfigure,
+                characterType = CharacterType.cow,
                 spawnTime = waveIdx * intraWaveSpawnTime,
                 spawnX = playerTrapX,
                 spawnLocation = spawnLocation,
