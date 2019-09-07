@@ -54,7 +54,15 @@ class Scene2(SceneBase):
         waveIdx = 0
         waveCount = 3
         if Config.devMode:
-            waveCount = 1
+            enemyCell = EnemyCell(
+                id = self.enemyCount,
+                characterType = CharacterType.cow,
+                spawnTime = 0,
+                spawnX = 0,
+                spawnLocation = Coordinates(35, 13),
+            )
+            self.enemyQueue.append(enemyCell)
+            return
 
         while waveIdx < waveCount:
             self.prepareWave(waveIdx, self.enemyQueue)
@@ -67,9 +75,6 @@ class Scene2(SceneBase):
 
         numStickfigures = 10
         numCows = 2
-        if Config.devMode:
-            numStickfigures = 1
-            numCows = 0
 
         # stickfigures
         n = 0

@@ -162,7 +162,7 @@ class Renderable(object):
         if self.direction is Direction.left:
             loc.x -= -1
         else:
-            loc.x += self.texture.width + -1
+            loc.x += self.texture.width - 1
 
         return loc
 
@@ -175,7 +175,7 @@ class Renderable(object):
         if self.direction is Direction.left:
             loc.x -= 1
         else:
-            loc.x += self.texture.width + 1
+            loc.x += self.texture.width - 1 + 1
 
         return loc
 
@@ -188,7 +188,7 @@ class Renderable(object):
         if self.direction is Direction.right:
             loc.x -= 1
         else:
-            loc.x += self.texture.width + 1
+            loc.x += self.texture.width - 1 + 1
 
         return loc
 

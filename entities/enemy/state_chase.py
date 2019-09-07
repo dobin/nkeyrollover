@@ -1,6 +1,7 @@
 import random
 import logging
 
+from sprite.direction import Direction
 from ai.states import BaseState as State
 from utilities.timer import Timer
 from sprite.coordinates import Coordinates, ExtCoordinates
@@ -34,7 +35,8 @@ class StateChase(State):
         self.hitCd = [
             Coordinates(0, 0),
             Coordinates(1, 0),
-            Coordinates(2, 0),
+            Coordinates(0, 1),
+            Coordinates(1, 1),
         ]
         self.hitCdWidth = 3
         self.hitCdHeight = 1
@@ -57,8 +59,6 @@ class StateChase(State):
         if meAttackable.isStunned:
             return
 
-        didAttack = False
-
         self.lastInputTimer.advance(dt)
         self.canAttackTimer.advance(dt)
 
@@ -67,17 +67,17 @@ class StateChase(State):
         if self.canAttackTimer.timeIsUp():
             if self.canAttackPlayer():
                 if EntityFinder.numEnemiesInState(self.brain.owner.world, 'attack') < Config.enemiesInStateAttacking:
-                    self.brain.pop()
-                    self.brain.push("attackwindup")
-                    didAttack = True
+                    ##self.brain.pop()
+                    ##self.brain.push("attackwindup")
+                    pass
 
             self.canAttackTimer.reset()
 
         # note that if we want to attack, as identified a few lines above,
         # we will be in state attackWindup, and not reach here
-        if didAttack:
-            return
 
+        # only move if we can not hit him
+        #if not self.canAttackPlayer():
         # movement speed, and direction
         if self.lastInputTimer.timeIsUp():
             self.getInputChase()
@@ -136,8 +136,8 @@ class StateChase(State):
             'y': 0,
         }
 
-        d1 = r1.coordinates.x - (r2.coordinates.x + r2.texture.width)
-        d2 = (r1.coordinates.x + r1.texture.width) - r2.coordinats.x
+        d1 = r1.coordinates.x - (r2.coordinates.x + r2.texture.width - 1)
+        d2 = (r1.coordinates.x + r1.texture.width - 1) - r2.coordinats.x
         if d1 < d2:
             res['x'] = d1
         elif d1 > d2:
@@ -174,6 +174,7 @@ class StateChase(State):
         if not Config.enemyMovement:
             return
 
+
         attackBaseLocation = meRenderable.getAttackBaseLocation()
         attackBaseLocationInverted = meRenderable.getAttackBaseLocationInverted()
 
@@ -182,30 +183,78 @@ class StateChase(State):
             playerEntity, system.renderable.Renderable)
         playerLocation = playerRenderable.getLocation()
 
-        moveX = 0
-        moveY = 0
-        dontChangeDirection = False
-
-        if attackBaseLocation.x < playerLocation.x - 1:
-            moveX = 1
-        elif attackBaseLocation.x > playerLocation.x:  # + meEnemy.player.texture.width:
-            moveX = -1
-
-        # check if its better to just walk backwards
+        # check distance, from both the direction we are facing, 
+        # and the other one
         distanceNormal = Utility.distance(playerLocation, attackBaseLocation)
         distanceInverted = Utility.distance(playerLocation, attackBaseLocationInverted)
-        #logger.info("CC Dir: {}  X: {}   Normal: {}  Inverted: {}".format(
-        #    meRenderable.direction, moveX,
-        #    distanceNormal['sum'],
-        #    distanceInverted['sum']
-        #))
-        if distanceNormal['sum'] < distanceInverted['sum']:
+
+        logging.info("--- Loc Enemy : {} / {}".format(
+            meRenderable.coordinates.x, meRenderable.coordinates.x + meRenderable.texture.width - 1))
+        logging.info("--- Loc Player: {}".format(playerRenderable.coordinates.x))
+
+        # decide on which reference point we will take
+        # and if we wanna change direction
+        attackLoc = None
+        dontChangeDirection = False
+        if distanceNormal['x'] < distanceInverted['x']:
+            logging.info("--- n: {}  i: {}   dontChange, use normal".format(
+                distanceNormal['x'], distanceInverted['x']
+            ))
             dontChangeDirection = True
+            attackLoc = attackBaseLocation
+        else:
+            logging.info("--- n: {}  i: {}   change, use inverted".format(
+                distanceNormal['x'], distanceInverted['x']
+            ))
+            dontChangeDirection = False
+            attackLoc = attackBaseLocationInverted
+
+        logging.info("--- Loc Atk    : {}".format(attackLoc.x))
+
+        moveX = 0
+        moveY = 0
+        # check if player overlaps with out attackpoint
+        # if yes, we are too close
+        if attackLoc.x >= playerRenderable.coordinates.x and attackLoc.x <= playerRenderable.coordinates.x + playerRenderable.texture.width-1:
+            logging.info("--- Overlap :-(")
+            #if refLoc.x >= playerRenderable.coordinates.x:
+            if meRenderable.direction is Direction.left:
+                moveX = 1
+            else:
+                moveX = -1
+
+            logging.info("--- Overlap decision: {}".format(moveX))
+
+        else:
+            logging.info("--- No overlap :-)")
+
+            playerref = 0
+            if attackLoc.x <= playerLocation.x + int(playerRenderable.texture.width / 2):
+                logging.info("--- Enemy is left of player")
+                playerref = playerLocation.x
+            else:
+                logging.info("--- Enemy is right of player. Ex:{} Px:{}".format(
+                    attackLoc.x, playerRenderable.coordinates.x
+                ))
+                playerref = playerLocation.x + playerRenderable.texture.width-1
+
+            tempDistance = attackLoc.x - playerref
+            if tempDistance > 1:
+                moveX = -1
+            elif tempDistance < -1:
+                moveX = 1
+
+            logging.info("--- Distance: {} because {} - {} ".format(
+                tempDistance, attackLoc.x, playerref))
+
+            logging.info("--- Enemy: moveX: {} dontChangeDirection: {}".format(
+                moveX, dontChangeDirection
+            ))
 
         # we can walk diagonally, no elif here
         if attackBaseLocation.y < playerLocation.y:
             moveY = 1
-        elif attackBaseLocation.y > playerLocation.y + playerRenderable.texture.height - 1:  # why -1?
+        elif attackBaseLocation.y > playerLocation.y + playerRenderable.texture.height - 1:
             moveY = -1
 
         # only move if we really move a character
@@ -219,3 +268,5 @@ class StateChase(State):
                     'dontChangeDirection': dontChangeDirection
                 },
             )
+
+
