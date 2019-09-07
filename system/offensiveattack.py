@@ -11,10 +11,9 @@ logger = logging.getLogger(__name__)
 
 
 class OffensiveAttack():
-    def __init__(self, parentChar, parentRenderable, world):
+    def __init__(self, parentChar, parentRenderable):
         self.parentChar = parentChar
         self.parentRenderable = parentRenderable
-        self.world = world
 
         # really necessary?
         self.durationTimer = Timer(0.0, active=False)

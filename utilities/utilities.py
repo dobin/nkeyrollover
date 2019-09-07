@@ -4,7 +4,6 @@ import math
 from texture.character.charactertype import CharacterType
 from texture.character.characteranimationtype import CharacterAnimationType
 from texture.animation import Animation
-from config import Config
 from sprite.coordinates import Coordinates, ExtCoordinates
 from sprite.sprite import Sprite
 
@@ -55,12 +54,12 @@ class Utility(object):
             x = basex
             while x <= basex + dd:
                 if y >= basey and y <= basey + dd + thicc:
-                    locs.append( Coordinates(
+                    locs.append(Coordinates(
                         x = x,
                         y = y
                     ))
                 elif x >= basex and x <= basex + dd + thicc:
-                    locs.append( Coordinates(
+                    locs.append(Coordinates(
                         x = x,
                         y = y
                     ))
@@ -82,12 +81,12 @@ class Utility(object):
             x = basex
             while x <= basex + dd:
                 if y == basey or y == basey + dd:
-                    locs.append( Coordinates(
+                    locs.append(Coordinates(
                         x = x,
                         y = y
                     ))
                 elif x == basex or x == basex + dd:
-                    locs.append( Coordinates(
+                    locs.append(Coordinates(
                         x = x,
                         y = y
                     ))
@@ -102,6 +101,7 @@ class Utility(object):
         # game events
         DEBUG_LEVELV_NUM = logging.WARN + 1
         logging.addLevelName(DEBUG_LEVELV_NUM, "RECORD")
+
         def __record(self, message, *args, **kws):
             if self.isEnabledFor(DEBUG_LEVELV_NUM):
                 # Yes, logger takes its '*args' as 'args'.

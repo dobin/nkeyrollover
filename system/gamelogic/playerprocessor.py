@@ -4,27 +4,18 @@ import logging
 import system.gamelogic.player
 from messaging import messaging, MessageType
 from sprite.coordinates import Coordinates
-from sprite.direction import Direction
 from config import Config
-from entities.entity import Entity
-from entities.entitytype import EntityType
-from world.particleemiter import ParticleEmiter
-from sprite.sprite import Sprite
 from texture.character.charactertype import CharacterType
 from texture.character.charactertexture import CharacterTexture
 from texture.animationtexture import AnimationTexture
 from entities.esperdata import EsperData
 from texture.character.characteranimationtype import CharacterAnimationType
-from system.graphics.characteranimationprocessor import CharacterAnimationProcessor
 from system.renderable import Renderable
 from system.graphics.speechbubble import SpeechBubble
 from system.offensiveskill import OffensiveSkill
 from system.groupid import GroupId
 from system.gamelogic.attackable import Attackable
-from texture.phenomena.phenomenatexture import PhenomenaTexture
-from texture.phenomena.phenomenatype import PhenomenaType
 from system.offensiveattack import OffensiveAttack
-import world.uniqueid
 from utilities.entityfinder import EntityFinder
 from system.gamelogic.player import Player
 
@@ -43,7 +34,7 @@ class PlayerProcessor(esper.Processor):
         self.advance(deltaTime)
         self.checkSpawn()
 
-    
+
     def checkSpawn(self):
         for message in messaging.getByType(MessageType.SpawnPlayer):
             self.spawnPlayer()
@@ -55,7 +46,7 @@ class PlayerProcessor(esper.Processor):
             return
         player = self.world.component_for_entity(
                 playerEntity, Player)
-                
+
         player.advance(deltaTime)
 
 
@@ -94,8 +85,7 @@ class PlayerProcessor(esper.Processor):
 
         offensiveAttack = OffensiveAttack(
             parentChar=player,
-            parentRenderable=renderable,
-            world=self)
+            parentRenderable=renderable)
         self.world.add_component(self.playerEntity, offensiveAttack)
         # /Player
 

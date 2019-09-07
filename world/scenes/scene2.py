@@ -54,7 +54,7 @@ class Scene2(SceneBase):
         waveIdx = 0
         waveCount = 3
         if Config.devMode:
-            waveCount = 0
+            waveCount = 1
 
         while waveIdx < waveCount:
             self.prepareWave(waveIdx, self.enemyQueue)
@@ -68,7 +68,7 @@ class Scene2(SceneBase):
         numStickfigures = 10
         numCows = 2
         if Config.devMode:
-            numStickfigures = 0
+            numStickfigures = 1
             numCows = 0
 
         # stickfigures

@@ -39,15 +39,12 @@ class StateAttack(State):
 
     def process(self, dt):
         self.attackTimer.advance(dt)
-        meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.enemy.Enemy)
 
         if self.attackTimer.timeIsUp():
             logger.info(self.name + " I'm attacking, via offensiveattack!")
             self.attackTimer.reset()
             offensiveAttack = self.brain.owner.world.component_for_entity(
-                meEnemy.offensiveAttackEntity,
-                OffensiveAttack)
+                self.brain.owner.entity, OffensiveAttack)
             offensiveAttack.attack()
 
         if self.timeIsUp():

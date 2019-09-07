@@ -3,15 +3,16 @@ import logging
 
 from ai.states import BaseState as State
 from utilities.timer import Timer
-from sprite.coordinates import Coordinates
+from sprite.coordinates import Coordinates, ExtCoordinates
 from utilities.utilities import Utility
 from messaging import messaging, MessageType
-from directmessaging import directMessaging, DirectMessage, DirectMessageType
+from directmessaging import directMessaging, DirectMessageType
 import system.renderable
 import system.gamelogic.enemy
 from utilities.entityfinder import EntityFinder
 from config import Config
-from utilities.entityfinder import EntityFinder
+import copy
+from sprite.direction import Direction
 
 logger = logging.getLogger(__name__)
 
@@ -26,9 +27,17 @@ class StateChase(State):
 
         self.lastInputTimer = Timer(
             meEnemy.enemyInfo.chaseStepDelay,
-            instant=True )
+            instant=True)
         self.canAttackTimer = Timer()
-        self.lastKnowsPlayerPosition = None
+        self.lastKnownPlayerPosition = None
+
+        self.hitCd = [
+            Coordinates(0, 0),
+            Coordinates(1, 0),
+            Coordinates(2, 0),
+        ]
+        self.hitCdWidth = 3
+        self.hitCdHeight = 1
 
 
     def on_enter(self):
@@ -36,14 +45,12 @@ class StateChase(State):
             self.brain.owner.entity, system.gamelogic.enemy.Enemy)
 
         stateTimeRnd = random.randrange(-100 * meEnemy.enemyInfo.chaseTimeRnd, 100 * meEnemy.enemyInfo.chaseTimeRnd)
-        self.setTimer( meEnemy.enemyInfo.chaseTime + (stateTimeRnd / 100) )
+        self.setTimer(meEnemy.enemyInfo.chaseTime + (stateTimeRnd / 100))
         self.canAttackTimer.setTimer(meEnemy.enemyInfo.enemyCanAttackPeriod)
         self.canAttackTimer.reset()
 
 
     def process(self, dt):
-        meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.enemy.Enemy)
         meAttackable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.attackable.Attackable)
 
@@ -86,25 +93,27 @@ class StateChase(State):
     def checkForNewPlayerPosition(self):
         # check if there are any new player position messages
         for message in messaging.getByType(MessageType.PlayerLocation):
-            self.lastKnowsPlayerPosition = message.data
+            self.lastKnownPlayerPosition = message.data
 
 
     def canAttackPlayer(self):
-        meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.enemy.Enemy)
+        logging.info("{}: (slow) Check if i can attack player".format(self.name))
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.renderable.Renderable)
 
-        if self.lastKnowsPlayerPosition is None:
-            # we may not yet have received a location. find it directly via player entity
+        if self.lastKnownPlayerPosition is None:
+            # we may not yet have received a location.
+            # find it directly via player entity
             # this is every time we go into chase state
             playerEntity = EntityFinder.findPlayer(self.brain.owner.world)
             playerRenderable = self.brain.owner.world.component_for_entity(
                 playerEntity, system.renderable.Renderable)
-            self.lastKnowsPlayerPosition = playerRenderable.getLocationAndSize()
-        playerLocation = self.lastKnowsPlayerPosition
+            self.lastKnownPlayerPosition = playerRenderable.getLocationAndSize()
+        playerLocation = self.lastKnownPlayerPosition
 
-        attackRendable = self.brain.owner.world.component_for_entity(
-            meEnemy.offensiveAttackEntity, system.renderable.Renderable)
-        hitLocations = attackRendable.getTextureHitCoordinates()
+        loc = meRenderable.getAttackBaseLocation()
+        direction = meRenderable.getDirection()
+        hitLocations = self.getHitLocations(loc, direction)
 
         # only one of the hitlocations need to hit
         for hitLocation in hitLocations:
@@ -121,18 +130,52 @@ class StateChase(State):
         return False
 
 
+    def distance(self, r1, r2):
+        res = {
+            'x': 0,
+            'y': 0,
+        }
+
+        d1 = r1.coordinates.x - (r2.coordinates.x + r2.texture.width)
+        d2 = (r1.coordinates.x + r1.texture.width) - r2.coordinats.x
+        if d1 < d2:
+            res['x'] = d1
+        elif d1 > d2:
+            res['x'] = d2
+
+        d1 = r1.coordinates.y - (r2.coordinates.y + r2.texture.height)
+        d2 = (r1.coordinates.y + r1.texture.height) - r2.coordinats.y
+        if d1 < d2:
+            res['y'] = d1
+        elif d1 > d2:
+            res['y'] = d2
+
+        return res
+
+
+    def getHitLocations(self, loc, direction):
+        carr = copy.deepcopy(self.hitCd)
+
+        for c in carr:
+            c.x += loc.x
+            c.y += loc.y
+            if direction is Direction.left:
+                c.x -= (self.hitCdWidth - 1)
+
+        return carr
+
+
     def getInputChase(self):
-        meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.enemy.Enemy)
         meGroupId = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.groupid.GroupId)
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.renderable.Renderable)
 
-        if not meEnemy.enemyMovement:
+        if not Config.enemyMovement:
             return
 
-        meOffensiveWeaponRenderable = self.brain.owner.world.component_for_entity(
-            meEnemy.offensiveAttackEntity, system.renderable.Renderable)
-        meWeaponLocation = meOffensiveWeaponRenderable.getLocation()
+        attackBaseLocation = meRenderable.getAttackBaseLocation()
+        attackBaseLocationInverted = meRenderable.getAttackBaseLocationInverted()
 
         playerEntity = EntityFinder.findPlayer(self.brain.owner.world)
         playerRenderable = self.brain.owner.world.component_for_entity(
@@ -143,15 +186,14 @@ class StateChase(State):
         moveY = 0
         dontChangeDirection = False
 
-        if meWeaponLocation.x < playerLocation.x - 1:
+        if attackBaseLocation.x < playerLocation.x - 1:
             moveX = 1
-        elif meWeaponLocation.x > playerLocation.x: #+ meEnemy.player.texture.width:
+        elif attackBaseLocation.x > playerLocation.x:  # + meEnemy.player.texture.width:
             moveX = -1
 
         # check if its better to just walk backwards
-        meWeaponLocationInverted = meOffensiveWeaponRenderable.getLocationDirectionInverted()
-        distanceNormal = Utility.distance(playerLocation, meWeaponLocation)
-        distanceInverted = Utility.distance(playerLocation, meWeaponLocationInverted)
+        distanceNormal = Utility.distance(playerLocation, attackBaseLocation)
+        distanceInverted = Utility.distance(playerLocation, attackBaseLocationInverted)
         #logger.info("CC Dir: {}  X: {}   Normal: {}  Inverted: {}".format(
         #    meRenderable.direction, moveX,
         #    distanceNormal['sum'],
@@ -161,9 +203,9 @@ class StateChase(State):
             dontChangeDirection = True
 
         # we can walk diagonally, no elif here
-        if meWeaponLocation.y < playerLocation.y:
+        if attackBaseLocation.y < playerLocation.y:
             moveY = 1
-        elif meWeaponLocation.y > playerLocation.y + playerRenderable.texture.height - 1: # why -1?
+        elif attackBaseLocation.y > playerLocation.y + playerRenderable.texture.height - 1:  # why -1?
             moveY = -1
 
         # only move if we really move a character

@@ -54,5 +54,3 @@ class Texture(object):
 
     def isActive(self) -> bool:
         return self.active
-
-

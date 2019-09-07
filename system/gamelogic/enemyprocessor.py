@@ -1,5 +1,6 @@
 import esper
 import random
+import logging
 
 from system.gamelogic.enemy import Enemy
 from texture.character.characteranimationtype import CharacterAnimationType
@@ -11,6 +12,9 @@ from messaging import messaging, MessageType
 from entities.esperdata import EsperData
 from system.gamelogic.ai import Ai
 import world.uniqueid
+from system.offensiveattack import OffensiveAttack
+
+logger = logging.getLogger(__name__)
 
 
 class EnemyProcessor(esper.Processor):
@@ -24,7 +28,7 @@ class EnemyProcessor(esper.Processor):
             player.advance(deltaTime)
         self.checkSpawn()
 
-    
+
     def checkSpawn(self):
         for message in messaging.getByType(MessageType.SpawnEnemy):
             self.spawnEnemy(message.data)
@@ -66,48 +70,10 @@ class EnemyProcessor(esper.Processor):
         self.world.add_component(enemy, tenemy)
         self.world.add_component(enemy, Attackable(initialHealth=100))
 
-        #offensiveAttack = OffensiveAttack(
-        #    isPlayer=False,
-        #    world=self.world,
-        #    renderable=renderable)
-        #self.world.add_component(enemy, tenemy)            
-
-        #enemyRenderable = renderable
-        # /Enemy
-
-        # CharacterAttack
-        #characterAttackEntity = self.world.create_entity()
-        #texture :PhenomenaTexture = PhenomenaTexture(
-        #    phenomenaType=PhenomenaType.hit)
-        #texture.name = "EnemyWeapon " + name
-        #coordinates = Coordinates( # for hit
-        #    0,
-        #    0
-        #)
-        #renderable = Renderable(
-        #    texture=texture,
-        #    viewport=self.viewport,
-        #    parent=enemyRenderable,
-        #    coordinates=coordinates,
-        #    z=2,
-        #    useParentDirection=True,
-        #    active=False)
-        #renderable.setLocation(
-        #   Coordinates(-1 * (renderable.texture.width - 2), 1)
-        #)
-        #renderable.name = "EnemyWeapon " + name
-        #texture.parentSprite = renderable
-        #self.world.add_component(characterAttackEntity, renderable)
-        #offensiveAttack = OffensiveAttack(
-        #    isPlayer=False,
-        #    world=self.world,
-        #    renderable=renderable)
-        #self.world.add_component(characterAttackEntity, groupId)
-        #self.world.add_component(characterAttackEntity, offensiveAttack)
-        #self.characterAttackEntity = characterAttackEntity
-        #offensiveAttack.switchWeapon(WeaponType.hitLine)
-        #tenemy.offensiveAttackEntity = characterAttackEntity
-        # /CharacterAttack
+        offensiveAttack = OffensiveAttack(
+            parentChar=tenemy,
+            parentRenderable=renderable)
+        self.world.add_component(enemy, offensiveAttack)
 
 
     def getRandomHead(self):

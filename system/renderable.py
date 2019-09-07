@@ -91,20 +91,6 @@ class Renderable(object):
             return self.coordinatesRel
 
 
-    def getLocationDirectionInverted(self):
-        if self.parent is None:
-            return self.coordinates
-        else:
-            parentLocation = self.parent.getLocation()
-            if self.parent.direction is Direction.right:
-                self.coordinatesRel2.x = parentLocation.x + self.coordinates.x
-                self.coordinatesRel2.y = parentLocation.y + self.coordinates.y
-            else:
-                self.coordinatesRel2.x = parentLocation.x + (-1 * self.coordinates.x) + self.parent.texture.width - self.texture.width
-                self.coordinatesRel2.y = parentLocation.y + self.coordinates.y
-            return self.coordinatesRel2
-
-
     def setLocation(self, coordinates :Coordinates):
         self.coordinates.x = coordinates.x
         self.coordinates.y = coordinates.y
@@ -182,16 +168,17 @@ class Renderable(object):
         return loc
 
 
-    def getTextureHitCoordinates(self, animationIdx=0):
-        locations = self.texture.getTextureHitCoordinates(animationIdx=0)
-        baseLocation = self.getLocation()
+    def getAttackBaseLocationInverted(self):
+        # Slow
+        loc = copy.copy(self.getLocation())
 
-        # make relative coordinates absolute
-        for location in locations:
-            location.x += baseLocation.x
-            location.y += baseLocation.y
+        loc.y += 1
+        if self.direction is Direction.right:
+            loc.x -= 1
+        else:
+            loc.x += self.texture.width + 1
 
-        return locations
+        return loc
 
 
     def isActive(self):
