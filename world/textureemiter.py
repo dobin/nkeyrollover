@@ -175,6 +175,6 @@ class TextureEmiter(object):
             self.addRenderableMinimal(renderableMinimal)
 
 
-    def addRenderableMinimal(self, sprite):
+    def addRenderableMinimal(self, renderable):
         entity = self.esperWorld.create_entity()
-        self.esperWorld.add_component(entity, sprite)
+        self.esperWorld.add_component(entity, renderable)
