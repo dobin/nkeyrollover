@@ -4,7 +4,7 @@ import logging
 from sprite.direction import Direction
 from ai.states import BaseState as State
 from utilities.timer import Timer
-from sprite.coordinates import Coordinates, ExtCoordinates
+from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 from messaging import messaging, MessageType
 from directmessaging import directMessaging, DirectMessageType
@@ -13,7 +13,6 @@ import system.gamelogic.enemy
 from utilities.entityfinder import EntityFinder
 from config import Config
 import copy
-from sprite.direction import Direction
 
 logger = logging.getLogger(__name__)
 
@@ -38,8 +37,8 @@ class StateChase(State):
             Coordinates(0, 1),
             Coordinates(1, 1),
         ]
-        self.hitCdWidth = 3
-        self.hitCdHeight = 1
+        self.hitCdWidth = 2
+        self.hitCdHeight = 2
 
 
     def on_enter(self):
@@ -67,8 +66,8 @@ class StateChase(State):
         if self.canAttackTimer.timeIsUp():
             if self.canAttackPlayer():
                 if EntityFinder.numEnemiesInState(self.brain.owner.world, 'attack') < Config.enemiesInStateAttacking:
-                    ##self.brain.pop()
-                    ##self.brain.push("attackwindup")
+                    self.brain.pop()
+                    self.brain.push("attackwindup")
                     pass
 
             self.canAttackTimer.reset()
@@ -76,12 +75,13 @@ class StateChase(State):
         # note that if we want to attack, as identified a few lines above,
         # we will be in state attackWindup, and not reach here
 
-        # only move if we can not hit him
-        #if not self.canAttackPlayer():
-        # movement speed, and direction
-        if self.lastInputTimer.timeIsUp():
-            self.getInputChase()
-            self.lastInputTimer.reset()
+        # only move if we can not hit him (even on cooldown)
+        # if not self.canAttackPlayer():
+        if True:
+            # movement speed, and direction
+            if self.lastInputTimer.timeIsUp():
+                self.getInputChase()
+                self.lastInputTimer.reset()
 
         # switch to wander if exhausted
         if self.timeIsUp():
@@ -174,6 +174,10 @@ class StateChase(State):
         if not Config.enemyMovement:
             return
 
+        # enemy will walk to this distance
+        # allows player to come close
+        # but not inside of him, will walk backwards
+        keepDistance = 1
 
         attackBaseLocation = meRenderable.getAttackBaseLocation()
         attackBaseLocationInverted = meRenderable.getAttackBaseLocationInverted()
@@ -239,9 +243,9 @@ class StateChase(State):
                 playerref = playerLocation.x + playerRenderable.texture.width-1
 
             tempDistance = attackLoc.x - playerref
-            if tempDistance > 1:
+            if tempDistance > keepDistance:
                 moveX = -1
-            elif tempDistance < -1:
+            elif tempDistance < -keepDistance:
                 moveX = 1
 
             logging.info("--- Distance: {} because {} - {} ".format(
