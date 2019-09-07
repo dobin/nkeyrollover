@@ -2,7 +2,6 @@ import esper
 import logging
 import random
 
-from utilities.utilities import Utility
 from texture.character.characteranimationtype import CharacterAnimationType
 from messaging import messaging, MessageType
 import system.advanceable
@@ -44,7 +43,8 @@ class CharacterAnimationProcessor(esper.Processor):
                 logger.info(meRenderable.name + " Death animation deluxe")
                 animationIndex = random.randint(0, 1)
 
-                effect = random.choice([TextureEmiterEffect.explode, TextureEmiterEffect.pushback])
+                effect = random.choice(
+                    [TextureEmiterEffect.explode, TextureEmiterEffect.pushback])
                 messaging.add(
                     type=MessageType.EmitTexture,
                     data = {
@@ -103,7 +103,8 @@ class CharacterAnimationProcessor(esper.Processor):
                     playerRenderable.direction)
 
             if message.type == MessageType.attackWindup:
-                entity = EntityFinder.findCharacterByGroupId(self.world, message.groupId)
+                entity = EntityFinder.findCharacterByGroupId(
+                    self.world, message.groupId)
                 entityRenderable = self.world.component_for_entity(
                     entity, system.renderable.Renderable)
 
@@ -112,7 +113,8 @@ class CharacterAnimationProcessor(esper.Processor):
                     entityRenderable.direction)
 
             if message.type == MessageType.EntityAttack:
-                entity = EntityFinder.findCharacterByGroupId(self.world, message.groupId)
+                entity = EntityFinder.findCharacterByGroupId(
+                    self.world, message.groupId)
                 entityRenderable = self.world.component_for_entity(
                     entity, system.renderable.Renderable)
 

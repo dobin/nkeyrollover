@@ -1,20 +1,16 @@
 import logging
 
 from utilities.recordholder import RecordHolder
-from config import Config
 from world.particleeffecttype import ParticleEffectType
-from texture.character.characteranimationtype import CharacterAnimationType
 from utilities.timer import Timer
 from utilities.utilities import Utility
 from entities.weapontype import WeaponType
-from utilities.colorpalette import ColorPalette
-from utilities.color import Color
 import system.gamelogic.attackable
 import system.renderable
 import system.graphics.speechbubble
 import system.groupid
-from messaging import messaging, Messaging, Message, MessageType
-from directmessaging import directMessaging, DirectMessage, DirectMessageType
+from messaging import messaging, MessageType
+from directmessaging import directMessaging, DirectMessageType
 from sprite.direction import Direction
 
 logger = logging.getLogger(__name__)
@@ -197,10 +193,9 @@ class OffensiveSkill(object):
             type=MessageType.PlayerAttack,
             data= {
                 'hitLocations': hitLocations,
-                'damage': self.damage[ WeaponType.explosion ]
+                'damage': self.damage[WeaponType.explosion]
             }
         )
-
         #self.player.announce(damage=damage, particleEffectType=ParticleEffectType.explosion)
 
 
@@ -217,7 +212,7 @@ class OffensiveSkill(object):
             type=MessageType.PlayerAttack,
             data= {
                 'hitLocations': hitLocations,
-                'damage': self.damage[ WeaponType.laser ]
+                'damage': self.damage[WeaponType.laser]
             }
         )
         #self.player.announce(damage=damage, particleEffectType=ParticleEffectType.laser)
@@ -236,10 +231,9 @@ class OffensiveSkill(object):
             type=MessageType.PlayerAttack,
             data= {
                 'hitLocations': hitLocations,
-                'damage': self.damage[ WeaponType.cleave ]
+                'damage': self.damage[WeaponType.cleave]
             }
         )
-
         #self.player.announce(damage=damage, particleEffectType=ParticleEffectType.cleave)
 
 

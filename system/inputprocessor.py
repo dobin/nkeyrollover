@@ -1,16 +1,15 @@
 import esper
 import curses
 import logging
-from enum import Enum
 
 from utilities.timer import Timer
-from messaging import messaging, Messaging, Message, MessageType
+from messaging import messaging, MessageType
 from config import Config
 import system.advanceable
 import system.renderable
 import system.gamelogic.player
 import system.gamelogic.attackable
-from directmessaging import directMessaging, DirectMessage, DirectMessageType
+from directmessaging import directMessaging, DirectMessageType
 from utilities.apm import Apm
 from utilities.entityfinder import EntityFinder
 
@@ -20,7 +19,7 @@ logger = logging.getLogger(__name__)
 class InputProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
-        self.movementTimer = Timer( 1.0 / Config.movementKeysPerSec, instant=True)
+        self.movementTimer = Timer(1.0 / Config.movementKeysPerSec, instant=True)
         self.apm = Apm()
 
 
@@ -48,6 +47,8 @@ class InputProcessor(esper.Processor):
         didMove = False
         if attackable.isStunned:
             return
+        if player.isAttacking:
+            return
 
         for message in messaging.getByType(MessageType.PlayerKeypress):
             self.apm.tick(message.data['time'])
@@ -69,19 +70,19 @@ class InputProcessor(esper.Processor):
 
         if self.movementTimer.timeIsUp():
             if key == curses.KEY_LEFT:
-                x=-1
+                x = -1
                 didMove = True
 
             elif key == curses.KEY_RIGHT:
-                x=1
+                x = 1
                 didMove = True
 
             elif key == curses.KEY_UP:
-                y=-1
+                y = -1
                 didMove = True
 
             elif key == curses.KEY_DOWN:
-                y=1
+                y = 1
                 didMove = True
 
         meGroupId = self.world.component_for_entity(
