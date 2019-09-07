@@ -24,7 +24,7 @@ class FileTextureLoader(object):
     ) -> Animation:
         ct = characterType.name
         cat = characterAnimationType.name
-        filename = "data/textures/{}/{}_{}.ascii".format(ct, ct, cat)
+        filename = "data/textures/character/{}/{}_{}.ascii".format(ct, ct, cat)
 
         # return fake animation if file does not exist(yet)
         if not os.path.isfile(filename):
@@ -40,7 +40,7 @@ class FileTextureLoader(object):
         animation = self.readAnimationFile(filename)
         animation.name = "{}_{}".format(ct, cat)
 
-        filenameYaml = "data/textures/{}/{}_{}.yaml".format(ct, ct, cat)
+        filenameYaml = "data/textures/character/{}/{}_{}.yaml".format(ct, ct, cat)
         self.loadYamlIntoAnimation(filenameYaml, animation)
 
         return animation
@@ -51,11 +51,25 @@ class FileTextureLoader(object):
         phenomenaType,
     ) -> Animation:
         phenomenaName = phenomenaType.name
-        filename = "data/textures/{}.ascii".format(phenomenaName)
+        filename = "data/textures/phenomena/{}.ascii".format(phenomenaName)
         animation = self.readAnimationFile(filename)
         animation.name = phenomenaName
 
-        filenameYaml = "data/textures/{}.yaml".format(phenomenaName)
+        filenameYaml = "data/textures/phenomena/{}.yaml".format(phenomenaName)
+        self.loadYamlIntoAnimation(filenameYaml, animation)
+        return animation
+
+
+    def readAction(
+        self,
+        actionType,
+    ) -> Animation:
+        actionName = actionType.name
+        filename = "data/textures/action/{}.ascii".format(actionName)
+        animation = self.readAnimationFile(filename)
+        animation.name = actionName
+
+        filenameYaml = "data/textures/action/{}.yaml".format(actionName)
         self.loadYamlIntoAnimation(filenameYaml, animation)
         return animation
 

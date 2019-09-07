@@ -27,7 +27,9 @@ class Map(object):
         self.color :Color = ColorPalette.getColorByColor(Color.grey)
 
         self.openXpMap('data/map/map02.xp')
-        self.mapTextures = [ None ] * self.xpmap['width'] # array of len(mapwidth), with arrays
+
+        # array of len(mapwidth), with arrays
+        self.mapTextures = [None] * self.xpmap['width']
         #self.loadMapTextures('map01')
 
 
@@ -60,18 +62,19 @@ class Map(object):
     def drawXp(self):
         # Note: This function should be as fast as possible.
         xp_file_layer = self.xpmap['layer_data'][0]
+
         # performance...
-        #if not xp_file_layer['width'] or not xp_file_layer['height']:
-        #    raise AttributeError('Attempted to call load_layer_to_console on data that didn\'t have a width or height key, check your data')
+        if False:
+            if not xp_file_layer['width'] or not xp_file_layer['height']:
+                raise AttributeError('Attempted to call load_layer_to_console on data that didn\'t have a width or height key, check your data')
+
         x = self.viewport.getx() + 1
         maxx = x + 78
         while x < maxx:
-        #for x in range(xp_file_layer['width']):
-            #for y in range(xp_file_layer['height']):
             y = 1
             while y < 24:
                 cell_data = xp_file_layer['cells'][x][y]
-                if cell_data['keycode'] != '': # dont print empty (space " ") cells
+                if cell_data['keycode'] != '':  # dont print empty (space " ") cells
                     char = cell_data['keycode']
                     self.viewport.addstr(
                         y=y, x=x, char=char, options=cell_data['color'], knownDrawable=True)
@@ -91,7 +94,7 @@ class Map(object):
 
     def addTextureToMap(self, texture :Texture):
         x = texture.getLocation().x
-        if not self.mapTextures[ x ]:
+        if not self.mapTextures[x]:
             self.mapTextures[x] = []
 
         self.mapTextures[x].append(texture)
@@ -109,16 +112,16 @@ class Map(object):
         xp_file_layer = self.xpmap['layer_data'][0]
         for x in range(xp_file_layer['width']):
             for y in range(xp_file_layer['height']):
-                # {'keycode': 65, 'fore_r': 178, 'fore_g': 134, 'fore_b': 0, 'back_r': 0,
-                # 'back_g': 0, 'back_b': 0}
+                # {'keycode': 65, 'fore_r': 178, 'fore_g': 134, 'fore_b': 0, 
+                # 'back_r': 0, 'back_g': 0, 'back_b': 0}
                 char = xp_file_layer['cells'][x][y]['keycode']
                 color = ColorPalette.getColorByRgb(
                     xp_file_layer['cells'][x][y]['fore_r'],
                     xp_file_layer['cells'][x][y]['fore_g'],
                     xp_file_layer['cells'][x][y]['fore_b']
                 )
-                # we only accept official palette colors. if it is not recognized, ignore
-                # character completely (artefact? misclick?)
+                # we only accept official palette colors. if it is not recognized, i
+                # gnore character completely (artefact? misclick?)
                 if color is not None:
                     xp_file_layer['cells'][x][y]['color'] = color
                     if char != 32 and char != 0:

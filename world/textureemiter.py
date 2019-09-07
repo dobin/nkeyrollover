@@ -9,13 +9,13 @@ from utilities.colorpalette import ColorPalette
 from system.renderableminimal import RenderableMinimal
 from system.textureminimal import TextureMinimal
 from system.renderable import Renderable
-from texture.phenomena.phenomenatexture import PhenomenaTexture
+from texture.action.actiontexture import ActionTexture
 from messaging import messaging, MessageType
 
 logger = logging.getLogger(__name__)
 
 
-class TextureEmiterEffect(Enum): 
+class TextureEmiterEffect(Enum):
     explode = 0
     pushback = 1
 
@@ -29,11 +29,11 @@ class TextureEmiter(object):
     def makeActionTexture(
         self, actionTextureType, location, fromPlayer, direction, damage=None
     ):
-        texture :PhenomenaTexture = PhenomenaTexture(
-            phenomenaType=actionTextureType,
+        texture :ActionTexture = ActionTexture(
+            actionType=actionTextureType,
             direction=direction)
 
-        if direction is Direction.left: 
+        if direction is Direction.left:
             location.x -= texture.width
 
         renderable = Renderable(

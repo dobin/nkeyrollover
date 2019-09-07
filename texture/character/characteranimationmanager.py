@@ -2,11 +2,8 @@ import logging
 
 from sprite.direction import Direction
 from texture.character.characteranimationtype import CharacterAnimationType
-from texture.animation import Animation
 from .charactertype import CharacterType
 from texture.filetextureloader import FileTextureLoader
-from utilities.color import Color
-from utilities.colorpalette import ColorPalette
 from utilities.utilities import Utility
 
 logger = logging.getLogger(__name__)
@@ -91,5 +88,3 @@ class CharacterAnimationManager(object):
             Utility.checkAnimation(animation, animationType, self.characterType)
 
         return animations
-
-

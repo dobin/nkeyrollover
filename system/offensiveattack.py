@@ -1,6 +1,6 @@
 import logging
 
-from texture.phenomena.phenomenatype import PhenomenaType
+from texture.action.actiontype import ActionType
 from config import Config
 from entities.weapontype import WeaponType
 from utilities.recordholder import RecordHolder
@@ -63,13 +63,13 @@ class OffensiveAttack():
 
     def weaponTypeToAnimationType(self, weaponType):
         if self.weaponType is WeaponType.hit:
-            return PhenomenaType.hit
+            return ActionType.hit
         elif self.weaponType is WeaponType.hitSquare:
-            return PhenomenaType.hitSquare
+            return ActionType.hitSquare
         elif self.weaponType is WeaponType.hitLine:
-            return PhenomenaType.hitLine
+            return ActionType.hitLine
         elif self.weaponType is WeaponType.jumpKick:
-            return PhenomenaType.hit
+            return ActionType.hit
 
 
     def attack(self):
@@ -83,11 +83,11 @@ class OffensiveAttack():
 
         actionTextureType = None
         if self.weaponType is WeaponType.hit:
-            actionTextureType = PhenomenaType.hit
+            actionTextureType = ActionType.hit
         elif self.weaponType is WeaponType.hitSquare:
-            actionTextureType = PhenomenaType.hitSquare
+            actionTextureType = ActionType.hitSquare
         elif self.weaponType is WeaponType.hitLine:
-            actionTextureType = PhenomenaType.hitLine
+            actionTextureType = ActionType.hitLine
 
         location = self.parentRenderable.getWeaponBaseLocation()
         direction = self.parentRenderable.getDirection()
