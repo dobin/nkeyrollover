@@ -15,7 +15,8 @@ class OffensiveAttackProcessor(esper.Processor):
 
 
     def process(self, dt):
-        self.handleAttackKeyPress()
+        self.handlePlayerAttackKeyPressMessage()
+        self.handleEnemyAttackMessage()
         self.advance(dt)
 
 
@@ -24,7 +25,11 @@ class OffensiveAttackProcessor(esper.Processor):
             offensiveAttack.advance(dt)
 
 
-    def handleAttackKeyPress(self):
+    def handleEnemyAttackMessage(self): 
+        pass
+
+
+    def handlePlayerAttackKeyPressMessage(self):
         for message in messaging.getByType(MessageType.PlayerKeypress):
             self.handlePlayerKeypress(message.data['key'])
 
@@ -34,7 +39,6 @@ class OffensiveAttackProcessor(esper.Processor):
         if playerAttack is None:
             # No player here yet
             return
-        
 
         if key == ord(' '):
             playerAttack.attack()
@@ -55,7 +59,7 @@ class OffensiveAttackProcessor(esper.Processor):
     def getPlayerAttack(self):
         # find player
         playerEntity = EntityFinder.findPlayer(self.world)
-        if playerEntity is None: 
+        if playerEntity is None:
             return None
 
         meGroupId = self.world.component_for_entity(
@@ -66,4 +70,3 @@ class OffensiveAttackProcessor(esper.Processor):
         ret = EntityFinder.findOffensiveAttackByGroupId(self.world, meGroupId.getId())
 
         return ret
-        

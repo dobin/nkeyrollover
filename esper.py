@@ -298,7 +298,7 @@ class World:
 
     def _process(self, *args, **kwargs):
         for processor in self._processors:
-            #logger.info("P: " + str(processor))
+            # logger.info("P: " + str(processor))
             processor.process(*args, **kwargs)
 
     def _timed_process(self, *args, **kwargs):

@@ -1,8 +1,6 @@
-from enum import Enum
 import logging
 
 from texture.phenomena.phenomenaanimationmanager import PhenomenaAnimationManager
-from sprite.direction import Direction
 from texture.animationtexture import AnimationTexture
 from sprite.coordinates import Coordinates
 
@@ -20,7 +18,7 @@ class PhenomenaTexture(AnimationTexture):
 
     def changeAnimation(self, phenomenaType, direction):
         self.animation = self.phenomenaAnimationManager.getAnimation(
-            phenomenaType, 
+            phenomenaType,
             direction)
         self.init()
         self.width = self.animation.width
@@ -35,7 +33,7 @@ class PhenomenaTexture(AnimationTexture):
         while x < self.width:
             y = 0
             while y < self.height:
-                if self.animation.arr[0][y][x] != '': 
+                if self.animation.arr[0][y][x] != '':
                     loc = Coordinates(x, y)
                     locations.append(loc)
 

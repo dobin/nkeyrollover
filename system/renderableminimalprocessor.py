@@ -1,12 +1,7 @@
 import esper
 import logging
 
-from utilities.timer import Timer
-from utilities.color import Color
-from utilities.colorpalette import ColorPalette
-from utilities.colortype import ColorType
 from world.viewport import Viewport
-from sprite.coordinates import Coordinates
 from system.renderableminimal import RenderableMinimal
 from messaging import messaging, MessageType
 
@@ -43,6 +38,15 @@ class RenderableMinimalProcessor(esper.Processor):
                 charDirection = message.data['charDirection'],
             )
 
+        for message in messaging.getByType(MessageType.EmitActionTexture):
+            self.textureEmiter.makeActionTexture(
+                actionTextureType = message.data['actionTextureType'],
+                location = message.data['location'],
+                fromPlayer = message.data['fromPlayer'],
+                damage = message.data['damage'],
+                direction = message.data['direction']
+            )
+
 
     def advance(self, dt):
         for ent, rend in self.world.get_component(RenderableMinimal):
@@ -53,7 +57,7 @@ class RenderableMinimalProcessor(esper.Processor):
             if not rend.isActive():
                 self.world.delete_entity(ent)
 
-    
+
     def handleTextureMinimal(self, rend, deltaTime):
         if not rend.isActive():
             return
@@ -68,7 +72,7 @@ class RenderableMinimalProcessor(esper.Processor):
                 rend.setActive(False)
                 return
 
-            rend.texture.timer.setTimer(rend.texture.timeArr[ rend.texture.idx ])
+            rend.texture.timer.setTimer(rend.texture.timeArr[rend.texture.idx])
             rend.texture.timer.start()
             rend.coordinates.x += rend.texture.movementX
             rend.coordinates.y += rend.texture.movementY
@@ -83,11 +87,10 @@ class RenderableMinimalProcessor(esper.Processor):
         if not rend.isActive():
             return
 
-        color = rend.texture.colorArr[ rend.texture.idx ]
+        color = rend.texture.colorArr[rend.texture.idx]
 
         self.viewport.addstr(
-                rend.coordinates.y,
-                rend.coordinates.x,
-                rend.texture.char,
-                color)
-
+            rend.coordinates.y,
+            rend.coordinates.x,
+            rend.texture.char,
+            color)

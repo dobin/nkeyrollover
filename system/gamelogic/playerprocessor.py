@@ -3,8 +3,6 @@ import logging
 
 import system.gamelogic.player
 from messaging import messaging, MessageType
-
-
 from sprite.coordinates import Coordinates
 from sprite.direction import Direction
 from config import Config
@@ -64,8 +62,8 @@ class PlayerProcessor(esper.Processor):
     def spawnPlayer(self):
         # Player
         myid = 0
-        self.player = self.world.create_entity()
-        esperData = EsperData(self.world, self.player, 'player')
+        self.playerEntity = self.world.create_entity()
+        esperData = EsperData(self.world, self.playerEntity, 'player')
         texture = CharacterTexture(
             characterType=CharacterType.player,
             characterAnimationType=CharacterAnimationType.standing)
@@ -86,45 +84,20 @@ class PlayerProcessor(esper.Processor):
         self.characterSkillEntity = characterSkill
         renderable.name = "Player"
         groupId = GroupId(id=myid)
-        self.world.add_component(self.player, groupId)
-        self.world.add_component(self.player, characterSkill)
-        self.world.add_component(self.player, renderable)
-        self.world.add_component(self.player, system.gamelogic.player.Player())
-        self.world.add_component(self.player, Attackable(initialHealth=100))
+        player = system.gamelogic.player.Player()
+        self.world.add_component(self.playerEntity, groupId)
+        self.world.add_component(self.playerEntity, characterSkill)
+        self.world.add_component(self.playerEntity, renderable)
+        self.world.add_component(self.playerEntity, player)
+        self.world.add_component(self.playerEntity, Attackable(initialHealth=100))
         self.playerRendable = renderable
-        # /Player
 
-        # CharacterAttack
-        characterAttackEntity = self.world.create_entity()
-        texture :PhenomenaTexture = PhenomenaTexture(
-            phenomenaType=PhenomenaType.hit)
-        coordinates = Coordinates( # for hit
-            0,
-            0
-        )
-        texture.name = "Playerweapon"
-        renderable = Renderable(
-            texture=texture,
-            viewport=self.viewport,
-            parent=self.playerRendable,
-            coordinates=coordinates,
-            z=3,
-            active=False,
-            useParentDirection=True)
-        renderable.setLocation(
-           Coordinates(-1 * (renderable.texture.width - 2), -1)
-        )            
-        renderable.name = "PlayerWeapon"
-        self.world.add_component(characterAttackEntity, renderable)
         offensiveAttack = OffensiveAttack(
-            isPlayer=True,
-            world=self,
-            renderable=renderable)
-        groupId = GroupId(id=myid)
-        self.world.add_component(characterAttackEntity, groupId)
-        self.world.add_component(characterAttackEntity, offensiveAttack)
-        self.characterAttackEntity = characterAttackEntity
-        # /CharacterAttack
+            parentChar=player,
+            parentRenderable=renderable,
+            world=self)
+        self.world.add_component(self.playerEntity, offensiveAttack)
+        # /Player
 
         # speech
         speechEntity = self.world.create_entity()

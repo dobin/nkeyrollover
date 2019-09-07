@@ -152,13 +152,13 @@ class Utility(object):
                 n = 0
                 while n < len(line) / 2:
                     cl = line[n]
-                    cr = line[ len(line) - 1 - n ]
+                    cr = line[len(line) - 1 - n]
 
                     cl = Utility.swapChar(cl)
                     cr = Utility.swapChar(cr)
 
                     line[n] = cr
-                    line[ len(line) - 1 - n ] = cl
+                    line[len(line) - 1 - n] = cl
                     n += 1
 
 
@@ -184,6 +184,10 @@ class Utility(object):
         elif char == 'Ɑ':
             return 'D'
 
+        if char == '<':
+            return '>'
+        elif char == '>':
+            return '<'
+
         else:
             return char
-

@@ -29,12 +29,12 @@ class FileTextureLoader(object):
         # return fake animation if file does not exist(yet)
         if not os.path.isfile(filename):
             animation = Animation()
-            animation.arr = [ [ [ 'X' ] ] ]
+            animation.arr = [[['X']]]
             animation.height = 1
             animation.width = 1
             animation.frameCount = 1
-            animation.frameTime = [ 10.0 ]
-            animation.frameColors = [ ColorPalette.getColorByColor(Color.white) ]
+            animation.frameTime = [10.0]
+            animation.frameColors = [ColorPalette.getColorByColor(Color.white)]
             return animation
 
         animation = self.readAnimationFile(filename)
@@ -57,7 +57,7 @@ class FileTextureLoader(object):
 
         filenameYaml = "data/textures/{}.yaml".format(phenomenaName)
         self.loadYamlIntoAnimation(filenameYaml, animation)
-        return animation 
+        return animation
 
 
     def loadYamlIntoAnimation(self, filename, animation): 
@@ -83,7 +83,7 @@ class FileTextureLoader(object):
                 animation.originalDirection = Direction.left
             elif data['direction'] == 'right':
                 animation.originalDirection = Direction.right
-            else: 
+            else:
                 animation.originalDirection = Direction.none
 
         # colors: 
@@ -93,7 +93,8 @@ class FileTextureLoader(object):
             if color.startswith('ColorType.'):
                 color = color.split('.')[1]
                 colorType = ColorPalette.getColorTypeByStr(color)
-                animation.frameColors[n] = ColorPalette.getColorByColorType(colorType, viewport=None)
+                animation.frameColors[n] = ColorPalette.getColorByColorType(
+                    colorType, viewport=None)
             else:
                 color = ColorPalette.getColorByStr(color)
                 animation.frameColors[n] = ColorPalette.getColorByColor(color)

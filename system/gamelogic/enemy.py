@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 class Enemy():
     def __init__(self, name):
         self.enemyMovement :bool = True
+        self.isPlayer = False
 
         self.name :str = 'Bot' + name
         self.enemyInfo :EnemyInfo = EnemyInfo()

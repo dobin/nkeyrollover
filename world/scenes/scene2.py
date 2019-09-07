@@ -4,9 +4,6 @@ import random
 from utilities.timer import Timer
 from world.scenes.scenebase import SceneBase
 from sprite.coordinates import Coordinates
-from system.renderable import Renderable
-from texture.phenomena.phenomenatype import PhenomenaType
-from texture.phenomena.phenomenatexture import PhenomenaTexture
 from messaging import messaging, MessageType
 from collections import deque
 from config import Config
@@ -27,22 +24,21 @@ class EnemyCell(object):
     def __repr__(self): 
         return "{} {} @{} @{} @{}".format(
             self.id,
-            self.characterType, 
+            self.characterType,
             self.spawnTime,
-            self.spawnX, 
+            self.spawnX,
             self.spawnLocation)
 
-        
 
 class Scene2(SceneBase):
     def __init__(self, viewport, esperWorld):
         super().__init__(esperWorld=esperWorld, viewport=viewport)
         self.name = "Scene2 - Map 0x01"
         self.isShowPlayer = True
-        self.isShowMap = True      
+        self.isShowMap = True
 
         self.enemyQueue = deque()
-        
+
         self.maxEnemies = 6
         self.minEnemies = 4
         self.maxEnemiesAttacking = 2
@@ -54,11 +50,11 @@ class Scene2(SceneBase):
         self.prepareEnemies()
 
 
-    def prepareEnemies(self): 
+    def prepareEnemies(self):
         waveIdx = 0
         waveCount = 3
-        if Config.devMode: 
-            waveCount = 1
+        if Config.devMode:
+            waveCount = 0
 
         while waveIdx < waveCount:
             self.prepareWave(waveIdx, self.enemyQueue)
@@ -71,14 +67,14 @@ class Scene2(SceneBase):
 
         numStickfigures = 10
         numCows = 2
-        if Config.devMode: 
-            numStickfigures = 1
+        if Config.devMode:
+            numStickfigures = 0
             numCows = 0
 
         # stickfigures
         n = 0
         while n < numStickfigures:
-            playerTrapX = waveIdx * intraWaveXoffset 
+            playerTrapX = waveIdx * intraWaveXoffset
             spawnLocation = self.getRandomSpawnCoords()
             enemyCell = EnemyCell(
                 id = self.enemyCount,
@@ -94,7 +90,7 @@ class Scene2(SceneBase):
         # cows
         n = 0
         while n < numCows:
-            playerTrapX = waveIdx * intraWaveXoffset 
+            playerTrapX = waveIdx * intraWaveXoffset
             spawnLocation = self.getRandomSpawnCoords()
             enemyCell = EnemyCell(
                 id = self.enemyCount,
@@ -109,7 +105,6 @@ class Scene2(SceneBase):
 
 
     def spawnEnemy(self, enemyCell): 
-        #logging.info("AAA: " + str(len(self.enemyQueue)))
         messaging.add(
             type=MessageType.SpawnEnemy,
             data=enemyCell,
@@ -139,7 +134,7 @@ class Scene2(SceneBase):
             return
 
         enemyCell = self.enemyQueue[0]
-        if enemyCell.spawnX < playerPosition.x: 
+        if enemyCell.spawnX < playerPosition.x:
             self.spawnEnemy(enemyCell)
             del self.enemyQueue[0]
 
@@ -155,11 +150,11 @@ class Scene2(SceneBase):
             del self.enemyQueue[0]
 
 
-    def handleEnemyDeath(self): 
+    def handleEnemyDeath(self):
         pass
 
 
-    def advance(self, dt): 
+    def advance(self, dt):
         self.time += dt
 
 
@@ -176,7 +171,7 @@ class Scene2(SceneBase):
         if side:
             myx = self.viewport.getx() + Config.columns + 1
         else:
-            myx = self.viewport.getx() - 1 #- enemy.texture.width
+            myx = self.viewport.getx() - 1  # - enemy.texture.width
 
         minY = Config.areaMoveable['miny']
         maxY = Config.areaMoveable['maxy']

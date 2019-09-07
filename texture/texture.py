@@ -1,11 +1,6 @@
-import copy
 import logging
 
-from sprite.coordinates import Coordinates
-from sprite.sprite import Sprite
 from utilities.timer import Timer
-from utilities.colorpalette import ColorPalette
-from utilities.colortype import ColorType
 from utilities.color import Color
 
 logger = logging.getLogger(__name__)
@@ -43,10 +38,8 @@ class Texture(object):
     def setOverwriteColorFor(self, time :float, color :Color):
         if self.overwriteColorTimer.isActive():
             logger.debug("{} Color already active on new set color".format(self.name))
-            #return
 
         self.overwriteColor = color
-
         self.overwriteColorTimer.setTimer(time)
         self.overwriteColorTimer.reset()
 

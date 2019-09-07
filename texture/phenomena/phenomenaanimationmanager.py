@@ -2,13 +2,10 @@ import logging
 
 from sprite.direction import Direction
 from texture.phenomena.phenomenatype import PhenomenaType
-from texture.animation import Animation
 from texture.filetextureloader import FileTextureLoader
-from utilities.color import Color
-from utilities.colorpalette import ColorPalette
 from utilities.utilities import Utility
 
-logger = logging.getLogger("phenomentaanimationmanager")
+logger = logging.getLogger("phenomenaAnimationManager")
 
 
 class PhenomenaAnimationManager(object):
@@ -18,10 +15,12 @@ class PhenomenaAnimationManager(object):
         self.fileTextureLoader = FileTextureLoader()
 
         for phenomenatype in PhenomenaType:
-            self.animationsLeft[phenomenatype] = self.createAnimation(phenomenatype, Direction.left)
+            self.animationsLeft[phenomenatype] = self.createAnimation(
+                phenomenatype, Direction.left)
 
         for phenomenatype in PhenomenaType:
-            self.animationsRight[phenomenatype] = self.createAnimation(phenomenatype, Direction.right)
+            self.animationsRight[phenomenatype] = self.createAnimation(
+                phenomenatype, Direction.right)
 
 
     def getAnimation(self, phenomenaType, direction):
@@ -40,4 +39,3 @@ class PhenomenaAnimationManager(object):
         Utility.checkAnimation(animation, phenomenaType, None)
 
         return animation
-

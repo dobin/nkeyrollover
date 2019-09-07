@@ -1,52 +1,29 @@
 import logging
-import random
 import curses
+import esper
 
-from sprite.coordinates import Coordinates
-from sprite.direction import Direction
-from config import Config
-from entities.entity import Entity
-from entities.entitytype import EntityType
 from world.particleemiter import ParticleEmiter
-from sprite.sprite import Sprite
 from .map import Map
 from .viewport import Viewport
 from .textureemiter import TextureEmiter
-from texture.character.charactertype import CharacterType
-from texture.character.charactertexture import CharacterTexture
-from texture.animationtexture import AnimationTexture
-
-import esper
-from system.advanceable import Advanceable, AdvanceableProcessor
+from system.advanceable import AdvanceableProcessor
 from system.renderable import Renderable
 from system.renderableprocessor import RenderableProcessor
-from system.gamelogic.attackable import Attackable
 from system.gamelogic.attackableprocessor import AttackableProcessor
-from system.gamelogic.enemy import Enemy
 from system.gamelogic.enemyprocessor import EnemyProcessor
-from system.gamelogic.player import Player
 from system.gamelogic.playerprocessor import PlayerProcessor
-from system.offensiveskill import OffensiveSkill
 from system.offensiveskillprocessor import OffensiveSkillProcessor
-from system.graphics.speechbubble import SpeechBubble
-from system.groupid import GroupId
 from system.sceneprocessor import SceneProcessor
 from system.renderableminimal import RenderableMinimal
-from texture.phenomena.phenomenatexture import PhenomenaTexture
-from texture.phenomena.phenomenatype import PhenomenaType
-from system.offensiveattack import OffensiveAttack
 from system.offensiveattackprocessor import OffensiveAttackProcessor
 from system.movementprocessor import MovementProcessor
-from entities.esperdata import EsperData
 from system.inputprocessor import InputProcessor
-from texture.character.characteranimationtype import CharacterAnimationType
 from system.graphics.characteranimationprocessor import CharacterAnimationProcessor
 from system.gamelogic.aiprocessor import AiProcessor
 from system.renderableminimalprocessor import RenderableMinimalProcessor
 from world.scenemanager import SceneManager
 from world.statusbar import StatusBar
 from utilities.entityfinder import EntityFinder
-
 from messaging import messaging, Messaging, Message, MessageType
 
 logger = logging.getLogger(__name__)
@@ -59,8 +36,7 @@ class World(object):
         self.esperWorld = esper.World()
         self.win = win
         self.statusBar = StatusBar(world=self, menuwin=menuwin)
-        self.viewport :Viewport =Viewport(win=win, world=self)
-        #self.worldSprite :Sprite = Sprite(viewport=self.viewport, parentSprite=None)
+        self.viewport :Viewport = Viewport(win=win, world=self)
         self.particleEmiter :ParticleEmiter = ParticleEmiter(viewport=self.viewport)
         self.textureEmiter :TextureEmiter = TextureEmiter(
             viewport=self.viewport,
@@ -72,7 +48,7 @@ class World(object):
 
         self.pause :bool = False
         self.gameRunning :bool = True
-        self.gameTime :float =0.0
+        self.gameTime :float = 0.0
         self.showStats = False
         self.showEnemyWanderDestination = False
 
@@ -80,14 +56,16 @@ class World(object):
         characterAnimationProcessor = CharacterAnimationProcessor()
         renderableProcessor = RenderableProcessor()
         advanceableProcessor = AdvanceableProcessor()
-        playerProcessor = PlayerProcessor(viewport=self.viewport, particleEmiter=self.particleEmiter)
+        playerProcessor = PlayerProcessor(
+            viewport=self.viewport,
+            particleEmiter=self.particleEmiter)
         enemyProcessor = EnemyProcessor(viewport=self.viewport)
         attackableProcessor = AttackableProcessor()
         offensiveAttackProcessor = OffensiveAttackProcessor()
         offensiveSkillProcessor = OffensiveSkillProcessor()
         movementProcessor = MovementProcessor()
         inputProcessor = InputProcessor()
-        self.inputProcessor = inputProcessor # for Statusbar:APM
+        self.inputProcessor = inputProcessor  # for Statusbar:APM
         renderableMinimalProcessor = RenderableMinimalProcessor(
             viewport=self.viewport,
             textureEmiter=self.textureEmiter)
@@ -229,21 +207,21 @@ class World(object):
         o = []
 
         o.append('Enemies:')
-        o.append('  Alive     : ' 
-            + str( EntityFinder.numEnemies(world=self.esperWorld)) )
-        o.append('  Attacking : ' 
-            + str( EntityFinder.numEnemiesInState(world=self.esperWorld, state='attack')) )
-        o.append('  Chasing   : ' 
-            + str( EntityFinder.numEnemiesInState(world=self.esperWorld, state='chase')) )
-        o.append('  Wadndering: ' 
-            + str( EntityFinder.numEnemiesInState(world=self.esperWorld, state='wander')) )
+        o.append('  Alive     : '
+            + str(EntityFinder.numEnemies(world=self.esperWorld)))
+        o.append('  Attacking : '
+            + str(EntityFinder.numEnemiesInState(world=self.esperWorld, state='attack')))
+        o.append('  Chasing   : '
+            + str(EntityFinder.numEnemiesInState(world=self.esperWorld, state='chase')))
+        o.append('  Wadndering: '
+            + str(EntityFinder.numEnemiesInState(world=self.esperWorld, state='wander')))
 
         playerEntity = EntityFinder.findPlayer(self.esperWorld)
         playerRenderable = self.esperWorld.component_for_entity(
             playerEntity, Renderable)
 
         o.append('Player:')
-        o.append('  Location:' + str( playerRenderable.getLocation() ) )
+        o.append('  Location:' + str(playerRenderable.getLocation()))
 
         n = 0
         while n < len(o):

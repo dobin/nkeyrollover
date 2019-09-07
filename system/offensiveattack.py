@@ -1,35 +1,32 @@
 import logging
 
-from sprite.coordinates import Coordinates
 from texture.phenomena.phenomenatype import PhenomenaType
 from config import Config
 from entities.weapontype import WeaponType
 from utilities.recordholder import RecordHolder
 from utilities.timer import Timer
-
-from messaging import messaging, Messaging, Message, MessageType
+from messaging import messaging, MessageType
 
 logger = logging.getLogger(__name__)
 
 
 class OffensiveAttack():
-    def __init__(self, isPlayer, renderable, world):
-        self.isPlayer :bool = isPlayer
-        self.renderable = renderable
+    def __init__(self, parentChar, parentRenderable, world):
+        self.parentChar = parentChar
+        self.parentRenderable = parentRenderable
         self.world = world
 
+        # really necessary?
         self.durationTimer = Timer(0.0, active=False)
-
-        # the duration of the hitting animation
-        self.durationTimer.setTimer( renderable.texture.getAnimationTime() )
+        self.durationTimer.setTimer(Config.playerAttackAnimationLen)
         self.durationTimer.reset()
 
-        self.cooldownTimer :Timer =Timer(Config.playerAttacksCd, instant=True)
+        self.cooldownTimer :Timer = Timer(Config.playerAttacksCd, instant=True)
 
         self.weaponType :WeaponType = WeaponType.hit
         self.selectedWeaponKey :str = '1'
 
-        if isPlayer:
+        if parentChar.isPlayer:
             self.damage = {
                 WeaponType.hit: 35,
                 WeaponType.hitSquare: 35,
@@ -64,13 +61,6 @@ class OffensiveAttack():
         logger.info("Switch to weaopn: " + str(weaponType))
         self.weaponType = weaponType
 
-        # TODO: This is ugly..
-        self.renderable.texture.changeAnimation(self.weaponTypeToAnimationType(weaponType), self.renderable.parent.direction)
-        coordinates = Coordinates( # for hit
-            -1 * (self.renderable.texture.width - 2),
-            -1
-        )
-        self.renderable.setLocation(coordinates)
 
     def weaponTypeToAnimationType(self, weaponType):
         if self.weaponType is WeaponType.hit:
@@ -85,37 +75,35 @@ class OffensiveAttack():
 
     def attack(self):
         if not self.cooldownTimer.timeIsUp():
-            RecordHolder.recordPlayerAttackCooldown(self.weaponType, time=self.cooldownTimer.getTimeLeft())
+            RecordHolder.recordPlayerAttackCooldown(
+                self.weaponType, time=self.cooldownTimer.getTimeLeft())
             return
-        self.cooldownTimer.reset() # activate cooldown
+        self.cooldownTimer.reset()  # activate cooldown
 
-        self.renderable.setActive(True)
-        self.durationTimer.reset() # will setActive(false) when time is up
+        self.durationTimer.reset()  # will setActive(false) when time is up
 
+        actionTextureType = None
         if self.weaponType is WeaponType.hit:
-            self.renderable.texture.changeAnimation(PhenomenaType.hit, self.renderable.parent.direction)
-            hitLocations = self.renderable.getTextureHitCoordinates()
+            actionTextureType = PhenomenaType.hit
         elif self.weaponType is WeaponType.hitSquare:
-            self.renderable.texture.changeAnimation(PhenomenaType.hitSquare, self.renderable.parent.direction)
-            hitLocations = self.renderable.getTextureHitCoordinates()
+            actionTextureType = PhenomenaType.hitSquare
         elif self.weaponType is WeaponType.hitLine:
-            self.renderable.texture.changeAnimation(PhenomenaType.hitLine, self.renderable.parent.direction)
-            hitLocations = self.renderable.getTextureHitCoordinates()
-        elif self.weaponType is WeaponType.jumpKick:
-            self.renderable.texture.changeAnimation(PhenomenaType.hit, self.renderable.parent.direction)
-            hitLocations = []
+            actionTextureType = PhenomenaType.hitLine
 
-        messageType = None
-        if self.isPlayer:
-            messageType = MessageType.PlayerAttack
-        else:
-            messageType = MessageType.EnemyAttack
+        location = self.parentRenderable.getWeaponBaseLocation()
+        direction = self.parentRenderable.getDirection()
 
+        # EmitActionTexture will create Attack message for the player/enemy
+        # as we dont know here what the attack locations are,
+        # as they depend on the specific attack
         messaging.add(
-            type=messageType,
-            data= {
-                'hitLocations': hitLocations,
-                'damage': self.damage[ self.weaponType ]
+            type=MessageType.EmitActionTexture,
+            data={
+                'actionTextureType': actionTextureType,
+                'location': location,
+                'fromPlayer': self.parentChar.isPlayer,
+                'damage': self.damage[self.weaponType],
+                'direction': direction,
             }
         )
 
@@ -124,11 +112,6 @@ class OffensiveAttack():
         self.cooldownTimer.advance(deltaTime)
         self.durationTimer.advance(deltaTime)
 
-        if self.durationTimer.isActive() and self.durationTimer.timeIsUp():
-            self.renderable.setActive(False)
 
     def getWeaponStr(self):
         return self.selectedWeaponKey
-
-
-

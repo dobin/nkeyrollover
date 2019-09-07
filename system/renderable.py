@@ -2,7 +2,6 @@ from __future__ import annotations
 # this so i can give type information about my own class
 # https://stackoverflow.com/questions/33533148/how-do-i-specify-that-the-return-type-of-a-method-is-the-same-as-the-class-itsel
 
-import esper
 import copy
 import logging
 from typing import List
@@ -13,7 +12,6 @@ from messaging import messaging, Messaging, Message, MessageType
 from config import Config
 from texture.texture import Texture
 from world.viewport import Viewport
-import system.gamelogic.attackable
 
 logger = logging.getLogger(__name__)
 
@@ -57,14 +55,6 @@ class Renderable(object):
         self.name = 'none'
 
 
-    def isHitBy(self, hitLocations :List[Coordinates]):
-        for hitLocation in hitLocations:
-            if self.collidesWithPoint(hitLocation):
-                return True
-
-        return False
-
-
     def __repr__(self):
         return self.name
 
@@ -73,10 +63,10 @@ class Renderable(object):
         loc = self.getLocation()
 
         d = ExtCoordinates(
-            x = loc.x,
-            y = loc.y,
-            width = self.texture.width,
-            height = self.texture.height
+            x=loc.x,
+            y=loc.y,
+            width=self.texture.width,
+            height=self.texture.height
         )
         return d
 
@@ -150,6 +140,14 @@ class Renderable(object):
         self.texture.draw(self.viewport, self.getLocation())
 
 
+    def isHitBy(self, hitLocations :List[Coordinates]):
+        for hitLocation in hitLocations:
+            if self.collidesWithPoint(hitLocation):
+                return True
+
+        return False
+
+
     def collidesWithPoint(self, hitCoords :Coordinates):
         if hitCoords.x >= self.coordinates.x and hitCoords.x < self.coordinates.x + self.texture.width:
             if hitCoords.y >= self.coordinates.y and hitCoords.y < self.coordinates.y + self.texture.height:
@@ -158,12 +156,38 @@ class Renderable(object):
         return False
 
 
+    def getWeaponBaseLocation(self):
+        # Slow
+        loc = copy.copy(self.getLocation())
+
+        loc.y -= 1
+        if self.direction is Direction.left:
+            loc.x -= -1
+        else:
+            loc.x += self.texture.width + -1
+
+        return loc
+
+
+    def getAttackBaseLocation(self):
+        # Slow
+        loc = copy.copy(self.getLocation())
+
+        loc.y += 1
+        if self.direction is Direction.left:
+            loc.x -= 1
+        else:
+            loc.x += self.texture.width + 1
+
+        return loc
+
+
     def getTextureHitCoordinates(self, animationIdx=0):
         locations = self.texture.getTextureHitCoordinates(animationIdx=0)
         baseLocation = self.getLocation()
 
         # make relative coordinates absolute
-        for location in locations: 
+        for location in locations:
             location.x += baseLocation.x
             location.y += baseLocation.y
 
@@ -177,3 +201,6 @@ class Renderable(object):
     def setActive(self, active):
         self.active = active
 
+
+    def getDirection(self):
+        return self.direction

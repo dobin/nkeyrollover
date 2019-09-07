@@ -1,5 +1,4 @@
 import logging
-import random
 from enum import Enum
 
 from world.viewport import Viewport
@@ -9,6 +8,9 @@ from utilities.color import Color
 from utilities.colorpalette import ColorPalette
 from system.renderableminimal import RenderableMinimal
 from system.textureminimal import TextureMinimal
+from system.renderable import Renderable
+from texture.phenomena.phenomenatexture import PhenomenaTexture
+from messaging import messaging, MessageType
 
 logger = logging.getLogger(__name__)
 
@@ -24,11 +26,54 @@ class TextureEmiter(object):
         self.esperWorld = esperWorld
 
 
-    def showCharAtPos(self, char :str, timeout :float, coordinate :Coordinates, color :Color):
+    def makeActionTexture(
+        self, actionTextureType, location, fromPlayer, direction, damage=None
+    ):
+        texture :PhenomenaTexture = PhenomenaTexture(
+            phenomenaType=actionTextureType,
+            direction=direction)
+
+        if direction is Direction.left: 
+            location.x -= texture.width
+
+        renderable = Renderable(
+            texture=texture,
+            viewport=self.viewport,
+            parent=None,
+            coordinates=location,
+            active=True)
+        self.addRenderable(renderable)
+
+        if damage is not None:
+            hitLocations = renderable.getTextureHitCoordinates()
+
+            msgType = None
+            if fromPlayer:
+                msgType = MessageType.PlayerAttack
+            else:
+                msgType = MessageType.EnemyAttack
+
+            messaging.add(
+                type=msgType,
+                data={
+                    'hitLocations': hitLocations,
+                    'damage': damage,
+                }
+            )
+
+
+    def addRenderable(self, renderable):
+        entity = self.esperWorld.create_entity()
+        self.esperWorld.add_component(entity, renderable)
+
+
+    def showCharAtPos(
+        self, char :str, timeout :float, coordinate :Coordinates, color :Color
+    ):
         textureMinimal = TextureMinimal(
             char=char,
-            colorArr=[ColorPalette.getColorByColor( color )],
-            timeArr= [ timeout ],
+            colorArr=[ColorPalette.getColorByColor(color)],
+            timeArr=[timeout],
         )
         renderableMinimal = RenderableMinimal(
             texture=textureMinimal,
@@ -44,8 +89,9 @@ class TextureEmiter(object):
             rowCnt = len(rows)
 
             for (x, column) in enumerate(rows):
-                if column is not '':
-                    self.makeEffect(effect, pos, x, y, column, columnCount, rowCnt, charDirection)
+                if column != '':
+                    self.makeEffect(
+                        effect, pos, x, y, column, columnCount, rowCnt, charDirection)
 
 
     def makeEffect(self, effect, pos, x, y, char, columnCount, rowCnt, charDirection):
@@ -64,8 +110,8 @@ class TextureEmiter(object):
                 movementX = 1
 
             c = Coordinates(
-                x = pos.x + x,
-                y = pos.y + y,
+                x=pos.x + x,
+                y=pos.y + y,
             )
 
             timeArr = [
@@ -74,9 +120,9 @@ class TextureEmiter(object):
                 0.1
             ]
             colorArr = [
-                ColorPalette.getColorByColor( Color.brightyellow ),
-                ColorPalette.getColorByColor( Color.yellow ),
-                ColorPalette.getColorByColor( Color.grey ),
+                ColorPalette.getColorByColor(Color.brightyellow),
+                ColorPalette.getColorByColor(Color.yellow),
+                ColorPalette.getColorByColor(Color.grey),
             ]
 
             textureMinimal = TextureMinimal(
@@ -99,8 +145,8 @@ class TextureEmiter(object):
                 d = 1
 
             c = Coordinates(
-                x = pos.x + x,
-                y = pos.y + y,
+                x=pos.x + x,
+                y=pos.y + y,
             )
 
             timeArr = [
@@ -110,16 +156,16 @@ class TextureEmiter(object):
                 0.4
             ]
             colorArr = [
-                ColorPalette.getColorByColor( Color.white ),
-                ColorPalette.getColorByColor( Color.white ),
-                ColorPalette.getColorByColor( Color.grey ),
-                ColorPalette.getColorByColor( Color.grey ),
+                ColorPalette.getColorByColor(Color.white),
+                ColorPalette.getColorByColor(Color.white),
+                ColorPalette.getColorByColor(Color.grey),
+                ColorPalette.getColorByColor(Color.grey),
             ]
 
             textureMinimal = TextureMinimal(
                 char=char,
-                movementX = d * 2,
-                movementY = 0,
+                movementX=d * 2,
+                movementY=0,
                 timeArr=timeArr,
                 colorArr=colorArr)
             renderableMinimal = RenderableMinimal(
