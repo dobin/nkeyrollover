@@ -113,7 +113,7 @@ class FileTextureLoader(object):
             else:
                 color = ColorPalette.getColorByStr(color)
                 animation.frameColors[n] = ColorPalette.getColorByColor(
-                    color, isUnitTest=self.isUnitTest)
+                    color)
 
 
     def readAnimationFile(self, filename :str) -> Animation:

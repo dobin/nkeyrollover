@@ -1,5 +1,7 @@
+#!/usr/bin/env python
+
+import unittest
 import esper
-import logging
 
 import system.gamelogic.player
 from messaging import messaging, MessageType
@@ -17,49 +19,22 @@ from system.gamelogic.offensiveattack import OffensiveAttack
 from utilities.entityfinder import EntityFinder
 from system.gamelogic.player import Player
 
-logger = logging.getLogger(__name__)
 
+class RenderableTest(unittest.TestCase):
+    def test_renderable(self):
 
-class PlayerProcessor(esper.Processor):
-    def __init__(self, viewport, particleEmiter):
-        super().__init__()
+        self.world = esper.World()
+        self.viewport = None
+        self.particleEmiter = None
 
-        self.viewport = viewport
-        self.particleEmiter = particleEmiter
-
-
-    def process(self, deltaTime):
-        self.advance(deltaTime)
-        self.checkSpawn()
-
-
-    def checkSpawn(self):
-        for message in messaging.getByType(MessageType.SpawnPlayer):
-            self.spawnPlayer()
-
-
-    def advance(self, deltaTime):
-        playerEntity = EntityFinder.findPlayer(self.world)
-        if playerEntity is None: 
-            return
-        player = self.world.component_for_entity(
-                playerEntity, Player)
-
-        player.advance(deltaTime)
-
-
-    def spawnPlayer(self):
         # Player
         myid = 0
-        playerEntity = self.world.create_entity()
-        groupId = GroupId(id=myid)
-        player = system.gamelogic.player.Player()
-
+        self.playerEntity = self.world.create_entity()
+        esperData = EsperData(self.world, self.playerEntity, 'player')
         texture = CharacterTexture(
             characterType=CharacterType.player,
             characterAnimationType=CharacterAnimationType.standing)
         texture.name = "Player"
-
         coordinates = Coordinates(
             Config.playerSpawnPoint['x'],
             Config.playerSpawnPoint['y']
@@ -69,25 +44,32 @@ class PlayerProcessor(esper.Processor):
             viewport=self.viewport,
             parent=None,
             coordinates=coordinates)
-        renderable.name = "Player"
-
-        esperData = EsperData(self.world, playerEntity, 'player')
         characterSkill = OffensiveSkill(
             esperData=esperData,
             particleEmiter=self.particleEmiter,
             viewport=self.viewport)
-
+        
+        renderable.name = "Player"
+        groupId = GroupId(id=myid)
+        player = system.gamelogic.player.Player()
 
         offensiveAttack = OffensiveAttack(
             parentChar=player,
             parentRenderable=renderable)
 
-        attackable = Attackable(initialHealth=100)
 
-        self.world.add_component(playerEntity, groupId)
-        self.world.add_component(playerEntity, characterSkill)
-        self.world.add_component(playerEntity, renderable)
-        self.world.add_component(playerEntity, player)
-        self.world.add_component(playerEntity, attackable)
-        self.world.add_component(playerEntity, offensiveAttack)
-        # /Player
+        self.world.add_component(self.playerEntity, offensiveAttack)
+
+        self.world.add_component(self.playerEntity, groupId)
+        self.world.add_component(self.playerEntity, characterSkill)
+        self.world.add_component(self.playerEntity, renderable)
+        self.world.add_component(self.playerEntity, player)
+        self.world.add_component(self.playerEntity, Attackable(initialHealth=100))
+        
+        self.characterSkillEntity = characterSkill
+        self.playerRendable = renderable
+
+
+
+if __name__ == '__main__':
+    unittest.main()

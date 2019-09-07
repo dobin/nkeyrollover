@@ -4,12 +4,14 @@ import unittest
 
 from texture.filetextureloader import FileTextureLoader
 from texture.phenomena.phenomenatype import PhenomenaType
+import world.isunittest
 
 
 class FileTextureLoaderTest(unittest.TestCase):
     def test_loadTexture(self):
-        fileTextureLoader = FileTextureLoader(isUnitTest=True)
-
+        world.isunittest.setIsUnitTest()
+        
+        fileTextureLoader = FileTextureLoader()
         animation = fileTextureLoader.readPhenomena(PhenomenaType.unittest)
 
         self.assertTrue(animation.height == 2)

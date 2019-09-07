@@ -5,6 +5,7 @@ from entities.entitytype import EntityType
 from .colortype import ColorType
 from world.viewport import Viewport
 from .color import Color
+import world.isunittest
 
 logger = logging.getLogger(__name__)
 
@@ -43,8 +44,8 @@ class ColorPalette(object):
 
 
     @staticmethod
-    def getColorByColor(color :Color, isUnitTest=False):
-        if isUnitTest:
+    def getColorByColor(color :Color):
+        if world.isunittest.getIsUnitTest():
             return color.name
 
         if color is Color.brightwhite:
@@ -92,12 +93,6 @@ class ColorPalette(object):
     @staticmethod
     def getColorByColorType(colorType: ColorType, viewport :Viewport):
         color = 0
-
-        # for unittests using MockWin
-        # we always import 'curses', and dont know if we are being unittested
-        # in the unittest, we use Viewport, which has method isUnitTest
-        if viewport is not None and hasattr(viewport, 'isUnitTest'):
-            return color
 
         if colorType is ColorType.particle:
             color = ColorPalette.getColorByColor(Color.brightmagenta)
