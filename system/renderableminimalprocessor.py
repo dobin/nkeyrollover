@@ -4,6 +4,10 @@ import logging
 from world.viewport import Viewport
 from system.renderableminimal import RenderableMinimal
 from messaging import messaging, MessageType
+from directmessaging import directMessaging, DirectMessageType
+import system.advanceable
+import system.renderable
+import system.gamelogic.player
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +23,28 @@ class RenderableMinimalProcessor(esper.Processor):
         self.handleMessages()
         self.advance(dt)
         self.draw()
+        self.makeSpeechBubble()
+
+
+    def makeSpeechBubble(self):
+        msg = directMessaging.get(
+            messageType = DirectMessageType.activateSpeechBubble
+        )
+        while msg is not None:
+            for ent, (renderable, groupId) in self.world.get_components(
+                system.renderable.Renderable,
+                system.groupid.GroupId
+            ):
+                if groupId.getId() == msg.groupId:
+                    self.textureEmiter.showSpeechBubble(
+                        displayText=msg.data['text'],
+                        time=msg.data['time'],
+                        parentRenderable=renderable
+                    )
+
+            msg = directMessaging.get(
+                messageType = DirectMessageType.activateSpeechBubble
+            )
 
 
     def handleMessages(self):

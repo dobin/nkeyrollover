@@ -7,7 +7,6 @@ from utilities.utilities import Utility
 from entities.weapontype import WeaponType
 import system.gamelogic.attackable
 import system.renderable
-import system.graphics.speechbubble
 import system.groupid
 from messaging import messaging, MessageType
 from directmessaging import directMessaging, DirectMessageType

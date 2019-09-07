@@ -11,6 +11,7 @@ from system.textureminimal import TextureMinimal
 from system.renderable import Renderable
 from texture.action.actiontexture import ActionTexture
 from messaging import messaging, MessageType
+from texture.speech.speechtexture import SpeechTexture
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,22 @@ class TextureEmiter(object):
     def __init__(self, viewport :Viewport, esperWorld):
         self.viewport :Viewport = viewport
         self.esperWorld = esperWorld
+
+
+    def showSpeechBubble(self, displayText, time, parentRenderable):
+        texture = SpeechTexture(
+            displayText=displayText,
+            time=time
+        )
+        coordinates = Coordinates(1, -4)
+        renderable = Renderable(
+            texture=texture,
+            viewport=self.viewport,
+            parent=parentRenderable,
+            coordinates=coordinates,
+            z=3,
+            active=True)
+        self.addRenderable(renderable)
 
 
     def makeActionTexture(

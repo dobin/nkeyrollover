@@ -7,11 +7,9 @@ from sprite.coordinates import Coordinates
 from config import Config
 from texture.character.charactertype import CharacterType
 from texture.character.charactertexture import CharacterTexture
-from texture.animationtexture import AnimationTexture
 from entities.esperdata import EsperData
 from texture.character.characteranimationtype import CharacterAnimationType
 from system.renderable import Renderable
-from system.graphics.speechbubble import SpeechBubble
 from system.offensiveskill import OffensiveSkill
 from system.groupid import GroupId
 from system.gamelogic.attackable import Attackable
@@ -88,27 +86,3 @@ class PlayerProcessor(esper.Processor):
             parentRenderable=renderable)
         self.world.add_component(self.playerEntity, offensiveAttack)
         # /Player
-
-        # speech
-        speechEntity = self.world.create_entity()
-        texture = AnimationTexture()
-        coordinates = Coordinates(1, -4)
-        renderable = Renderable(
-            texture=texture,
-            viewport=self.viewport,
-            parent=self.playerRendable,
-            coordinates=coordinates,
-            z=3,
-            active=False)
-        speechBubble = SpeechBubble(renderable=renderable)
-        groupId = GroupId(id=myid)
-        self.world.add_component(
-            speechEntity,
-            groupId)
-        self.world.add_component(
-            speechEntity,
-            renderable)
-        self.world.add_component(
-            speechEntity,
-            speechBubble)
-        # /speech

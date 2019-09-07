@@ -1,7 +1,7 @@
 import logging
 import esper
 
-from messaging import messaging, Messaging, Message, MessageType
+from messaging import messaging, MessageType
 from config import Config
 from directmessaging import directMessaging, DirectMessageType
 import system.gamelogic.attackable
@@ -25,29 +25,8 @@ class RenderableProcessor(esper.Processor):
     def process(self, dt):
         # TODO which one first?
         self.collisionDetection()
-        self.speechBubbleActivator()
         self.advance(dt)
         self.render()
-
-
-    def speechBubbleActivator(self):
-        msg = directMessaging.get(
-            messageType = DirectMessageType.activateSpeechBubble
-        )
-        while msg is not None:
-            for ent, (renderable, speechBubble, groupId) in self.world.get_components(
-                system.renderable.Renderable,
-                system.graphics.speechbubble.SpeechBubble,
-                system.groupid.GroupId
-            ):
-                if groupId.getId() == msg.groupId:
-                    speechBubble.showText(
-                        displayText=msg.data['text'],
-                        time=msg.data['time'])
-
-            msg = directMessaging.get(
-                messageType = DirectMessageType.activateSpeechBubble
-            )
 
 
     def advance(self, deltaTime):
@@ -57,63 +36,66 @@ class RenderableProcessor(esper.Processor):
 
     def collisionDetection(self):
         for message in messaging.get():
-            damageSum = 0
-
             # handle Player Attacks
             if message.type is MessageType.PlayerAttack:
-                hitLocations = message.data['hitLocations']
-                damage = message.data['damage']
-
-                for ent, (groupId, renderable, attackable, enemy) in self.world.get_components(
-                    system.groupid.GroupId,
-                    system.renderable.Renderable,
-                    system.gamelogic.attackable.Attackable,
-                    system.gamelogic.enemy.Enemy
-                ):
-                    if renderable.isHitBy(hitLocations):
-                        directMessaging.add(
-                            groupId=groupId.id,
-                            type=DirectMessageType.receiveDamage,
-                            data=damage
-                        )
-                        damageSum += damage
-
-                # check if we should announce our awesomeness
-                if damageSum > Config.announceDamage:
-                    # find player
-                    for ent, (groupId, player) in self.world.get_components(
-                        system.groupid.GroupId, system.gamelogic.player.Player
-                    ):
-                        directMessaging.add(
-                            groupId = groupId.getId(),
-                            type = DirectMessageType.activateSpeechBubble,
-                            data = {
-                                'text': 'Cowabunga!',
-                                'time': 1.0,
-                            }
-                        )
+                self.handleMessagePlayerAttack(message)
 
             # handle Enemy Attacks
             if message.type is MessageType.EnemyAttack:
-                hitLocations = message.data['hitLocations']
-                damage = message.data['damage']
+                self.handleMessageEnemyAttack(message)
 
-                for ent, (groupId, renderable, attackable, player) in self.world.get_components(
-                    system.groupid.GroupId,
-                    system.renderable.Renderable,
-                    system.gamelogic.attackable.Attackable,
-                    system.gamelogic.player.Player
-                ):
-                    if renderable.isHitBy(hitLocations):
-                        directMessaging.add(
-                            groupId=groupId.id,
-                            type=DirectMessageType.receiveDamage,
-                            data=damage
-                        )
 
-        #RecordHolder.recordAttack(
-        #    weaponType=self.weaponType, damage=damage, name=self.renderable.parent.name,
-        #    characterType=self.renderable.parent.entityType)
+    def handleMessageEnemyAttack(self, message):
+        hitLocations = message.data['hitLocations']
+        damage = message.data['damage']
+
+        for ent, (groupId, renderable, attackable, player) in self.world.get_components(
+            system.groupid.GroupId,
+            system.renderable.Renderable,
+            system.gamelogic.attackable.Attackable,
+            system.gamelogic.player.Player
+        ):
+            if renderable.isHitBy(hitLocations):
+                directMessaging.add(
+                    groupId=groupId.id,
+                    type=DirectMessageType.receiveDamage,
+                    data=damage
+                )
+
+
+    def handleMessagePlayerAttack(self, message):
+        damageSum = 0
+        hitLocations = message.data['hitLocations']
+        damage = message.data['damage']
+
+        for ent, (groupId, renderable, attackable, enemy) in self.world.get_components(
+            system.groupid.GroupId,
+            system.renderable.Renderable,
+            system.gamelogic.attackable.Attackable,
+            system.gamelogic.enemy.Enemy
+        ):
+            if renderable.isHitBy(hitLocations):
+                directMessaging.add(
+                    groupId=groupId.id,
+                    type=DirectMessageType.receiveDamage,
+                    data=damage
+                )
+                damageSum += damage
+
+        # check if we should announce our awesomeness
+        if damageSum > Config.announceDamage:
+            # find player
+            for ent, (groupId, player) in self.world.get_components(
+                system.groupid.GroupId, system.gamelogic.player.Player
+            ):
+                directMessaging.add(
+                    groupId = groupId.getId(),
+                    type = DirectMessageType.activateSpeechBubble,
+                    data = {
+                        'text': 'Cowabunga!',
+                        'time': 1.0,
+                    }
+                )
 
 
     def render(self):
@@ -124,9 +106,9 @@ class RenderableProcessor(esper.Processor):
         # which is by y coordinates
         for ent, rend in self.world.get_component(system.renderable.Renderable):
             if rend.isActive():
-                #logger.info("REND: {} {} {}".format(rend, rend.z, rend.coordinates))
+                # logger.info("REND: {} {} {}".format(rend, rend.z, rend.coordinates))
                 loc = rend.getLocation()
-                self.renderOrder[ loc.y + rend.z ].append(rend)
+                self.renderOrder[loc.y + rend.z].append(rend)
 
         for l in self.renderOrder:
             for rend in l:

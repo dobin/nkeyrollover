@@ -3,6 +3,7 @@ from texture.animation import Animation
 from utilities.color import Color
 from utilities.colorpalette import ColorPalette
 
+
 class SpeechAnimationManager(object):
     def __init__(self):
         pass
