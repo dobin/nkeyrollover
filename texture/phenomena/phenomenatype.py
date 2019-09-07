@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class PhenomenaType(Enum):
+    unittest = 0
     roflcopter = 1
     intro = 2
     tree1 = 3

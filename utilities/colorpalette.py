@@ -33,17 +33,20 @@ class ColorPalette(object):
 
 
     @staticmethod
-    def getColorByStr(s): 
+    def getColorByStr(s):
         return Color[s]
 
 
     @staticmethod
-    def getColorTypeByStr(s): 
+    def getColorTypeByStr(s):
         return ColorType[s]
 
 
     @staticmethod
-    def getColorByColor(color :Color):
+    def getColorByColor(color :Color, isUnitTest=False):
+        if isUnitTest:
+            return color.name
+
         if color is Color.brightwhite:
             return curses.color_pair(7) | curses.A_BOLD
         elif color is Color.white:
@@ -99,7 +102,7 @@ class ColorPalette(object):
         if colorType is ColorType.particle:
             color = ColorPalette.getColorByColor(Color.brightmagenta)
 
-        elif colorType is ColorType.sprite: # only init?
+        elif colorType is ColorType.sprite:  # only init?
             color = ColorPalette.getColorByColor(Color.green)
 
         elif colorType is ColorType.specktexture:

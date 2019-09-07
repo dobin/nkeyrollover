@@ -1,25 +1,23 @@
 #!/usr/bin/env python
 
 import unittest
-import time
-import logging
-import curses
 
 from texture.filetextureloader import FileTextureLoader
+from texture.phenomena.phenomenatype import PhenomenaType
 
 
 class FileTextureLoaderTest(unittest.TestCase):
-    def test_loadTexture(self): 
-        fileTextureLoader = FileTextureLoader()
+    def test_loadTexture(self):
+        fileTextureLoader = FileTextureLoader(isUnitTest=True)
 
-        animation = fileTextureLoader.readPhenomena('unittest')
+        animation = fileTextureLoader.readPhenomena(PhenomenaType.unittest)
 
         self.assertTrue(animation.height == 2)
         self.assertTrue(animation.width == 2)
         self.assertTrue(animation.frameCount == 2)
 
-        self.assertTrue(animation.endless == True)
-        self.assertTrue(animation.advanceByStep == True)
+        self.assertTrue(animation.endless is True)
+        self.assertTrue(animation.advanceByStep is False)
         self.assertTrue(animation.frameTime[0] == 0.1)
         self.assertTrue(animation.frameTime[1] == 0.2)
         self.assertTrue(animation.frameColors[0] == 'white')

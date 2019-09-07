@@ -14,13 +14,14 @@ logger = logging.getLogger(__name__)
 
 
 class FileTextureLoader(object):
-    def __init__(self):
-        pass
+    def __init__(self, isUnitTest=False):
+        self.isUnitTest = isUnitTest
 
 
     def readAnimation(
         self, characterType :CharacterType,
-        characterAnimationType :CharacterAnimationType
+        characterAnimationType :CharacterAnimationType,
+        isUnitTest :bool =False
     ) -> Animation:
         ct = characterType.name
         cat = characterAnimationType.name
@@ -111,7 +112,8 @@ class FileTextureLoader(object):
                     colorType, viewport=None)
             else:
                 color = ColorPalette.getColorByStr(color)
-                animation.frameColors[n] = ColorPalette.getColorByColor(color)
+                animation.frameColors[n] = ColorPalette.getColorByColor(
+                    color, isUnitTest=self.isUnitTest)
 
 
     def readAnimationFile(self, filename :str) -> Animation:

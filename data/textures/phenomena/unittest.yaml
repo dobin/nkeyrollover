@@ -1,5 +1,5 @@
 endless: True
-advanceByStep: True
+advanceByStep: False
 frameTime:
   - 0.1
   - 0.2
