@@ -5,8 +5,8 @@ import random
 
 
 class SceneBase(object): 
-    def __init__(self, esperWorld, viewport): 
-        self.esperWorld = esperWorld
+    def __init__(self, world, viewport): 
+        self.world = world
         self.viewport = viewport
 
         # scene data
@@ -69,12 +69,12 @@ class SceneBase(object):
 
 
     def addRenderable(self, sprite):
-        entity = self.esperWorld.create_entity()
-        self.esperWorld.add_component(entity, sprite)
+        entity = self.world.create_entity()
+        self.world.add_component(entity, sprite)
         self.entities.append(entity)
         return entity
 
 
     def removeRenderable(self, entity): 
-        self.esperWorld.delete_entity(entity)
+        self.world.delete_entity(entity)
 

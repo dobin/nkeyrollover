@@ -23,7 +23,7 @@ class StatusBar(object):
         #    fps = 1000 * (float)(n) / (float)(current_milli_time() - self.startTime)
         #    #fps = self.workTime * 1000.0
 
-        playerEntity = EntityFinder.findPlayer(self.world.esperWorld)
+        playerEntity = EntityFinder.findPlayer(self.world.world)
         if playerEntity is None: 
             # No player here yet
             return
@@ -31,9 +31,9 @@ class StatusBar(object):
 
         #self.menuwin.erase()
         #self.menuwin.border()
-        playerAttackable = self.world.esperWorld.component_for_entity(
+        playerAttackable = self.world.world.component_for_entity(
             playerEntity, Attackable)
-        player = self.world.esperWorld.component_for_entity(
+        player = self.world.world.component_for_entity(
             playerEntity, Player)
 
         s = "Health: " + str(playerAttackable.getHealth())
@@ -49,7 +49,7 @@ class StatusBar(object):
 
 
     def printSkillbar(self, color, playerEntity):
-        playerOffensiveSkill = self.world.esperWorld.component_for_entity(
+        playerOffensiveSkill = self.world.world.component_for_entity(
             playerEntity, OffensiveSkill)
 
         basex = 54
@@ -63,10 +63,10 @@ class StatusBar(object):
             n += 1
 
     def printAttackbar(self, color, playerEntity):
-        playerGroupId = self.world.esperWorld.component_for_entity(
+        playerGroupId = self.world.world.component_for_entity(
             playerEntity, GroupId)
         playerOffensiveAttack = EntityFinder.findOffensiveAttackByGroupId(
-            self.world.esperWorld,
+            self.world.world,
             playerGroupId.getId())
         
         weaponIdx = 62

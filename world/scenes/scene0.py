@@ -11,8 +11,8 @@ logger = logging.getLogger(__name__)
 
 
 class Scene0(SceneBase):
-    def __init__(self, viewport, esperWorld):
-        super().__init__(esperWorld=esperWorld, viewport=viewport)
+    def __init__(self, viewport, world):
+        super().__init__(world=world, viewport=viewport)
 
         # teh logo
         coordinates = Coordinates(2, 5)

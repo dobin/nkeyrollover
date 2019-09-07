@@ -22,9 +22,9 @@ class TextureEmiterEffect(Enum):
 
 
 class TextureEmiter(object):
-    def __init__(self, viewport :Viewport, esperWorld):
+    def __init__(self, viewport :Viewport, world):
         self.viewport :Viewport = viewport
-        self.esperWorld = esperWorld
+        self.world = world
 
 
     def showSpeechBubble(self, displayText, time, parentRenderable):
@@ -80,8 +80,8 @@ class TextureEmiter(object):
 
 
     def addRenderable(self, renderable):
-        entity = self.esperWorld.create_entity()
-        self.esperWorld.add_component(entity, renderable)
+        entity = self.world.create_entity()
+        self.world.add_component(entity, renderable)
 
 
     def showCharAtPos(
@@ -193,5 +193,5 @@ class TextureEmiter(object):
 
 
     def addRenderableMinimal(self, renderable):
-        entity = self.esperWorld.create_entity()
-        self.esperWorld.add_component(entity, renderable)
+        entity = self.world.create_entity()
+        self.world.add_component(entity, renderable)

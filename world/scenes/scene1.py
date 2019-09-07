@@ -26,8 +26,8 @@ class IntroSceneState(Enum):
 
 
 class Scene1(SceneBase):
-    def __init__(self, viewport, esperWorld):
-        super().__init__(esperWorld=esperWorld, viewport=viewport)
+    def __init__(self, viewport, world):
+        super().__init__(world=world, viewport=viewport)
 
         textureCopter = PhenomenaTexture(
             phenomenaType=PhenomenaType.roflcopter)

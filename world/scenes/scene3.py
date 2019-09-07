@@ -12,8 +12,8 @@ logger = logging.getLogger(__name__)
 
 
 class Scene3(SceneBase):
-    def __init__(self, viewport, esperWorld):
-        super().__init__(esperWorld=esperWorld)
+    def __init__(self, viewport, world):
+        super().__init__(world=world)
         self.viewport = viewport
         self.name = "Scene2 - Map 0x01"
         self.isShowPlayer = True
