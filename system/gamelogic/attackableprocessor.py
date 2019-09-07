@@ -2,7 +2,8 @@ import esper
 import logging
 import random
 
-from system.renderable import Renderable
+from system.graphics.renderable import Renderable
+
 from system.groupid import GroupId
 from system.gamelogic.enemy import Enemy
 from system.gamelogic.attackable import Attackable

@@ -2,10 +2,10 @@ import logging
 
 from ai.states import BaseState as State
 from utilities.timer import Timer
-from system.offensiveattack import OffensiveAttack
+from system.gamelogic.offensiveattack import OffensiveAttack
 
 import system.gamelogic.enemy
-import system.renderable
+import system.graphics.renderable
 import system.groupid
 from messaging import messaging, Messaging, Message, MessageType
 

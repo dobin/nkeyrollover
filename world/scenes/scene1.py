@@ -6,7 +6,8 @@ from enum import Enum
 from utilities.timer import Timer
 from world.scenes.scenebase import SceneBase
 from sprite.coordinates import Coordinates
-from system.renderable import Renderable
+from system.graphics.renderable import Renderable
+
 from texture.phenomena.phenomenatype import PhenomenaType
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.character.characteranimationtype import CharacterAnimationType

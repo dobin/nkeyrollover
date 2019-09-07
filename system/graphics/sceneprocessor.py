@@ -7,7 +7,7 @@ from directmessaging import directMessaging, DirectMessageType
 import system.gamelogic.attackable
 import system.gamelogic.enemy
 import system.gamelogic.player
-import system.renderable
+import system.graphics.renderable
 import system.groupid
 
 logger = logging.getLogger(__name__)

@@ -12,7 +12,7 @@ from utilities.utilities import Utility
 from utilities.color import Color
 from messaging import messaging, Messaging, Message, MessageType
 from utilities.entityfinder import EntityFinder
-import system.renderable
+import system.graphics.renderable
 import system.gamelogic.enemy
 from directmessaging import directMessaging, DirectMessage, DirectMessageType
 
@@ -44,7 +44,7 @@ class StateWander(State):
 
     def process(self, dt):
         meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.renderable.Renderable)
+            self.brain.owner.entity, system.graphics.renderable.Renderable)
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.enemy.Enemy)
         meAttackable = self.brain.owner.world.component_for_entity(
@@ -84,7 +84,7 @@ class StateWander(State):
 
     def getInputWander(self):
         meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.renderable.Renderable)
+            self.brain.owner.entity, system.graphics.renderable.Renderable)
         meGroupId = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.groupid.GroupId)
 
@@ -116,7 +116,7 @@ class StateWander(State):
 
     def chooseDestination(self):
         meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.renderable.Renderable)
+            self.brain.owner.entity, system.graphics.renderable.Renderable)
 
         # if true:  go to a static point close to the current enemy position
         # if false: go to a point relative to the enemy
@@ -125,7 +125,7 @@ class StateWander(State):
         # note that getLocation() will return a reference. we need to copy it here.
         playerEntity = EntityFinder.findPlayer(self.brain.owner.world)
         playerRenderable = self.brain.owner.world.component_for_entity(
-            playerEntity, system.renderable.Renderable)
+            playerEntity, system.graphics.renderable.Renderable)
 
         self.destCoord.x = playerRenderable.getLocation().x
         self.destCoord.y = playerRenderable.getLocation().y

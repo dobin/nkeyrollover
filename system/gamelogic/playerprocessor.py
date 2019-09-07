@@ -9,11 +9,12 @@ from texture.character.charactertype import CharacterType
 from texture.character.charactertexture import CharacterTexture
 from entities.esperdata import EsperData
 from texture.character.characteranimationtype import CharacterAnimationType
-from system.renderable import Renderable
-from system.offensiveskill import OffensiveSkill
+from system.graphics.renderable import Renderable
+
+from system.gamelogic.offensiveskill import OffensiveSkill
 from system.groupid import GroupId
 from system.gamelogic.attackable import Attackable
-from system.offensiveattack import OffensiveAttack
+from system.gamelogic.offensiveattack import OffensiveAttack
 from utilities.entityfinder import EntityFinder
 from system.gamelogic.player import Player
 

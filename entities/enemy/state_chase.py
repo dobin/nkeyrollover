@@ -8,7 +8,7 @@ from sprite.coordinates import Coordinates
 from utilities.utilities import Utility
 from messaging import messaging, MessageType
 from directmessaging import directMessaging, DirectMessageType
-import system.renderable
+import system.graphics.renderable
 import system.gamelogic.enemy
 from utilities.entityfinder import EntityFinder
 from config import Config
@@ -99,7 +99,7 @@ class StateChase(State):
     def canAttackPlayer(self):
         logging.info("{}: (slow) Check if i can attack player".format(self.name))
         meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.renderable.Renderable)
+            self.brain.owner.entity, system.graphics.renderable.Renderable)
 
         if self.lastKnownPlayerPosition is None:
             # we may not yet have received a location.
@@ -107,7 +107,7 @@ class StateChase(State):
             # this is every time we go into chase state
             playerEntity = EntityFinder.findPlayer(self.brain.owner.world)
             playerRenderable = self.brain.owner.world.component_for_entity(
-                playerEntity, system.renderable.Renderable)
+                playerEntity, system.graphics.renderable.Renderable)
             self.lastKnownPlayerPosition = playerRenderable.getLocationAndSize()
         playerLocation = self.lastKnownPlayerPosition
 
@@ -169,7 +169,7 @@ class StateChase(State):
         meGroupId = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.groupid.GroupId)
         meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.renderable.Renderable)
+            self.brain.owner.entity, system.graphics.renderable.Renderable)
 
         if not Config.enemyMovement:
             return
@@ -184,7 +184,7 @@ class StateChase(State):
 
         playerEntity = EntityFinder.findPlayer(self.brain.owner.world)
         playerRenderable = self.brain.owner.world.component_for_entity(
-            playerEntity, system.renderable.Renderable)
+            playerEntity, system.graphics.renderable.Renderable)
         playerLocation = playerRenderable.getLocation()
 
         # check distance, from both the direction we are facing, 

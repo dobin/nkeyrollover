@@ -5,8 +5,8 @@ from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
 from system.gamelogic.attackable import Attackable
 from system.gamelogic.player import Player
-from system.offensiveattack import OffensiveAttack
-from system.offensiveskill import OffensiveSkill
+from system.gamelogic.offensiveattack import OffensiveAttack
+from system.gamelogic.offensiveskill import OffensiveSkill
 from system.groupid import GroupId
 from utilities.entityfinder import EntityFinder
 

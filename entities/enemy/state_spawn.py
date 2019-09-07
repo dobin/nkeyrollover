@@ -2,7 +2,7 @@ import logging
 
 from ai.states import BaseState as State
 from config import Config
-import system.renderable
+import system.graphics.renderable
 import system.gamelogic.enemy
 
 logger = logging.getLogger(__name__)

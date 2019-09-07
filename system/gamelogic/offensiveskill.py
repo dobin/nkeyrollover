@@ -6,7 +6,7 @@ from utilities.timer import Timer
 from utilities.utilities import Utility
 from entities.weapontype import WeaponType
 import system.gamelogic.attackable
-import system.renderable
+import system.graphics.renderable
 import system.groupid
 from messaging import messaging, MessageType
 from directmessaging import directMessaging, DirectMessageType
@@ -158,7 +158,7 @@ class OffensiveSkill(object):
 
     def skillPort(self):
         meRenderable = self.esperData.world.component_for_entity(
-            self.esperData.entity, system.renderable.Renderable)
+            self.esperData.entity, system.graphics.renderable.Renderable)
         meGroupId = self.esperData.world.component_for_entity(
             self.esperData.entity, system.groupid.GroupId)
 
@@ -180,7 +180,7 @@ class OffensiveSkill(object):
 
     def skillExplosion(self):
         meRenderable = self.esperData.world.component_for_entity(
-            self.esperData.entity, system.renderable.Renderable)
+            self.esperData.entity, system.graphics.renderable.Renderable)
 
         locCenter = meRenderable.getLocationCenter()
         self.particleEmiter.emit(
@@ -200,7 +200,7 @@ class OffensiveSkill(object):
 
     def skillLaser(self):
         meRenderable = self.esperData.world.component_for_entity(
-            self.esperData.entity, system.renderable.Renderable)
+            self.esperData.entity, system.graphics.renderable.Renderable)
 
         hitLocations = self.particleEmiter.emit(
             meRenderable.getLocationCenter(),
@@ -219,7 +219,7 @@ class OffensiveSkill(object):
 
     def skillCleave(self):
         meRenderable = self.esperData.world.component_for_entity(
-            self.esperData.entity, system.renderable.Renderable)
+            self.esperData.entity, system.graphics.renderable.Renderable)
 
         hitLocations = self.particleEmiter.emit(
             meRenderable.getLocationCenter(),

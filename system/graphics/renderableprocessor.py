@@ -7,7 +7,7 @@ from directmessaging import directMessaging, DirectMessageType
 import system.gamelogic.attackable
 import system.gamelogic.enemy
 import system.gamelogic.player
-import system.renderable
+import system.graphics.renderable
 import system.groupid
 
 logger = logging.getLogger(__name__)
@@ -30,7 +30,7 @@ class RenderableProcessor(esper.Processor):
 
 
     def advance(self, deltaTime):
-        for ent, rend in self.world.get_component(system.renderable.Renderable):
+        for ent, rend in self.world.get_component(system.graphics.renderable.Renderable):
             rend.advance(deltaTime)
 
 
@@ -51,7 +51,7 @@ class RenderableProcessor(esper.Processor):
 
         for ent, (groupId, renderable, attackable, player) in self.world.get_components(
             system.groupid.GroupId,
-            system.renderable.Renderable,
+            system.graphics.renderable.Renderable,
             system.gamelogic.attackable.Attackable,
             system.gamelogic.player.Player
         ):
@@ -70,7 +70,7 @@ class RenderableProcessor(esper.Processor):
 
         for ent, (groupId, renderable, attackable, enemy) in self.world.get_components(
             system.groupid.GroupId,
-            system.renderable.Renderable,
+            system.graphics.renderable.Renderable,
             system.gamelogic.attackable.Attackable,
             system.gamelogic.enemy.Enemy
         ):
@@ -104,7 +104,7 @@ class RenderableProcessor(esper.Processor):
 
         # add all elements to draw in the correct Z order
         # which is by y coordinates
-        for ent, rend in self.world.get_component(system.renderable.Renderable):
+        for ent, rend in self.world.get_component(system.graphics.renderable.Renderable):
             if rend.isActive():
                 # logger.info("REND: {} {} {}".format(rend, rend.z, rend.coordinates))
                 loc = rend.getLocation()

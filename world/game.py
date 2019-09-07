@@ -6,21 +6,20 @@ from world.particleemiter import ParticleEmiter
 from .map import Map
 from .viewport import Viewport
 from .textureemiter import TextureEmiter
-from system.advanceable import AdvanceableProcessor
-from system.renderable import Renderable
-from system.renderableprocessor import RenderableProcessor
+from system.graphics.renderable import Renderable
+from system.graphics.renderableprocessor import RenderableProcessor
 from system.gamelogic.attackableprocessor import AttackableProcessor
 from system.gamelogic.enemyprocessor import EnemyProcessor
 from system.gamelogic.playerprocessor import PlayerProcessor
-from system.offensiveskillprocessor import OffensiveSkillProcessor
-from system.sceneprocessor import SceneProcessor
-from system.renderableminimal import RenderableMinimal
-from system.offensiveattackprocessor import OffensiveAttackProcessor
-from system.movementprocessor import MovementProcessor
-from system.inputprocessor import InputProcessor
+from system.gamelogic.offensiveskillprocessor import OffensiveSkillProcessor
+from system.graphics.sceneprocessor import SceneProcessor
+from system.graphics.renderableminimal import RenderableMinimal
+from system.gamelogic.offensiveattackprocessor import OffensiveAttackProcessor
+from system.gamelogic.movementprocessor import MovementProcessor
+from system.io.inputprocessor import InputProcessor
 from system.graphics.characteranimationprocessor import CharacterAnimationProcessor
 from system.gamelogic.aiprocessor import AiProcessor
-from system.renderableminimalprocessor import RenderableMinimalProcessor
+from system.graphics.renderableminimalprocessor import RenderableMinimalProcessor
 from world.scenemanager import SceneManager
 from world.statusbar import StatusBar
 from utilities.entityfinder import EntityFinder
@@ -55,7 +54,6 @@ class Game(object):
         aiProcessor = AiProcessor()
         characterAnimationProcessor = CharacterAnimationProcessor()
         renderableProcessor = RenderableProcessor()
-        advanceableProcessor = AdvanceableProcessor()
         playerProcessor = PlayerProcessor(
             viewport=self.viewport,
             particleEmiter=self.particleEmiter)
@@ -125,7 +123,6 @@ class Game(object):
         # Nothing
         self.world.add_processor(enemyProcessor)
         self.world.add_processor(playerProcessor)
-        self.world.add_processor(advanceableProcessor)
 
         # x handle:  MessageType           EmitTextureMinimal
         self.world.add_processor(renderableMinimalProcessor)

@@ -2,11 +2,10 @@ import esper
 import logging
 
 from world.viewport import Viewport
-from system.renderableminimal import RenderableMinimal
+from system.graphics.renderableminimal import RenderableMinimal
 from messaging import messaging, MessageType
 from directmessaging import directMessaging, DirectMessageType
-import system.advanceable
-import system.renderable
+import system.graphics.renderable
 import system.gamelogic.player
 
 logger = logging.getLogger(__name__)
@@ -32,7 +31,7 @@ class RenderableMinimalProcessor(esper.Processor):
         )
         while msg is not None:
             for ent, (renderable, groupId) in self.world.get_components(
-                system.renderable.Renderable,
+                system.graphics.renderable.Renderable,
                 system.groupid.GroupId
             ):
                 if groupId.getId() == msg.groupId:

@@ -3,7 +3,7 @@ import logging
 
 from utilities.entityfinder import EntityFinder
 from messaging import messaging, Messaging, Message, MessageType
-from system.offensiveattack import OffensiveAttack
+from system.gamelogic.offensiveattack import OffensiveAttack
 import system.groupid
 
 logger = logging.getLogger(__name__)

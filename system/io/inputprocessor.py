@@ -5,8 +5,7 @@ import logging
 from utilities.timer import Timer
 from messaging import messaging, MessageType
 from config import Config
-import system.advanceable
-import system.renderable
+import system.graphics.renderable
 import system.gamelogic.player
 import system.gamelogic.attackable
 from directmessaging import directMessaging, DirectMessageType
@@ -40,7 +39,7 @@ class InputProcessor(esper.Processor):
         player = self.world.component_for_entity(
                 playerEntity, system.gamelogic.player.Player)
         renderable = self.world.component_for_entity(
-                playerEntity, system.renderable.Renderable)
+                playerEntity, system.graphics.renderable.Renderable)
         attackable = self.world.component_for_entity(
                 playerEntity, system.gamelogic.attackable.Attackable)
 

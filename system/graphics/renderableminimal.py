@@ -1,9 +1,3 @@
-import esper
-import logging
-
-from world.viewport import Viewport
-from sprite.coordinates import Coordinates
-
 
 class RenderableMinimal(object): 
     def __init__(self, texture, coordinate, active=True): 
@@ -22,4 +16,3 @@ class RenderableMinimal(object):
 
     def setActive(self, active):
         self.active = active
-

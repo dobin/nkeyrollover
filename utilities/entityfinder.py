@@ -1,9 +1,9 @@
 import logging
 
-import system.offensiveattack
-import system.offensiveskill
+import system.gamelogic.offensiveattack
+import system.gamelogic.offensiveskill
 import system.gamelogic.attackable
-import system.renderable
+import system.graphics.renderable
 import system.groupid
 
 logger = logging.getLogger(__name__)
@@ -14,7 +14,7 @@ class EntityFinder(object):
     def findCharacterByGroupId(world, id):
         for ent, (groupId, renderable, player) in world.get_components(
             system.groupid.GroupId,
-            system.renderable.Renderable,
+            system.graphics.renderable.Renderable,
             system.gamelogic.player.Player,
         ):
             if groupId.getId() == id:
@@ -22,7 +22,7 @@ class EntityFinder(object):
 
         for ent, (groupId, renderable, enemy) in world.get_components(
             system.groupid.GroupId,
-            system.renderable.Renderable,
+            system.graphics.renderable.Renderable,
             system.gamelogic.enemy.Enemy,
         ):
             if groupId.getId() == id:
@@ -37,7 +37,7 @@ class EntityFinder(object):
     def findOffensiveAttackByGroupId(world, id):
         for ent, (groupId, offensiveAttack) in world.get_components(
             system.groupid.GroupId,
-            system.offensiveattack.OffensiveAttack
+            system.gamelogic.offensiveattack.OffensiveAttack
         ):
             if groupId.getId() == id:
                 return offensiveAttack
@@ -52,7 +52,7 @@ class EntityFinder(object):
     def findOffensiveSkillByGroupId(world, id):
         for ent, (groupId, offensiveSkill) in world.get_components(
             system.groupid.GroupId,
-            system.offensiveskill.OffensiveSkill
+            system.gamelogic.offensiveskill.OffensiveSkill
         ):
             if groupId.getId() == id:
                 return offensiveSkill

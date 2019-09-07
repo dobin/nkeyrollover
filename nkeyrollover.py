@@ -7,7 +7,7 @@ import locale
 from config import Config
 from world.game import Game
 from utilities.utilities import Utility
-from system.keyboardinput import KeyboardInput
+from system.io.keyboardinput import KeyboardInput
 from utilities.colorpalette import ColorPalette
 
 current_milli_time = lambda: int(round(time.time() * 1000))

@@ -7,7 +7,7 @@ from sprite.direction import Direction
 import system.gamelogic.attackable
 import system.gamelogic.enemy
 import system.gamelogic.player
-import system.renderable
+import system.graphics.renderable
 import system.groupid
 from messaging import messaging, MessageType
 from utilities.utilities import Utility
@@ -34,7 +34,7 @@ class MovementProcessor(esper.Processor):
         playerGroupId = self.world.component_for_entity(
                 playerEntity, system.groupid.GroupId)
         playerRenderable = self.world.component_for_entity(
-                playerEntity, system.renderable.Renderable)
+                playerEntity, system.graphics.renderable.Renderable)
 
         msg = directMessaging.get(
             messageType = DirectMessageType.movePlayer
@@ -67,7 +67,7 @@ class MovementProcessor(esper.Processor):
         while msg is not None:
             entity = EntityFinder.findCharacterByGroupId(self.world, msg.groupId)
             meRenderable = self.world.component_for_entity(
-                entity, system.renderable.Renderable)
+                entity, system.graphics.renderable.Renderable)
             self.moveRenderable(
                 meRenderable,
                 msg.groupId,

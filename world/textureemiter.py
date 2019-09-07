@@ -6,9 +6,9 @@ from sprite.coordinates import Coordinates
 from sprite.direction import Direction
 from utilities.color import Color
 from utilities.colorpalette import ColorPalette
-from system.renderableminimal import RenderableMinimal
-from system.textureminimal import TextureMinimal
-from system.renderable import Renderable
+from system.graphics.renderableminimal import RenderableMinimal
+from system.graphics.textureminimal import TextureMinimal
+from system.graphics.renderable import Renderable
 from texture.action.actiontexture import ActionTexture
 from messaging import messaging, MessageType
 from texture.speech.speechtexture import SpeechTexture

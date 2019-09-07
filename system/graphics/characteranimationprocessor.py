@@ -4,8 +4,7 @@ import random
 
 from texture.character.characteranimationtype import CharacterAnimationType
 from messaging import messaging, MessageType
-import system.advanceable
-import system.renderable
+import system.graphics.renderable
 import system.gamelogic.player
 from utilities.entityfinder import EntityFinder
 from world.textureemiter import TextureEmiterEffect
@@ -37,7 +36,7 @@ class CharacterAnimationProcessor(esper.Processor):
         for message in messaging.getByType(MessageType.EntityDying):
             entity = EntityFinder.findCharacterByGroupId(self.world, message.groupId)
             meRenderable = self.world.component_for_entity(
-                entity, system.renderable.Renderable)
+                entity, system.graphics.renderable.Renderable)
 
             if random.choice([True, False]):
                 logger.info(meRenderable.name + " Death animation deluxe")
@@ -75,7 +74,7 @@ class CharacterAnimationProcessor(esper.Processor):
         for message in messaging.getByType(MessageType.EntityMoved):
             entity = EntityFinder.findCharacterByGroupId(self.world, message.groupId)
             renderable = self.world.component_for_entity(
-                entity, system.renderable.Renderable)
+                entity, system.graphics.renderable.Renderable)
 
             if renderable.texture.characterAnimationType is CharacterAnimationType.walking:
                 if message.data['didChangeDirection']:
@@ -96,7 +95,7 @@ class CharacterAnimationProcessor(esper.Processor):
             if message.type == MessageType.PlayerAttack:
                 playerEntity = EntityFinder.findPlayer(self.world)
                 playerRenderable = self.world.component_for_entity(
-                    playerEntity, system.renderable.Renderable)
+                    playerEntity, system.graphics.renderable.Renderable)
 
                 playerRenderable.texture.changeAnimation(
                     CharacterAnimationType.hitting,
@@ -106,7 +105,7 @@ class CharacterAnimationProcessor(esper.Processor):
                 entity = EntityFinder.findCharacterByGroupId(
                     self.world, message.groupId)
                 entityRenderable = self.world.component_for_entity(
-                    entity, system.renderable.Renderable)
+                    entity, system.graphics.renderable.Renderable)
 
                 entityRenderable.texture.changeAnimation(
                     CharacterAnimationType.hitwindup,
@@ -116,7 +115,7 @@ class CharacterAnimationProcessor(esper.Processor):
                 entity = EntityFinder.findCharacterByGroupId(
                     self.world, message.groupId)
                 entityRenderable = self.world.component_for_entity(
-                    entity, system.renderable.Renderable)
+                    entity, system.graphics.renderable.Renderable)
 
                 entityRenderable.texture.changeAnimation(
                     CharacterAnimationType.hitting,
@@ -127,7 +126,7 @@ class CharacterAnimationProcessor(esper.Processor):
         for message in messaging.getByType(MessageType.EntityStun):
             entity = EntityFinder.findCharacterByGroupId(self.world, message.groupId)
             entityRenderable = self.world.component_for_entity(
-                entity, system.renderable.Renderable)
+                entity, system.graphics.renderable.Renderable)
 
             entityRenderable.texture.changeAnimation(
                 CharacterAnimationType.stun,

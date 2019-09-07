@@ -6,13 +6,14 @@ from system.gamelogic.enemy import Enemy
 from texture.character.characteranimationtype import CharacterAnimationType
 from texture.character.charactertexture import CharacterTexture
 from system.groupid import GroupId
-from system.renderable import Renderable
+from system.graphics.renderable import Renderable
+
 from system.gamelogic.attackable import Attackable
 from messaging import messaging, MessageType
 from entities.esperdata import EsperData
 from system.gamelogic.ai import Ai
 import world.uniqueid
-from system.offensiveattack import OffensiveAttack
+from system.gamelogic.offensiveattack import OffensiveAttack
 
 logger = logging.getLogger(__name__)
 
