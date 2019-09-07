@@ -1,15 +1,14 @@
 import logging
 
-from system.gamelogic.player import Player
 from messaging import messaging, MessageType
 
 logger = logging.getLogger(__name__)
 
 
 class KeyboardInput(object):
-    def __init__(self, world):
-        self.world = world
-        self.viewport = world.viewport
+    def __init__(self, game):
+        self.game = game
+        self.viewport = game.viewport
 
 
     def getInput(self):
@@ -24,26 +23,26 @@ class KeyboardInput(object):
 
 
     def handleInput(self, key):
-            # game related
-            if key == ord('p'):
-                self.world.togglePause()
+        # game related
+        if key == ord('p'):
+            self.game.togglePause()
 
-            if key == 27: # esc
-                self.world.quitGame()
+        if key == 27:  # esc
+            self.game.quitGame()
 
-            if key == 265: # f1
-                self.world.toggleStats()
+        if key == 265:  # f1
+            self.game.toggleStats()
 
-            if key == 266: # f2
-                self.world.toggleShowEnemyWanderDestination()
+        if key == 266:  # f2
+            self.game.toggleShowEnemyWanderDestination()
 
-            messaging.add(
-                type=MessageType.PlayerKeypress,
-                data={
-                    'key': key,
-                    'time': self.world.getGameTime(),
-                }
-            )
+        messaging.add(
+            type=MessageType.PlayerKeypress,
+            data={
+                'key': key,
+                'time': self.game.getGameTime(),
+            }
+        )
 
 
     def advance(self, deltaTime):

@@ -1,13 +1,10 @@
 import logging
-import curses
+
 from .entitytype import EntityType
 from sprite.direction import Direction
 from utilities.timer import Timer
 from sprite.sprite import Sprite
 from sprite.coordinates import Coordinates
-from world.viewport import Viewport
-from utilities.colorpalette import ColorPalette
-from utilities.colortype import ColorType
 
 logger = logging.getLogger(__name__)
 

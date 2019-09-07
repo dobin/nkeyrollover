@@ -1,27 +1,24 @@
-import curses
 import gzip
 import logging
 
-from config import Config
 from utilities.colorpalette import ColorPalette
-from utilities.colortype import ColorType
 import utilities.xp_loader as xp_loader
 from utilities.color import Color
 import utilities.ansitounicode as ansitounicode
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
 from texture.texture import Texture
-#from world.world import World
 from world.viewport import Viewport
+
+logger = logging.getLogger(__name__)
 
 
 class Map(object):
     """Draws the map on the screen"""
 
-    def __init__(self, viewport :Viewport, world):
+    def __init__(self, viewport :Viewport):
         self.viewport :Viewport = viewport
         self.playerInMapX :int = 0
-        self.world = world
         self.xpmap = None
         self.mapTextures = None
         self.color :Color = ColorPalette.getColorByColor(Color.grey)

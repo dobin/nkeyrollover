@@ -24,12 +24,12 @@ from system.renderableminimalprocessor import RenderableMinimalProcessor
 from world.scenemanager import SceneManager
 from world.statusbar import StatusBar
 from utilities.entityfinder import EntityFinder
-from messaging import messaging, Messaging, Message, MessageType
+from messaging import messaging
 
 logger = logging.getLogger(__name__)
 
 
-class World(object):
+class Game(object):
     """The game world in which all game object live"""
 
     def __init__(self, win, menuwin):
@@ -41,7 +41,7 @@ class World(object):
         self.textureEmiter :TextureEmiter = TextureEmiter(
             viewport=self.viewport,
             esperWorld=self.esperWorld)
-        self.map :Map = Map(viewport=self.viewport, world=self)
+        self.map :Map = Map(viewport=self.viewport)
         self.sceneManager = SceneManager(
             viewport=self.viewport,
             esperWorld=self.esperWorld)

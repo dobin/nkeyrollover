@@ -5,7 +5,7 @@ import logging
 import locale
 
 from config import Config
-from world.world import World
+from world.game import Game
 from utilities.utilities import Utility
 from system.keyboardinput import KeyboardInput
 from utilities.colorpalette import ColorPalette
@@ -15,9 +15,9 @@ current_milli_time = lambda: int(round(time.time() * 1000))
 
 class Keyrollover(object):
     def __init__(self):
-        self.win = None         # canvas to draw
+        self.win = None
         self.menuwin = None
-        self.world = None       # the world, with all textures and units
+        self.game = None
         self.currentTime = None
         self.init()
 
@@ -50,14 +50,14 @@ class Keyrollover(object):
         curses.cbreak()
         self.win.keypad(1)
         curses.curs_set(0)
-        self.win.nodelay(1) # make getch() nonblocking
+        self.win.nodelay(1)  # make getch() nonblocking
         ColorPalette.cursesInitColor()
 
         self.win.clear()
         self.win.border()
 
-        self.world = World(win=self.win, menuwin=self.menuwin)
-        self.keyboardInput = KeyboardInput(world=self.world)
+        self.game = Game(win=self.win, menuwin=self.menuwin)
+        self.keyboardInput = KeyboardInput(game=self.game)
 
         self.startTime = current_milli_time()
         self.currentTime = self.startTime
@@ -66,17 +66,17 @@ class Keyrollover(object):
     def loop(self):
         n = 0
         targetFrameTime = 1.0 / Config.fps
-        deltaTime = targetFrameTime # we try to keep it...
+        deltaTime = targetFrameTime  # we try to keep it...
         timeStart = 0
         timeEnd = 0
         workTime = 0
-        while self.world.gameRunning:
+        while self.game.gameRunning:
             timeStart = time.time()
             self.win.erase()
             self.win.border()
 
-            self.world.draw(n)
-            self.world.advance(deltaTime)
+            self.game.draw(n)
+            self.game.advance(deltaTime)
             self.keyboardInput.advance(deltaTime)
 
             # has to be after draw, as getch() does a refresh
@@ -88,7 +88,8 @@ class Keyrollover(object):
             workTime = timeEnd - timeStart
             self.workTime = workTime
             if workTime > targetFrameTime:
-                logging.warning("Could not keep FPS! Worktime was: {}ms".format( self.workTime * 100.0))
+                logging.warning("Could not keep FPS! Worktime was: {}ms".format(
+                    self.workTime * 100.0))
 
             targetSleepTime = targetFrameTime - workTime
             if targetSleepTime < 0:

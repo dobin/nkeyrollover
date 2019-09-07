@@ -67,7 +67,7 @@ class OffensiveSkillProcessor(esper.Processor):
             playerEntity, system.groupid.GroupId)
 
         offensiveSkillEntity = EntityFinder.findOffensiveSkillByGroupId(
-            self.world, 
+            self.world,
             meGroupId.getId())
 
         return offensiveSkillEntity
