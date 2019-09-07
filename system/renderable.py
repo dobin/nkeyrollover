@@ -142,6 +142,18 @@ class Renderable(object):
         return False
 
 
+    def getTextureHitCoordinates(self, animationIdx=0):
+        locations = self.texture.getTextureHitCoordinates(animationIdx=0)
+        baseLocation = self.getLocation()
+
+        # make relative coordinates absolute
+        for location in locations: 
+            location.x += baseLocation.x
+            location.y += baseLocation.y
+
+        return locations
+
+
     def getWeaponBaseLocation(self):
         # Slow
         loc = copy.copy(self.getLocation())
