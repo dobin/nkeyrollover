@@ -25,26 +25,20 @@ class Config:
     moveBorderRight = 70
     moveBorderLeft = 8
 
-    playerSpawnPoint = {
-        'x': 24,
-        'y': 13,
-    }
-
-    devMode = True
-    enemyMovement = True  # freeze enemies for tests?
-    showEnemyWanderDest = True
-
-    moveDiagonal = False  # instead of up/down
-
-    announceDamage = 350  # min amount of damage done
+    # system config
+    devMode = False
     maxParticles = 128
-    movementKeysPerSec = 20.0
-
-    playerAttacksCd = 0.2
-
     version = str(0.02)
 
+    # player config
+    announceDamage = 350  # min amount of damage done
+    movementKeysPerSec = 20.0
+    playerAttacksCd = 0.2  # player attack cooldown
+
+    # enemy config
+    enemyMovement = True  # freeze enemies for tests?    
+    showEnemyWanderDest = True
     enemiesInStateAttacking = 1
     enemiesInStateChase = 2
 
-    playerAttackAnimationLen = 0.2
+    playerAttackAnimationLen = 0.2  # not yet used
