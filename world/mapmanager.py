@@ -15,7 +15,7 @@ from common.coordinates import Coordinates
 logger = logging.getLogger(__name__)
 
 
-class Map(object):
+class MapManager(object):
     """Draws the map on the screen"""
 
     def __init__(self, viewport :Viewport):

@@ -15,15 +15,15 @@ class SceneManager(object):
     * Play pre-scripted animations
     """
 
-    def __init__(self, viewport, world, map):
+    def __init__(self, viewport, world, mapManager):
         self.viewport = viewport
         self.currentScene = None
-        self.map = map
+        self.mapManager = mapManager
 
         self.scenes = [
             Scene0(viewport=viewport, world=world),  # intro logo
             Scene1(viewport=viewport, world=world),  # intro animation
-            Scene2(viewport=viewport, world=world),  # map
+            Scene2(viewport=viewport, world=world),  # mapManager
         ]
         self.currentSceneIdx = 0
         self.currentScene = self.scenes[self.currentSceneIdx]
@@ -42,7 +42,7 @@ class SceneManager(object):
 
         if self.currentSceneIdx == 2:
             logging.error("loadmap")
-            self.map.loadMap('map02')
+            self.mapManager.loadMap('map02')
         self.initScene()
 
 

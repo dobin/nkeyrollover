@@ -3,7 +3,7 @@ import curses
 import esper
 
 from system.graphics.particleprocessor import ParticleProcessor
-from .map import Map
+from .mapmanager import MapManager
 from .viewport import Viewport
 from .textureemiter import TextureEmiter
 from system.graphics.renderable import Renderable
@@ -40,11 +40,11 @@ class Game(object):
         self.textureEmiter :TextureEmiter = TextureEmiter(
             viewport=self.viewport,
             world=self.world)
-        self.map :Map = Map(viewport=self.viewport)
+        self.mapManager :MapManager = MapManager(viewport=self.viewport)
         self.sceneManager = SceneManager(
             viewport=self.viewport,
             world=self.world,
-            map=self.map)
+            mapManager=self.mapManager)
 
         self.pause :bool = False
         self.gameRunning :bool = True
@@ -145,7 +145,7 @@ class Game(object):
         """Draws backmost layer (e.g. map)"""
         if self.sceneManager.currentScene.showMap():
             self.statusBar.drawStatusbar()
-            self.map.draw()
+            self.mapManager.draw()
 
 
     def advance(self, deltaTime):
@@ -158,7 +158,7 @@ class Game(object):
         self.gameTime += deltaTime
 
         self.world.process(deltaTime)  # this also draws
-        self.map.advance(deltaTime)
+        self.mapManager.advance(deltaTime)
 
         messaging.reset()
 
