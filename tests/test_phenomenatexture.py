@@ -3,21 +3,9 @@
 import unittest
 import esper
 
-import system.gamelogic.player
 from messaging import messaging, MessageType
 from common.coordinates import Coordinates
 from config import Config
-from texture.character.charactertype import CharacterType
-from texture.character.charactertexture import CharacterTexture
-from entities.esperdata import EsperData
-from texture.character.characteranimationtype import CharacterAnimationType
-from system.graphics.renderable import Renderable
-from system.gamelogic.offensiveskill import OffensiveSkill
-from system.groupid import GroupId
-from system.gamelogic.attackable import Attackable
-from system.gamelogic.offensiveattack import OffensiveAttack
-from utilities.entityfinder import EntityFinder
-from system.gamelogic.player import Player
 
 from tests.mockwin import MockWin
 import world.isunittest
@@ -25,17 +13,19 @@ from system.gamelogic.movementprocessor import MovementProcessor
 from system.io.inputprocessor import InputProcessor
 from system.graphics.renderableminimalprocessor import RenderableMinimalProcessor
 from system.graphics.renderableprocessor import RenderableProcessor
+from world.textureemiter import TextureEmiter
+from texture.action.actiontype import ActionType
+from common.direction import Direction
 
 
-
-class RenderableTest(unittest.TestCase):
-    def test_renderable(self):
+class PhenomenaTextureTest(unittest.TestCase):
+    def test_phenomenatexture(self):
         world.isunittest.setIsUnitTest()
 
         self.viewport = MockWin(20, 10)
         self.particleEmiter = None
         self.world = esper.World()
-        self.textureEmiter = None
+        self.textureEmiter = TextureEmiter(viewport=self.viewport, world=self.world)
 
         renderableProcessor = RenderableProcessor()
         movementProcessor = MovementProcessor()
@@ -48,16 +38,48 @@ class RenderableTest(unittest.TestCase):
         self.world.add_processor(renderableMinimalProcessor)
         self.world.add_processor(renderableProcessor)
 
+        location = Coordinates(10, 10)
+        self.textureEmiter.makeActionTexture(
+            actionTextureType = ActionType.unittest,
+            location=location,
+            fromPlayer=True,
+            direction=Direction.right,
+            damage=100
+        )
 
-        # Player
+        messages = messaging.getByType(MessageType.PlayerAttack)
+        for message in messages:
+            print(message.data['hitLocations'])
+            hl = message.data['hitLocations']
+
+            self.assertTrue(hl[0].x == 12)
+            self.assertTrue(hl[0].y == 11)
+
+            self.assertTrue(hl[1].x == 12)
+            self.assertTrue(hl[1].y == 12)
+
+            self.assertTrue(hl[2].x == 13)
+            self.assertTrue(hl[2].y == 11)
+
+            self.assertTrue(hl[3].x == 13)
+            self.assertTrue(hl[3].y == 12)
 
 
         # process it
         targetFrameTime = 1.0 / Config.fps
         self.world.process(targetFrameTime)
-        self.viewport.internalPrint()
-        #self.world.process(targetFrameTime)
-        #self.viewport.internalPrint()
+
+        self.assertTrue(self.viewport.peek(12, 11) == '>')
+        self.assertTrue(self.viewport.peek(12, 12) == '>')
+        self.assertTrue(self.viewport.peek(13, 11) == '>')
+        self.assertTrue(self.viewport.peek(13, 12) == '>')
+
+        self.world.process(0.1)  # animation len
+
+        self.assertTrue(self.viewport.peek(12, 11) == '-')
+        self.assertTrue(self.viewport.peek(12, 12) == '-')
+        self.assertTrue(self.viewport.peek(13, 11) == '-')
+        self.assertTrue(self.viewport.peek(13, 12) == '-')
 
 
 if __name__ == '__main__':

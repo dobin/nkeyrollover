@@ -3,18 +3,12 @@
 import unittest
 import esper
 
-import system.gamelogic.player
 from common.coordinates import Coordinates
 from config import Config
 from texture.character.charactertype import CharacterType
 from texture.character.charactertexture import CharacterTexture
-from entities.esperdata import EsperData
 from texture.character.characteranimationtype import CharacterAnimationType
 from system.graphics.renderable import Renderable
-from system.gamelogic.offensiveskill import OffensiveSkill
-from system.groupid import GroupId
-from system.gamelogic.attackable import Attackable
-from system.gamelogic.offensiveattack import OffensiveAttack
 from common.direction import Direction
 
 from tests.mockwin import MockWin
@@ -23,7 +17,6 @@ from system.gamelogic.movementprocessor import MovementProcessor
 from system.io.inputprocessor import InputProcessor
 from system.graphics.renderableminimalprocessor import RenderableMinimalProcessor
 from system.graphics.renderableprocessor import RenderableProcessor
-
 
 
 class RenderableTest(unittest.TestCase):

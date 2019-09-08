@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class ActionType(Enum):
-    hit = 0
-    hitSquare = 1
-    hitLine = 2
+    unittest = 0
+    hit = 1
+    hitSquare = 2
+    hitLine = 3
