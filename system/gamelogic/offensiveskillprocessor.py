@@ -3,7 +3,6 @@ import logging
 
 from messaging import messaging, MessageType
 from system.gamelogic.offensiveskill import OffensiveSkill
-from utilities.utilities import Utility
 import system.groupid
 from utilities.entityfinder import EntityFinder
 

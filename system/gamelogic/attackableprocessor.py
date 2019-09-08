@@ -1,20 +1,16 @@
 import esper
 import logging
-import random
 
 from system.graphics.renderable import Renderable
 
 from system.groupid import GroupId
 from system.gamelogic.enemy import Enemy
 from system.gamelogic.attackable import Attackable
-from system.gamelogic.player import Player
-from utilities.utilities import Utility
 from utilities.colorpalette import ColorPalette
 from utilities.color import Color
 from system.gamelogic.ai import Ai
 from messaging import messaging, MessageType
 from directmessaging import directMessaging, DirectMessageType
-from texture.character.characteranimationtype import CharacterAnimationType
 from utilities.entityfinder import EntityFinder
 
 logger = logging.getLogger(__name__)
@@ -27,7 +23,7 @@ class AttackableProcessor(esper.Processor):
 
     def process(self, dt):
         self.checkHealth()
-        self.checkReceiveDamage() # dont stun if he has no health left..
+        self.checkReceiveDamage()  # dont stun if he has no health left..
                 
         self.advance(dt)
 
@@ -50,11 +46,11 @@ class AttackableProcessor(esper.Processor):
 
     def checkHealth(self):
         # if enemies have less than 0 health, make them gonna die
-        for ent, (attackable, meRenderable, meEnemy, ai, meGroupId) in self.world.get_components(
-            Attackable, Renderable, Enemy, Ai, GroupId
+        for ent, (attackable, meEnemy, ai, meGroupId) in self.world.get_components(
+            Attackable, Enemy, Ai, GroupId
         ):
             if attackable.getHealth() <= 0:
-                if ai.brain.state.name is not 'dead' and ai.brain.state.name is not 'dying':
+                if ai.brain.state.name != 'dead' and ai.brain.state.name != 'dying':
                     # update state
                     ai.brain.pop()
                     ai.brain.push('dying')
@@ -101,7 +97,7 @@ class AttackableProcessor(esper.Processor):
 
             # color the texture, even if we are dead
             meRenderable.texture.setOverwriteColorFor(
-                1.0 - 1.0/damage , ColorPalette.getColorByColor(Color.red))
+                1.0 - 1.0 / damage , ColorPalette.getColorByColor(Color.red))
 
             # get next message
             msg = directMessaging.get(

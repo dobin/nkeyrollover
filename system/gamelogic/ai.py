@@ -1,4 +1,3 @@
-import esper
 import logging
 
 from ai.brain import Brain

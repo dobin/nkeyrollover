@@ -62,7 +62,7 @@ class OffensiveSkill(object):
         else:
             logger.error("Unknown skill {}".format(weaponType))
 
-        #RecordHolder.recordAttack(
+        # RecordHolder.recordAttack(
         #    weaponType=weaponType, damage=damage, name=self.player.name,
         #    characterType=self.player.entityType)
 
@@ -145,7 +145,7 @@ class OffensiveSkill(object):
             }
         )
 
-        #self.player.actionCtrl.changeTo(
+        # self.player.actionCtrl.changeTo(
         #    CharacterAnimationType.shrugging,
         #    self.player.direction)
 
@@ -195,7 +195,6 @@ class OffensiveSkill(object):
                 'damage': self.damage[WeaponType.explosion]
             }
         )
-        #self.player.announce(damage=damage, particleEffectType=ParticleEffectType.explosion)
 
 
     def skillLaser(self):
@@ -214,7 +213,6 @@ class OffensiveSkill(object):
                 'damage': self.damage[WeaponType.laser]
             }
         )
-        #self.player.announce(damage=damage, particleEffectType=ParticleEffectType.laser)
 
 
     def skillCleave(self):
@@ -233,7 +231,6 @@ class OffensiveSkill(object):
                 'damage': self.damage[WeaponType.cleave]
             }
         )
-        #self.player.announce(damage=damage, particleEffectType=ParticleEffectType.cleave)
 
 
     def advance(self, dt):

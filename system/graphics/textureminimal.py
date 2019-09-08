@@ -1,9 +1,10 @@
 import logging
 
 from utilities.timer import Timer
-from utilities.color import Color
 from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
+
+logger = logging.getLogger(__name__)
 
 
 class TextureMinimal(object): 
@@ -25,9 +26,8 @@ class TextureMinimal(object):
         self.colorArr = colorArr
 
         self.idx = 0
-        self.timer = Timer( self.timeArr[ 0 ] )
+        self.timer = Timer(self.timeArr[0])
         self.color = ColorPalette.getColorByColorType(ColorType.specktexture, None)
 
     def advance(self, dt):
         self.timer.advance(dt)
-

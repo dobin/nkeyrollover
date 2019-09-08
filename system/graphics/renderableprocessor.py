@@ -30,7 +30,7 @@ class RenderableProcessor(esper.Processor):
 
 
     def advance(self, deltaTime):
-        for ent, rend in self.world.get_component(system.graphics.renderable.Renderable):
+        for _, rend in self.world.get_component(system.graphics.renderable.Renderable):
             rend.advance(deltaTime)
 
 
@@ -104,7 +104,7 @@ class RenderableProcessor(esper.Processor):
 
         # add all elements to draw in the correct Z order
         # which is by y coordinates
-        for ent, rend in self.world.get_component(system.graphics.renderable.Renderable):
+        for _, rend in self.world.get_component(system.graphics.renderable.Renderable):
             if rend.isActive():
                 # logger.info("REND: {} {} {}".format(rend, rend.z, rend.coordinates))
                 loc = rend.getLocation()

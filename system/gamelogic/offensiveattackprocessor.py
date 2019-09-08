@@ -2,7 +2,7 @@ import esper
 import logging
 
 from utilities.entityfinder import EntityFinder
-from messaging import messaging, Messaging, Message, MessageType
+from messaging import messaging, MessageType
 from system.gamelogic.offensiveattack import OffensiveAttack
 import system.groupid
 

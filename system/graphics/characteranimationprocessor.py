@@ -76,7 +76,8 @@ class CharacterAnimationProcessor(esper.Processor):
             renderable = self.world.component_for_entity(
                 entity, system.graphics.renderable.Renderable)
 
-            if renderable.texture.characterAnimationType is CharacterAnimationType.walking:
+            if (renderable.texture.characterAnimationType
+                    is CharacterAnimationType.walking):
                 if message.data['didChangeDirection']:
                     renderable.texture.changeAnimation(
                         CharacterAnimationType.walking,

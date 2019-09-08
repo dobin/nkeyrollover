@@ -3,6 +3,9 @@ import logging
 
 from system.gamelogic.ai import Ai
 
+logger = logging.getLogger(__name__)
+
+
 class AiProcessor(esper.Processor):
     def __init__(self):
         super().__init__()

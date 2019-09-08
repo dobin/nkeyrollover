@@ -3,8 +3,6 @@ import logging
 
 import system.gamelogic.player
 from messaging import messaging, MessageType
-from common.coordinates import Coordinates
-from config import Config
 from texture.character.charactertype import CharacterType
 from texture.character.charactertexture import CharacterTexture
 from entities.esperdata import EsperData

@@ -2,7 +2,7 @@ import logging
 import esper
 
 from config import Config
-from common.coordinates import Coordinates, ExtCoordinates
+from common.coordinates import ExtCoordinates
 from common.direction import Direction
 import system.gamelogic.attackable
 import system.gamelogic.enemy
@@ -10,7 +10,6 @@ import system.gamelogic.player
 import system.graphics.renderable
 import system.groupid
 from messaging import messaging, MessageType
-from utilities.utilities import Utility
 from utilities.entityfinder import EntityFinder
 from directmessaging import directMessaging, DirectMessageType
 
@@ -89,7 +88,8 @@ class MovementProcessor(esper.Processor):
         didChangeDirection = False
 
         if x > 0:
-            #if renderable.coordinates.x < Config.columns - renderable.texture.width - 1:
+            # if renderable.coordinates.x 
+            #    < Config.columns - renderable.texture.width - 1:
             if True:
                 renderable.coordinates.x += x
                 didMove = True

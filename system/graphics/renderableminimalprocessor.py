@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class RenderableMinimalProcessor(esper.Processor):
-    def __init__(self, viewport :Viewport, textureEmiter): 
+    def __init__(self, viewport :Viewport, textureEmiter):
         super().__init__()
         self.viewport = viewport
         self.textureEmiter = textureEmiter

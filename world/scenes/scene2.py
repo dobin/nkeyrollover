@@ -1,7 +1,6 @@
 import logging
 import random
 
-from utilities.timer import Timer
 from world.scenes.scenebase import SceneBase
 from common.coordinates import Coordinates
 from messaging import messaging, MessageType
