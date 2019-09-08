@@ -45,35 +45,36 @@ class EnemyProcessor(esper.Processor):
         groupId = GroupId(id=id)
         enemy = self.world.create_entity()
         esperData = EsperData(self.world, enemy, name)
+        tenemy = Enemy(name=name)
+        ai = Ai(
+            name=name,
+            esperData=esperData)
+
         texture = CharacterTexture(
             characterAnimationType=CharacterAnimationType.standing,
             head=self.getRandomHead(),
             body=self.getRandomBody(),
-            characterType=characterType)
-        texture.name = name
+            characterType=characterType,
+            name=name)
+
         renderable = Renderable(
             texture=texture,
             viewport=self.viewport,
             parent=None,
             coordinates=coordinates,
-            active=True)
-        renderable.name = name
-        renderable.world = self.world
-        renderable.enemyMovement = True
-        self.world.add_component(enemy, groupId)
-        self.world.add_component(enemy, renderable)
-        tenemy = Enemy(name=name)
-        ai = Ai(
-            name=name,
-            esperData=esperData)
-        self.world.add_component(enemy, ai)
-
-        self.world.add_component(enemy, tenemy)
-        self.world.add_component(enemy, Attackable(initialHealth=100))
+            active=True,
+            name=name)
 
         offensiveAttack = OffensiveAttack(
             parentChar=tenemy,
             parentRenderable=renderable)
+
+        self.world.add_component(enemy, ai)
+        self.world.add_component(enemy, groupId)
+        self.world.add_component(enemy, renderable)
+        self.world.add_component(enemy, tenemy)
+        self.world.add_component(enemy, Attackable(initialHealth=100))
+
         self.world.add_component(enemy, offensiveAttack)
 
 

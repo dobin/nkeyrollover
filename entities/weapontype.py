@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class WeaponType(Enum):
     default = 0
     hit = 1

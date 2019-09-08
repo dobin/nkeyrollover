@@ -3,7 +3,7 @@ import logging
 
 import system.gamelogic.player
 from messaging import messaging, MessageType
-from sprite.coordinates import Coordinates
+from common.coordinates import Coordinates
 from config import Config
 from texture.character.charactertype import CharacterType
 from texture.character.charactertexture import CharacterTexture
@@ -40,10 +40,10 @@ class PlayerProcessor(esper.Processor):
 
     def advance(self, deltaTime):
         playerEntity = EntityFinder.findPlayer(self.world)
-        if playerEntity is None: 
+        if playerEntity is None:
             return
         player = self.world.component_for_entity(
-                playerEntity, Player)
+            playerEntity, Player)
 
         player.advance(deltaTime)
 
@@ -57,8 +57,8 @@ class PlayerProcessor(esper.Processor):
 
         texture = CharacterTexture(
             characterType=CharacterType.player,
-            characterAnimationType=CharacterAnimationType.standing)
-        texture.name = "Player"
+            characterAnimationType=CharacterAnimationType.standing,
+            name='Player')
 
         coordinates = Coordinates(
             Config.playerSpawnPoint['x'],
@@ -68,8 +68,8 @@ class PlayerProcessor(esper.Processor):
             texture=texture,
             viewport=self.viewport,
             parent=None,
-            coordinates=coordinates)
-        renderable.name = "Player"
+            coordinates=coordinates,
+            name='Player')
 
         esperData = EsperData(self.world, playerEntity, 'player')
         characterSkill = OffensiveSkill(

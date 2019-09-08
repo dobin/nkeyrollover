@@ -2,9 +2,7 @@ import math
 import logging
 import curses
 
-from sprite.coordinates import Coordinates
 from utilities.timer import Timer
-from utilities.utilities import Utility
 from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
 
@@ -73,9 +71,9 @@ class Particle(object):
 
 
     def __repr__(self): 
-        #return "{}/{}  vel: {}/{}  life: {}".format(
-        #    self.x, self.y, self.velocity['x'], self.velocity['y'], self.life
-        #)
+        # return "{}/{}  vel: {}/{}  life: {}".format(
+        #     self.x, self.y, self.velocity['x'], self.velocity['y'], self.life
+        # )
         return "Particle {}/{}".format(
             self.x, self.y
         )

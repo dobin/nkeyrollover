@@ -10,7 +10,7 @@ import system.graphics.renderable
 import system.groupid
 from messaging import messaging, MessageType
 from directmessaging import directMessaging, DirectMessageType
-from sprite.direction import Direction
+from common.direction import Direction
 
 logger = logging.getLogger(__name__)
 

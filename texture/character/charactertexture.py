@@ -1,11 +1,8 @@
-from enum import Enum
 import logging
 
-from sprite.direction import Direction
+from common.direction import Direction
 from texture.animationtexture import AnimationTexture
-from sprite.sprite import Sprite
 from texture.character.characteranimationmanager import CharacterAnimationManager
-from entities.entity import Entity
 from texture.character.characteranimationtype import CharacterAnimationType
 from .charactertype import CharacterType
 
@@ -20,8 +17,9 @@ class CharacterTexture(AnimationTexture):
             direction :Direction =Direction.none,
             head :str =None,
             body :str =None,
-        ):
-        super(CharacterTexture, self).__init__()
+            name = '',
+    ):
+        super(CharacterTexture, self).__init__(name)
 
         self.characterAnimationManager = CharacterAnimationManager(
             head=head, body=body, characterType=characterType)
@@ -39,8 +37,9 @@ class CharacterTexture(AnimationTexture):
             characterAnimationType :CharacterAnimationType,
             direction :Direction,
             subtype :int =0
-        ):
-        logger.debug("{} Change texture to: {}".format(self.name, characterAnimationType))
+    ):
+        logger.debug("{} Change texture to: {}".format(
+            self.name, characterAnimationType))
 
         self.characterAnimationType = characterAnimationType
         self.animation = self.characterAnimationManager.getAnimation(

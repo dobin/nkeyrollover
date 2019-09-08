@@ -7,10 +7,11 @@ logger = logging.getLogger(__name__)
 
 
 class Texture(object):
-    def __init__(self, width =0, height =0):
+    def __init__(self, width =0, height =0, name=''):
         self.width :int = width
         self.height :int = height
         self.active :bool = True
+        self.name = name
 
         # color related
         self.overwriteColorTimer = Timer(0.25, active=False)

@@ -1,6 +1,6 @@
 import logging
 
-from sprite.direction import Direction
+from common.direction import Direction
 from texture.phenomena.phenomenatype import PhenomenaType
 from texture.filetextureloader import FileTextureLoader
 from utilities.utilities import Utility

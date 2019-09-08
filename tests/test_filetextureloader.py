@@ -10,7 +10,7 @@ import world.isunittest
 class FileTextureLoaderTest(unittest.TestCase):
     def test_loadTexture(self):
         world.isunittest.setIsUnitTest()
-        
+
         fileTextureLoader = FileTextureLoader()
         animation = fileTextureLoader.readPhenomena(PhenomenaType.unittest)
 

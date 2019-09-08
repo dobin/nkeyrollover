@@ -4,8 +4,7 @@ import unittest
 import esper
 
 import system.gamelogic.player
-from messaging import messaging, MessageType
-from sprite.coordinates import Coordinates
+from common.coordinates import Coordinates
 from config import Config
 from texture.character.charactertype import CharacterType
 from texture.character.charactertexture import CharacterTexture
@@ -16,59 +15,104 @@ from system.gamelogic.offensiveskill import OffensiveSkill
 from system.groupid import GroupId
 from system.gamelogic.attackable import Attackable
 from system.gamelogic.offensiveattack import OffensiveAttack
-from utilities.entityfinder import EntityFinder
-from system.gamelogic.player import Player
+from common.direction import Direction
+
+from tests.mockwin import MockWin
+import world.isunittest
+from system.gamelogic.movementprocessor import MovementProcessor
+from system.io.inputprocessor import InputProcessor
+from system.graphics.renderableminimalprocessor import RenderableMinimalProcessor
+from system.graphics.renderableprocessor import RenderableProcessor
+
 
 
 class RenderableTest(unittest.TestCase):
     def test_renderable(self):
+        world.isunittest.setIsUnitTest()
 
-        self.world = esper.World()
-        self.viewport = None
+        self.viewport = MockWin(20, 10)
         self.particleEmiter = None
+        self.world = esper.World()
+        self.textureEmiter = None
+
+        renderableProcessor = RenderableProcessor()
+        movementProcessor = MovementProcessor()
+        inputProcessor = InputProcessor()
+        renderableMinimalProcessor = RenderableMinimalProcessor(
+            viewport=self.viewport,
+            textureEmiter=self.textureEmiter)
+        self.world.add_processor(inputProcessor)
+        self.world.add_processor(movementProcessor)
+        self.world.add_processor(renderableMinimalProcessor)
+        self.world.add_processor(renderableProcessor)
 
         # Player
-        myid = 0
-        self.playerEntity = self.world.create_entity()
-        esperData = EsperData(self.world, self.playerEntity, 'player')
+        playerEntity = self.world.create_entity()
+
         texture = CharacterTexture(
             characterType=CharacterType.player,
-            characterAnimationType=CharacterAnimationType.standing)
-        texture.name = "Player"
+            characterAnimationType=CharacterAnimationType.standing,
+            name='Player')
+
         coordinates = Coordinates(
-            Config.playerSpawnPoint['x'],
-            Config.playerSpawnPoint['y']
+            10,
+            10
         )
         renderable = Renderable(
             texture=texture,
             viewport=self.viewport,
             parent=None,
-            coordinates=coordinates)
-        characterSkill = OffensiveSkill(
-            esperData=esperData,
-            particleEmiter=self.particleEmiter,
-            viewport=self.viewport)
-        
-        renderable.name = "Player"
-        groupId = GroupId(id=myid)
-        player = system.gamelogic.player.Player()
+            coordinates=coordinates,
+            direction=Direction.right,
+            name='Player')
 
-        offensiveAttack = OffensiveAttack(
-            parentChar=player,
-            parentRenderable=renderable)
+        self.world.add_component(playerEntity, renderable)
+        # /Player
 
+        # process it
+        targetFrameTime = 1.0 / Config.fps
+        self.world.process(targetFrameTime)
+        self.viewport.internalPrint()
 
-        self.world.add_component(self.playerEntity, offensiveAttack)
+        # check if head is at correct position
+        self.assertTrue(self.viewport.peek(11, 10) == 'o')
 
-        self.world.add_component(self.playerEntity, groupId)
-        self.world.add_component(self.playerEntity, characterSkill)
-        self.world.add_component(self.playerEntity, renderable)
-        self.world.add_component(self.playerEntity, player)
-        self.world.add_component(self.playerEntity, Attackable(initialHealth=100))
-        
-        self.characterSkillEntity = characterSkill
-        self.playerRendable = renderable
+        extCoords = renderable.getLocationAndSize()
+        self.assertTrue(extCoords.x == 10)
+        self.assertTrue(extCoords.y == 10)
+        self.assertTrue(extCoords.width == 3)
+        self.assertTrue(extCoords.height == 3)
 
+        locCenter = renderable.getLocationCenter()
+        self.assertTrue(locCenter.x == 11)
+        self.assertTrue(locCenter.y == 11)
+        self.assertTrue(self.viewport.peek(11, 11) == '|')  # body
+
+        attackLocation = renderable.getAttackBaseLocation()
+        self.assertTrue(attackLocation.x == 13)
+        self.assertTrue(attackLocation.y == 11)
+
+        attackLocation = renderable.getAttackBaseLocationInverted()
+        self.assertTrue(attackLocation.x == 9)
+        self.assertTrue(attackLocation.y == 11)
+
+        weaponBaseLoc = renderable.getWeaponBaseLocation()
+        self.assertTrue(weaponBaseLoc.x == 12)
+        self.assertTrue(weaponBaseLoc.y == 9)
+
+        p = Coordinates(9, 9)
+        self.assertFalse(renderable.isHitBy([p]))
+        p = Coordinates(13, 13)
+        self.assertFalse(renderable.isHitBy([p]))
+        p = Coordinates(10, 10)
+        self.assertTrue(renderable.isHitBy([p]))
+        p = Coordinates(12, 12)
+        self.assertTrue(renderable.isHitBy([p]))
+
+        renderable.setDirection(Direction.left)
+        attackLocation = renderable.getAttackBaseLocation()
+        self.assertTrue(attackLocation.x == 9)
+        self.assertTrue(attackLocation.y == 11)
 
 
 if __name__ == '__main__':

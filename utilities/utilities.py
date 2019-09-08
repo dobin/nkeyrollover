@@ -4,8 +4,7 @@ import math
 from texture.character.charactertype import CharacterType
 from texture.character.characteranimationtype import CharacterAnimationType
 from texture.animation import Animation
-from sprite.coordinates import Coordinates, ExtCoordinates
-from sprite.sprite import Sprite
+from common.coordinates import Coordinates, ExtCoordinates
 
 logger = logging.getLogger(__name__)
 
@@ -20,18 +19,10 @@ class Utility(object):
         }
         res['x'] = abs(coord1.x - coord2.x)
         res['y'] = abs(coord1.y - coord2.y)
-        #res['sum'] = res['x'] + res['y']
+        # res['sum'] = res['x'] + res['y']
         res['sum'] = math.sqrt(res['x'] ** 2 + res['y'] ** 2)
         return res
 
-
-    @staticmethod
-    def pointInSprite(coord1 :Coordinates, sprite2 :Sprite):
-        coord2 = sprite2.getLocation()
-        if coord1.x >= coord2.x and coord1.x < coord2.x + sprite2.texture.width and coord1.y >= coord2.y and coord1.y < coord2.y + sprite2.texture.height:
-            return True
-        else:
-            return False
 
     @staticmethod
     def pointIn(coord1 :Coordinates, location2 :ExtCoordinates):

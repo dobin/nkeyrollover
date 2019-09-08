@@ -1,7 +1,7 @@
 import logging
 import copy
 
-from sprite.coordinates import Coordinates
+from common.coordinates import Coordinates
 from config import Config
 from messaging import messaging, Messaging, Message, MessageType
 

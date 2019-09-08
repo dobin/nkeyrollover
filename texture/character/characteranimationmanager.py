@@ -1,6 +1,6 @@
 import logging
 
-from sprite.direction import Direction
+from common.direction import Direction
 from texture.character.characteranimationtype import CharacterAnimationType
 from .charactertype import CharacterType
 from texture.filetextureloader import FileTextureLoader

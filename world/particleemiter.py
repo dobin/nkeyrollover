@@ -1,10 +1,9 @@
 import logging
 
 from config import Config
-from sprite.direction import Direction
-from sprite.particle import Particle
+from common.direction import Direction
+from common.particle import Particle
 from .particleeffecttype import ParticleEffectType
-from utilities.utilities import Utility
 from world.viewport import Viewport
 
 logger = logging.getLogger(__name__)
@@ -22,11 +21,14 @@ class ParticleEmiter(object):
         self.particleActive = []
         n = 0
         while n < Config.maxParticles:
-            self.particlePool.append( Particle(viewport=viewport) )
+            self.particlePool.append(Particle(viewport=viewport))
             n += 1
 
 
-    def emit(self, loc, effectType :ParticleEffectType, direction :Direction = Direction.none):
+    def emit(
+        self, loc, effectType :ParticleEffectType,
+        direction :Direction = Direction.none
+    ):
         particleList = []
         if effectType is ParticleEffectType.explosion:
             particleCount = 16
@@ -58,7 +60,7 @@ class ParticleEmiter(object):
                     angle = 180
                     xinv = -1
 
-                basex = loc.x + (xinv * 6) # distance from char
+                basex = loc.x + (xinv * 6)  # distance from char
                 particle.init(
                     x=basex + n * xinv, y=loc.y, life=life, angle=angle,
                     speed=0.0, fadeout=True, byStep=False, charType=0,
@@ -90,11 +92,16 @@ class ParticleEmiter(object):
             while n < particleCount:
                 particle = self.particlePool.pop()
 
-                basex = loc.x + xinv # distance from char
-                logger.info("New at: {}/{}".format(basex + xinv, loc.y + n))
+                basex = loc.x + xinv  # distance from char
+                logger.debug("New particle at: {}/{}".format(basex + xinv, loc.y + n))
                 particle.init(
-                    x=basex + xinv, y=loc.y + n - int(particleCount / 2) + 1, life=life, angle=0,
-                    speed=0.0, fadeout=True, byStep=False, charType=0,
+                    x=basex + xinv, y=loc.y + n - int(particleCount / 2) + 1,
+                    life=life,
+                    angle=0,
+                    speed=0.0,
+                    fadeout=True,
+                    byStep=False,
+                    charType=0,
                     active=True)
 
                 self.particleActive.append(particle)
@@ -109,7 +116,7 @@ class ParticleEmiter(object):
             particle.advance(dt)
 
             if not particle.isActive():
-                self.particleActive.remove( particle )
+                self.particleActive.remove(particle)
                 self.particlePool.append(particle)
 
 

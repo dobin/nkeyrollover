@@ -6,10 +6,8 @@ import copy
 import logging
 from typing import List
 
-from sprite.coordinates import Coordinates, ExtCoordinates
-from sprite.direction import Direction
-from messaging import messaging, Messaging, Message, MessageType
-from config import Config
+from common.coordinates import Coordinates, ExtCoordinates
+from common.direction import Direction
 from texture.texture import Texture
 from world.viewport import Viewport
 
@@ -26,9 +24,13 @@ class Renderable(object):
         z :int =0,
         active :bool =True,
         useParentDirection =False,
+        direction=Direction.left,
+        name=''
     ):
         self.viewport :Viewport = viewport
         self.texture :Texture = texture
+        self.direction = direction
+        self.name = name
 
         # if parent is given, this position will always be relative
         # to that parent
@@ -51,9 +53,6 @@ class Renderable(object):
         self.coordinatesRel2 :Coordinates = Coordinates(0, 0)
         self.z :int = z
 
-        self.direction = Direction.left
-        self.name = 'none'
-
 
     def __repr__(self):
         return self.name
@@ -74,7 +73,7 @@ class Renderable(object):
     def getLocation(self):
         """Get a reference to our location.
 
-        The location may depend on the parentSprite, if it is not None
+        The location may depend on the parent, if it is not None
         Note that we dont return a copy of the coordinates, but a reference
         to an internal var.
         """
@@ -86,7 +85,8 @@ class Renderable(object):
                 self.coordinatesRel.x = parentLocation.x + self.coordinates.x
                 self.coordinatesRel.y = parentLocation.y + self.coordinates.y
             else:
-                self.coordinatesRel.x = parentLocation.x + (-1 * self.coordinates.x) + self.parent.texture.width - self.texture.width
+                self.coordinatesRel.x = parentLocation.x + (-1 * self.coordinates.x)
+                + self.parent.texture.width - self.texture.width
                 self.coordinatesRel.y = parentLocation.y + self.coordinates.y
             return self.coordinatesRel
 
@@ -135,19 +135,22 @@ class Renderable(object):
 
 
     def collidesWithPoint(self, hitCoords :Coordinates):
-        if hitCoords.x >= self.coordinates.x and hitCoords.x < self.coordinates.x + self.texture.width:
-            if hitCoords.y >= self.coordinates.y and hitCoords.y < self.coordinates.y + self.texture.height:
-                return True
+        if (hitCoords.x >= self.coordinates.x 
+                and hitCoords.x < self.coordinates.x + self.texture.width
+                and hitCoords.y >= self.coordinates.y 
+                and hitCoords.y < self.coordinates.y + self.texture.height):
+            return True
 
         return False
 
 
     def getTextureHitCoordinates(self, animationIdx=0):
+        # Only works on ActionTexture's
         locations = self.texture.getTextureHitCoordinates(animationIdx=0)
         baseLocation = self.getLocation()
 
         # make relative coordinates absolute
-        for location in locations: 
+        for location in locations:
             location.x += baseLocation.x
             location.y += baseLocation.y
 
@@ -203,3 +206,7 @@ class Renderable(object):
 
     def getDirection(self):
         return self.direction
+
+
+    def setDirection(self, direction):
+        self.direction = direction

@@ -1,14 +1,6 @@
-import curses
 import logging
-from enum import Enum
 
-from sprite.coordinates import Coordinates
-from entities.entity import Entity
-from sprite.direction import Direction
-from config import Config
-from utilities.utilities import Utility
 from texture.texture import Texture
-from sprite.sprite import Sprite
 from texture.animation import Animation
 
 logger = logging.getLogger(__name__)
@@ -16,10 +8,8 @@ logger = logging.getLogger(__name__)
 
 class AnimationTexture(Texture):
     # abstract class
-    # cant be used really as no animation is stored in arr
-    # initSprite needs to be overwritten to make it work
-    def __init__(self):
-        super(AnimationTexture, self).__init__()
+    def __init__(self, name=''):
+        super(AnimationTexture, self).__init__(name)
         self.animation :Animation = None
         self.init()
 
@@ -58,7 +48,8 @@ class AnimationTexture(Texture):
         super().advance(deltaTime)
 
         # no need to advance stuff which is forever
-        if (self.animation.frameTime is None or len(self.animation.frameTime) == 0) and self.animation.endless == True:
+        if ((self.animation.frameTime is None or len(self.animation.frameTime) == 0)
+                and self.animation.endless is True):
             return
 
         # not active, no work
@@ -76,16 +67,17 @@ class AnimationTexture(Texture):
             if self.animation.endless:
                 # endless, just advance
                 self.frameIndex = (self.frameIndex + 1) % self.animation.frameCount
-                self.frameTimeLeft = self.animation.frameTime[ self.frameIndex ]
+                self.frameTimeLeft = self.animation.frameTime[self.frameIndex]
             else:
                 # check if it is the last animation, if yes stop it
                 if self.frameIndex == self.animation.frameCount - 1:
                     self.setActive(False)
                     return
                 else:
-                    if self.frameIndex >= len( self.animation.frameTime ):
-                        logger.error("Frameindex {} larget than frametime arr {}".format(self.frameIndex, self.animation.frameTime))
-                    self.frameTimeLeft = self.animation.frameTime[ self.frameIndex ]
+                    if self.frameIndex >= len(self.animation.frameTime):
+                        logger.error("Frameidx {} larget than frametime arr {}".format(
+                            self.frameIndex, self.animation.frameTime))
+                    self.frameTimeLeft = self.animation.frameTime[self.frameIndex]
                     self.frameIndex = (self.frameIndex + 1) % self.animation.frameCount
 
 
@@ -95,23 +87,22 @@ class AnimationTexture(Texture):
             return
 
         if self.frameIndex >= len(self.animation.arr):
-            raise Exception("Trying to access frameIndex {} on array with len {}, actual len{}"
-                .format(self.frameIndex, self.animation.frameCount, len(self.animation.arr)))
+            m = "Trying to access frameId {} on arr with len {}, actual len {}"
+            raise Exception(m.format(
+                self.frameIndex, self.animation.frameCount, len(self.animation.arr)))
 
         if self.overwriteColor is not None:
             color = self.overwriteColor
         else:
-            color = self.animation.frameColors[ self.frameIndex ]
+            color = self.animation.frameColors[self.frameIndex]
 
         # Note: For performance reason, replace enumerate with a while loop
         y = 0
-        while y < len(self.animation.arr[ self.frameIndex ]):
-        #for (y, rows) in enumerate(self.animation.arr[ self.frameIndex ]):
+        while y < len(self.animation.arr[self.frameIndex]):
             x = 0
-            while x < len(self.animation.arr[ self.frameIndex ][y]):
-            # for (x, column) in enumerate(rows):
-                column = self.animation.arr[ self.frameIndex ][y][x]
-                if column is not '':
+            while x < len(self.animation.arr[self.frameIndex][y]):
+                column = self.animation.arr[self.frameIndex][y][x]
+                if column != '':
                     viewport.addstr(
                         pos.y + y,
                         pos.x + x,
@@ -129,7 +120,7 @@ class AnimationTexture(Texture):
     def getAnimationTime(self) -> float:
         """Return sum of all animation times in current sprite"""
         n = 0.0
-        if self.animation.frameTime is None: 
+        if self.animation.frameTime is None:
             logger.error("Texture {} does not have frametime".format(self.animation))
         for time in self.animation.frameTime:
             n += time

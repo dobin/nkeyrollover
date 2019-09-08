@@ -1,20 +1,17 @@
 import random
 import logging
 
-from ai.brain import Brain
 from ai.states import BaseState as State
-from texture.character.characteranimationtype import CharacterAnimationType
 from utilities.timer import Timer
-from sprite.direction import Direction
 from config import Config
-from sprite.coordinates import Coordinates
+from common.coordinates import Coordinates
 from utilities.utilities import Utility
 from utilities.color import Color
-from messaging import messaging, Messaging, Message, MessageType
 from utilities.entityfinder import EntityFinder
 import system.graphics.renderable
 import system.gamelogic.enemy
-from directmessaging import directMessaging, DirectMessage, DirectMessageType
+from directmessaging import directMessaging, DirectMessageType
+from messaging import messaging, MessageType
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +23,7 @@ class StateWander(State):
         State.__init__(self, brain)
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.enemy.Enemy)
-        self.lastInputTimer = Timer( meEnemy.enemyInfo.wanderStepDelay, instant=True )
+        self.lastInputTimer = Timer(meEnemy.enemyInfo.wanderStepDelay, instant=True)
         self.destCoord = Coordinates()
         self.destIsPoint = False
 
@@ -38,15 +35,13 @@ class StateWander(State):
         stateTimeRnd = random.randrange(
             -100 * meEnemy.enemyInfo.wanderTimeRnd,
             100 * meEnemy.enemyInfo.wanderTimeRnd)
-        self.setTimer( meEnemy.enemyInfo.wanderTime + (stateTimeRnd / 100) )
+        self.setTimer(meEnemy.enemyInfo.wanderTime + (stateTimeRnd / 100))
         self.chooseDestination()
 
 
     def process(self, dt):
         meRenderable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.graphics.renderable.Renderable)
-        meEnemy = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.gamelogic.enemy.Enemy)
         meAttackable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.attackable.Attackable)
 
@@ -60,8 +55,10 @@ class StateWander(State):
             self.lastInputTimer.reset()
 
         if self.timeIsUp():
-            if EntityFinder.numEnemiesInState(self.brain.owner.world, 'chase') < Config.enemiesInStateChase:
-                logger.info("{}: Too long wandering, chase again a bit".format(self.owner))
+            if (EntityFinder.numEnemiesInState(self.brain.owner.world, 'chase')
+                    < Config.enemiesInStateChase):
+                logger.info("{}: Too long wandering, chase again a bit".format(
+                    self.owner))
                 self.brain.pop()
                 self.brain.push("chase")
 
@@ -88,20 +85,20 @@ class StateWander(State):
         meGroupId = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.groupid.GroupId)
 
-        if not meRenderable.enemyMovement:
+        if not Config.enemyMovement:
             return
 
         x = 0
         y = 0
         if self.destCoord.x > meRenderable.coordinates.x:
-            x=1
+            x = 1
         elif self.destCoord.x < meRenderable.coordinates.x:
-            x=-1
+            x = -1
 
         if self.destCoord.y > meRenderable.coordinates.y:
-            y=1
+            y = 1
         elif self.destCoord.y < meRenderable.coordinates.y:
-            y=-1
+            y = -1
 
         directMessaging.add(
             groupId = meGroupId.getId(),
@@ -120,7 +117,7 @@ class StateWander(State):
 
         # if true:  go to a static point close to the current enemy position
         # if false: go to a point relative to the enemy
-        #self.destIsPoint = random.choice([True, False])
+        # self.destIsPoint = random.choice([True, False])
 
         # note that getLocation() will return a reference. we need to copy it here.
         playerEntity = EntityFinder.findPlayer(self.brain.owner.world)
@@ -159,7 +156,7 @@ class StateWander(State):
             coord.y -= 4 + random.randint(0, 5)
             # +1 so they can overlap only a bit on top
             if coord.y < Config.topborder - meRenderable.texture.height + 1:
-                coord.y = Config.topborder  - meRenderable.texture.height + 1
+                coord.y = Config.topborder - meRenderable.texture.height + 1
 
         # make sure destination is on-screen
         if coord.x < Config.topborder:

@@ -80,11 +80,11 @@ class Map(object):
 
 
     def loadMapTextures(self, map):
-        t = PhenomenaTexture(parentSprite=None, phenomenaType=PhenomenaType.tree1)
+        t = PhenomenaTexture(phenomenaType=PhenomenaType.tree1)
         t.setLocation(50, 8 - t.height)
         self.addTextureToMap(t)
 
-        t = PhenomenaTexture(parentSprite=None, phenomenaType=PhenomenaType.tree4)
+        t = PhenomenaTexture(phenomenaType=PhenomenaType.tree4)
         t.setLocation(90, 8 - t.height)
         self.addTextureToMap(t)
 

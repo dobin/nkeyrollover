@@ -3,7 +3,7 @@ import random
 
 from utilities.timer import Timer
 from world.scenes.scenebase import SceneBase
-from sprite.coordinates import Coordinates
+from common.coordinates import Coordinates
 from messaging import messaging, MessageType
 from collections import deque
 from config import Config

@@ -2,7 +2,7 @@ import logging
 
 from texture.action.actionanimationmanager import ActionAnimationManager
 from texture.animationtexture import AnimationTexture
-from sprite.coordinates import Coordinates
+from common.coordinates import Coordinates
 
 logger = logging.getLogger(__name__)
 

@@ -1,12 +1,11 @@
 import logging
 import yaml
-import io
 import os
 
 from texture.character.characteranimationtype import CharacterAnimationType
 from texture.character.charactertype import CharacterType
 from texture.animation import Animation
-from sprite.direction import Direction
+from common.direction import Direction
 from utilities.colorpalette import ColorPalette
 from utilities.color import Color
 

@@ -1,4 +1,4 @@
-from sprite.direction import Direction
+from common.direction import Direction
 from texture.animation import Animation
 from utilities.color import Color
 from utilities.colorpalette import ColorPalette

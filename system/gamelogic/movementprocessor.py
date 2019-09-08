@@ -2,8 +2,8 @@ import logging
 import esper
 
 from config import Config
-from sprite.coordinates import Coordinates, ExtCoordinates
-from sprite.direction import Direction
+from common.coordinates import Coordinates, ExtCoordinates
+from common.direction import Direction
 import system.gamelogic.attackable
 import system.gamelogic.enemy
 import system.gamelogic.player
@@ -32,18 +32,18 @@ class MovementProcessor(esper.Processor):
         if playerEntity is None:
             return
         playerGroupId = self.world.component_for_entity(
-                playerEntity, system.groupid.GroupId)
+            playerEntity, system.groupid.GroupId)
         playerRenderable = self.world.component_for_entity(
-                playerEntity, system.graphics.renderable.Renderable)
+            playerEntity, system.graphics.renderable.Renderable)
 
         msg = directMessaging.get(
             messageType = DirectMessageType.movePlayer
         )
         while msg is not None:
             didMove = self.moveRenderable(
-                playerRenderable, 
-                playerGroupId.getId(), 
-                msg.data['x'], 
+                playerRenderable,
+                playerGroupId.getId(),
+                msg.data['x'],
                 msg.data['y'])
 
             if didMove:
@@ -81,7 +81,8 @@ class MovementProcessor(esper.Processor):
 
 
     def moveRenderable(
-        self, renderable, groupId, x :int =0, y :int =0, dontChangeDirection :bool =False
+        self, renderable, groupId, x :int =0, y :int =0,
+        dontChangeDirection :bool =False
     ):
         """Move this renderable in x/y direction, if allowed. Update direction too"""
         didMove = False
@@ -93,16 +94,18 @@ class MovementProcessor(esper.Processor):
                 renderable.coordinates.x += x
                 didMove = True
 
-                if not dontChangeDirection and renderable.direction is not Direction.right:
-                    renderable.direction = Direction.right
+                if (not dontChangeDirection
+                        and renderable.direction is not Direction.right):
+                    renderable.setDirection(Direction.right)
                     didChangeDirection = True
 
         elif x < 0:
             if renderable.coordinates.x > 1:
                 renderable.coordinates.x += x
                 didMove = True
-                if not dontChangeDirection and renderable.direction is not Direction.left:
-                    renderable.direction = Direction.left
+                if (not dontChangeDirection
+                        and renderable.direction is not Direction.left):
+                    renderable.setDirection(Direction.left)
                     didChangeDirection = True
 
         if y > 0:
@@ -111,7 +114,8 @@ class MovementProcessor(esper.Processor):
                 didMove = True
 
         elif y < 0:
-            if renderable.coordinates.y >  Config.areaMoveable['miny'] - renderable.texture.height + 1:
+            if (renderable.coordinates.y
+                    > Config.areaMoveable['miny'] - renderable.texture.height + 1):
                 renderable.coordinates.y += y
                 didMove = True
 

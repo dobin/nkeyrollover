@@ -2,8 +2,8 @@ import logging
 from enum import Enum
 
 from world.viewport import Viewport
-from sprite.coordinates import Coordinates
-from sprite.direction import Direction
+from common.coordinates import Coordinates
+from common.direction import Direction
 from utilities.color import Color
 from utilities.colorpalette import ColorPalette
 from system.graphics.renderableminimal import RenderableMinimal
