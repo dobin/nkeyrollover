@@ -5,8 +5,6 @@
 
 Follow the adventures of ASCIIMAN.
 
-<<<<<<< HEAD
-
 
 ## History Lesson 
 
@@ -29,25 +27,29 @@ Or was it?
 
 https://en.wikipedia.org/wiki/Text-based_game
 
+## Requirements
 
-## Mypy
+* Python 3.7
+
+
+## Miscellaneous
+
+### Mypy
 
 ```
-python -m mypy nkeyrollover.py
+python3.7 -m mypy nkeyrollover.py
 ```
-
-
-## Tests 
-
-* tests/animationplayer.py: play various animations
-* unittest_test.py: test some stuff
-* worldplayer.py: a simple world
-
 
 ### Unit tests
 
 ```
-python -m unittest
+python3.7 -m unittest
+```
+
+### Performance tests 
+
+```
+python3.7 -m cProfile -s time nkeyrollover.py
 ```
 
 ## Telnet config 
@@ -66,8 +68,3 @@ Configure:
 # adduser game # password game
 # chsh -s '/opt/nkeyrollover/nkeyrollover.py' game
 ```
-=======
-## Requirements 
-
-* Python 3.7+
->>>>>>> 28fd77a911f4fbed7afd66b58b13663b34db23db
