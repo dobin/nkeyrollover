@@ -2,8 +2,6 @@ import logging
 
 from ai.states import BaseState as State
 from config import Config
-import system.graphics.renderable
-import system.gamelogic.enemy
 
 logger = logging.getLogger(__name__)
 
@@ -26,8 +24,6 @@ class StateSpawn(State):
             if Config.devMode:
                 # make him come straight at us, sucker
                 logger.info("{} From Spawn To Chase".format(self.owner))
-                self.brain.pop()
                 self.brain.push("chase")
             else:
-                self.brain.pop()
                 self.brain.push("wander")
