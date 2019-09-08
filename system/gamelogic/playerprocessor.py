@@ -19,11 +19,10 @@ logger = logging.getLogger(__name__)
 
 
 class PlayerProcessor(esper.Processor):
-    def __init__(self, viewport, particleEmiter):
+    def __init__(self, viewport):
         super().__init__()
 
         self.viewport = viewport
-        self.particleEmiter = particleEmiter
 
 
     def process(self, deltaTime):
@@ -47,8 +46,7 @@ class PlayerProcessor(esper.Processor):
 
 
     def spawnPlayer(self, spawnCoordinates):
-        # Player
-        myid = 0
+        myid = 0  # 0 should be player
         playerEntity = self.world.create_entity()
         groupId = GroupId(id=myid)
         player = system.gamelogic.player.Player()
@@ -57,7 +55,6 @@ class PlayerProcessor(esper.Processor):
             characterType=CharacterType.player,
             characterAnimationType=CharacterAnimationType.standing,
             name='Player')
-
         renderable = Renderable(
             texture=texture,
             viewport=self.viewport,
@@ -68,9 +65,7 @@ class PlayerProcessor(esper.Processor):
         esperData = EsperData(self.world, playerEntity, 'player')
         characterSkill = OffensiveSkill(
             esperData=esperData,
-            particleEmiter=self.particleEmiter,
             viewport=self.viewport)
-
 
         offensiveAttack = OffensiveAttack(
             parentChar=player,
@@ -84,4 +79,3 @@ class PlayerProcessor(esper.Processor):
         self.world.add_component(playerEntity, player)
         self.world.add_component(playerEntity, attackable)
         self.world.add_component(playerEntity, offensiveAttack)
-        # /Player

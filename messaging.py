@@ -25,6 +25,7 @@ class MessageType(Enum):
     EmitTextureMinimal = 14
     EmitTexture = 15
     EmitActionTexture = 16
+    EmitParticleEffect = 17
 
 
 class Message(object):

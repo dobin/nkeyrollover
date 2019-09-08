@@ -2,7 +2,7 @@ import logging
 import curses
 import esper
 
-from world.particleemiter import ParticleEmiter
+from system.graphics.particleprocessor import ParticleProcessor
 from .map import Map
 from .viewport import Viewport
 from .textureemiter import TextureEmiter
@@ -37,7 +37,6 @@ class Game(object):
         self.win = win
         self.statusBar = StatusBar(world=self, menuwin=menuwin)
         self.viewport :Viewport = Viewport(win=win, world=self)
-        self.particleEmiter :ParticleEmiter = ParticleEmiter(viewport=self.viewport)
         self.textureEmiter :TextureEmiter = TextureEmiter(
             viewport=self.viewport,
             world=self.world)
@@ -52,12 +51,13 @@ class Game(object):
         self.showStats = False
         self.showEnemyWanderDestination = False
 
+        particleProcessor = ParticleProcessor(viewport=self.viewport)
+
         aiProcessor = AiProcessor()
         characterAnimationProcessor = CharacterAnimationProcessor()
         renderableProcessor = RenderableProcessor()
         playerProcessor = PlayerProcessor(
-            viewport=self.viewport,
-            particleEmiter=self.particleEmiter)
+            viewport=self.viewport)
         enemyProcessor = EnemyProcessor(viewport=self.viewport)
         attackableProcessor = AttackableProcessor()
         offensiveAttackProcessor = OffensiveAttackProcessor()
@@ -98,11 +98,12 @@ class Game(object):
 
         # e handle:   DirectMessageType   moveEnemy
         # p handle:   MessageType         PlayerKeyPress (space/attack, weaponselect)
-        # p generate: MessageType         PlayerAttack (via OffensiveAttackEntity)
+        # p generate: MessageType         PlayerAttack. (via OffensiveAttack)
         self.world.add_processor(offensiveAttackProcessor)
 
         # p handle:   MessageType         PlayerKeyPress (skill activate)
-        # p generate: MessageType         PlayerAttack
+        # p generate: MessageType         PlayerAttack!
+        # p generate: MessageType         EmitParticleEffect (skill)
         self.world.add_processor(offensiveSkillProcessor)
 
         # p handle:   MessageType         PlayerLocation
@@ -114,7 +115,7 @@ class Game(object):
         self.world.add_processor(attackableProcessor)
 
         # e handle:  MessageType          EntityDying
-        # p handle:  MessageType          PlayerAttack
+        # p handle:  MessageType          PlayerAttack.
         # x handle:  MessageType          AttackWindup
         # x handle:  MessageType          EntityAttack
         # x handle:  MessageType          EntityMoved
@@ -125,14 +126,18 @@ class Game(object):
         self.world.add_processor(enemyProcessor)
         self.world.add_processor(playerProcessor)
 
-        # x handle:  MessageType           EmitTextureMinimal
+        # x handle:   MessageType         EmitTextureMinimal
+        # p generate: MessageType         PlayerAttack.
         self.world.add_processor(renderableMinimalProcessor)
 
-        # p handle:   MessageType         PlayerAttack
+        # p handle:   MessageType         PlayerAttack. (convert to damage)
         # e handle:   MessageType         EnemyAttack
         # x generate: DirectMessageType   receiveDamage
         self.world.add_processor(renderableProcessor)
 
+        # x handle:   MessageType         EmitParticleEffect
+        # x generate: DirectMessageType   receiveDamage
+        self.world.add_processor(particleProcessor)
 
 
     def togglePause(self):
@@ -151,8 +156,6 @@ class Game(object):
         if self.sceneManager.currentScene.showMap():
             self.statusBar.drawStatusbar()
             self.map.draw()
-
-        self.particleEmiter.draw()
 
         if self.showStats:
             self.drawStats()
@@ -193,7 +196,6 @@ class Game(object):
 
         self.gameTime += deltaTime
         self.map.advance(deltaTime)
-        self.particleEmiter.advance(deltaTime)
 
         messaging.reset()
 

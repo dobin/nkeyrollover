@@ -16,8 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class OffensiveSkill(object):
-    def __init__(self, esperData, particleEmiter, viewport):
-        self.particleEmiter = particleEmiter
+    def __init__(self, esperData, viewport):
         self.esperData = esperData
         self.viewport = viewport
 
@@ -183,11 +182,18 @@ class OffensiveSkill(object):
             self.esperData.entity, system.graphics.renderable.Renderable)
 
         locCenter = meRenderable.getLocationCenter()
-        self.particleEmiter.emit(
-            locCenter,
-            ParticleEffectType.explosion)
-        hitLocations = Utility.getBorder(locCenter, distance=4, thicc=2)
+        messaging.add(
+            type=MessageType.EmitParticleEffect,
+            data= {
+                'location': locCenter,
+                'effectType': ParticleEffectType.explosion,
+                'damage': None,
+                'byPlayer': True,
+                'direction': Direction.none,
+            }
+        )
 
+        hitLocations = Utility.getBorder(locCenter, distance=4, thicc=2)
         messaging.add(
             type=MessageType.PlayerAttack,
             data= {
@@ -201,36 +207,48 @@ class OffensiveSkill(object):
         meRenderable = self.esperData.world.component_for_entity(
             self.esperData.entity, system.graphics.renderable.Renderable)
 
-        hitLocations = self.particleEmiter.emit(
-            meRenderable.getLocationCenter(),
-            ParticleEffectType.laser,
-            direction=meRenderable.direction)
-
+        locCenter = meRenderable.getLocationCenter()
         messaging.add(
-            type=MessageType.PlayerAttack,
+            type=MessageType.EmitParticleEffect,
             data= {
-                'hitLocations': hitLocations,
-                'damage': self.damage[WeaponType.laser]
+                'location': locCenter,
+                'effectType': ParticleEffectType.laser,
+                'damage': self.damage[WeaponType.laser],
+                'byPlayer': True,
+                'direction': meRenderable.direction,
             }
         )
+#        messaging.add(
+#            type=MessageType.PlayerAttack,
+#            data= {
+#                'hitLocations': hitLocations,
+#                'damage': self.damage[WeaponType.laser]
+#            }
+#        )
 
 
     def skillCleave(self):
         meRenderable = self.esperData.world.component_for_entity(
             self.esperData.entity, system.graphics.renderable.Renderable)
 
-        hitLocations = self.particleEmiter.emit(
-            meRenderable.getLocationCenter(),
-            ParticleEffectType.cleave,
-            direction=meRenderable.direction)
-
+        locCenter = meRenderable.getLocationCenter()
         messaging.add(
-            type=MessageType.PlayerAttack,
+            type=MessageType.EmitParticleEffect,
             data= {
-                'hitLocations': hitLocations,
-                'damage': self.damage[WeaponType.cleave]
+                'location': locCenter,
+                'effectType': ParticleEffectType.cleave,
+                'damage': self.damage[WeaponType.cleave],
+                'byPlayer': True,
+                'direction': meRenderable.direction,
             }
         )
+#        messaging.add(
+#            type=MessageType.PlayerAttack,
+#            data= {
+#                'hitLocations': hitLocations,
+#                'damage': self.damage[WeaponType.cleave]
+#            }
+#        )
 
 
     def advance(self, dt):
