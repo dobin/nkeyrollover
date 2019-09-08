@@ -12,6 +12,7 @@ from system.graphics.renderable import Renderable
 from texture.action.actiontexture import ActionTexture
 from messaging import messaging, MessageType
 from texture.speech.speechtexture import SpeechTexture
+from config import Config
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +39,7 @@ class TextureEmiter(object):
             viewport=self.viewport,
             parent=parentRenderable,
             coordinates=coordinates,
-            z=3,
+            z=Config.zMax,
             active=True)
         self.addRenderable(renderable)
 
@@ -58,7 +59,8 @@ class TextureEmiter(object):
             viewport=self.viewport,
             parent=None,
             coordinates=location,
-            active=True)
+            active=True,
+            z=Config.zActionTexture)
         self.addRenderable(renderable)
 
         if damage is not None:

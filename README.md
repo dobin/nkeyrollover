@@ -68,3 +68,11 @@ Configure:
 # adduser game # password game
 # chsh -s '/opt/nkeyrollover/nkeyrollover.py' game
 ```
+
+## Z Order 
+
+* all RenderableMinimal
+* y-value is basically Z order
+* Then, renderable with z value set
+  * zMax
+  * zActionTexture

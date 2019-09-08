@@ -108,7 +108,10 @@ class RenderableProcessor(esper.Processor):
             if rend.isActive():
                 # logger.info("REND: {} {} {}".format(rend, rend.z, rend.coordinates))
                 loc = rend.getLocation()
-                self.renderOrder[loc.y + rend.z].append(rend)
+                if rend.z > 0:
+                    self.renderOrder[rend.z].append(rend)
+                else:
+                    self.renderOrder[loc.y].append(rend)
 
         for l in self.renderOrder:
             for rend in l:

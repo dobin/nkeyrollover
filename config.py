@@ -30,13 +30,18 @@ class Config:
     maxParticles = 128
     version = str(0.02)
 
+    # some z orders
+    zMax = 25
+    zActionTexture = 26
+    zSkill = 27
+
     # player config
     announceDamage = 350  # min amount of damage done
     movementKeysPerSec = 20.0
     playerAttacksCd = 0.2  # player attack cooldown
 
     # enemy config
-    enemyMovement = True  # freeze enemies for tests?    
+    enemyMovement = True  # freeze enemies for tests?
     showEnemyWanderDest = True
     enemiesInStateAttacking = 1
     enemiesInStateChase = 2

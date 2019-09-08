@@ -24,7 +24,6 @@ class AttackableProcessor(esper.Processor):
     def process(self, dt):
         self.checkHealth()
         self.checkReceiveDamage()  # dont stun if he has no health left..
-                
         self.advance(dt)
 
 
