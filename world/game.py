@@ -24,6 +24,7 @@ from world.scenemanager import SceneManager
 from world.statusbar import StatusBar
 from utilities.entityfinder import EntityFinder
 from messaging import messaging
+from directmessaging import directMessaging
 
 logger = logging.getLogger(__name__)
 
@@ -147,20 +148,18 @@ class Game(object):
 
 
     def draw(self, frame):
-        # order here is relevant, as it is Z order 
-
         if self.sceneManager.currentScene.showMap():
             self.statusBar.drawStatusbar()
             self.map.draw()
 
         self.particleEmiter.draw()
 
-        if self.showStats and frame % 10 == 0:
+        if self.showStats:
             self.drawStats()
 
+        # not drawing related, but who cares
         if frame % 100 == 0:
             self.printEntityStats()
-
 
         if self.pause:
             self.win.addstr(12, 40, "Paused", curses.color_pair(7))
@@ -189,6 +188,8 @@ class Game(object):
             return
 
         self.world.process(deltaTime)
+        messaging.nextFrame()
+        directMessaging.nextFrame()
 
         self.gameTime += deltaTime
         self.map.advance(deltaTime)

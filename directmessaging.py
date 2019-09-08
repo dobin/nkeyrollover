@@ -24,6 +24,12 @@ class DirectMessaging(object):
     """
     def __init__(self):
         self.messages = []
+        self.frame = 0
+
+
+    def nextFrame(self):
+        self.frame += 1
+
 
     def add(self, groupId, type, data):
         self.messages.append(DirectMessage(
@@ -31,7 +37,9 @@ class DirectMessaging(object):
             type = type,
             data = data
         ))
-        logger.info("DirectMsg for %6i: type %s: %s" % (groupId, type.name, data))
+        logger.info("%4i: DirectMsg for %6i: type %s: %s" % 
+                    (self.frame, groupId, type.name, data))
+
 
     def getByType(self, messageType):
         for message in self.messages:

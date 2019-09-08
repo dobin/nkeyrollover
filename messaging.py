@@ -42,6 +42,11 @@ class Messaging(object):
     """
     def __init__(self):
         self.messages = []
+        self.frame = 0
+
+
+    def nextFrame(self):
+        self.frame += 1
 
 
     def add(self, type, data, groupId=None):
@@ -51,9 +56,9 @@ class Messaging(object):
             groupId=groupId,
         ))
         if groupId is None:
-            logger.info("%-20s: %s" % (type.name, data))
+            logger.info("%4i: %-20s: %s" % (self.frame, type.name, data))
         else:
-            logger.info("%-16s%4i: %s" % (type.name, groupId, data))
+            logger.info("%4i: %-16s%4i: %s" % (self.frame, type.name, groupId, data))
 
 
     def reset(self):
