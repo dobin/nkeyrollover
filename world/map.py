@@ -9,6 +9,9 @@ from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
 from texture.texture import Texture
 from world.viewport import Viewport
+from system.graphics.renderableminimal import RenderableMinimal
+from system.graphics.renderable import Renderable
+from common.coordinates import Coordinates
 
 logger = logging.getLogger(__name__)
 
@@ -20,39 +23,38 @@ class Map(object):
         self.viewport :Viewport = viewport
         self.playerInMapX :int = 0
         self.xpmap = None
-        self.mapTextures = None
         self.color :Color = ColorPalette.getColorByColor(Color.grey)
 
         self.openXpMap('data/map/map02.xp')
 
         # array of len(mapwidth), with arrays
-        self.mapTextures = [None] * self.xpmap['width']
-        #self.loadMapTextures('map01')
+        self.mapRenderables = [None] * self.xpmap['width']
+        self.loadMapRenderables('map01')
 
 
     def advance(self, deltaTime):
         x = self.viewport.getx() + 1
         maxx = x + 78
         while x < maxx:
-            if self.mapTextures[x] is not None:
-                for texture in self.mapTextures[x]:
-                    texture.advance(deltaTime)
+            if self.mapRenderables[x] is not None:
+                for renderable in self.mapRenderables[x]:
+                    renderable.advance(deltaTime)
             x += 1
 
 
     def draw(self):
         self.drawXp()
-        self.drawTextures()
+        self.drawRenderables()
 
 
-    def drawTextures(self):
+    def drawRenderables(self):
         # Note: This function should be as fast as possible.
         x = self.viewport.getx() + 1
         maxx = x + 78
         while x < maxx:
-            if self.mapTextures[x] is not None:
-                for texture in self.mapTextures[x]:
-                    texture.draw(self.viewport)
+            if self.mapRenderables[x] is not None:
+                for renderable in self.mapRenderables[x]:
+                    renderable.draw()
             x += 1
 
 
@@ -63,7 +65,9 @@ class Map(object):
         # performance...
         if False:
             if not xp_file_layer['width'] or not xp_file_layer['height']:
-                raise AttributeError('Attempted to call load_layer_to_console on data that didn\'t have a width or height key, check your data')
+                msg = 'Attempted to call load_layer_to_console on data that didn\'t'
+                msg += ' have a width or height key, check your data'
+                raise AttributeError(msg)
 
         x = self.viewport.getx() + 1
         maxx = x + 78
@@ -74,27 +78,43 @@ class Map(object):
                 if cell_data['keycode'] != '':  # dont print empty (space " ") cells
                     char = cell_data['keycode']
                     self.viewport.addstr(
-                        y=y, x=x, char=char, options=cell_data['color'], knownDrawable=True)
+                        y=y,
+                        x=x,
+                        char=char,
+                        options=cell_data['color'],
+                        knownDrawable=True)
                 y += 1
             x += 1
 
 
-    def loadMapTextures(self, map):
+    def loadMapRenderables(self, map):
         t = PhenomenaTexture(phenomenaType=PhenomenaType.tree1)
-        t.setLocation(50, 8 - t.height)
-        self.addTextureToMap(t)
+        r = Renderable(
+            texture=t,
+            viewport=self.viewport,
+            coordinates=Coordinates(80, 8 - t.height),
+            active=True
+        )
+        self.addTextureToMap(r)
 
         t = PhenomenaTexture(phenomenaType=PhenomenaType.tree4)
-        t.setLocation(90, 8 - t.height)
-        self.addTextureToMap(t)
+        r = Renderable(
+            texture=t,
+            viewport=self.viewport,
+            coordinates=Coordinates(40, 8 - t.height),
+            active=True
+        )
+        self.addTextureToMap(r)
 
 
-    def addTextureToMap(self, texture :Texture):
-        x = texture.getLocation().x
-        if not self.mapTextures[x]:
-            self.mapTextures[x] = []
+    def addTextureToMap(self, renderable :RenderableMinimal):
+        x = renderable.getLocation().x
+        if not self.mapRenderables[x]:
+            self.mapRenderables[x] = []
 
-        self.mapTextures[x].append(texture)
+        # We dont add it to esper world, but handle it by ourself in a local
+        # array, sorted by x
+        self.mapRenderables[x].append(renderable)
 
 
     def openXpMap(self, filename):
@@ -122,7 +142,8 @@ class Map(object):
                 if color is not None:
                     xp_file_layer['cells'][x][y]['color'] = color
                     if char != 32 and char != 0:
-                        xp_file_layer['cells'][x][y]['keycode'] = chr(ansitounicode.getUnicode(char))
+                        k = chr(ansitounicode.getUnicode(char))
+                        xp_file_layer['cells'][x][y]['keycode'] = k
                     else:
                         xp_file_layer['cells'][x][y]['keycode'] = ''
                 else:

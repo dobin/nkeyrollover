@@ -1,8 +1,8 @@
 
-class RenderableMinimal(object): 
-    def __init__(self, texture, coordinate, active=True): 
+class RenderableMinimal(object):
+    def __init__(self, texture, coordinates, active=True):
         self.texture = texture
-        self.coordinates = coordinate
+        self.coordinates = coordinates
         self.active = active
 
 
@@ -16,3 +16,7 @@ class RenderableMinimal(object):
 
     def setActive(self, active):
         self.active = active
+
+
+    def getLocation(self):
+        return self.coordinates

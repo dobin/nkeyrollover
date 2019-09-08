@@ -6,3 +6,4 @@ frameTime:
 frameColors:
   - ColorType.background
   - ColorType.background
+direction: right

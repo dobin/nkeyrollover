@@ -1,6 +1,4 @@
 endless: True
 advanceByStep: False
-frameTime:
-  - None
 frameColors:
   - ColorType.background

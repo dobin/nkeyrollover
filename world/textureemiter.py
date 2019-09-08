@@ -96,7 +96,7 @@ class TextureEmiter(object):
         )
         renderableMinimal = RenderableMinimal(
             texture=textureMinimal,
-            coordinate=coordinate,
+            coordinates=coordinate,
         )
 
         self.addRenderableMinimal(renderableMinimal)
@@ -152,7 +152,7 @@ class TextureEmiter(object):
                 colorArr=colorArr)
             renderableMinimal = RenderableMinimal(
                 texture=textureMinimal,
-                coordinate=c,
+                coordinates=c,
             )
             self.addRenderableMinimal(renderableMinimal)
 
@@ -189,7 +189,7 @@ class TextureEmiter(object):
                 colorArr=colorArr)
             renderableMinimal = RenderableMinimal(
                 texture=textureMinimal,
-                coordinate=c
+                coordinates=c
             )
             self.addRenderableMinimal(renderableMinimal)
 
