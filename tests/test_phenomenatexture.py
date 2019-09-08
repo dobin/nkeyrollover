@@ -23,7 +23,6 @@ class PhenomenaTextureTest(unittest.TestCase):
         world.isunittest.setIsUnitTest()
 
         self.viewport = MockWin(20, 10)
-        self.particleEmiter = None
         self.world = esper.World()
         self.textureEmiter = TextureEmiter(viewport=self.viewport, world=self.world)
 
