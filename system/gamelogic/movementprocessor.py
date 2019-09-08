@@ -35,10 +35,7 @@ class MovementProcessor(esper.Processor):
         playerRenderable = self.world.component_for_entity(
             playerEntity, system.graphics.renderable.Renderable)
 
-        msg = directMessaging.get(
-            messageType = DirectMessageType.movePlayer
-        )
-        while msg is not None:
+        for msg in directMessaging.getByType(DirectMessageType.movePlayer):
             didMove = self.moveRenderable(
                 playerRenderable,
                 playerGroupId.getId(),
@@ -55,15 +52,9 @@ class MovementProcessor(esper.Processor):
                     type = MessageType.PlayerLocation,
                     data = extcords)
 
-            msg = directMessaging.get(
-                messageType = DirectMessageType.movePlayer
-            )
 
     def moveEnemy(self):
-        msg = directMessaging.get(
-            messageType = DirectMessageType.moveEnemy
-        )
-        while msg is not None:
+        for msg in directMessaging.getByType(DirectMessageType.moveEnemy):
             entity = EntityFinder.findCharacterByGroupId(self.world, msg.groupId)
             meRenderable = self.world.component_for_entity(
                 entity, system.graphics.renderable.Renderable)
@@ -73,10 +64,6 @@ class MovementProcessor(esper.Processor):
                 msg.data['x'],
                 msg.data['y'],
                 msg.data['dontChangeDirection'])
-
-            msg = directMessaging.get(
-                messageType = DirectMessageType.moveEnemy
-            )
 
 
     def moveRenderable(

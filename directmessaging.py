@@ -33,14 +33,12 @@ class DirectMessaging(object):
         ))
         logger.info("DirectMsg for %6i: type %s: %s" % (groupId, type.name, data))
 
-    def get(self, messageType):
+    def getByType(self, messageType):
         for message in self.messages:
             if message.type == messageType:
                 msg = message
                 self.messages.remove(message)
-                return msg
-
-        return None
+                yield msg
 
 
 # singleton

@@ -26,10 +26,7 @@ class RenderableMinimalProcessor(esper.Processor):
 
 
     def makeSpeechBubble(self):
-        msg = directMessaging.get(
-            messageType = DirectMessageType.activateSpeechBubble
-        )
-        while msg is not None:
+        for msg in directMessaging.getByType(DirectMessageType.activateSpeechBubble):
             for ent, (renderable, groupId) in self.world.get_components(
                 system.graphics.renderable.Renderable,
                 system.groupid.GroupId
@@ -40,10 +37,6 @@ class RenderableMinimalProcessor(esper.Processor):
                         time=msg.data['time'],
                         parentRenderable=renderable
                     )
-
-            msg = directMessaging.get(
-                messageType = DirectMessageType.activateSpeechBubble
-            )
 
 
     def handleMessages(self):

@@ -63,11 +63,7 @@ class AttackableProcessor(esper.Processor):
 
 
     def checkReceiveDamage(self):
-        # damage taken
-        msg = directMessaging.get(
-            messageType = DirectMessageType.receiveDamage
-        )
-        while msg is not None:
+        for msg in directMessaging.getByType(DirectMessageType.receiveDamage):
             entity = EntityFinder.findCharacterByGroupId(self.world, msg.groupId)
             meRenderable = self.world.component_for_entity(
                 entity, Renderable)
@@ -98,8 +94,3 @@ class AttackableProcessor(esper.Processor):
             # color the texture, even if we are dead
             meRenderable.texture.setOverwriteColorFor(
                 1.0 - 1.0 / damage , ColorPalette.getColorByColor(Color.red))
-
-            # get next message
-            msg = directMessaging.get(
-                messageType = DirectMessageType.receiveDamage
-            )
