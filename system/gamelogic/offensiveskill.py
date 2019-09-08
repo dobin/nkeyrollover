@@ -1,7 +1,7 @@
 import logging
 
 from utilities.recordholder import RecordHolder
-from world.particleeffecttype import ParticleEffectType
+from system.graphics.particleeffecttype import ParticleEffectType
 from utilities.timer import Timer
 from utilities.utilities import Utility
 from entities.weapontype import WeaponType
