@@ -43,7 +43,8 @@ class Game(object):
         self.map :Map = Map(viewport=self.viewport)
         self.sceneManager = SceneManager(
             viewport=self.viewport,
-            world=self.world)
+            world=self.world,
+            map=self.map)
 
         self.pause :bool = False
         self.gameRunning :bool = True

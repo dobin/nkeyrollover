@@ -23,15 +23,19 @@ class Map(object):
         self.playerInMapX :int = 0
         self.xpmap = None
         self.color :Color = ColorPalette.getColorByColor(Color.grey)
+        self.mapRenderables = None
 
-        self.openXpMap('data/map/map02.xp')
-
+    def loadMap(self, name):
+        self.openXpMap("data/map/{}.xp".format(name))
         # array of len(mapwidth), with arrays
         self.mapRenderables = [None] * self.xpmap['width']
-        self.loadMapRenderables('map01')
+        self.loadMapRenderables(name)
 
 
     def advance(self, deltaTime):
+        if self.mapRenderables is None:
+            return
+
         x = self.viewport.getx() + 1
         maxx = x + 78
         while x < maxx:
@@ -42,6 +46,9 @@ class Map(object):
 
 
     def draw(self):
+        if self.mapRenderables is None:
+            return
+
         self.drawXp()
         self.drawRenderables()
 

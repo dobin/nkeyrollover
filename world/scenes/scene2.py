@@ -32,7 +32,7 @@ class EnemyCell(object):
 class Scene2(SceneBase):
     def __init__(self, viewport, world):
         super().__init__(world=world, viewport=viewport)
-        self.name = "Scene2 - Map 0x01"
+        self.name = "Scene2"
         self.isShowPlayer = True
         self.isShowMap = True
 
