@@ -140,23 +140,30 @@ class Game(object):
         self.world.add_processor(particleProcessor)
 
 
-    def togglePause(self):
-        self.pause = not self.pause
-
-
-    def toggleStats(self):
-        self.showStats = not self.showStats
-
-
-    def toggleShowEnemyWanderDestination(self):
-        self.showEnemyWanderDestination = not self.showEnemyWanderDestination
-
-
-    def draw(self, frame):
+    def draw1(self, frame):
+        """Draws backmost layer (e.g. map)"""
         if self.sceneManager.currentScene.showMap():
             self.statusBar.drawStatusbar()
             self.map.draw()
 
+
+    def advance(self, deltaTime):
+        """Advance game, and draw game entities (e.g. player, effects)"""
+        if self.pause:
+            return
+
+        messaging.nextFrame()
+        directMessaging.nextFrame()
+        self.gameTime += deltaTime
+
+        self.world.process(deltaTime)  # this also draws
+        self.map.advance(deltaTime)
+
+        messaging.reset()
+
+
+    def draw2(self, frame):
+        """Draws foremost layer (e.g. "pause" sign)"""
         if self.showStats:
             self.drawStats()
 
@@ -184,20 +191,6 @@ class Game(object):
 
     def getGameTime(self):
         return self.gameTime
-
-
-    def advance(self, deltaTime):
-        if self.pause:
-            return
-
-        self.world.process(deltaTime)
-        messaging.nextFrame()
-        directMessaging.nextFrame()
-
-        self.gameTime += deltaTime
-        self.map.advance(deltaTime)
-
-        messaging.reset()
 
 
     def drawStats(self):
@@ -231,3 +224,15 @@ class Game(object):
 
     def quitGame(self):
         self.gameRunning = False
+
+
+    def togglePause(self):
+        self.pause = not self.pause
+
+
+    def toggleStats(self):
+        self.showStats = not self.showStats
+
+
+    def toggleShowEnemyWanderDestination(self):
+        self.showEnemyWanderDestination = not self.showEnemyWanderDestination

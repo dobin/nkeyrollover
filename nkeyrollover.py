@@ -78,8 +78,9 @@ class Keyrollover(object):
             self.win.erase()
             self.win.border()
 
-            self.game.draw(n)
+            self.game.draw1(n)
             self.game.advance(deltaTime)
+            self.game.draw2(n)
             self.keyboardInput.advance(deltaTime)
 
             # has to be after draw, as getch() does a refresh
