@@ -40,6 +40,11 @@ https://en.wikipedia.org/wiki/Text-based_game
 python3.7 -m mypy nkeyrollover.py
 ```
 
+VSC settings.json:
+```
+    "python.linting.flake8Args": ["--ignore=E231,E203,E303,E252,E251", "--max-line-length=88"],
+```
+
 ### Unit tests
 
 ```
@@ -72,7 +77,9 @@ Configure:
 ## Z Order 
 
 * all RenderableMinimal
-* y-value is basically Z order
-* Then, renderable with z value set
-  * zMax
-  * zActionTexture
+* all Renderable
+    * y-value is basically Z order
+    * Then, renderable with z value set
+    * zMax
+    * zActionTexture
+* particles
