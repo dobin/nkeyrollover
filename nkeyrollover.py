@@ -10,8 +10,6 @@ from utilities.utilities import Utility
 from system.io.keyboardinput import KeyboardInput
 from utilities.colorpalette import ColorPalette
 
-current_milli_time = lambda: int(round(time.time() * 1000))
-
 
 class Keyrollover(object):
     def __init__(self):
@@ -20,6 +18,10 @@ class Keyrollover(object):
         self.game = None
         self.currentTime = None
         self.init()
+
+
+    def getTimeMs(self): 
+        return int(round(time.time() * 1000))
 
 
     def init(self):
@@ -59,9 +61,10 @@ class Keyrollover(object):
         self.game = Game(win=self.win, menuwin=self.menuwin)
         self.keyboardInput = KeyboardInput(game=self.game)
 
-        self.startTime = current_milli_time()
+        self.startTime = self.getTimeMs()
         self.currentTime = self.startTime
         self.workTime = 0
+
 
     def loop(self):
         n = 0

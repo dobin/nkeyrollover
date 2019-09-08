@@ -30,7 +30,7 @@ class ColorPalette(object):
         curses.init_pair(10, curses.COLOR_WHITE, curses.COLOR_RED)
 
         # intro
-        curses.init_pair(11, curses.COLOR_BLACK, curses.COLOR_BLUE )
+        curses.init_pair(11, curses.COLOR_BLACK, curses.COLOR_BLUE)
 
 
     @staticmethod
