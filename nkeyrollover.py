@@ -38,7 +38,7 @@ class Keyrollover(object):
             logging.basicConfig(
                 filename='app.log',
                 filemode='a',
-                level=logging.INFO,
+                level=logging.WARNING,
                 format='%(asctime)s %(levelname)-07s %(name)32s: %(message)s')
 
         logger = logging.getLogger(__name__)
