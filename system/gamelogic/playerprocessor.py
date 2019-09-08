@@ -35,7 +35,7 @@ class PlayerProcessor(esper.Processor):
 
     def checkSpawn(self):
         for message in messaging.getByType(MessageType.SpawnPlayer):
-            self.spawnPlayer()
+            self.spawnPlayer(message.data['coordinates'])
 
 
     def advance(self, deltaTime):
@@ -48,7 +48,7 @@ class PlayerProcessor(esper.Processor):
         player.advance(deltaTime)
 
 
-    def spawnPlayer(self):
+    def spawnPlayer(self, spawnCoordinates):
         # Player
         myid = 0
         playerEntity = self.world.create_entity()
@@ -60,15 +60,11 @@ class PlayerProcessor(esper.Processor):
             characterAnimationType=CharacterAnimationType.standing,
             name='Player')
 
-        coordinates = Coordinates(
-            Config.playerSpawnPoint['x'],
-            Config.playerSpawnPoint['y']
-        )
         renderable = Renderable(
             texture=texture,
             viewport=self.viewport,
             parent=None,
-            coordinates=coordinates,
+            coordinates=spawnCoordinates,
             name='Player')
 
         esperData = EsperData(self.world, playerEntity, 'player')
