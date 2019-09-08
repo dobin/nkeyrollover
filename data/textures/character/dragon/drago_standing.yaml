@@ -1,0 +1,6 @@
+endless: True
+advanceByStep: False
+frameColors:
+  - white
+direction: left
+# source: https://twitter.com/MacyCron/status/882751132061323272
