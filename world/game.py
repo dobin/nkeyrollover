@@ -25,6 +25,7 @@ from world.statusbar import StatusBar
 from utilities.entityfinder import EntityFinder
 from messaging import messaging
 from directmessaging import directMessaging
+from world.particleemiter import ParticleEmiter
 
 logger = logging.getLogger(__name__)
 
@@ -33,8 +34,9 @@ class Game(object):
     """The game world in which all game object live"""
 
     def __init__(self, win, menuwin):
-        self.world = esper.World()
         self.win = win
+
+        self.world = esper.World()
         self.statusBar = StatusBar(world=self, menuwin=menuwin)
         self.viewport :Viewport = Viewport(win=win, world=self)
         self.textureEmiter :TextureEmiter = TextureEmiter(
@@ -45,6 +47,7 @@ class Game(object):
             viewport=self.viewport,
             world=self.world,
             mapManager=self.mapManager)
+        self.particleEmiter = ParticleEmiter()
 
         self.pause :bool = False
         self.gameRunning :bool = True
