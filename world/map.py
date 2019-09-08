@@ -7,7 +7,6 @@ from utilities.color import Color
 import utilities.ansitounicode as ansitounicode
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
-from texture.texture import Texture
 from world.viewport import Viewport
 from system.graphics.renderableminimal import RenderableMinimal
 from system.graphics.renderable import Renderable
@@ -92,7 +91,7 @@ class Map(object):
         r = Renderable(
             texture=t,
             viewport=self.viewport,
-            coordinates=Coordinates(80, 8 - t.height),
+            coordinates=Coordinates(80, 8 - t.height + 1),
             active=True
         )
         self.addTextureToMap(r)
@@ -101,7 +100,7 @@ class Map(object):
         r = Renderable(
             texture=t,
             viewport=self.viewport,
-            coordinates=Coordinates(40, 8 - t.height),
+            coordinates=Coordinates(40, 8 - t.height + 1),
             active=True
         )
         self.addTextureToMap(r)

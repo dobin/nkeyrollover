@@ -3,7 +3,7 @@ import esper
 
 from config import Config
 from common.direction import Direction
-from common.particle import Particle
+from system.graphics.particle import Particle
 from world.particleeffecttype import ParticleEffectType
 from world.viewport import Viewport
 from messaging import messaging, MessageType
