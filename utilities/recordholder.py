@@ -1,6 +1,6 @@
 import logging
 
-from entities.weapontype import WeaponType
+from system.gamelogic.weapontype import WeaponType
 from texture.character.charactertype import CharacterType
 
 logger = logging.getLogger(__name__)

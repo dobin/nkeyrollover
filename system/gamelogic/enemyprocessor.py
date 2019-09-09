@@ -10,7 +10,7 @@ from system.graphics.renderable import Renderable
 
 from system.gamelogic.attackable import Attackable
 from messaging import messaging, MessageType
-from entities.esperdata import EsperData
+from system.gamelogic.esperdata import EsperData
 from system.gamelogic.ai import Ai
 import world.uniqueid
 from system.gamelogic.offensiveattack import OffensiveAttack

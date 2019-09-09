@@ -2,7 +2,7 @@ import logging
 
 from texture.action.actiontype import ActionType
 from config import Config
-from entities.weapontype import WeaponType
+from system.gamelogic.weapontype import WeaponType
 from utilities.recordholder import RecordHolder
 from utilities.timer import Timer
 from messaging import messaging, MessageType

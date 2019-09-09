@@ -4,7 +4,7 @@ from utilities.recordholder import RecordHolder
 from system.graphics.particleeffecttype import ParticleEffectType
 from utilities.timer import Timer
 from utilities.utilities import Utility
-from entities.weapontype import WeaponType
+from system.gamelogic.weapontype import WeaponType
 import system.gamelogic.attackable
 import system.graphics.renderable
 import system.groupid

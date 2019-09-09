@@ -1,7 +1,6 @@
 import logging
 import curses
 
-from entities.entitytype import EntityType
 from .colortype import ColorType
 from world.viewport import Viewport
 from .color import Color
@@ -170,26 +169,3 @@ class ColorPalette(object):
         else:
             logger.debug("Unknown color: {}/{}/{}".format(r, g, b))
             return None
-
-
-    @staticmethod
-    def getColorByEntityType(entityType: EntityType, viewport :Viewport):
-        color = 0
-
-        # for unittests using MockWin
-        # we always import 'curses', and dont know if we are being unittested
-        # in the unittest, we use Viewport, which has method isUnitTest
-        if hasattr(viewport, 'isUnitTest'):
-            return color
-
-        if entityType is EntityType.player:
-            return curses.color_pair(7) | curses.A_BOLD
-        elif entityType is EntityType.enemy:
-            return curses.color_pair(5)
-        elif entityType is EntityType.takedamage:
-            return curses.color_pair(3)
-        elif entityType is EntityType.weapon:
-            return curses.color_pair(4)
-        else:
-            logger.error("unknown color type: " + str(entityType))
-            return curses.color_pair(1)

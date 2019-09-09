@@ -5,7 +5,7 @@ import system.gamelogic.player
 from messaging import messaging, MessageType
 from texture.character.charactertype import CharacterType
 from texture.character.charactertexture import CharacterTexture
-from entities.esperdata import EsperData
+from system.gamelogic.esperdata import EsperData
 from texture.character.characteranimationtype import CharacterAnimationType
 from system.graphics.renderable import Renderable
 from system.gamelogic.offensiveskill import OffensiveSkill
