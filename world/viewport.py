@@ -1,9 +1,7 @@
 import logging
-import copy
 
 from common.coordinates import Coordinates
 from config import Config
-from messaging import messaging, Messaging, Message, MessageType
 
 logger = logging.getLogger(__name__)
 
@@ -21,10 +19,14 @@ class Viewport(object):
         return self.x
 
 
+    def getRightX(self):
+        return self.x + Config.columns - 2
+
+
     def addstr(self, y, x, char, options=None, knownDrawable=False):
         # Note: This function should be as fast as possible.
 
-        x = x - self.x # getScreenCoords() - fast version
+        x = x - self.x  # getScreenCoords() - fast version
 
         if not knownDrawable:
             if not self.isPointDrawableXY(x, y):

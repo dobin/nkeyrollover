@@ -29,6 +29,20 @@ class EnemyCell(object):
             self.spawnLocation)
 
 
+# if no enemies alive:
+# - camera pushes forward, advances, till new spawn point reached
+#
+# if no enemies in sight:
+# - camera follows player, till enemy are in sight
+
+
+class Akt(object):
+    def __init__(self):
+        self.min_x = 0
+        self.max_x = 0
+        self.enemyQueue = deque()
+
+
 class Scene2(SceneBase):
     def __init__(self, viewport, world):
         super().__init__(world=world, viewport=viewport)
@@ -59,6 +73,15 @@ class Scene2(SceneBase):
                 spawnTime = 0,
                 spawnX = 0,
                 spawnLocation = Coordinates(35, 13),
+            )
+            self.enemyQueue.append(enemyCell)
+
+            enemyCell = EnemyCell(
+                id = self.enemyCount,
+                characterType = CharacterType.cow,
+                spawnTime = 10000,
+                spawnX = 60,
+                spawnLocation = Coordinates(60 + 80, 13),
             )
             self.enemyQueue.append(enemyCell)
             return
@@ -108,7 +131,8 @@ class Scene2(SceneBase):
             n += 1
 
 
-    def spawnEnemy(self, enemyCell): 
+    def spawnEnemy(self, enemyCell):
+        logging.warning("Spawn enemy")
         messaging.add(
             type=MessageType.SpawnEnemy,
             data=enemyCell,
@@ -139,7 +163,9 @@ class Scene2(SceneBase):
 
         enemyCell = self.enemyQueue[0]
         if enemyCell.spawnX < playerPosition.x:
+            logging.warning("Spawn: Pos: {}".format(playerPosition.x))
             self.spawnEnemy(enemyCell)
+            self.enemySpawned.append(enemyCell)
             del self.enemyQueue[0]
 
 
@@ -150,7 +176,9 @@ class Scene2(SceneBase):
         # spawn more enemies?
         enemyCell = self.enemyQueue[0]
         if enemyCell.spawnTime < self.time:
+            logging.warning("Spawn: Time: {}".format(enemyCell.spawnTime))
             self.spawnEnemy(enemyCell)
+            self.enemySpawned.append(enemyCell)
             del self.enemyQueue[0]
 
 

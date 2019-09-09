@@ -1,11 +1,10 @@
 import logging
-import random
 
-
+logger = logging.getLogger(__name__)
 
 
 class SceneBase(object): 
-    def __init__(self, world, viewport): 
+    def __init__(self, world, viewport):
         self.world = world
         self.viewport = viewport
 
@@ -20,50 +19,50 @@ class SceneBase(object):
         # properties
         self.anyKeyFinishesScene = False
         self.name = None
-        
+
         self.isShowPlayer = False
-        self.isShowMap = False        
+        self.isShowMap = False
 
 
-    def __repr__(self): 
+    def __repr__(self):
         return self.name
 
 
-    def showPlayer(self): 
+    def showPlayer(self):
         return self.isShowPlayer
 
 
-    def showMap(self): 
+    def showMap(self):
         return self.isShowMap
 
 
-    def getStartX(self): 
+    def getStartX(self):
         return self.start_x
 
 
-    def getEndX(self): 
+    def getEndX(self):
         return self.end_x
 
 
-    def sceneIsFinished(self) -> bool: 
+    def sceneIsFinished(self) -> bool:
         pass
 
 
-    def advance(self, dt): 
+    def advance(self, dt):
         pass
 
 
     def handlePosition(self, playerPosition, viewportX):
         pass
 
-    def handleTime(self): 
+    def handleTime(self):
         pass
 
     def handleEnemyDeath(self):
         pass
 
 
-    def leave(self): 
+    def leave(self):
         for entity in self.entities:
             self.removeRenderable(entity)
 
