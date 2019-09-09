@@ -1,6 +1,6 @@
 import logging
 from collections import deque
-from ai.states import BaseState
+from stackfsm.states import BaseState
 
 STATES = []
 

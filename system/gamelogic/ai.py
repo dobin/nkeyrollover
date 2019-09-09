@@ -1,13 +1,13 @@
 import logging
 
-from ai.brain import Brain
-from entities.enemy.state_attack import StateAttack
-from entities.enemy.state_attackwindup import StateAttackWindup
-from entities.enemy.state_chase import StateChase
-from entities.enemy.state_dying import StateDying
-from entities.enemy.state_spawn import StateSpawn
-from entities.enemy.state_wander import StateWander
-from entities.enemy.state_dead import StateDead
+from stackfsm.brain import Brain
+from ai.stickfigure.state_attack import StateAttack
+from ai.stickfigure.state_attackwindup import StateAttackWindup
+from ai.stickfigure.state_chase import StateChase
+from ai.stickfigure.state_dying import StateDying
+from ai.stickfigure.state_spawn import StateSpawn
+from ai.stickfigure.state_wander import StateWander
+from ai.stickfigure.state_dead import StateDead
 
 logger = logging.getLogger(__name__)
 

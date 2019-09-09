@@ -1,7 +1,7 @@
 import random
 import logging
 
-from ai.states import BaseState as State
+from stackfsm.states import BaseState as State
 from utilities.timer import Timer
 from config import Config
 from common.coordinates import Coordinates

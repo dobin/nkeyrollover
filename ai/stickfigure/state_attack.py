@@ -1,13 +1,13 @@
 import logging
 
-from ai.states import BaseState as State
+from stackfsm.states import BaseState as State
 from utilities.timer import Timer
 from system.gamelogic.offensiveattack import OffensiveAttack
 
 import system.gamelogic.enemy
 import system.graphics.renderable
 import system.groupid
-from messaging import messaging, Messaging, Message, MessageType
+from messaging import messaging, MessageType
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ class StateAttack(State):
 
     def __init__(self, brain):
         State.__init__(self, brain)
-        self.attackTimer = Timer() # Timer(0.5, instant=False) # windup and cooldown
+        self.attackTimer = Timer()  # Timer(0.5, instant=False) # windup and cooldown
 
 
     def on_enter(self):

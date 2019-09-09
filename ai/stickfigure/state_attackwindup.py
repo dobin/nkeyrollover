@@ -1,6 +1,6 @@
 import logging
 
-from ai.states import BaseState as State
+from stackfsm.states import BaseState as State
 import system.gamelogic.enemy
 import system.groupid
 from messaging import messaging, MessageType
@@ -23,14 +23,14 @@ class StateAttackWindup(State):
             data=None
         )
 
-        self.setTimer( meEnemy.enemyInfo.attackWindupTime )
+        self.setTimer(meEnemy.enemyInfo.attackWindupTime)
 
     def process(self, dt):
         meAttackable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.attackable.Attackable)
         if meAttackable.isStunned:
             self.brain.pop()
-            self.brain.push("chase")            
+            self.brain.push("chase")
 
         if self.timeIsUp():
             # windup time done, lets do the attack

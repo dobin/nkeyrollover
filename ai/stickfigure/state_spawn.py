@@ -1,6 +1,6 @@
 import logging
 
-from ai.states import BaseState as State
+from stackfsm.states import BaseState as State
 from config import Config
 
 logger = logging.getLogger(__name__)

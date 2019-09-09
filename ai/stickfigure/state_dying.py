@@ -1,7 +1,6 @@
-import random
 import logging
 
-from ai.states import BaseState as State
+from stackfsm.states import BaseState as State
 import system.graphics.renderable
 import system.gamelogic.enemy
 
@@ -19,7 +18,7 @@ class StateDying(State):
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.enemy.Enemy)
 
-        self.setTimer( meEnemy.enemyInfo.dyingTime )
+        self.setTimer(meEnemy.enemyInfo.dyingTime)
 
 
     def process(self, dt):

@@ -2,7 +2,7 @@ import random
 import logging
 
 from common.direction import Direction
-from ai.states import BaseState as State
+from stackfsm.states import BaseState as State
 from utilities.timer import Timer
 from common.coordinates import Coordinates
 from utilities.utilities import Utility
@@ -186,9 +186,9 @@ class StateChase(State):
         attackBaseLocationInverted = meRenderable.getAttackBaseLocationInverted()
 
         playerEntity = EntityFinder.findPlayer(self.brain.owner.world)
-        playerRend = self.brain.owner.world.component_for_entity(
+        plyrRend = self.brain.owner.world.component_for_entity(
             playerEntity, system.graphics.renderable.Renderable)
-        playerLocation = playerRend.getLocation()
+        playerLocation = plyrRend.getLocation()
 
         # check distance, from both the direction we are facing, 
         # and the other one
@@ -223,8 +223,8 @@ class StateChase(State):
         moveY = 0
         # check if player overlaps with out attackpoint
         # if yes, we are too close
-        if (atkLoc.x >= playerRend.coordinates.x
-                and atkLoc.x <= playerRend.coordinates.x + playerRend.texture.width - 1):
+        if (atkLoc.x >= plyrRend.coordinates.x
+                and atkLoc.x <= plyrRend.coordinates.x + plyrRend.texture.width - 1):
             # logging.info("--- Overlap :-(")
             # if refLoc.x >= playerRenderable.coordinates.x:
             if meRenderable.direction is Direction.left:
@@ -238,14 +238,14 @@ class StateChase(State):
             # logging.info("--- No overlap :-)")
 
             playerref = 0
-            if atkLoc.x <= playerLocation.x + int(playerRend.texture.width / 2):
+            if atkLoc.x <= playerLocation.x + int(plyrRend.texture.width / 2):
                 # logging.info("--- Enemy is left of player")
                 playerref = playerLocation.x
             else:
                 # logging.info("--- Enemy is right of player. Ex:{} Px:{}".format(
                 #     attackLoc.x, playerRenderable.coordinates.x
                 # ))
-                playerref = playerLocation.x + playerRend.texture.width - 1
+                playerref = playerLocation.x + plyrRend.texture.width - 1
 
             tempDistance = atkLoc.x - playerref
             if tempDistance > keepDistance:
@@ -263,7 +263,7 @@ class StateChase(State):
         # we can walk diagonally, no elif here
         if attackBaseLocation.y < playerLocation.y:
             moveY = 1
-        elif attackBaseLocation.y > playerLocation.y + playerRend.texture.height - 1:
+        elif attackBaseLocation.y > playerLocation.y + plyrRend.texture.height - 1:
             moveY = -1
 
         # only move if we really move a character
