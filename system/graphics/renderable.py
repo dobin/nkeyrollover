@@ -9,7 +9,7 @@ from typing import List
 from common.coordinates import Coordinates, ExtCoordinates
 from common.direction import Direction
 from texture.texture import Texture
-from world.viewport import Viewport
+from game.viewport import Viewport
 
 logger = logging.getLogger(__name__)
 

@@ -1,7 +1,7 @@
 import logging
 
 from utilities.timer import Timer
-from world.scenes.scenebase import SceneBase
+from game.scenes.scenebase import SceneBase
 from common.coordinates import Coordinates
 from system.graphics.renderable import Renderable
 

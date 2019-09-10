@@ -1,8 +1,8 @@
 import logging
 
-from world.scenes.scene0 import Scene0
-from world.scenes.scene1 import Scene1
-from world.scenes.scene2 import Scene2
+from game.scenes.scene0 import Scene0
+from game.scenes.scene1 import Scene1
+from game.scenes.scene2 import Scene2
 
 logger = logging.getLogger(__name__)
 

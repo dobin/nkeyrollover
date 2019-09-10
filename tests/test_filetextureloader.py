@@ -4,12 +4,12 @@ import unittest
 
 from texture.filetextureloader import FileTextureLoader
 from texture.phenomena.phenomenatype import PhenomenaType
-import world.isunittest
+import game.isunittest
 
 
 class FileTextureLoaderTest(unittest.TestCase):
     def test_loadTexture(self):
-        world.isunittest.setIsUnitTest()
+        game.isunittest.setIsUnitTest()
 
         fileTextureLoader = FileTextureLoader()
         animation = fileTextureLoader.readPhenomena(PhenomenaType.unittest)

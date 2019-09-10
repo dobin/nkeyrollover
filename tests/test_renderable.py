@@ -12,7 +12,7 @@ from system.graphics.renderable import Renderable
 from common.direction import Direction
 
 from tests.mockwin import MockWin
-import world.isunittest
+import game.isunittest
 from system.gamelogic.movementprocessor import MovementProcessor
 from system.io.inputprocessor import InputProcessor
 from system.graphics.renderableminimalprocessor import RenderableMinimalProcessor
@@ -21,7 +21,7 @@ from system.graphics.renderableprocessor import RenderableProcessor
 
 class RenderableTest(unittest.TestCase):
     def test_renderable(self):
-        world.isunittest.setIsUnitTest()
+        game.isunittest.setIsUnitTest()
 
         self.viewport = MockWin(20, 10)
         self.world = esper.World()

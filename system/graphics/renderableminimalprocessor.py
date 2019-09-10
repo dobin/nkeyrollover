@@ -1,7 +1,7 @@
 import esper
 import logging
 
-from world.viewport import Viewport
+from game.viewport import Viewport
 from system.graphics.renderableminimal import RenderableMinimal
 from messaging import messaging, MessageType
 from directmessaging import directMessaging, DirectMessageType

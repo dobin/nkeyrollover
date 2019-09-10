@@ -20,12 +20,12 @@ from system.io.inputprocessor import InputProcessor
 from system.graphics.characteranimationprocessor import CharacterAnimationProcessor
 from system.gamelogic.aiprocessor import AiProcessor
 from system.graphics.renderableminimalprocessor import RenderableMinimalProcessor
-from world.scenemanager import SceneManager
-from world.statusbar import StatusBar
+from game.scenemanager import SceneManager
+from game.statusbar import StatusBar
 from utilities.entityfinder import EntityFinder
 from messaging import messaging
 from directmessaging import directMessaging
-from world.particleemiter import ParticleEmiter
+from game.particleemiter import ParticleEmiter
 
 logger = logging.getLogger(__name__)
 

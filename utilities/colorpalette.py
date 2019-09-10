@@ -2,9 +2,9 @@ import logging
 import curses
 
 from .colortype import ColorType
-from world.viewport import Viewport
+from game.viewport import Viewport
 from .color import Color
-import world.isunittest
+import game.isunittest
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +44,7 @@ class ColorPalette(object):
 
     @staticmethod
     def getColorByColor(color :Color):
-        if world.isunittest.getIsUnitTest():
+        if game.isunittest.getIsUnitTest():
             return color.name
 
         if color is Color.brightwhite:

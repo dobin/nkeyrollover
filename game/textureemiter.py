@@ -1,7 +1,7 @@
 import logging
 from enum import Enum
 
-from world.viewport import Viewport
+from game.viewport import Viewport
 from common.coordinates import Coordinates
 from common.direction import Direction
 from utilities.color import Color

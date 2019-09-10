@@ -1,7 +1,7 @@
 import logging
 import random
 
-from world.scenes.scenebase import SceneBase
+from game.scenes.scenebase import SceneBase
 from common.coordinates import Coordinates
 from messaging import messaging, MessageType
 from collections import deque

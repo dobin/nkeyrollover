@@ -8,19 +8,19 @@ from common.coordinates import Coordinates
 from config import Config
 
 from tests.mockwin import MockWin
-import world.isunittest
+import game.isunittest
 from system.gamelogic.movementprocessor import MovementProcessor
 from system.io.inputprocessor import InputProcessor
 from system.graphics.renderableminimalprocessor import RenderableMinimalProcessor
 from system.graphics.renderableprocessor import RenderableProcessor
-from world.textureemiter import TextureEmiter
+from game.textureemiter import TextureEmiter
 from texture.action.actiontype import ActionType
 from common.direction import Direction
 
 
 class PhenomenaTextureTest(unittest.TestCase):
     def test_phenomenatexture(self):
-        world.isunittest.setIsUnitTest()
+        game.isunittest.setIsUnitTest()
 
         self.viewport = MockWin(20, 10)
         self.world = esper.World()

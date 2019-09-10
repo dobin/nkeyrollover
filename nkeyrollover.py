@@ -5,7 +5,7 @@ import logging
 import locale
 
 from config import Config
-from world.game import Game
+from game.game import Game
 from utilities.utilities import Utility
 from system.io.keyboardinput import KeyboardInput
 from utilities.colorpalette import ColorPalette

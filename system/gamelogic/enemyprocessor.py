@@ -12,7 +12,7 @@ from system.gamelogic.attackable import Attackable
 from messaging import messaging, MessageType
 from system.gamelogic.esperdata import EsperData
 from system.gamelogic.ai import Ai
-import world.uniqueid
+import game.uniqueid
 from system.gamelogic.offensiveattack import OffensiveAttack
 
 logger = logging.getLogger(__name__)
@@ -37,7 +37,7 @@ class EnemyProcessor(esper.Processor):
 
 
     def spawnEnemy(self, message):
-        id = world.uniqueid.getUniqueId()
+        id = game.uniqueid.getUniqueId()
         characterType = message.characterType
         coordinates = message.spawnLocation
 

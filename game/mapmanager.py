@@ -7,7 +7,7 @@ from utilities.color import Color
 import utilities.ansitounicode as ansitounicode
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
-from world.viewport import Viewport
+from game.viewport import Viewport
 from system.graphics.renderableminimal import RenderableMinimal
 from system.graphics.renderable import Renderable
 from common.coordinates import Coordinates

@@ -5,7 +5,7 @@ from config import Config
 from common.direction import Direction
 from system.graphics.particle import Particle
 from system.graphics.particleeffecttype import ParticleEffectType
-from world.viewport import Viewport
+from game.viewport import Viewport
 from messaging import messaging, MessageType
 from directmessaging import directMessaging, DirectMessageType
 import system.gamelogic.attackable
