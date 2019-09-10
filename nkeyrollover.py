@@ -67,8 +67,7 @@ class Keyrollover(object):
 
     def loop(self):
         n = 0
-        targetFrameTime = 1.0 / Config.fps
-        deltaTime = targetFrameTime  # we try to keep it...
+        targetFrameTime = 1.0 / Config.fps  # we try to keep it...
         timeStart = 0
         timeEnd = 0
         workTime = 0
@@ -78,9 +77,9 @@ class Keyrollover(object):
             self.win.border()
 
             self.game.draw1(n)
-            self.game.advance(deltaTime, n)
+            self.game.advance(targetFrameTime, n)
             self.game.draw2(n)
-            self.keyboardInput.advance(deltaTime)
+            self.keyboardInput.advance(targetFrameTime)
 
             # has to be after draw, as getch() does a refresh
             # https://stackoverflow.com/questions/19748685/curses-library-why-does-getch-clear-my-screen
