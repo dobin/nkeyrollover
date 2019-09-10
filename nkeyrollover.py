@@ -63,7 +63,6 @@ class Keyrollover(object):
 
         self.startTime = self.getTimeMs()
         self.currentTime = self.startTime
-        self.workTime = 0
 
 
     def loop(self):
@@ -90,10 +89,9 @@ class Keyrollover(object):
             # fps logistics
             timeEnd = time.time()
             workTime = timeEnd - timeStart
-            self.workTime = workTime
             if workTime > targetFrameTime:
                 logging.warning("{}: Could not keep FPS! Worktime was: {}ms".format(
-                    n, self.workTime * 100.0))
+                    n, workTime * 100.0))
 
             targetSleepTime = targetFrameTime - workTime
             if targetSleepTime < 0:
