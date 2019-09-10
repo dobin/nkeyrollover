@@ -79,7 +79,7 @@ class Keyrollover(object):
             self.win.border()
 
             self.game.draw1(n)
-            self.game.advance(deltaTime)
+            self.game.advance(deltaTime, n)
             self.game.draw2(n)
             self.keyboardInput.advance(deltaTime)
 
@@ -92,12 +92,12 @@ class Keyrollover(object):
             workTime = timeEnd - timeStart
             self.workTime = workTime
             if workTime > targetFrameTime:
-                logging.warning("Could not keep FPS! Worktime was: {}ms".format(
-                    self.workTime * 100.0))
+                logging.warning("{}: Could not keep FPS! Worktime was: {}ms".format(
+                    n, self.workTime * 100.0))
 
             targetSleepTime = targetFrameTime - workTime
             if targetSleepTime < 0:
-                logging.error("Sleep for negative amount: " + str(targetSleepTime))
+                logging.debug("Sleep for negative amount: " + str(targetSleepTime))
             else:
                 time.sleep(targetSleepTime)
             n = n + 1

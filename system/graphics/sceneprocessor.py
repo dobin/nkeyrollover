@@ -52,7 +52,6 @@ class SceneProcessor(esper.Processor):
 
     def setState(self, state):
         if self.state != state:
-            logger.warning("State: {}".format(state))
             self.state = state
 
 
@@ -62,7 +61,6 @@ class SceneProcessor(esper.Processor):
         for message in messaging.getByType(MessageType.EntityDead):
             # if no enemies are alive, we want to go to the next akt
             if self.numEnemiesAlive() == 0:
-                logging.warning("START TIMER")
                 self.screenMoveTimer.start()
                 self.setState(State.pushToNextScene)
             break
@@ -77,7 +75,6 @@ class SceneProcessor(esper.Processor):
 
             if self.state is State.brawl:
                 if self.numEnemiesVisible() == 0:
-                    logging.warning("START TIMER")
                     self.screenMoveTimer.start()
                     self.setState(State.pushToEnemies)
 

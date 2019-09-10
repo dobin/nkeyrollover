@@ -153,13 +153,13 @@ class Game(object):
             self.mapManager.draw()
 
 
-    def advance(self, deltaTime):
+    def advance(self, deltaTime, frame):
         """Advance game, and draw game entities (e.g. player, effects)"""
         if self.pause:
             return
 
-        messaging.nextFrame()
-        directMessaging.nextFrame()
+        messaging.setFrame(frame)
+        directMessaging.setFrame(frame)
         self.gameTime += deltaTime
 
         self.world.process(deltaTime)  # this also draws

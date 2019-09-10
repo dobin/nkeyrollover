@@ -27,8 +27,8 @@ class DirectMessaging(object):
         self.frame = 0
 
 
-    def nextFrame(self):
-        self.frame += 1
+    def setFrame(self, frame):
+        self.frame = frame
 
 
     def add(self, groupId, type, data):
