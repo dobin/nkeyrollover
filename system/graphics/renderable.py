@@ -196,6 +196,14 @@ class Renderable(object):
         return loc
 
 
+    def isOnScreen(self):
+        if (self.coordinates.x > self.viewport.getx()
+                and self.coordinates.x < self.viewport.getRightX()):
+            return True
+        else:
+            return False
+
+
     def isActive(self):
         return self.active
 

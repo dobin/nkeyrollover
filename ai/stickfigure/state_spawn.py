@@ -2,6 +2,7 @@ import logging
 
 from stackfsm.states import BaseState as State
 from config import Config
+import system.graphics.renderable
 
 logger = logging.getLogger(__name__)
 
@@ -14,16 +15,31 @@ class StateSpawn(State):
 
 
     def on_enter(self):
-        self.setTimer(0.1)
+        pass
 
 
     def process(self, dt):
-        if self.timeIsUp():
-            self.brain.pop()
+        # if the screen moves by itself, we may have not a playerlocation
+        # and he will see us standing around stupidly
+        # for message in messaging.getByType(MessageType.PlayerLocation):
 
-            if Config.devMode:
-                # make him come straight at us, sucker
-                logger.info("{} From Spawn To Chase".format(self.owner))
-                self.brain.push("chase")
-            else:
-                self.brain.push("wander")
+        # just check regularly...
+        if self.timeIsUp():
+            if self.isMeOnScreen():
+                logging.info("Bot now on screen, going active!")
+                self.brain.pop()
+                if Config.devMode:
+                    # make him come straight at us, sucker
+                    self.brain.push("chase")
+                else:
+                    self.brain.push("wander")
+
+
+            self.setTimer(0.2)
+
+
+    def isMeOnScreen(self):
+        meRenderable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.graphics.renderable.Renderable)
+
+        return meRenderable.isOnScreen()

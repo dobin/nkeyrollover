@@ -22,11 +22,8 @@ class StateDying(State):
 
 
     def process(self, dt):
-        meRenderable = self.brain.owner.world.component_for_entity(
-            self.brain.owner.entity, system.graphics.renderable.Renderable)
-
         if self.timeIsUp():
-            logger.info("{}: Died enough, set to inactive".format(self.owner))
+            logger.info("{}: Died enough, set to dead".format(self.owner))
             self.brain.pop()
             self.brain.push("dead")
-            meRenderable.setActive(False)
+

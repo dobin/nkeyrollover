@@ -18,6 +18,7 @@ class MessageType(Enum):
 
     EntityStun = 10  # to play stun animation
     EntityDying = 11  # to play death animation
+    EntityDead = 18
 
     SpawnPlayer = 12
     SpawnEnemy = 13
@@ -63,6 +64,7 @@ class Messaging(object):
 
 
     def reset(self):
+        logger.debug("Reset message queue")
         self.messages.clear()
 
 
@@ -73,7 +75,7 @@ class Messaging(object):
     def getByType(self, messageType):
         n = 0
         while n < len(self.messages):
-            if self.messages[n].type is messageType: 
+            if self.messages[n].type is messageType:
                 yield self.messages[n]
             n += 1
 
@@ -81,7 +83,7 @@ class Messaging(object):
     def getByGroupId(self, groupId):
         n = 0
         while n < len(self.messages):
-            if self.messages[n].groupId is groupId: 
+            if self.messages[n].groupId is groupId:
                 yield self.messages[n]
             n += 1
 

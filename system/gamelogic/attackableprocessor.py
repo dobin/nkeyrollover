@@ -35,7 +35,7 @@ class AttackableProcessor(esper.Processor):
             meAttackable.advance(dt)
 
             # check if stun is finished
-            if meAttackable.stunTimer.timeIsUp(): 
+            if meAttackable.stunTimer.timeIsUp():
                 meAttackable.isStunned = False
                 meAttackable.stunTimer.stop()
 

@@ -51,6 +51,7 @@ class Scene2(SceneBase):
         self.isShowMap = True
 
         self.enemyQueue = deque()
+        self.enemySpawned = []
 
         self.maxEnemies = 6
         self.minEnemies = 4
@@ -69,7 +70,7 @@ class Scene2(SceneBase):
         if Config.devMode:
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                characterType = CharacterType.cow,
+                characterType = CharacterType.stickfigure,
                 spawnTime = 0,
                 spawnX = 0,
                 spawnLocation = Coordinates(35, 13),
@@ -79,6 +80,15 @@ class Scene2(SceneBase):
             enemyCell = EnemyCell(
                 id = self.enemyCount,
                 characterType = CharacterType.cow,
+                spawnTime = 0,
+                spawnX = 0,
+                spawnLocation = Coordinates(85, 13),
+            )
+            self.enemyQueue.append(enemyCell)
+
+            enemyCell = EnemyCell(
+                id = self.enemyCount,
+                characterType = CharacterType.stickfigure,
                 spawnTime = 10000,
                 spawnX = 60,
                 spawnLocation = Coordinates(60 + 80, 13),

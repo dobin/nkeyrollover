@@ -98,6 +98,7 @@ class Game(object):
         # e generate: MessageType         EnemyAttack
         # e generate: DirectMessageType   moveEnemy
         # x generate: MessageType         EmitTextureMinimal
+        # e generate: MessageType         EntityDead
         self.world.add_processor(aiProcessor)
 
         # e handle:   DirectMessageType   moveEnemy
@@ -111,6 +112,7 @@ class Game(object):
         self.world.add_processor(offensiveSkillProcessor)
 
         # p handle:   MessageType         PlayerLocation
+        # e handle:   MessageType         EntityDead
         self.world.add_processor(sceneProcessor)
 
         # x handle:   DirectMessageType   receiveDamage
