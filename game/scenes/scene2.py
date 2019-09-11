@@ -29,13 +29,6 @@ class EnemyCell(object):
             self.spawnLocation)
 
 
-# if no enemies alive:
-# - camera pushes forward, advances, till new spawn point reached
-#
-# if no enemies in sight:
-# - camera follows player, till enemy are in sight
-
-
 class Akt(object):
     def __init__(self):
         self.min_x = 0

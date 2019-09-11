@@ -1,11 +1,12 @@
 from config import Config
 
+
 class EnemyInfo(object):
     def __init__(self):
         # static lenghts
         self.attackWindupTime = 1.0
         self.spawnTime = 1.0
-        self.attackTime = 1.0 # should be synchronized with attack animation
+        self.attackTime = 1.0  # should be synchronized with attack animation
         self.dyingTime = 1.0
         self.enemyCanAttackPeriod = 0.3
 

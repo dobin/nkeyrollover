@@ -1,6 +1,6 @@
 import logging
 
-from ai.stickfigure.enemyinfo import EnemyInfo
+from ai.enemyinfo import EnemyInfo
 
 logger = logging.getLogger(__name__)
 

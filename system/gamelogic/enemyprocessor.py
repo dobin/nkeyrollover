@@ -75,7 +75,6 @@ class EnemyProcessor(esper.Processor):
         self.world.add_component(enemy, renderable)
         self.world.add_component(enemy, tenemy)
         self.world.add_component(enemy, Attackable(initialHealth=100))
-
         self.world.add_component(enemy, offensiveAttack)
 
 

@@ -9,7 +9,7 @@ import system.groupid
 logger = logging.getLogger(__name__)
 
 
-class EntityFinder(object): 
+class EntityFinder(object):
     @staticmethod
     def findCharacterByGroupId(world, id):
         for ent, (groupId, renderable, player) in world.get_components(
@@ -72,12 +72,12 @@ class EntityFinder(object):
 
 
     @staticmethod
-    def numEnemiesInState(world, state): 
+    def numEnemiesInState(world, state):
         num = 0
         for ent, ai in world.get_component(
             system.gamelogic.ai.Ai,
         ):
-            if ai.brain.state.name == state: 
+            if ai.brain.state.name == state:
                 num += 1
 
         return num
@@ -91,4 +91,3 @@ class EntityFinder(object):
             num += 1
 
         return num
-
