@@ -20,7 +20,7 @@ class _Config:
         'maxx': 79
     }
 
-    moveBorderRight = 70
+    moveBorderRight = 65
     moveBorderLeft = 8
 
     # system config
