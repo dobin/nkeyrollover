@@ -1,6 +1,4 @@
-
-
-class Config:
+class _Config:
     fps = 60
 
     rows = 25
@@ -28,7 +26,7 @@ class Config:
     # system config
     devMode = False
     maxParticles = 128
-    version = str(0.02)
+    version = str(0.1)
 
     # some z orders
     zMax = 25
@@ -47,3 +45,6 @@ class Config:
     enemiesInStateChase = 2
 
     playerAttackAnimationLen = 0.2  # not yet used
+
+
+Config = _Config()
