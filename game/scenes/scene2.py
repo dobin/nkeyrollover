@@ -105,11 +105,11 @@ class Scene2(SceneBase):
         n = 0
         while n < numStickfigures:
             playerTrapX = waveIdx * intraWaveXoffset
-            spawnLocation = self.getRandomSpawnCoords()
+            spawnLocation = self.getRandomSpawnCoords(rightSideBias=0.8)
             enemyCell = EnemyCell(
                 id = self.enemyCount,
                 characterType = CharacterType.stickfigure,
-                spawnTime = waveIdx * intraWaveSpawnTime,
+                spawnTime = waveIdx * intraWaveSpawnTime + n,
                 spawnX = playerTrapX,
                 spawnLocation = spawnLocation,
             )
@@ -121,7 +121,7 @@ class Scene2(SceneBase):
         n = 0
         while n < numCows:
             playerTrapX = waveIdx * intraWaveXoffset
-            spawnLocation = self.getRandomSpawnCoords()
+            spawnLocation = self.getRandomSpawnCoords(rightSideBias=0.8)
             enemyCell = EnemyCell(
                 id = self.enemyCount,
                 characterType = CharacterType.cow,
@@ -135,7 +135,6 @@ class Scene2(SceneBase):
 
 
     def spawnEnemy(self, enemyCell):
-        logging.warning("Spawn enemy")
         messaging.add(
             type=MessageType.SpawnEnemy,
             data=enemyCell,
@@ -166,7 +165,7 @@ class Scene2(SceneBase):
 
         enemyCell = self.enemyQueue[0]
         if enemyCell.spawnX < playerPosition.x:
-            logging.warning("Spawn: Pos: {}".format(playerPosition.x))
+            logger.info("Spawn: Pos: {}".format(playerPosition.x))
             self.spawnEnemy(enemyCell)
             self.enemySpawned.append(enemyCell)
             del self.enemyQueue[0]
@@ -179,7 +178,7 @@ class Scene2(SceneBase):
         # spawn more enemies?
         enemyCell = self.enemyQueue[0]
         if enemyCell.spawnTime < self.time:
-            logging.warning("Spawn: Time: {}".format(enemyCell.spawnTime))
+            logger.info("Spawn: Time: {}".format(enemyCell.spawnTime))
             self.spawnEnemy(enemyCell)
             self.enemySpawned.append(enemyCell)
             del self.enemyQueue[0]
@@ -193,11 +192,11 @@ class Scene2(SceneBase):
         self.time += dt
 
 
-    def getRandomSpawnCoords(self):
+    def getRandomSpawnCoords(self, rightSideBias=0.5):
         # X
-        side = random.choice([True, False])
         myx = 0
-        if side:
+        roll = random.random()
+        if roll < rightSideBias:
             myx = self.viewport.getx() + Config.columns + 1
         else:
             myx = self.viewport.getx() - 1  # - enemy.texture.width
