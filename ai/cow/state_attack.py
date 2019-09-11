@@ -71,11 +71,16 @@ class StateAttack(State):
                         'direction': meRenderable.direction,
                     }
                 )
+
+                if meRenderable.direction is Direction.left:
+                    x = -1
+                else:
+                    x = 1
                 directMessaging.add(
                     groupId = meGroupId.getId(),
                     type = DirectMessageType.moveEnemy,
                     data = {
-                        'x': -1,
+                        'x': x,
                         'y': 0,
                         'dontChangeDirection': False,
                     },
