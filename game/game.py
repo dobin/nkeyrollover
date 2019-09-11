@@ -76,6 +76,7 @@ class Game(object):
             viewport=self.viewport,
             sceneManager=self.sceneManager,
         )
+        self.sceneProcessor = sceneProcessor  # for stats
 
         # Lots of comments to check if the order of the processors really work,
         # as Messaging looses all messages on every iteration (use DirectMessaging 
@@ -200,8 +201,8 @@ class Game(object):
 
 
     def drawStats(self):
-        x = 4
-        y = 4
+        x = 2
+        y = 1
 
         o = []
 
@@ -212,7 +213,7 @@ class Game(object):
             + str(EntityFinder.numEnemiesInState(world=self.world, state='attack')))
         o.append('  Chasing   : '
             + str(EntityFinder.numEnemiesInState(world=self.world, state='chase')))
-        o.append('  Wadndering: '
+        o.append('  Wandering: '
             + str(EntityFinder.numEnemiesInState(world=self.world, state='wander')))
 
         playerEntity = EntityFinder.findPlayer(self.world)
@@ -221,6 +222,12 @@ class Game(object):
 
         o.append('Player:')
         o.append('  Location:' + str(playerRenderable.getLocation()))
+
+        o.append('Scene:')
+        o.append('  Name:' + self.sceneManager.currentScene.name)
+        o.append('  Scne State:' + str(self.sceneProcessor.state))
+        o.append('  Enemies Alive:' + str(self.sceneProcessor.numEnemiesAlive()))
+        o.append('  Enemies Visible:' + str(self.sceneProcessor.numEnemiesVisible()))
 
         n = 0
         while n < len(o):
