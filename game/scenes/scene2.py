@@ -194,13 +194,7 @@ class Scene2(SceneBase):
 
 
     def getRandomSpawnCoords(self):
-        if Config.devMode:
-            coordinates = Coordinates(
-                x=40,
-                y=10 + random.randrange(0, 10),
-            )
-            return coordinates
-
+        # X
         side = random.choice([True, False])
         myx = 0
         if side:
@@ -208,8 +202,10 @@ class Scene2(SceneBase):
         else:
             myx = self.viewport.getx() - 1  # - enemy.texture.width
 
+        # Y
         minY = Config.areaMoveable['miny']
         maxY = Config.areaMoveable['maxy']
         myy = random.randint(minY, maxY)
+
         spawnCoords = Coordinates(myx, myy)
         return spawnCoords

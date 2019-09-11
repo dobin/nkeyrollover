@@ -42,4 +42,4 @@ class StateSpawn(State):
         meRenderable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.graphics.renderable.Renderable)
 
-        return meRenderable.isOnScreen()
+        return meRenderable.isOnScreen(wiggle=4)

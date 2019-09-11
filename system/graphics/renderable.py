@@ -196,9 +196,9 @@ class Renderable(object):
         return loc
 
 
-    def isOnScreen(self):
-        if (self.coordinates.x > self.viewport.getx()
-                and self.coordinates.x < self.viewport.getRightX()):
+    def isOnScreen(self, wiggle :int =0):
+        if (self.coordinates.x > self.viewport.getx() - wiggle
+                and self.coordinates.x < self.viewport.getRightX() + wiggle):
             return True
         else:
             return False
