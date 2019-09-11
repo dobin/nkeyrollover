@@ -93,6 +93,7 @@ class OffensiveAttack():
         direction = self.parentRenderable.getDirection()
 
         # EmitActionTexture will create Attack message for the player/enemy
+        # (data['damage'] is not None)
         # as we dont know here what the attack locations are,
         # as they depend on the specific attack
         messaging.add(

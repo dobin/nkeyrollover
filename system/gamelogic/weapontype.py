@@ -14,3 +14,5 @@ class WeaponType(Enum):
 
     heal = 8
     port = 9
+
+    charge = 10  # for cow

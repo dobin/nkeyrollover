@@ -49,7 +49,8 @@ class EnemyProcessor(esper.Processor):
         tenemy = Enemy(name=name)
         ai = Ai(
             name=name,
-            esperData=esperData)
+            esperData=esperData,
+            characterType=characterType)
 
         texture = CharacterTexture(
             characterAnimationType=CharacterAnimationType.standing,

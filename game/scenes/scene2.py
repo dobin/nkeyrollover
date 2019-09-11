@@ -59,8 +59,8 @@ class Scene2(SceneBase):
         if Config.devMode:
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                characterType = CharacterType.stickfigure,
-                spawnTime = 0,
+                characterType = CharacterType.cow,
+                spawnTime = None,
                 spawnX = 0,
                 spawnLocation = Coordinates(35, 13),
             )
@@ -69,7 +69,7 @@ class Scene2(SceneBase):
             enemyCell = EnemyCell(
                 id = self.enemyCount,
                 characterType = CharacterType.cow,
-                spawnTime = 0,
+                spawnTime = None,
                 spawnX = 0,
                 spawnLocation = Coordinates(85, 13),
             )
@@ -78,7 +78,7 @@ class Scene2(SceneBase):
             enemyCell = EnemyCell(
                 id = self.enemyCount,
                 characterType = CharacterType.stickfigure,
-                spawnTime = 10000,
+                spawnTime = None,
                 spawnX = 60,
                 spawnLocation = Coordinates(60 + 80, 13),
             )

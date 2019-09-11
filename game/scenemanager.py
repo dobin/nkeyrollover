@@ -23,7 +23,7 @@ class SceneManager(object):
         self.scenes = [
             Scene0(viewport=viewport, world=world),  # intro logo
             Scene1(viewport=viewport, world=world),  # intro animation
-            Scene2(viewport=viewport, world=world),  # mapManager
+            Scene2(viewport=viewport, world=world),  # map
         ]
         self.currentSceneIdx = 0
         self.currentScene = self.scenes[self.currentSceneIdx]
