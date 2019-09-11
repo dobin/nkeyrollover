@@ -91,16 +91,24 @@ class SceneProcessor(esper.Processor):
                 # player is left side of screen (screen pushes player right)
                 if playerScreenCoords.x != 10:
                     distance = int(playerScreenCoords.x - 10)
-                    if distance > 0:
+                    if distance < 0:
+                        self.viewport.adjustViewport(-1)
+                        self.screenMoveTimer.reset()
+                    elif distance > 0:
                         self.viewport.adjustViewport(1)
+                        self.screenMoveTimer.reset()
 
             elif self.state is State.pushToEnemies:
                 # screen follows player
                 # player is middle of the screen
                 if playerScreenCoords.x != self.xCenter:
                     distance = int(playerScreenCoords.x - self.xCenter)
-                    if distance > 0:
+                    if distance < 0:
+                        self.viewport.adjustViewport(-1)
+                        self.screenMoveTimer.reset()
+                    elif distance > 0:
                         self.viewport.adjustViewport(1)
+                        self.screenMoveTimer.reset()
 
             elif self.state is State.brawl:
                 # player can move freely
