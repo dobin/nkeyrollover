@@ -11,7 +11,7 @@ from texture.character.charactertype import CharacterType
 logger = logging.getLogger(__name__)
 
 
-class EnemyCell(object): 
+class EnemyCell(object):
     def __init__(self, id, characterType, spawnTime, spawnX, spawnLocation):
         self.id = id
         self.characterType :CharacterType = characterType
@@ -20,7 +20,7 @@ class EnemyCell(object):
         self.spawnLocation = spawnLocation
 
 
-    def __repr__(self): 
+    def __repr__(self):
         return "{} {} @{} @{} @{}".format(
             self.id,
             self.characterType,
@@ -47,10 +47,6 @@ class Scene2(SceneBase):
         self.enemySpawned = []
 
         self.maxEnemies = 6
-        self.minEnemies = 4
-        self.maxEnemiesAttacking = 2
-        self.maxEnemiesChasing = 4
-
         self.time = 0.0
         self.enemyCount = 0
 
@@ -109,7 +105,7 @@ class Scene2(SceneBase):
             enemyCell = EnemyCell(
                 id = self.enemyCount,
                 characterType = CharacterType.stickfigure,
-                spawnTime = waveIdx * intraWaveSpawnTime + n,
+                spawnTime = None,  # waveIdx * intraWaveSpawnTime + n,
                 spawnX = playerTrapX,
                 spawnLocation = spawnLocation,
             )
@@ -125,7 +121,7 @@ class Scene2(SceneBase):
             enemyCell = EnemyCell(
                 id = self.enemyCount,
                 characterType = CharacterType.cow,
-                spawnTime = waveIdx * intraWaveSpawnTime,
+                spawnTime = None,  # waveIdx * intraWaveSpawnTime,
                 spawnX = playerTrapX,
                 spawnLocation = spawnLocation,
             )
@@ -156,11 +152,14 @@ class Scene2(SceneBase):
         self.spawnPlayer()
 
 
-    def handlePosition(self, playerPosition, viewportX):
+    def handlePosition(self, playerPosition, viewportX, numEnemiesAlive):
         # spawn more enemies?
-        # note that will not spawn all enemies at a certain position at once, 
+        # note that will not spawn all enemies at a certain position at once,
         # but only on every move of the player
         if len(self.enemyQueue) == 0:
+            return
+
+        if numEnemiesAlive > self.maxEnemies:
             return
 
         enemyCell = self.enemyQueue[0]
@@ -171,12 +170,15 @@ class Scene2(SceneBase):
             del self.enemyQueue[0]
 
 
-    def handleTime(self): 
+    def handleTime(self):
         if len(self.enemyQueue) == 0:
             return
 
         # spawn more enemies?
         enemyCell = self.enemyQueue[0]
+        if enemyCell.spawnTime is None:
+            return
+
         if enemyCell.spawnTime < self.time:
             logger.info("Spawn: Time: {}".format(enemyCell.spawnTime))
             self.spawnEnemy(enemyCell)

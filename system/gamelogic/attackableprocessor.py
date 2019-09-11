@@ -27,7 +27,7 @@ class AttackableProcessor(esper.Processor):
         self.advance(dt)
 
 
-    def advance(self, dt): 
+    def advance(self, dt):
         for ent, meAttackable in self.world.get_component(
             Attackable
         ):
@@ -64,13 +64,17 @@ class AttackableProcessor(esper.Processor):
     def checkReceiveDamage(self):
         for msg in directMessaging.getByType(DirectMessageType.receiveDamage):
             entity = EntityFinder.findCharacterByGroupId(self.world, msg.groupId)
+            if entity is None:
+                # May be already deleted?
+                continue
+
             meRenderable = self.world.component_for_entity(
                 entity, Renderable)
             meAttackable = self.world.component_for_entity(
                 entity, Attackable)
             meGroupId = self.world.component_for_entity(
                 entity, GroupId)
-            damage = msg.data                
+            damage = msg.data
 
             # change health
             meAttackable.handleHit(damage)

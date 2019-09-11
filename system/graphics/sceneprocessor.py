@@ -121,12 +121,16 @@ class SceneProcessor(esper.Processor):
                     self.viewport.adjustViewport(distance)
             # /adjust viewport on move
 
-            self.sceneManager.handlePosition(message.data, self.viewport.getx())
+            # let the scene decide if we need more enemies
+            self.sceneManager.currentScene.handlePosition(
+                message.data,
+                self.viewport.getx(),
+                self.numEnemiesAlive())
 
         for message in messaging.getByType(MessageType.PlayerKeypress):
             self.sceneManager.handlePlayerKeyPress()
 
-        # move screen
+        # move screen animation
         if self.screenMoveTimer.timeIsUp() and self.lastKnownPlayerPos is not None:
             playerScreenCoords = self.viewport.getScreenCoords(
                 self.lastKnownPlayerPos)

@@ -56,10 +56,6 @@ class SceneManager(object):
             self.nextScene()
 
 
-    def handlePosition(self, playerPosition, viewportX):
-        self.currentScene.handlePosition(playerPosition, viewportX)
-
-
-    def handlePlayerKeyPress(self): 
+    def handlePlayerKeyPress(self):
         if self.currentScene.anyKeyFinishesScene:
             self.nextScene()
