@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 
-import curses, time, signal, sys
+import curses
+import time
+import signal
+import sys
 import logging
 import locale
+import yaml
 
 from config import Config
 from game.game import Game
@@ -58,11 +62,22 @@ class Keyrollover(object):
         self.win.clear()
         self.win.border()
 
+        self.loadConfig()
         self.game = Game(win=self.win, menuwin=self.menuwin)
         self.keyboardInput = KeyboardInput(game=self.game)
 
         self.startTime = self.getTimeMs()
         self.currentTime = self.startTime
+
+
+    def loadConfig(self):
+        with open("nkeyrollover.yaml", 'r') as stream:
+            try:
+                d = yaml.safe_load(stream)
+                if 'isdevmode' in d:
+                    Config.devMode = d['isdevmode']
+            except yaml.YAMLError as exc:
+                logging.error(exc)
 
 
     def loop(self):

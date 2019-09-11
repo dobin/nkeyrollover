@@ -74,7 +74,7 @@ class FileTextureLoader(object):
         return animation
 
 
-    def loadYamlIntoAnimation(self, filename, animation): 
+    def loadYamlIntoAnimation(self, filename, animation):
         with open(filename, 'r') as stream:
             data = yaml.safe_load(stream)
 
@@ -99,7 +99,7 @@ class FileTextureLoader(object):
             else:
                 animation.originalDirection = Direction.none
 
-        # colors: 
+        # colors:
         # - <Color>: white, brightblue, ...
         # - ColorType.<ColorType>: background, world, ...
         for (n, color) in enumerate(data['frameColors']):
