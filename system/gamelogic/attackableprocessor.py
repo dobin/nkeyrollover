@@ -77,7 +77,7 @@ class AttackableProcessor(esper.Processor):
             damage = msg.data
 
             # change health
-            meAttackable.handleHit(damage)
+            meAttackable.adjustHealth(-1 * damage)
 
             # dont stun if there is no health left
             if meAttackable.getHealth() > 0.0:

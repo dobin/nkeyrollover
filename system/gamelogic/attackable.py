@@ -19,18 +19,14 @@ class Attackable():
         self.health = self.initialHealth
 
 
-    def handleHit(self, damage :int):
-        self.health -= damage
-        logger.info("Got damage: {}  new health: {}".format(damage, self.health))
-
-
-    def heal(self, healAmount):
-        self.health += healAmount
+    def adjustHealth(self, health :int):
+        self.health += health
+        logger.info("Got damage: {}  new health: {}".format(health, self.health))
 
 
     def getHealth(self):
         return self.health
 
 
-    def advance(self, dt): 
+    def advance(self, dt):
         self.stunTimer.advance(dt)

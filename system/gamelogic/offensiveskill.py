@@ -152,7 +152,7 @@ class OffensiveSkill(object):
     def skillHeal(self):
         meAttackable = self.esperData.world.component_for_entity(
             self.esperData.entity, system.gamelogic.attackable.Attackable)
-        meAttackable.heal(50)
+        meAttackable.adjustHealth(50)
 
 
     def skillPort(self):
