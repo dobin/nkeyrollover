@@ -31,15 +31,6 @@ class StateChase(State):
         self.canAttackTimer = Timer()
         self.lastKnownPlayerPosition = None
 
-        self.hitCd = [
-            Coordinates(0, 0),
-            Coordinates(1, 0),
-            Coordinates(0, 1),
-            Coordinates(1, 1),
-        ]
-        self.hitCdWidth = 2
-        self.hitCdHeight = 2
-
 
     def on_enter(self):
         meEnemy = self.brain.owner.world.component_for_entity(
@@ -103,6 +94,8 @@ class StateChase(State):
         logging.info("{}: (slow) Check if i can attack player".format(self.name))
         meRenderable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.graphics.renderable.Renderable)
+        meOffensiveAttack = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.offensiveattack.OffensiveAttack)
 
         if self.lastKnownPlayerPosition is None:
             # we may not yet have received a location.
@@ -116,10 +109,14 @@ class StateChase(State):
 
         loc = meRenderable.getAttackBaseLocation()
         direction = meRenderable.getDirection()
-        hitLocations = self.getHitLocations(loc, direction)
+        currentWeaponHitArea = meOffensiveAttack.getCurrentWeaponHitArea()
+        self.updateWeaponHitArea(
+            currentWeaponHitArea,
+            loc,
+            direction)
 
         # only one of the hitlocations need to hit
-        for hitLocation in hitLocations:
+        for hitLocation in currentWeaponHitArea.hitCd:
             canAttack = Utility.pointIn(
                 hitLocation,
                 playerLocation)
@@ -156,16 +153,14 @@ class StateChase(State):
         return res
 
 
-    def getHitLocations(self, loc, direction):
-        carr = copy.deepcopy(self.hitCd)
-
+    def updateWeaponHitArea(self, weaponHitArea, loc, direction):
+        carr = weaponHitArea.hitCd
         for c in carr:
             c.x += loc.x
             c.y += loc.y
             if direction is Direction.left:
-                c.x -= (self.hitCdWidth - 1)
-
-        return carr
+                c.x -= (weaponHitArea.hitCdWidth - 1)
+        #return carr
 
 
     def getInputChase(self):

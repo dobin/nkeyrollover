@@ -37,7 +37,6 @@ class StateAttack(State):
 
         # self.attackTimer.setTimer(meEnemy.enemyInfo.attackTime)
         # self.setTimer(meEnemy.enemyInfo.attackTime)
-
         self.stepsTodo = 30
         self.attackTimer.setTimer(0.1)
         self.setTimer(3.0)
