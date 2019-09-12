@@ -57,21 +57,10 @@ class CharacterTexture(AnimationTexture):
                     self.previousAnimation
                 ))
                 pass
-        #else:
-        #    self.previousAnimation = None
-
-        # cow: ignore walking
-        if not interrupt and self.previousAnimation is not None:
-            logging.info("{}: Wanted to change state to {}, but its not interrupted=True, while I am".format(
-                self.name,
-                characterAnimationType
-            ))
-            return
-
 
         logger.info("{}: Change texture to: {}".format(
             self.name, characterAnimationType))
-
+        self.setActive(True)
         self.characterAnimationType = characterAnimationType
         self.animation = self.characterAnimationManager.getAnimation(
             characterAnimationType, direction, subtype)

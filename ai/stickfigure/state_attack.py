@@ -27,14 +27,14 @@ class StateAttack(State):
             self.brain.owner.entity, system.groupid.GroupId)
 
         self.attackTimer.init()
+        self.attackTimer.setTimer(meEnemy.enemyInfo.attackTime)
+        self.setTimer(meEnemy.enemyInfo.attackTime)
+
         messaging.add(
             type=MessageType.EntityAttack,
             groupId=meGroupId.getId(),
             data=None
         )
-
-        self.attackTimer.setTimer(meEnemy.enemyInfo.attackTime)
-        self.setTimer(meEnemy.enemyInfo.attackTime)
 
 
     def process(self, dt):

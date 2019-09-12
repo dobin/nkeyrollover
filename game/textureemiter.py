@@ -49,7 +49,9 @@ class TextureEmiter(object):
     ):
         texture :ActionTexture = ActionTexture(
             actionType=actionTextureType,
-            direction=direction)
+            direction=direction,
+            name="ActionTexture (actionTextureType={} fromPlayer={}, damage={})".format(
+                actionTextureType, fromPlayer, damage))
 
         if direction is Direction.left:
             location.x -= texture.width

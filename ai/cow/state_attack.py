@@ -3,11 +3,9 @@ import logging
 from stackfsm.states import BaseState as State
 from utilities.timer import Timer
 from system.graphics.renderable import Renderable
-from texture.action.actiontype import ActionType
 from common.direction import Direction
 from directmessaging import directMessaging, DirectMessageType
-
-
+from system.gamelogic.offensiveattack import OffensiveAttack
 import system.gamelogic.enemy
 import system.graphics.renderable
 import system.groupid
@@ -66,19 +64,10 @@ class StateAttack(State):
                     self.brain.owner.entity, Renderable)
                 meGroupId = self.brain.owner.world.component_for_entity(
                     self.brain.owner.entity, system.groupid.GroupId)
-                location = meRenderable.getWeaponBaseLocation()
 
-                actionTextureType = ActionType.charge
-                messaging.add(
-                    type=MessageType.EmitActionTexture,
-                    data={
-                        'actionTextureType': actionTextureType,
-                        'location': location,
-                        'fromPlayer': False,
-                        'damage': 100,
-                        'direction': meRenderable.direction,
-                    }
-                )
+                offensiveAttack = self.brain.owner.world.component_for_entity(
+                    self.brain.owner.entity, OffensiveAttack)
+                offensiveAttack.attack()
 
                 if meRenderable.direction is Direction.left:
                     x = -1
@@ -91,6 +80,7 @@ class StateAttack(State):
                         'x': x,
                         'y': 0,
                         'dontChangeDirection': False,
+                        'updateTexture': False,
                     },
                 )
             else:
@@ -98,6 +88,7 @@ class StateAttack(State):
 
         if self.timeIsUp():
             # too long attacking. lets switch to chasing
-            logger.info("{}: ---------- Too long attacking, switch to chasing".format(self.owner))
+            logger.info("{}: Too long attacking, switch to chasing".format(
+                self.owner))
             self.brain.pop()
             self.brain.push("chase")

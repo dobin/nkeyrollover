@@ -63,12 +63,14 @@ class MovementProcessor(esper.Processor):
                 msg.groupId,
                 msg.data['x'],
                 msg.data['y'],
-                msg.data['dontChangeDirection'])
+                msg.data['dontChangeDirection'],
+                msg.data['updateTexture'])
 
 
     def moveRenderable(
         self, renderable, groupId, x :int =0, y :int =0,
-        dontChangeDirection :bool =False
+        dontChangeDirection :bool =False,
+        updateTexture :bool =True
     ):
         """Move this renderable in x/y direction, if allowed. Update direction too"""
         didMove = False
@@ -106,15 +108,16 @@ class MovementProcessor(esper.Processor):
                 renderable.coordinates.y += y
                 didMove = True
 
-        # notify texture manager
-        messaging.add(
-            groupId = groupId,
-            type = MessageType.EntityMoved,
-            data = {
-                'didChangeDirection': didChangeDirection,
-                'x': x,
-                'y': y,
-            }
-        )
+        if updateTexture:
+            # notify texture manager
+            messaging.add(
+                groupId = groupId,
+                type = MessageType.EntityMoved,
+                data = {
+                    'didChangeDirection': didChangeDirection,
+                    'x': x,
+                    'y': y,
+                }
+            )
 
         return didMove

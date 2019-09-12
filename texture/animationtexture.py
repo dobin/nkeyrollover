@@ -86,10 +86,17 @@ class AnimationTexture(Texture):
             # logger.debug("Drawing nonactive sprite")
             return
 
+        if self.animation is None:
+            m = "{}: Trying to access animation which does not exist"
+            raise Exception(m.format(self.name))
+
         if self.frameIndex >= len(self.animation.arr):
-            m = "Trying to access frameId {} on arr with len {}, actual len {}"
+            m = "{}: Trying to access frameId {} on arr with len {}, actual len {}"
             raise Exception(m.format(
-                self.frameIndex, self.animation.frameCount, len(self.animation.arr)))
+                self.name,
+                self.frameIndex,
+                self.animation.frameCount,
+                len(self.animation.arr)))
 
         if self.overwriteColor is not None:
             color = self.overwriteColor
@@ -121,7 +128,8 @@ class AnimationTexture(Texture):
         """Return sum of all animation times in current sprite"""
         n = 0.0
         if self.animation.frameTime is None:
-            logger.error("Texture {} does not have frametime".format(self.animation))
+            logger.error("{}: Texture {} does not have frametime".format(
+                self.name, self.animation))
         for time in self.animation.frameTime:
             n += time
         return n

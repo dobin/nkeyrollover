@@ -30,14 +30,15 @@ class OffensiveAttack():
                 WeaponType.hit: 35,
                 WeaponType.hitSquare: 35,
                 WeaponType.hitLine: 35,
-                WeaponType.jumpKick: 30
+                WeaponType.jumpKick: 30,
             }
-        else: 
+        else:
             self.damage = {
                 WeaponType.hit: 20,
                 WeaponType.hitSquare: 20,
                 WeaponType.hitLine: 20,
-                WeaponType.jumpKick: 20
+                WeaponType.jumpKick: 20,
+                WeaponType.charge: 10,
             }
 
 
@@ -57,7 +58,8 @@ class OffensiveAttack():
 
 
     def switchWeapon(self, weaponType :WeaponType):
-        logger.info("Switch to weaopn: " + str(weaponType))
+        logger.info("{} Switch to weapon: {}".format(
+            self.parentChar, weaponType))
         self.weaponType = weaponType
 
 
@@ -88,6 +90,8 @@ class OffensiveAttack():
             actionTextureType = ActionType.hitSquare
         elif self.weaponType is WeaponType.hitLine:
             actionTextureType = ActionType.hitLine
+        elif self.weaponType is WeaponType.charge:
+            actionTextureType = ActionType.charge
 
         location = self.parentRenderable.getWeaponBaseLocation()
         direction = self.parentRenderable.getDirection()

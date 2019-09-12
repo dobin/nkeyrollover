@@ -2,18 +2,19 @@ import esper
 import random
 import logging
 
-from system.gamelogic.enemy import Enemy
 from texture.character.characteranimationtype import CharacterAnimationType
 from texture.character.charactertexture import CharacterTexture
+from texture.character.charactertype import CharacterType
 from system.groupid import GroupId
 from system.graphics.renderable import Renderable
-
+from system.gamelogic.enemy import Enemy
 from system.gamelogic.attackable import Attackable
-from messaging import messaging, MessageType
 from system.gamelogic.esperdata import EsperData
 from system.gamelogic.ai import Ai
-import game.uniqueid
 from system.gamelogic.offensiveattack import OffensiveAttack
+from system.gamelogic.weapontype import WeaponType
+from messaging import messaging, MessageType
+import game.uniqueid
 
 logger = logging.getLogger(__name__)
 
@@ -70,6 +71,10 @@ class EnemyProcessor(esper.Processor):
         offensiveAttack = OffensiveAttack(
             parentChar=tenemy,
             parentRenderable=renderable)
+        if characterType is CharacterType.stickfigure:
+            offensiveAttack.switchWeapon(WeaponType.hitSquare)
+        elif characterType is CharacterType.cow:
+            offensiveAttack.switchWeapon(WeaponType.charge)
 
         self.world.add_component(enemy, ai)
         self.world.add_component(enemy, groupId)

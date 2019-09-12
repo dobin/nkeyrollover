@@ -38,36 +38,12 @@ class CharacterAnimationProcessor(esper.Processor):
             meRenderable = self.world.component_for_entity(
                 entity, system.graphics.renderable.Renderable)
 
-            if random.choice([True, False]):
-                logger.info(meRenderable.name + " Death animation deluxe")
-                animationIndex = random.randint(0, 1)
-
-                effect = random.choice(
-                    [TextureEmiterEffect.explode, TextureEmiterEffect.pushback])
-                messaging.add(
-                    type=MessageType.EmitTexture,
-                    data = {
-                        'effect': effect,
-                        'pos': meRenderable.getLocation(),
-                        'frame': meRenderable.texture.getCurrentFrameCopy(),
-                        'charDirection': meRenderable.direction,                        
-                    }
-                )
-
-                # really necessary? it is disabled..
-                # should be before message add, to get frame copy of dead animation?
-                meRenderable.texture.changeAnimation(
-                    CharacterAnimationType.dying,
-                    meRenderable.direction,
-                    animationIndex)
-                meRenderable.setActive(False)
-
-            else:
-                animationIndex = random.randint(0, 1)
-                meRenderable.texture.changeAnimation(
-                    CharacterAnimationType.dying,
-                    meRenderable.direction,
-                    animationIndex)
+            animationIndex = random.randint(0, 1)
+            meRenderable.texture.changeAnimation(
+                characterAnimationType=CharacterAnimationType.dying,
+                direction=meRenderable.direction,
+                subtype=animationIndex,
+                interrupt=True)
 
 
     def animationUpdateMove(self):

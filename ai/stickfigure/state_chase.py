@@ -274,6 +274,7 @@ class StateChase(State):
                 data = {
                     'x': moveX,
                     'y': moveY,
-                    'dontChangeDirection': dontChangeDirection
+                    'dontChangeDirection': dontChangeDirection,
+                    'updateTexture': True
                 },
             )

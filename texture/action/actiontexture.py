@@ -8,8 +8,8 @@ logger = logging.getLogger(__name__)
 
 
 class ActionTexture(AnimationTexture):
-    def __init__(self, actionType=None, direction=None):
-        super(ActionTexture, self).__init__()
+    def __init__(self, actionType=None, direction=None, name=''):
+        super(ActionTexture, self).__init__(name=name)
         self.actionAnimationManager = ActionAnimationManager()
 
         if actionType is not None:
