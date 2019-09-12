@@ -78,9 +78,14 @@ class FileTextureLoader(object):
         with open(filename, 'r') as stream:
             data = yaml.safe_load(stream)
 
-        animation.endless = data['endless']
-        animation.advanceByStep = data['advanceByStep']
-        animation.frameColors = data['frameColors']
+        try:
+            animation.endless = data['endless']
+            animation.advanceByStep = data['advanceByStep']
+            animation.frameColors = data['frameColors']
+        except TypeError as error:
+            raise Exception("Error, missing field in yaml file {}, error {}".format(
+                filename, error
+            ))
 
         # FrameTime can be non-existing, e.g. if 'advanceByStep' = True,
         # or if it is one frame and endless...

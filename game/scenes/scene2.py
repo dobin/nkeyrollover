@@ -59,7 +59,7 @@ class Scene2(SceneBase):
         if Config.devMode:
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                characterType = CharacterType.cow,
+                characterType = CharacterType.dragon,
                 spawnTime = None,
                 spawnX = 0,
                 spawnLocation = Coordinates(35, 13),

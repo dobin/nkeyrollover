@@ -1,0 +1,8 @@
+endless: False
+advanceByStep: False
+# the sum of this frametime has to be syncronized with ai.cow.state_attack timer
+frameTime:
+  - 3.0
+frameColors:
+  - white
+direction: left
