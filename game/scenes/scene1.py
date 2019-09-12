@@ -42,7 +42,8 @@ class Scene1(SceneBase):
 
         texturePlayer = CharacterTexture(
             characterAnimationType=CharacterAnimationType.standing,
-            characterType=CharacterType.player)
+            characterType=CharacterType.player,
+            name='Player')
         coordinates = Coordinates(24, 13)
         renderablePlayer = Renderable(
             texture=texturePlayer,

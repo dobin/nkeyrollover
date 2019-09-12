@@ -100,7 +100,8 @@ class CharacterAnimationProcessor(esper.Processor):
 
                 playerRenderable.texture.changeAnimation(
                     CharacterAnimationType.hitting,
-                    playerRenderable.direction)
+                    playerRenderable.direction,
+                    interrupt=True)
 
             if message.type == MessageType.attackWindup:
                 entity = EntityFinder.findCharacterByGroupId(
@@ -110,7 +111,8 @@ class CharacterAnimationProcessor(esper.Processor):
 
                 entityRenderable.texture.changeAnimation(
                     CharacterAnimationType.hitwindup,
-                    entityRenderable.direction)
+                    entityRenderable.direction,
+                    interrupt=True)
 
             if message.type == MessageType.EntityAttack:
                 entity = EntityFinder.findCharacterByGroupId(
@@ -120,10 +122,11 @@ class CharacterAnimationProcessor(esper.Processor):
 
                 entityRenderable.texture.changeAnimation(
                     CharacterAnimationType.hitting,
-                    entityRenderable.direction)
+                    entityRenderable.direction,
+                    interrupt=True)
 
 
-    def animationUpdateStun(self): 
+    def animationUpdateStun(self):
         for message in messaging.getByType(MessageType.EntityStun):
             entity = EntityFinder.findCharacterByGroupId(self.world, message.groupId)
             entityRenderable = self.world.component_for_entity(
@@ -131,4 +134,5 @@ class CharacterAnimationProcessor(esper.Processor):
 
             entityRenderable.texture.changeAnimation(
                 CharacterAnimationType.stun,
-                entityRenderable.direction)
+                entityRenderable.direction,
+                interrupt=True)

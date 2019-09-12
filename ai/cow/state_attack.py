@@ -44,12 +44,20 @@ class StateAttack(State):
         self.attackTimer.setTimer(0.1)
         self.setTimer(3.0)
 
+        # even though we attack multiple times (each step)
+        # only send EntityAttack once (change animation)
+        messaging.add(
+            type=MessageType.EntityAttack,
+            groupId=meGroupId.getId(),
+            data={}
+        )
+
 
     def process(self, dt):
         self.attackTimer.advance(dt)
 
         if self.attackTimer.timeIsUp():
-            logger.info("{} -------- > I'm attacking".format(self.owner))
+            logger.info("{}: I'm attacking".format(self.owner))
 
             if self.stepsTodo > 0:
                 self.attackTimer.reset()

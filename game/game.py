@@ -112,6 +112,10 @@ class Game(object):
         # p generate: MessageType         EmitParticleEffect (skill)
         self.world.add_processor(offensiveSkillProcessor)
 
+        # x handle:   MessageType         EmitTextureMinimal
+        # p generate: MessageType         PlayerAttack. (via texture emiter)
+        self.world.add_processor(renderableMinimalProcessor)
+
         # p handle:   MessageType         PlayerLocation
         # e handle:   MessageType         EntityDead
         self.world.add_processor(sceneProcessor)
@@ -133,9 +137,6 @@ class Game(object):
         self.world.add_processor(enemyProcessor)
         self.world.add_processor(playerProcessor)
 
-        # x handle:   MessageType         EmitTextureMinimal
-        # p generate: MessageType         PlayerAttack.
-        self.world.add_processor(renderableMinimalProcessor)
 
         # p handle:   MessageType         PlayerAttack. (convert to damage)
         # e handle:   MessageType         EnemyAttack

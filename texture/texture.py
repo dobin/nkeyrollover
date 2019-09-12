@@ -17,8 +17,6 @@ class Texture(object):
         self.overwriteColorTimer = Timer(0.25, active=False)
         self.overwriteColor = None
 
-        self.name = None
-
 
     def init(self):
         pass

@@ -31,7 +31,8 @@ class Keyrollover(object):
     def init(self):
         locale.setlocale(locale.LC_ALL, '')
         Utility.setupLogger()
-
+        self.loadConfig()
+        
         if Config.devMode:
             logging.basicConfig(
                 filename='app.log',
@@ -62,7 +63,7 @@ class Keyrollover(object):
         self.win.clear()
         self.win.border()
 
-        self.loadConfig()
+
         self.game = Game(win=self.win, menuwin=self.menuwin)
         self.keyboardInput = KeyboardInput(game=self.game)
 
