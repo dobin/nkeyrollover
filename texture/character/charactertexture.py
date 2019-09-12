@@ -4,7 +4,7 @@ from common.direction import Direction
 from texture.animationtexture import AnimationTexture
 from texture.character.characteranimationmanager import CharacterAnimationManager
 from texture.character.characteranimationtype import CharacterAnimationType
-from .charactertype import CharacterType
+from texture.character.charactertexturetype import CharacterTextureType
 
 logger = logging.getLogger('CharacterTexture')
 
@@ -12,7 +12,7 @@ logger = logging.getLogger('CharacterTexture')
 class CharacterTexture(AnimationTexture):
     def __init__(
             self,
-            characterType :CharacterType,
+            characterTextureType :CharacterTextureType,
             characterAnimationType :CharacterAnimationType =None,
             direction :Direction =Direction.none,
             head :str =None,
@@ -23,7 +23,7 @@ class CharacterTexture(AnimationTexture):
         self.previousAnimation = None
 
         self.characterAnimationManager = CharacterAnimationManager(
-            head=head, body=body, characterType=characterType)
+            head=head, body=body, characterTextureType=characterTextureType)
 
         self.characterAnimationType = characterAnimationType
         if characterAnimationType is not None:

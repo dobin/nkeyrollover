@@ -1,4 +1,3 @@
-import time
 import logging
 import curses
 from enum import Enum
@@ -12,7 +11,7 @@ from texture.phenomena.phenomenatype import PhenomenaType
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.character.characteranimationtype import CharacterAnimationType
 from texture.character.charactertexture import CharacterTexture
-from texture.character.charactertype import CharacterType
+from texture.character.charactertexturetype import CharacterTextureType
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +41,7 @@ class Scene1(SceneBase):
 
         texturePlayer = CharacterTexture(
             characterAnimationType=CharacterAnimationType.standing,
-            characterType=CharacterType.player,
+            characterTextureType=CharacterTextureType.player,
             name='Player')
         coordinates = Coordinates(24, 13)
         renderablePlayer = Renderable(
@@ -61,12 +60,12 @@ class Scene1(SceneBase):
         self.anyKeyFinishesScene = True
 
 
-    def advance(self, dt): 
+    def advance(self, dt):
         self.myTimer.advance(dt)
         self.handleState()
 
 
-    def enter(self): 
+    def enter(self):
         self.addRenderable(self.renderableCopter)
         self.addRenderable(self.renderablePlayer)
 

@@ -26,6 +26,7 @@ from utilities.entityfinder import EntityFinder
 from messaging import messaging
 from directmessaging import directMessaging
 from game.particleemiter import ParticleEmiter
+from game.enemyloader import EnemyLoader
 
 logger = logging.getLogger(__name__)
 
@@ -48,6 +49,7 @@ class Game(object):
             world=self.world,
             mapManager=self.mapManager)
         self.particleEmiter = ParticleEmiter()
+        self.enemyLoader = EnemyLoader()
 
         self.pause :bool = False
         self.gameRunning :bool = True
@@ -62,7 +64,8 @@ class Game(object):
         renderableProcessor = RenderableProcessor()
         playerProcessor = PlayerProcessor(
             viewport=self.viewport)
-        enemyProcessor = EnemyProcessor(viewport=self.viewport)
+        enemyProcessor = EnemyProcessor(
+            viewport=self.viewport, enemyLoader=self.enemyLoader)
         attackableProcessor = AttackableProcessor()
         offensiveAttackProcessor = OffensiveAttackProcessor()
         offensiveSkillProcessor = OffensiveSkillProcessor()

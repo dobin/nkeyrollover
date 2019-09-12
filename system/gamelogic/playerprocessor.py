@@ -3,7 +3,7 @@ import logging
 
 import system.gamelogic.player
 from messaging import messaging, MessageType
-from texture.character.charactertype import CharacterType
+from texture.character.charactertexturetype import CharacterTextureType
 from texture.character.charactertexture import CharacterTexture
 from system.gamelogic.esperdata import EsperData
 from texture.character.characteranimationtype import CharacterAnimationType
@@ -52,7 +52,7 @@ class PlayerProcessor(esper.Processor):
         player = system.gamelogic.player.Player()
 
         texture = CharacterTexture(
-            characterType=CharacterType.player,
+            characterTextureType=CharacterTextureType.player,
             characterAnimationType=CharacterAnimationType.standing,
             name='Player')
         renderable = Renderable(

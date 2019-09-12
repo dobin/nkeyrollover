@@ -4,7 +4,6 @@ import copy
 from texture.action.actiontype import ActionType
 from config import Config
 from system.gamelogic.weapontype import WeaponType
-from utilities.recordholder import RecordHolder
 from utilities.timer import Timer
 from messaging import messaging, MessageType
 from common.coordinates import Coordinates
@@ -113,10 +112,6 @@ class OffensiveAttack():
 
 
     def attack(self):
-        if not self.cooldownTimer.timeIsUp():
-            RecordHolder.recordPlayerAttackCooldown(
-                self.weaponType, time=self.cooldownTimer.getTimeLeft())
-            return
         self.cooldownTimer.reset()  # activate cooldown
         self.durationTimer.reset()  # will setActive(false) when time is up
 

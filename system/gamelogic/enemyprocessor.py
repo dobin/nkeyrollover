@@ -4,7 +4,7 @@ import logging
 
 from texture.character.characteranimationtype import CharacterAnimationType
 from texture.character.charactertexture import CharacterTexture
-from texture.character.charactertype import CharacterType
+from game.enemytype import EnemyType
 from system.groupid import GroupId
 from system.graphics.renderable import Renderable
 from system.gamelogic.enemy import Enemy
@@ -20,8 +20,9 @@ logger = logging.getLogger(__name__)
 
 
 class EnemyProcessor(esper.Processor):
-    def __init__(self, viewport):
+    def __init__(self, viewport, enemyLoader):
         super().__init__()
+        self.enemyLoader = enemyLoader
         self.viewport = viewport
 
 
@@ -37,27 +38,28 @@ class EnemyProcessor(esper.Processor):
             self.spawnEnemy(message.data)
 
 
-    def spawnEnemy(self, message):
+    def spawnEnemy(self, data):
         id = game.uniqueid.getUniqueId()
-        characterType = message.characterType
-        coordinates = message.spawnLocation
+        enemyType = data.enemyType
+        coordinates = data.spawnLocation
+
+        enemySeed = self.enemyLoader.getSeedForEnemy(enemyType)
 
         name = "Bot " + str(id)
-        # Enemy
         groupId = GroupId(id=id)
         enemy = self.world.create_entity()
         esperData = EsperData(self.world, enemy, name)
-        tenemy = Enemy(name=name)
+        tenemy = Enemy(name=name, enemyInfo=enemySeed.enemyInfo)
         ai = Ai(
             name=name,
             esperData=esperData,
-            characterType=characterType)
+            enemyType=enemyType)
 
         texture = CharacterTexture(
             characterAnimationType=CharacterAnimationType.standing,
             head=self.getRandomHead(),
             body=self.getRandomBody(),
-            characterType=characterType,
+            characterTextureType=enemySeed.characterTextureType,
             name=name)
 
         renderable = Renderable(
@@ -71,10 +73,7 @@ class EnemyProcessor(esper.Processor):
         offensiveAttack = OffensiveAttack(
             parentChar=tenemy,
             parentRenderable=renderable)
-        if characterType is CharacterType.stickfigure:
-            offensiveAttack.switchWeapon(WeaponType.hitSquare)
-        elif characterType is CharacterType.cow:
-            offensiveAttack.switchWeapon(WeaponType.charge)
+        offensiveAttack.switchWeapon(enemySeed.weaponType)
 
         self.world.add_component(enemy, ai)
         self.world.add_component(enemy, groupId)

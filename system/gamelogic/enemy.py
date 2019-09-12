@@ -6,10 +6,10 @@ logger = logging.getLogger(__name__)
 
 
 class Enemy():
-    def __init__(self, name):
+    def __init__(self, name, enemyInfo):
         self.isPlayer = False
         self.name :str = 'Bot' + name
-        self.enemyInfo :EnemyInfo = EnemyInfo()
+        self.enemyInfo :EnemyInfo = enemyInfo
 
 
     def advance(self, deltaTime :float):

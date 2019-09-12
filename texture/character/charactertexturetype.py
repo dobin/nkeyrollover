@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class CharacterType(Enum):
+class CharacterTextureType(Enum):
     player = 0
     stickfigure = 1
     cow = 2

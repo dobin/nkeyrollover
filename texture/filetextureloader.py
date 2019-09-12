@@ -3,7 +3,7 @@ import yaml
 import os
 
 from texture.character.characteranimationtype import CharacterAnimationType
-from texture.character.charactertype import CharacterType
+from texture.character.charactertexturetype import CharacterTextureType
 from texture.animation import Animation
 from common.direction import Direction
 from utilities.colorpalette import ColorPalette
@@ -18,11 +18,11 @@ class FileTextureLoader(object):
 
 
     def readAnimation(
-        self, characterType :CharacterType,
+        self, characterTextureType :CharacterTextureType,
         characterAnimationType :CharacterAnimationType,
         isUnitTest :bool =False
     ) -> Animation:
-        ct = characterType.name
+        ct = characterTextureType.name
         cat = characterAnimationType.name
         filename = "data/textures/character/{}/{}_{}.ascii".format(ct, ct, cat)
 

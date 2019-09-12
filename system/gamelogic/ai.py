@@ -9,16 +9,16 @@ from ai.stickfigure.state_dying import StateDying
 from ai.stickfigure.state_spawn import StateSpawn
 from ai.stickfigure.state_wander import StateWander
 from ai.stickfigure.state_dead import StateDead
-from texture.character.charactertype import CharacterType
+from game.enemytype import EnemyType
 
 logger = logging.getLogger(__name__)
 
 
 class Ai():
-    def __init__(self, esperData, name, characterType):
+    def __init__(self, esperData, name, enemyType):
         self.esperData = esperData
         self.offensiveAttackEntity = None
-        self.characterType = characterType
+        self.enemyType = enemyType
 
         self.name :str = 'Bot' + name
         self.initAi()
@@ -28,9 +28,9 @@ class Ai():
         self.brain :Brain = Brain(self.esperData)
 
         self.brain.register(StateSpawn)
-        if self.characterType is CharacterType.cow:
+        if self.enemyType is EnemyType.cow:
             self.brain.register(CowStateAttack)
-        else: 
+        else:
             self.brain.register(StateAttack)
         self.brain.register(StateChase)
         self.brain.register(StateWander)

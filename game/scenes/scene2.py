@@ -6,15 +6,15 @@ from common.coordinates import Coordinates
 from messaging import messaging, MessageType
 from collections import deque
 from config import Config
-from texture.character.charactertype import CharacterType
+from game.enemytype import EnemyType
 
 logger = logging.getLogger(__name__)
 
 
 class EnemyCell(object):
-    def __init__(self, id, characterType, spawnTime, spawnX, spawnLocation):
+    def __init__(self, id, enemyType, spawnTime, spawnX, spawnLocation):
         self.id = id
-        self.characterType :CharacterType = characterType
+        self.enemyType = enemyType
         self.spawnTime = spawnTime
         self.spawnX = spawnX
         self.spawnLocation = spawnLocation
@@ -23,7 +23,7 @@ class EnemyCell(object):
     def __repr__(self):
         return "{} {} @{} @{} @{}".format(
             self.id,
-            self.characterType,
+            self.enemyType,
             self.spawnTime,
             self.spawnX,
             self.spawnLocation)
@@ -59,7 +59,7 @@ class Scene2(SceneBase):
         if Config.devMode:
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                characterType = CharacterType.dragon,
+                enemyType = EnemyType.dragon,
                 spawnTime = None,
                 spawnX = 0,
                 spawnLocation = Coordinates(35, 13),
@@ -68,7 +68,7 @@ class Scene2(SceneBase):
 
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                characterType = CharacterType.cow,
+                enemyType = EnemyType.cow,
                 spawnTime = None,
                 spawnX = 0,
                 spawnLocation = Coordinates(85, 13),
@@ -77,7 +77,7 @@ class Scene2(SceneBase):
 
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                characterType = CharacterType.stickfigure,
+                enemyType = EnemyType.stickfigure,
                 spawnTime = None,
                 spawnX = 60,
                 spawnLocation = Coordinates(60 + 80, 13),
@@ -104,7 +104,7 @@ class Scene2(SceneBase):
             spawnLocation = self.getRandomSpawnCoords(rightSideBias=0.8)
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                characterType = CharacterType.stickfigure,
+                enemyType = EnemyType.stickfigure,
                 spawnTime = None,  # waveIdx * intraWaveSpawnTime + n,
                 spawnX = playerTrapX,
                 spawnLocation = spawnLocation,
@@ -120,7 +120,7 @@ class Scene2(SceneBase):
             spawnLocation = self.getRandomSpawnCoords(rightSideBias=0.8)
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                characterType = CharacterType.cow,
+                enemyType = EnemyType.cow,
                 spawnTime = None,  # waveIdx * intraWaveSpawnTime,
                 spawnX = playerTrapX,
                 spawnLocation = spawnLocation,

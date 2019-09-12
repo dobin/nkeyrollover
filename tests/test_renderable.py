@@ -5,7 +5,7 @@ import esper
 
 from common.coordinates import Coordinates
 from config import Config
-from texture.character.charactertype import CharacterType
+from texture.character.charactertexturetype import CharacterTextureType
 from texture.character.charactertexture import CharacterTexture
 from texture.character.characteranimationtype import CharacterAnimationType
 from system.graphics.renderable import Renderable
@@ -42,7 +42,7 @@ class RenderableTest(unittest.TestCase):
         playerEntity = self.world.create_entity()
 
         texture = CharacterTexture(
-            characterType=CharacterType.player,
+            characterTextureType=CharacterTextureType.player,
             characterAnimationType=CharacterAnimationType.standing,
             name='Player')
 

@@ -16,3 +16,4 @@ class WeaponType(Enum):
     port = 9
 
     charge = 10  # for cow
+    spitfire = 11  # for dragon

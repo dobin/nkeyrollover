@@ -2,7 +2,7 @@ import logging
 
 from common.direction import Direction
 from texture.character.characteranimationtype import CharacterAnimationType
-from .charactertype import CharacterType
+from texture.character.charactertexturetype import CharacterTextureType
 from texture.filetextureloader import FileTextureLoader
 from utilities.utilities import Utility
 
@@ -11,22 +11,22 @@ logger = logging.getLogger(__name__)
 
 class CharacterAnimationManager(object):
     def __init__(
-        self, characterType :CharacterType, head=None, body=None,
+        self, characterTextureType :CharacterTextureType, head=None, body=None,
     ):
         self.animationsLeft = {}
         self.animationsRight = {}
         self.fileTextureLoader = FileTextureLoader()
-        self.characterType = characterType
+        self.characterTextureType = characterTextureType
 
         for animationType in CharacterAnimationType:
             self.animationsLeft[animationType] = self.createAnimations(
-                animationType, characterType, Direction.left)
+                animationType, characterTextureType, Direction.left)
         for animationType in CharacterAnimationType:
             self.animationsRight[animationType] = self.createAnimations(
-                animationType, characterType, Direction.right)
+                animationType, characterTextureType, Direction.right)
 
         # update head, bodies of stickfigure enemies
-        if characterType is CharacterType.stickfigure:
+        if characterTextureType is CharacterTextureType.stickfigure:
             if head is not None:
                 self.updateAllAnimations(1, 0, head, skip=CharacterAnimationType.dying)
 
@@ -62,14 +62,14 @@ class CharacterAnimationManager(object):
             return self.animationsRight[characterAnimationType][subtype]
 
 
-    def createAnimations(self, animationType, characterType, direction):
+    def createAnimations(self, animationType, characterTextureType, direction):
         animations = []
 
         if animationType is CharacterAnimationType.dying:
             n = 0
             while n < 2:
                 animation = self.fileTextureLoader.readAnimation(
-                    characterType=characterType,
+                    characterTextureType=characterTextureType,
                     characterAnimationType=animationType)
                 if animation.originalDirection is not direction:
                     Utility.mirrorFrames(animation.arr)
@@ -78,13 +78,13 @@ class CharacterAnimationManager(object):
                 n += 1
         else:
             animation = self.fileTextureLoader.readAnimation(
-                characterType=characterType,
+                characterTextureType=characterTextureType,
                 characterAnimationType=animationType)
             if animation.originalDirection is not direction:
                 Utility.mirrorFrames(animation.arr)                
             animations.append(animation)
 
         for animation in animations:
-            Utility.checkAnimation(animation, animationType, self.characterType)
+            Utility.checkAnimation(animation, animationType, self.characterTextureType)
 
         return animations
