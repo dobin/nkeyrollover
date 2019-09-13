@@ -14,7 +14,6 @@ from directmessaging import directMessaging, DirectMessageType
 from utilities.entityfinder import EntityFinder
 from game.textureemiter import TextureEmiterEffect
 
-
 logger = logging.getLogger(__name__)
 
 

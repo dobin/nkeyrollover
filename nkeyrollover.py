@@ -20,7 +20,6 @@ class Keyrollover(object):
         self.win = None
         self.menuwin = None
         self.game = None
-        self.currentTime = None
         self.init()
 
 
@@ -62,9 +61,6 @@ class Keyrollover(object):
 
         self.game = Game(win=self.win, menuwin=self.menuwin)
         self.keyboardInput = KeyboardInput(game=self.game)
-
-        self.startTime = Utility.getTimeMs()
-        self.currentTime = self.startTime
 
 
     def loadConfig(self):

@@ -1,6 +1,7 @@
 import logging
 
 from messaging import messaging, MessageType
+import system.singletons.gametime
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +41,7 @@ class KeyboardInput(object):
             type=MessageType.PlayerKeypress,
             data={
                 'key': key,
-                'time': self.game.getGameTime(),
+                'time': system.singletons.gametime.getGameTime(),
             }
         )
 
