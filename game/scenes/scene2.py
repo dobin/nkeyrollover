@@ -7,6 +7,9 @@ from messaging import messaging, MessageType
 from collections import deque
 from config import Config
 from game.enemytype import EnemyType
+from utilities.entityfinder import EntityFinder
+import system.groupid
+from directmessaging import directMessaging, DirectMessageType
 
 logger = logging.getLogger(__name__)
 
@@ -51,6 +54,18 @@ class Scene2(SceneBase):
         self.enemyCount = 0
 
         self.prepareEnemies()
+        self.speechBubbles = [
+            {
+                'timeSpawn': 1.0,
+                'timeShow': 1.0,
+                'text': 'I am here to chew game and kick ass'
+            },
+            {
+                'timeSpawn': 2.0,
+                'timeShow': 1.0,
+                'text': 'And I am all out of gum'
+            },
+        ]
 
 
     def prepareEnemies(self):
@@ -168,6 +183,25 @@ class Scene2(SceneBase):
             self.spawnEnemy(enemyCell)
             self.enemySpawned.append(enemyCell)
             del self.enemyQueue[0]
+
+        # handle speech bubbles here, too
+        if len(self.speechBubbles) > 0:
+            speechEntry = self.speechBubbles[0]
+            if self.time > speechEntry['timeSpawn']:
+                playerEnt = EntityFinder.findPlayer(self.world)
+                playerGroupId = self.world.component_for_entity(
+                    playerEnt, system.groupid.GroupId)
+
+                directMessaging.add(
+                    groupId = playerGroupId.getId(),
+                    type = DirectMessageType.activateSpeechBubble,
+                    data = {
+                        'text': speechEntry['text'],
+                        'time': speechEntry['timeShow'],
+                        'waitTime': 0,
+                    }
+                )
+                self.speechBubbles.pop(0)
 
 
     def handleTime(self):
