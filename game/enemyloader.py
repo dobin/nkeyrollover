@@ -14,6 +14,7 @@ class EnemySeed(object):
         self.characterTextureType = None
         self.weaponType = None
         self.health = None
+        self.stunTime = None
         self.enemyInfo = EnemyInfo()
 
 
@@ -39,6 +40,7 @@ class EnemyLoader(object):
         enemySeed.characterTextureType = CharacterTextureType[data['characterTextureType']]
         enemySeed.weaponType = WeaponType[data['weaponType']]
         enemySeed.health = data['health']
+        enemySeed.stunTime = data['stunTime']
         enemyInfo = data['enemyInfo']
         try:
             enemySeed.enemyInfo.attackWindupTime = enemyInfo['attackWindupTime']
@@ -52,7 +54,6 @@ class EnemyLoader(object):
             enemySeed.enemyInfo.chaseTimeRnd = enemyInfo['chaseTimeRnd']
             enemySeed.enemyInfo.chaseStepDelay = enemyInfo['chaseStepDelay']
             enemySeed.enemyInfo.attackWindupTime = enemyInfo['attackWindupTime']
-            enemySeed.enemyInfo.stunTime = enemyInfo['stunTime']
         except KeyError as error:
             raise Exception("Error, missing field in yaml file {}, error {}".format(
                 filename, error

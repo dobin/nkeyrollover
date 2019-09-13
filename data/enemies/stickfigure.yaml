@@ -12,4 +12,4 @@ enemyInfo:
   chaseTime: 5.0
   chaseTimeRnd: 2.0
   chaseStepDelay: 0.2
-  stunTime: 1.0
+stunTime: 0.75

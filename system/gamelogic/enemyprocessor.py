@@ -50,7 +50,9 @@ class EnemyProcessor(esper.Processor):
         enemy = self.world.create_entity()
         esperData = EsperData(self.world, enemy, name)
         tenemy = Enemy(name=name, enemyInfo=enemySeed.enemyInfo)
-        attackable = Attackable(initialHealth=enemySeed.health)
+        attackable = Attackable(
+            initialHealth=enemySeed.health,
+            stunTime=enemySeed.stunTime)
         ai = Ai(
             name=name,
             esperData=esperData,

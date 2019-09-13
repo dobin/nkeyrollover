@@ -16,5 +16,3 @@ class EnemyInfo(object):
         # movement speed
         self.wanderStepDelay = 0.3
         self.chaseStepDelay = 0.2
-
-        self.stunTime = 1.0

@@ -50,6 +50,9 @@ class PlayerProcessor(esper.Processor):
         playerEntity = self.world.create_entity()
         groupId = GroupId(id=myid)
         player = system.gamelogic.player.Player()
+        attackable = Attackable(
+            initialHealth=100,
+            stunTime=0.75)
 
         texture = CharacterTexture(
             characterTextureType=CharacterTextureType.player,
@@ -70,8 +73,6 @@ class PlayerProcessor(esper.Processor):
         offensiveAttack = OffensiveAttack(
             parentChar=player,
             parentRenderable=renderable)
-
-        attackable = Attackable(initialHealth=100)
 
         self.world.add_component(playerEntity, groupId)
         self.world.add_component(playerEntity, characterSkill)

@@ -101,18 +101,20 @@ class AttackableProcessor(esper.Processor):
 
             # dont stun if there is no health left
             if meAttackable.getHealth() > 0.0:
-                stunTime = 0.75
-                meAttackable.stunTimer.setTimer(timerValue=stunTime)
-                meAttackable.stunTimer.start()
-                meAttackable.isStunned = True
+                if meAttackable.isStunnable():
+                    stunTime = meAttackable.stunTime
+                    meAttackable.stunTimer.setTimer(timerValue=stunTime)
+                    meAttackable.stunTimer.start()
+                    meAttackable.isStunned = True
+                    meAttackable.addStun(stunTime=stunTime)
 
-                messaging.add(
-                    type=MessageType.EntityStun,
-                    data={
-                        'timerValue': stunTime,
-                    },
-                    groupId = meGroupId.getId(),
-                )
+                    messaging.add(
+                        type=MessageType.EntityStun,
+                        data={
+                            'timerValue': stunTime,
+                        },
+                        groupId = meGroupId.getId(),
+                    )
 
                 # color the texture if we are not dead
                 meRenderable.texture.setOverwriteColorFor(

@@ -24,15 +24,11 @@ class Keyrollover(object):
         self.init()
 
 
-    def getTimeMs(self): 
-        return int(round(time.time() * 1000))
-
-
     def init(self):
         locale.setlocale(locale.LC_ALL, '')
         Utility.setupLogger()
         self.loadConfig()
-        
+
         if Config.devMode:
             logging.basicConfig(
                 filename='app.log',
@@ -67,7 +63,7 @@ class Keyrollover(object):
         self.game = Game(win=self.win, menuwin=self.menuwin)
         self.keyboardInput = KeyboardInput(game=self.game)
 
-        self.startTime = self.getTimeMs()
+        self.startTime = Utility.getTimeMs()
         self.currentTime = self.startTime
 
 
