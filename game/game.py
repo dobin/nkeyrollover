@@ -20,13 +20,14 @@ from system.io.inputprocessor import InputProcessor
 from system.graphics.characteranimationprocessor import CharacterAnimationProcessor
 from system.gamelogic.aiprocessor import AiProcessor
 from system.graphics.renderableminimalprocessor import RenderableMinimalProcessor
+from system.gamelogic.gametimeprocessor import GametimeProcessor
 from game.scenemanager import SceneManager
 from game.statusbar import StatusBar
+from game.particleemiter import ParticleEmiter
+from game.enemyloader import EnemyLoader
 from utilities.entityfinder import EntityFinder
 from messaging import messaging
 from directmessaging import directMessaging
-from game.particleemiter import ParticleEmiter
-from game.enemyloader import EnemyLoader
 
 logger = logging.getLogger(__name__)
 
@@ -53,12 +54,12 @@ class Game(object):
 
         self.pause :bool = False
         self.gameRunning :bool = True
-        self.gameTime :float = 0.0
         self.showStats = False
         self.showEnemyWanderDestination = False
 
         particleProcessor = ParticleProcessor(viewport=self.viewport)
 
+        gametimeProcessor = GametimeProcessor()
         aiProcessor = AiProcessor()
         characterAnimationProcessor = CharacterAnimationProcessor()
         renderableProcessor = RenderableProcessor()
@@ -84,6 +85,7 @@ class Game(object):
         # Lots of comments to check if the order of the processors really work,
         # as Messaging looses all messages on every iteration (use DirectMessaging 
         # instead)
+        self.world.add_processor(gametimeProcessor)
 
         # KeyboardInput:getInput()
         # p generate  MessageType         PlayerKeypress
@@ -166,7 +168,6 @@ class Game(object):
 
         messaging.setFrame(frame)
         directMessaging.setFrame(frame)
-        self.gameTime += deltaTime
 
         self.world.process(deltaTime)  # this also draws
         self.mapManager.advance(deltaTime)
@@ -199,10 +200,6 @@ class Game(object):
         logger.info("Stats: Renderable: {}  RenderableMinimal: {}".format(
             renderable, renderableMinimal
         ))
-
-
-    def getGameTime(self):
-        return self.gameTime
 
 
     def drawStats(self):

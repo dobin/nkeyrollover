@@ -2,7 +2,7 @@ import logging
 import collections
 
 from utilities.timer import Timer
-from utilities.utilities import Utility
+import system.singletons.gametime
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +13,7 @@ class Attackable():
         self.initialHealth = initialHealth
 
         self.maxStunCount = stunCount
-        self.stunTimeFrame = stunTime * 1000
+        self.stunTimeFrame = stunTimeFrame
         self.stunTime = stunTime
 
         self.isStunned = False
@@ -23,13 +23,13 @@ class Attackable():
 
 
     def isStunnable(self):
-        timeRef = Utility.getTimeMs() - self.stunTimeFrame
+        timeRef = system.singletons.gametime.getGameTime() - self.stunTimeFrame
         stunCount = 0
         for stunned in self.stunnedQueue:
             if stunned['time'] > timeRef:
                 stunCount += 1
 
-        if stunCount < self.maxStunCount:
+        if stunCount <= self.maxStunCount:
             logger.debug("Stun check: Can be stunned")
             return True
         else:
@@ -39,7 +39,7 @@ class Attackable():
 
     def addStun(self, stunTime):
         self.stunnedQueue.append({
-            'time': Utility.getTimeMs(),
+            'time': system.singletons.gametime.getGameTime(),
             'stunTime': stunTime
         })
 

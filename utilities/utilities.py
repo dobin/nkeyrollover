@@ -1,6 +1,5 @@
 import logging
 import math
-import time
 
 from texture.character.charactertexturetype import CharacterTextureType
 from texture.character.characteranimationtype import CharacterAnimationType
@@ -11,11 +10,6 @@ logger = logging.getLogger(__name__)
 
 
 class Utility(object):
-    @staticmethod
-    def getTimeMs():
-        return int(round(time.time() * 1000))
-
-
     @staticmethod
     def distance(coord1 :Coordinates, coord2 :Coordinates):
         res = {
