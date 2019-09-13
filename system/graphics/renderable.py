@@ -32,6 +32,9 @@ class Renderable(object):
         self.direction = direction
         self.name = name
 
+        # skill on left side
+        self.attackBaseLocation = Coordinates(-1, 1)
+
         # if parent is given, this position will always be relative
         # to that parent
         self.parent :Renderable = parent
@@ -174,11 +177,11 @@ class Renderable(object):
         # Slow
         loc = copy.copy(self.getLocation())
 
-        loc.y += 1
+        loc.y += self.attackBaseLocation.y
         if self.direction is Direction.left:
-            loc.x -= 1
+            loc.x += self.attackBaseLocation.x
         else:
-            loc.x += self.texture.width - 1 + 1
+            loc.x += self.texture.width - 1 - self.attackBaseLocation.x
 
         return loc
 
@@ -187,11 +190,11 @@ class Renderable(object):
         # Slow
         loc = copy.copy(self.getLocation())
 
-        loc.y += 1
+        loc.y += self.attackBaseLocation.y
         if self.direction is Direction.right:
-            loc.x -= 1
+            loc.x += self.attackBaseLocation.x
         else:
-            loc.x += self.texture.width - 1 + 1
+            loc.x += self.texture.width - 1 - self.attackBaseLocation.x
 
         return loc
 

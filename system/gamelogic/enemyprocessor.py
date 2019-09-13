@@ -15,6 +15,7 @@ from system.gamelogic.offensiveattack import OffensiveAttack
 from system.gamelogic.weapontype import WeaponType
 from messaging import messaging, MessageType
 import game.uniqueid
+from common.coordinates import Coordinates
 
 logger = logging.getLogger(__name__)
 
@@ -72,6 +73,10 @@ class EnemyProcessor(esper.Processor):
             coordinates=coordinates,
             active=True,
             name=name)
+        renderable.attackBaseLocation = Coordinates(
+            enemySeed.attackBaseLocation['x'],
+            enemySeed.attackBaseLocation['y']
+        )
 
         offensiveAttack = OffensiveAttack(
             parentChar=tenemy,

@@ -5,6 +5,7 @@ from game.enemytype import EnemyType
 from system.gamelogic.weapontype import WeaponType
 from texture.character.charactertexturetype import CharacterTextureType
 from ai.enemyinfo import EnemyInfo
+from common.coordinates import Coordinates
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +18,7 @@ class EnemySeed(object):
         self.stunTime = None
         self.stunCount = None
         self.stunTimeFrame = None
+        self.attackBaseLocation = None
         self.enemyInfo = EnemyInfo()
 
 
@@ -45,6 +47,14 @@ class EnemyLoader(object):
         enemySeed.stunTime = data['stunTime']
         enemySeed.stunCount = data['stunCount']
         enemySeed.stunTimeFrame = data['stunTimeFrame']
+
+        if 'attackBaseLocation' in data:
+            enemySeed.attackBaseLocation = data['attackBaseLocation']
+        else:
+            enemySeed.attackBaseLocation = {
+                'x': -1,
+                'y': 1
+            }
 
         enemyInfo = data['enemyInfo']
         try:

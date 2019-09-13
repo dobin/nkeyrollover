@@ -84,6 +84,11 @@ class OffensiveAttack():
             Coordinates(8, 12),
             Coordinates(10, 12),
             Coordinates(12, 12),
+
+            Coordinates(6, 13),
+            Coordinates(8, 13),
+            Coordinates(10, 13),
+            Coordinates(12, 13),
         ]
 
         self.weaponHitArea = {
@@ -94,7 +99,7 @@ class OffensiveAttack():
             WeaponType.charge: WeaponHitArea(
                 hitCd=chargeHitArea, hitCdWidth=14, hitCdHeight=1),
             WeaponType.spitfire: WeaponHitArea(
-                hitCd=spitfireHitArea, hitCdWidth=12, hitCdHeight=12),
+                hitCd=spitfireHitArea, hitCdWidth=12, hitCdHeight=13),
         }
 
         if parentChar.isPlayer:

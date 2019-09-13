@@ -109,7 +109,7 @@ class StateChase(State):
             self.lastKnownPlayerPosition = playerRenderable.getLocationAndSize()
         playerLocation = self.lastKnownPlayerPosition
 
-        loc = meRenderable.getAttackBaseLocation()
+        loc = meRenderable.getWeaponBaseLocation()
         direction = meRenderable.getDirection()
         currentWeaponHitArea = meOffensiveAttack.getCurrentWeaponHitArea()
         self.updateWeaponHitArea(

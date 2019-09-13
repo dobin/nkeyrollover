@@ -15,3 +15,6 @@ enemyInfo:
 stunTime: 0.4
 stunCount: 2
 stunTimeFrame: 3
+attackBaseLocation:
+  x: -1
+  y: 12
