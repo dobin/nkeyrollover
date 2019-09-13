@@ -32,7 +32,7 @@ class SceneProcessor(esper.Processor):
     def numEnemiesAlive(self) -> int:
         count = 0
         for _, ai in self.world.get_component(system.gamelogic.ai.Ai):
-            if ai.brain.state.name != 'dead':
+            if ai.brain.state.name != 'dead' and ai.brain.state.name != 'dying':
                 count += 1
 
         return count
@@ -42,7 +42,7 @@ class SceneProcessor(esper.Processor):
         count = 0
         for _, (ai, renderable) in self.world.get_components(
                 system.gamelogic.ai.Ai, system.graphics.renderable.Renderable):
-            if (ai.brain.state.name != 'dead'
+            if (ai.brain.state.name != 'dead' and ai.brain.state.name != 'dying'
                     and renderable.coordinates.x > self.viewport.getx()
                     and renderable.coordinates.x < self.viewport.getRightX()):
                 count += 1
