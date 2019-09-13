@@ -5,7 +5,7 @@ enemyInfo:
   attackWindupTime: 1.0
   attackTime: 1.0
   dyingTime: 1.0
-  enemyCanAttackPeried: 0.3
+  enemyCanAttackPeriod: 0.3
   wanderTime: 5.0
   wanderTimeRnd: 2.0
   wanderStepDelay: 0.3

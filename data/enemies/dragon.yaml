@@ -5,13 +5,13 @@ enemyInfo:
   attackWindupTime: 1.0 
   attackTime: 1.0
   dyingTime: 1.0
-  enemyCanAttackPeried: 0.3
-  wanderTime: 5.0
-  wanderTimeRnd: 2.0
-  wanderStepDelay: 0.3
+  enemyCanAttackPeriod: 0.3
+  wanderTime: 1.0
+  wanderTimeRnd: 0.5
+  wanderStepDelay: 0.5
   chaseTime: 5.0
   chaseTimeRnd: 2.0
-  chaseStepDelay: 0.2
+  chaseStepDelay: 0.5
 stunTime: 0.4
 stunCount: 2
 stunTimeFrame: 3

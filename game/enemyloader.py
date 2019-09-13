@@ -51,7 +51,7 @@ class EnemyLoader(object):
             enemySeed.enemyInfo.attackWindupTime = enemyInfo['attackWindupTime']
             enemySeed.enemyInfo.attackTime = enemyInfo['attackTime']
             enemySeed.enemyInfo.dyingTime = enemyInfo['dyingTime']
-            enemySeed.enemyInfo.enemyCanAttackPeried = enemyInfo['enemyCanAttackPeried']
+            enemySeed.enemyInfo.enemyCanAttackPeriod = enemyInfo['enemyCanAttackPeriod']
             enemySeed.enemyInfo.wanderTime = enemyInfo['wanderTime']
             enemySeed.enemyInfo.wanderTimeRnd = enemyInfo['wanderTimeRnd']
             enemySeed.enemyInfo.wanderStepDelay = enemyInfo['wanderStepDelay']
