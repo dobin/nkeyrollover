@@ -5,7 +5,6 @@ from game.enemytype import EnemyType
 from system.gamelogic.weapontype import WeaponType
 from texture.character.charactertexturetype import CharacterTextureType
 from ai.enemyinfo import EnemyInfo
-from common.coordinates import Coordinates
 
 logger = logging.getLogger(__name__)
 
