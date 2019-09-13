@@ -13,6 +13,8 @@ import system.gamelogic.enemy
 from utilities.entityfinder import EntityFinder
 from config import Config
 import copy
+from utilities.color import Color
+
 
 logger = logging.getLogger(__name__)
 
@@ -114,6 +116,18 @@ class StateChase(State):
             currentWeaponHitArea,
             loc,
             direction)
+
+        if Config.showEnemyHitbox:
+            for hitlocation in currentWeaponHitArea.hitCd:
+                messaging.add(
+                    type=MessageType.EmitTextureMinimal,
+                    data={
+                        'char': ',',
+                        'timeout': 0.2,
+                        'coordinate': hitlocation,
+                        'color': Color.grey
+                    }
+                )
 
         # only one of the hitlocations need to hit
         for hitLocation in currentWeaponHitArea.hitCd:

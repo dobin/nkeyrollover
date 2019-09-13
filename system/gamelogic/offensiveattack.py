@@ -51,17 +51,39 @@ class OffensiveAttack():
 
         chargeHitArea = [
             Coordinates(1, 0),
-            Coordinates(2, 0),
             Coordinates(3, 0),
-            Coordinates(4, 0),
             Coordinates(5, 0),
-            Coordinates(6, 0),
             Coordinates(7, 0),
-            Coordinates(8, 0),
             Coordinates(9, 0),
-            Coordinates(10, 0),
             Coordinates(11, 0),
-            Coordinates(12, 0),
+            Coordinates(13, 0),
+        ]
+        spitfireHitArea = [
+            Coordinates(6, 4),
+            Coordinates(8, 4),
+            Coordinates(10, 4),
+            Coordinates(12, 4),
+
+            Coordinates(2, 7),
+            Coordinates(4, 7),
+            Coordinates(6, 7),
+            Coordinates(8, 7),
+            Coordinates(10, 7),
+            Coordinates(12, 7),
+
+            Coordinates(2, 10),
+            Coordinates(4, 10),
+            Coordinates(6, 10),
+            Coordinates(8, 10),
+            Coordinates(10, 10),
+            Coordinates(12, 10),
+
+            Coordinates(2, 12),
+            Coordinates(4, 12),
+            Coordinates(6, 12),
+            Coordinates(8, 12),
+            Coordinates(10, 12),
+            Coordinates(12, 12),
         ]
 
         self.weaponHitArea = {
@@ -70,7 +92,9 @@ class OffensiveAttack():
             WeaponType.hitLine: WeaponHitArea(),
             WeaponType.jumpKick: WeaponHitArea(),
             WeaponType.charge: WeaponHitArea(
-                hitCd=chargeHitArea, hitCdWidth=12, hitCdHeight=1),
+                hitCd=chargeHitArea, hitCdWidth=14, hitCdHeight=1),
+            WeaponType.spitfire: WeaponHitArea(
+                hitCd=spitfireHitArea, hitCdWidth=12, hitCdHeight=12),
         }
 
         if parentChar.isPlayer:
@@ -87,6 +111,7 @@ class OffensiveAttack():
                 WeaponType.hitLine: 20,
                 WeaponType.jumpKick: 20,
                 WeaponType.charge: 10,
+                WeaponType.spitfire: 90,
             }
 
 
@@ -146,6 +171,10 @@ class OffensiveAttack():
             return ActionType.hit
         elif self.weaponType is WeaponType.charge:
             return ActionType.charge
+        elif self.weaponType is WeaponType.spitfire:
+            return ActionType.spitfire
+        else:
+            raise Exception('Unknown weaponType {}'.format(weaponType))
 
 
     def advance(self, deltaTime :float):

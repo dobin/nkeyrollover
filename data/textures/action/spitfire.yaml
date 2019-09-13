@@ -1,0 +1,9 @@
+endless: False
+advanceByStep: False
+frameTime:
+  - 0.2
+  - 0.2
+frameColors:
+  - brightyellow
+  - brightyellow
+direction: left

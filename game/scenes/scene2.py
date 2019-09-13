@@ -77,7 +77,7 @@ class Scene2(SceneBase):
                 enemyType = EnemyType.dragon,
                 spawnTime = None,
                 spawnX = 0,
-                spawnLocation = Coordinates(35, 13),
+                spawnLocation = Coordinates(35, 8),
             )
             self.enemyQueue.append(enemyCell)
 

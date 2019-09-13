@@ -1,5 +1,5 @@
 characterTextureType: dragon
-weaponType: hitLine
+weaponType: spitfire
 health: 1000
 enemyInfo:
   attackWindupTime: 1.0 

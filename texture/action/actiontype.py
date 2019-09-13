@@ -7,3 +7,4 @@ class ActionType(Enum):
     hitSquare = 2
     hitLine = 3
     charge = 4
+    spitfire = 5
