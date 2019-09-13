@@ -1,5 +1,6 @@
 characterTextureType: dragon
 weaponType: hitLine
+health: 1000
 enemyInfo:
   attackWindupTime: 1.0 
   attackTime: 1.0

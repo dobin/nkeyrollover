@@ -1,5 +1,6 @@
 characterTextureType: cow
 weaponType: charge
+health: 200
 enemyInfo:
   attackWindupTime: 1.0
   attackTime: 1.0

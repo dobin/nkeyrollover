@@ -13,6 +13,7 @@ class EnemySeed(object):
     def __init__(self):
         self.characterTextureType = None
         self.weaponType = None
+        self.health = None
         self.enemyInfo = EnemyInfo()
 
 
@@ -37,7 +38,7 @@ class EnemyLoader(object):
 
         enemySeed.characterTextureType = CharacterTextureType[data['characterTextureType']]
         enemySeed.weaponType = WeaponType[data['weaponType']]
-
+        enemySeed.health = data['health']
         enemyInfo = data['enemyInfo']
         try:
             enemySeed.enemyInfo.attackWindupTime = enemyInfo['attackWindupTime']

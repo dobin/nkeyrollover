@@ -1,6 +1,3 @@
-from config import Config
-
-
 class EnemyInfo(object):
     def __init__(self):
         # static lenghts
@@ -21,8 +18,3 @@ class EnemyInfo(object):
         self.chaseStepDelay = 0.2
 
         self.stunTime = 1.0
-
-        if Config.devMode:
-            self.wanderTime = 0.5
-            self.spawnTime = 0.2
-            self.chaseTime = 10.0

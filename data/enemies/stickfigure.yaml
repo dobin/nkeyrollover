@@ -1,5 +1,6 @@
 characterTextureType: stickfigure
 weaponType: hitSquare
+health: 100
 enemyInfo:
   attackWindupTime: 1.0
   attackTime: 1.0

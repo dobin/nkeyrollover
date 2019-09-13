@@ -50,6 +50,7 @@ class EnemyProcessor(esper.Processor):
         enemy = self.world.create_entity()
         esperData = EsperData(self.world, enemy, name)
         tenemy = Enemy(name=name, enemyInfo=enemySeed.enemyInfo)
+        attackable = Attackable(initialHealth=enemySeed.health)
         ai = Ai(
             name=name,
             esperData=esperData,
@@ -79,7 +80,7 @@ class EnemyProcessor(esper.Processor):
         self.world.add_component(enemy, groupId)
         self.world.add_component(enemy, renderable)
         self.world.add_component(enemy, tenemy)
-        self.world.add_component(enemy, Attackable(initialHealth=100))
+        self.world.add_component(enemy, attackable)
         self.world.add_component(enemy, offensiveAttack)
 
 
