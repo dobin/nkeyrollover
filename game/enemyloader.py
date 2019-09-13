@@ -15,6 +15,8 @@ class EnemySeed(object):
         self.weaponType = None
         self.health = None
         self.stunTime = None
+        self.stunCount = None
+        self.stunTimeFrame = None
         self.enemyInfo = EnemyInfo()
 
 
@@ -41,6 +43,9 @@ class EnemyLoader(object):
         enemySeed.weaponType = WeaponType[data['weaponType']]
         enemySeed.health = data['health']
         enemySeed.stunTime = data['stunTime']
+        enemySeed.stunCount = data['stunCount']
+        enemySeed.stunTimeFrame = data['stunTimeFrame']
+
         enemyInfo = data['enemyInfo']
         try:
             enemySeed.enemyInfo.attackWindupTime = enemyInfo['attackWindupTime']

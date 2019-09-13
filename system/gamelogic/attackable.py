@@ -8,11 +8,12 @@ logger = logging.getLogger(__name__)
 
 
 class Attackable():
-    def __init__(self, initialHealth=100, stunTime=0.75):
+    def __init__(self, initialHealth=100, stunTime=0.75, stunCount=3, stunTimeFrame=3):
         self.health = initialHealth
         self.initialHealth = initialHealth
 
-        self.maxStun = 3
+        self.maxStunCount = stunCount
+        self.stunTimeFrame = stunTime * 1000
         self.stunTime = stunTime
 
         self.isStunned = False
@@ -22,13 +23,13 @@ class Attackable():
 
 
     def isStunnable(self):
-        timeRef = Utility.getTimeMs() - 3000
+        timeRef = Utility.getTimeMs() - self.stunTimeFrame
         stunCount = 0
         for stunned in self.stunnedQueue:
             if stunned['time'] > timeRef:
                 stunCount += 1
 
-        if stunCount < self.maxStun:
+        if stunCount < self.maxStunCount:
             logger.debug("Stun check: Can be stunned")
             return True
         else:
