@@ -23,6 +23,5 @@ class EnemyLoaderTest(unittest.TestCase):
         self.assertTrue(enemySeed.attackBaseLocation['x'] == -1)
 
 
-
 if __name__ == '__main__':
     unittest.main()

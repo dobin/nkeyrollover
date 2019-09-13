@@ -8,6 +8,10 @@ from texture.animation import Animation
 from common.direction import Direction
 from utilities.colorpalette import ColorPalette
 from utilities.color import Color
+from common.coordinates import Coordinates
+from texture.action.actiontype import ActionType
+from system.gamelogic.weapontype import WeaponType
+from common.weaponhitarea import WeaponHitArea
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +75,70 @@ class FileTextureLoader(object):
 
         filenameYaml = "data/textures/action/{}.yaml".format(actionName)
         self.loadYamlIntoAnimation(filenameYaml, animation)
+
+        # Temporary
+        filenameHitDetect = "data/textures/action/{}_hitdetect.ascii".format(actionName)
+        animation.hitDetection = self.readHitDetectionFile(filenameHitDetect, actionType)
+
         return animation
+
+
+    def readHitDetectionFile(self, filename, actionType):
+        if not os.path.isfile(filename):
+            chargeHitArea = [
+                Coordinates(1, 0),
+                Coordinates(3, 0),
+                Coordinates(5, 0),
+                Coordinates(7, 0),
+                Coordinates(9, 0),
+                Coordinates(11, 0),
+                Coordinates(13, 0),
+            ]
+            spitfireHitArea = [
+                Coordinates(6, 4),
+                Coordinates(8, 4),
+                Coordinates(10, 4),
+                Coordinates(12, 4),
+
+                Coordinates(2, 7),
+                Coordinates(4, 7),
+                Coordinates(6, 7),
+                Coordinates(8, 7),
+                Coordinates(10, 7),
+                Coordinates(12, 7),
+
+                Coordinates(2, 10),
+                Coordinates(4, 10),
+                Coordinates(6, 10),
+                Coordinates(8, 10),
+                Coordinates(10, 10),
+                Coordinates(12, 10),
+
+                Coordinates(2, 12),
+                Coordinates(4, 12),
+                Coordinates(6, 12),
+                Coordinates(8, 12),
+                Coordinates(10, 12),
+                Coordinates(12, 12),
+
+                Coordinates(6, 13),
+                Coordinates(8, 13),
+                Coordinates(10, 13),
+                Coordinates(12, 13),
+            ]
+
+            self.weaponHitArea = {
+                ActionType.hit: WeaponHitArea(),
+                ActionType.hitSquare: WeaponHitArea(),
+                ActionType.hitLine: WeaponHitArea(),
+                ActionType.charge: WeaponHitArea(
+                    hitCd=chargeHitArea, hitCdWidth=14, hitCdHeight=1),
+                ActionType.spitfire: WeaponHitArea(
+                    hitCd=spitfireHitArea, hitCdWidth=12, hitCdHeight=13),
+            }
+        else:
+            print("AAAAAAAAAAAA")
+            pass
 
 
     def loadYamlIntoAnimation(self, filename, animation):

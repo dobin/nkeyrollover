@@ -4,11 +4,12 @@ import unittest
 
 from texture.filetextureloader import FileTextureLoader
 from texture.phenomena.phenomenatype import PhenomenaType
+from texture.action.actiontype import ActionType
 import game.isunittest
 
 
 class FileTextureLoaderTest(unittest.TestCase):
-    def test_loadTexture(self):
+    def test_loadTexturePhenomena(self):
         game.isunittest.setIsUnitTest()
 
         fileTextureLoader = FileTextureLoader()
@@ -46,6 +47,55 @@ class FileTextureLoaderTest(unittest.TestCase):
         y = 1
         frameIndex = 1
         self.assertTrue(animation.arr[frameIndex][y][x] == 'X')
+
+
+    def test_loadTextureAction(self):
+        game.isunittest.setIsUnitTest()
+
+        fileTextureLoader = FileTextureLoader()
+        animation = fileTextureLoader.readAction(ActionType.unittest)
+
+        self.assertTrue(animation.height == 3)
+        self.assertTrue(animation.width == 4)
+        self.assertTrue(animation.frameCount == 3)
+
+        self.assertTrue(animation.endless is False)
+        self.assertTrue(animation.advanceByStep is False)
+        self.assertTrue(animation.frameTime[0] == 0.1)
+        self.assertTrue(animation.frameTime[1] == 0.1)
+        self.assertTrue(animation.frameTime[2] == 0.1)
+        self.assertTrue(animation.frameColors[0] == 'brightyellow')
+        self.assertTrue(animation.frameColors[1] == 'brightyellow')
+        self.assertTrue(animation.frameColors[2] == 'brightyellow')
+
+        x = 0
+        y = 1
+        frameIndex = 0
+        self.assertTrue(animation.arr[frameIndex][y][x] == '<')
+
+        x = 1
+        y = 1
+        self.assertTrue(animation.arr[frameIndex][y][x] == '<')
+
+        x = 0
+        y = 2
+        self.assertTrue(animation.arr[frameIndex][y][x] == '<')
+
+        x = 1
+        y = 2
+        self.assertTrue(animation.arr[frameIndex][y][x] == '<')
+
+        frameIndex = 1
+        self.assertTrue(animation.arr[frameIndex][1][0] == '-')
+        self.assertTrue(animation.arr[frameIndex][1][1] == '-')
+        self.assertTrue(animation.arr[frameIndex][2][0] == '-')
+        self.assertTrue(animation.arr[frameIndex][2][1] == '-')
+
+        frameIndex = 2
+        self.assertTrue(animation.arr[frameIndex][1][0] == '<')
+        self.assertTrue(animation.arr[frameIndex][1][1] == '')
+        self.assertTrue(animation.arr[frameIndex][2][0] == '<')
+        self.assertTrue(animation.arr[frameIndex][2][1] == '')
 
 
 if __name__ == '__main__':
