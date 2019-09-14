@@ -44,9 +44,6 @@ class Keyrollover(object):
         logger = logging.getLogger(__name__)
         logger.record("-----------------Start------------------------")
 
-        self.menuwin = curses.newwin(3, Config.columns, 0, 0)
-        self.menuwin.border()
-
         self.win = curses.newwin(Config.rows, Config.columns, 2, 0)
         curses.noecho()
         curses.cbreak()
@@ -55,9 +52,8 @@ class Keyrollover(object):
         self.win.nodelay(1)  # make getch() nonblocking
         ColorPalette.cursesInitColor()
 
-        self.win.clear()
-        self.win.border()
-
+        self.menuwin = curses.newwin(3, Config.columns, 0, 0)
+        self.menuwin.border()
 
         self.game = Game(win=self.win, menuwin=self.menuwin)
         self.keyboardInput = KeyboardInput(game=self.game)
@@ -87,7 +83,6 @@ class Keyrollover(object):
             self.game.draw1(n)
             self.game.advance(targetFrameTime, n)
             self.game.draw2(n)
-            self.keyboardInput.advance(targetFrameTime)
 
             # has to be after draw, as getch() does a refresh
             # https://stackoverflow.com/questions/19748685/curses-library-why-does-getch-clear-my-screen

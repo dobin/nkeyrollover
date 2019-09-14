@@ -33,31 +33,28 @@ logger = logging.getLogger(__name__)
 
 
 class Game(object):
-    """The game world in which all game object live"""
-
     def __init__(self, win, menuwin):
         self.win = win
 
-        self.world = esper.World()
-        self.statusBar = StatusBar(world=self, menuwin=menuwin)
+        self.world :esper.World = esper.World()
+        self.statusBar :StatusBar = StatusBar(world=self, menuwin=menuwin)
         self.viewport :Viewport = Viewport(win=win, world=self)
         self.textureEmiter :TextureEmiter = TextureEmiter(
             viewport=self.viewport,
             world=self.world)
         self.mapManager :MapManager = MapManager(viewport=self.viewport)
-        self.sceneManager = SceneManager(
+        self.sceneManager :SceneManager = SceneManager(
             viewport=self.viewport,
             world=self.world,
             mapManager=self.mapManager)
-        self.particleEmiter = ParticleEmiter()
-        self.enemyLoader = EnemyLoader()
+        self.particleEmiter :ParticleEmiter = ParticleEmiter()
+        self.enemyLoader :EnemyLoader = EnemyLoader()
 
         self.pause :bool = False
         self.gameRunning :bool = True
         self.showStats = False
 
         particleProcessor = ParticleProcessor(viewport=self.viewport)
-
         gametimeProcessor = GametimeProcessor()
         aiProcessor = AiProcessor()
         characterAnimationProcessor = CharacterAnimationProcessor()
@@ -71,7 +68,6 @@ class Game(object):
         offensiveSkillProcessor = OffensiveSkillProcessor()
         movementProcessor = MovementProcessor()
         inputProcessor = InputProcessor()
-        self.inputProcessor = inputProcessor  # for Statusbar:APM
         renderableMinimalProcessor = RenderableMinimalProcessor(
             viewport=self.viewport,
             textureEmiter=self.textureEmiter)
@@ -79,7 +75,9 @@ class Game(object):
             viewport=self.viewport,
             sceneManager=self.sceneManager,
         )
-        self.sceneProcessor = sceneProcessor  # for stats
+
+        self.inputProcessor :InputProcessor = inputProcessor  # for Statusbar:APM
+        self.sceneProcessor :SceneProcessor = sceneProcessor  # for stats
 
         # Lots of comments to check if the order of the processors really work,
         # as Messaging looses all messages on every iteration (use DirectMessaging 
@@ -153,14 +151,14 @@ class Game(object):
         self.world.add_processor(particleProcessor)
 
 
-    def draw1(self, frame):
+    def draw1(self, frame :int):
         """Draws backmost layer (e.g. map)"""
         if self.sceneManager.currentScene.showMap():
             self.statusBar.drawStatusbar()
             self.mapManager.draw()
 
 
-    def advance(self, deltaTime, frame):
+    def advance(self, deltaTime :float, frame :int):
         """Advance game, and draw game entities (e.g. player, effects)"""
         if self.pause:
             return
@@ -174,20 +172,20 @@ class Game(object):
         messaging.reset()
 
 
-    def draw2(self, frame):
+    def draw2(self, frame :int):
         """Draws foremost layer (e.g. "pause" sign)"""
         if self.showStats:
             self.drawStats()
 
         # not drawing related, but who cares
         if frame % 100 == 0:
-            self.printEntityStats()
+            self.logEntityStats()
 
         if self.pause:
             self.win.addstr(12, 40, "Paused", curses.color_pair(7))
 
 
-    def printEntityStats(self): 
+    def logEntityStats(self):
         renderableMinimal = 0
         for ent, rend in self.world.get_component(RenderableMinimal):
             renderableMinimal += 1

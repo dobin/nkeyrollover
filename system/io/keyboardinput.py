@@ -2,14 +2,16 @@ import logging
 
 from messaging import messaging, MessageType
 import system.singletons.gametime
+from game.game import Game
+from game.viewport import Viewport
 
 logger = logging.getLogger(__name__)
 
 
 class KeyboardInput(object):
-    def __init__(self, game):
-        self.game = game
-        self.viewport = game.viewport
+    def __init__(self, game :Game):
+        self.game :Game = game
+        self.viewport :Viewport = game.viewport
 
 
     def getInput(self):
@@ -23,7 +25,7 @@ class KeyboardInput(object):
         return gotInput
 
 
-    def handleInput(self, key):
+    def handleInput(self, key :str):
         # game related
         if key == ord('p'):
             self.game.togglePause()
@@ -44,7 +46,3 @@ class KeyboardInput(object):
                 'time': system.singletons.gametime.getGameTime(),
             }
         )
-
-
-    def advance(self, deltaTime):
-        pass
