@@ -221,3 +221,7 @@ class Renderable(object):
 
     def setDirection(self, direction):
         self.direction = direction
+
+
+    def setName(self, name):
+        self.name = name

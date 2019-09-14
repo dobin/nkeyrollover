@@ -2,13 +2,14 @@ import logging
 
 from texture.speech.speechanimationmanager import SpeechAnimationManager
 from texture.animationtexture import AnimationTexture
+from texture.texturetype import TextureType
 
 logger = logging.getLogger(__name__)
 
 
 class SpeechTexture(AnimationTexture):
     def __init__(self, displayText=None, time=None):
-        super(SpeechTexture, self).__init__()
+        super(SpeechTexture, self).__init__(type=TextureType.speech)
         self.speechAnimationManager = SpeechAnimationManager()
 
         if displayText is not None:

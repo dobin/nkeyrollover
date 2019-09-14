@@ -5,6 +5,7 @@ from texture.animationtexture import AnimationTexture
 from texture.character.characteranimationmanager import characterAnimationManager
 from texture.character.characteranimationtype import CharacterAnimationType
 from texture.character.charactertexturetype import CharacterTextureType
+from texture.texturetype import TextureType
 
 logger = logging.getLogger('CharacterTexture')
 
@@ -17,7 +18,7 @@ class CharacterTexture(AnimationTexture):
             direction :Direction =Direction.none,
             name = '',
     ):
-        super(CharacterTexture, self).__init__(name=name)
+        super(CharacterTexture, self).__init__(type=TextureType.character, name=name)
         self.previousAnimation = None
 
         self.characterTextureType = characterTextureType

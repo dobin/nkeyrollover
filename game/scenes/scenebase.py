@@ -74,5 +74,5 @@ class SceneBase(object):
         return entity
 
 
-    def removeRenderable(self, entity): 
+    def removeRenderable(self, entity):
         self.world.delete_entity(entity)

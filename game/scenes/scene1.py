@@ -30,7 +30,8 @@ class Scene1(SceneBase):
         super().__init__(world=world, viewport=viewport)
 
         textureCopter = PhenomenaTexture(
-            phenomenaType=PhenomenaType.roflcopter)
+            phenomenaType=PhenomenaType.roflcopter,
+            name="Scene1 chopper")
         self.copterSpawn = Coordinates(13, -1 * textureCopter.height)
         renderableCopter = Renderable(
             texture=textureCopter,
@@ -42,7 +43,7 @@ class Scene1(SceneBase):
         texturePlayer = CharacterTexture(
             characterAnimationType=CharacterAnimationType.standing,
             characterTextureType=CharacterTextureType.player,
-            name='Player')
+            name='Scene1 Player')
         coordinates = Coordinates(24, 13)
         renderablePlayer = Renderable(
             texture=texturePlayer,
@@ -67,13 +68,12 @@ class Scene1(SceneBase):
 
     def enter(self):
         self.addRenderable(self.renderableCopter)
-        self.addRenderable(self.renderablePlayer)
 
 
-    def sceneIsFinished(self) -> bool: 
+    def sceneIsFinished(self) -> bool:
         if self.state is IntroSceneState.done:
             return True
-        else: 
+        else:
             return False
 
 
@@ -106,9 +106,7 @@ class Scene1(SceneBase):
                 self.myTimer.setTimer(0.1)
                 logger.debug("Scene: Go to State: Drop")
                 self.state = IntroSceneState.drop
-                #self.renderablePlayer.coordinates.x = 24
-                #self.renderablePlayer.coordinates.y = 13
-                self.renderablePlayer.setActive(True)
+                self.addRenderable(self.renderablePlayer)
 
         elif self.state is IntroSceneState.drop:
             # for next scene: Flyup
@@ -121,4 +119,3 @@ class Scene1(SceneBase):
 
         elif self.state is IntroSceneState.done:
             pass
-

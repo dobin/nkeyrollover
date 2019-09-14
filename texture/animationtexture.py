@@ -8,8 +8,8 @@ logger = logging.getLogger(__name__)
 
 class AnimationTexture(Texture):
     # abstract class
-    def __init__(self, name=''):
-        super(AnimationTexture, self).__init__(name=name)
+    def __init__(self, type, name=''):
+        super(AnimationTexture, self).__init__(type=type, name=name)
         self.animation :Animation = None
         self.init()
 

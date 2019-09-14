@@ -13,6 +13,7 @@ from texture.action.actiontexture import ActionTexture
 from messaging import messaging, MessageType
 from texture.speech.speechtexture import SpeechTexture
 from config import Config
+from utilities.objectcache import ObjectCache
 
 logger = logging.getLogger(__name__)
 
@@ -27,42 +28,46 @@ class TextureEmiter(object):
         self.viewport :Viewport = viewport
         self.world = world
 
+        self.actionRenderableCache = ObjectCache(size=32)
+        self.init()
 
-    def showSpeechBubble(self, displayText, time, parentRenderable):
-        texture = SpeechTexture(
-            displayText=displayText,
-            time=time
-        )
-        coordinates = Coordinates(1, -4)
-        renderable = Renderable(
-            texture=texture,
-            viewport=self.viewport,
-            parent=parentRenderable,
-            coordinates=coordinates,
-            z=Config.zMax,
-            active=True)
-        self.addRenderable(renderable)
+
+    def init(self):
+        n = 0
+        while n < 32:
+            # slow
+            texture :ActionTexture = ActionTexture()
+            renderable = Renderable(
+                texture=texture,
+                viewport=self.viewport,
+                active=True,
+                z=Config.zActionTexture)
+            self.actionRenderableCache.addObject(renderable)
+            n += 1
 
 
     def makeActionTexture(
         self, actionTextureType, location, fromPlayer, direction, damage=None
     ):
-        texture :ActionTexture = ActionTexture(
+        renderable = self.actionRenderableCache.getObject()
+
+        # manage texture
+        renderable.texture.changeAnimation(
             actionType=actionTextureType,
-            direction=direction,
+            direction=direction)
+        renderable.texture.setName(
             name="ActionTexture (actionTextureType={} fromPlayer={}, damage={})".format(
                 actionTextureType, fromPlayer, damage))
 
+        # manage renderable
         if direction is Direction.left:
-            location.x -= texture.width
+            location.x -= renderable.texture.width
+        renderable.setLocation(location)
+        renderable.setActive(True)
+        renderable.setName(
+            name="ActionRenderable (actionTextureType={} fromPlayer={}, damage={})".format(
+                actionTextureType, fromPlayer, damage))
 
-        renderable = Renderable(
-            texture=texture,
-            viewport=self.viewport,
-            parent=None,
-            coordinates=location,
-            active=True,
-            z=Config.zActionTexture)
         self.addRenderable(renderable)
 
         if damage is not None:
@@ -83,8 +88,9 @@ class TextureEmiter(object):
             )
 
 
-    def addRenderable(self, renderable):
+    def addRenderableAction(self, renderable, actionTexture):
         entity = self.world.create_entity()
+        self.world.add_component(entity, actionTexture)
         self.world.add_component(entity, renderable)
 
 
@@ -197,5 +203,26 @@ class TextureEmiter(object):
 
 
     def addRenderableMinimal(self, renderable):
+        entity = self.world.create_entity()
+        self.world.add_component(entity, renderable)
+
+
+    def showSpeechBubble(self, displayText, time, parentRenderable):
+        texture = SpeechTexture(
+            displayText=displayText,
+            time=time
+        )
+        coordinates = Coordinates(1, -4)
+        renderable = Renderable(
+            texture=texture,
+            viewport=self.viewport,
+            parent=parentRenderable,
+            coordinates=coordinates,
+            z=Config.zMax,
+            active=True)
+        self.addRenderable(renderable)
+
+
+    def addRenderable(self, renderable):
         entity = self.world.create_entity()
         self.world.add_component(entity, renderable)

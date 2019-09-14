@@ -7,7 +7,8 @@ logger = logging.getLogger(__name__)
 
 
 class Texture(object):
-    def __init__(self, width =0, height =0, name=''):
+    def __init__(self, type, width =0, height =0, name=''):
+        self.type = type
         self.width :int = width
         self.height :int = height
         self.active :bool = True
@@ -53,3 +54,11 @@ class Texture(object):
 
     def isActive(self) -> bool:
         return self.active
+
+
+    def setName(self, name :str):
+        self.name = name
+
+
+    def __repr__(self):
+        return self.name
