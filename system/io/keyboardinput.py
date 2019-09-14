@@ -35,7 +35,7 @@ class KeyboardInput(object):
             self.game.toggleStats()
 
         if key == 266:  # f2
-            self.game.toggleShowEnemyWanderDestination()
+            pass
 
         messaging.add(
             type=MessageType.PlayerKeypress,

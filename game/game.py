@@ -55,7 +55,6 @@ class Game(object):
         self.pause :bool = False
         self.gameRunning :bool = True
         self.showStats = False
-        self.showEnemyWanderDestination = False
 
         particleProcessor = ParticleProcessor(viewport=self.viewport)
 
@@ -247,7 +246,3 @@ class Game(object):
 
     def toggleStats(self):
         self.showStats = not self.showStats
-
-
-    def toggleShowEnemyWanderDestination(self):
-        self.showEnemyWanderDestination = not self.showEnemyWanderDestination
