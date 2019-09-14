@@ -225,3 +225,7 @@ class Renderable(object):
 
     def setName(self, name):
         self.name = name
+
+
+    def setZ(self, z):
+        self.z = z

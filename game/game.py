@@ -28,6 +28,7 @@ from game.enemyloader import EnemyLoader
 from utilities.entityfinder import EntityFinder
 from messaging import messaging
 from directmessaging import directMessaging
+from utilities.renderablecache import renderableCache
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +54,8 @@ class Game(object):
         self.pause :bool = False
         self.gameRunning :bool = True
         self.showStats = False
+
+        renderableCache.init(viewport=self.viewport)
 
         particleProcessor = ParticleProcessor(viewport=self.viewport)
         gametimeProcessor = GametimeProcessor()

@@ -9,11 +9,11 @@ from utilities.colorpalette import ColorPalette
 from system.graphics.renderableminimal import RenderableMinimal
 from system.graphics.textureminimal import TextureMinimal
 from system.graphics.renderable import Renderable
-from texture.action.actiontexture import ActionTexture
 from messaging import messaging, MessageType
 from texture.speech.speechtexture import SpeechTexture
 from config import Config
-from utilities.objectcache import ObjectCache
+from utilities.renderablecache import renderableCache
+from texture.texturetype import TextureType
 
 logger = logging.getLogger(__name__)
 
@@ -28,28 +28,11 @@ class TextureEmiter(object):
         self.viewport :Viewport = viewport
         self.world = world
 
-        self.actionRenderableCache = ObjectCache(size=32)
-        self.init()
-
-
-    def init(self):
-        n = 0
-        while n < 32:
-            # slow
-            texture :ActionTexture = ActionTexture()
-            renderable = Renderable(
-                texture=texture,
-                viewport=self.viewport,
-                active=True,
-                z=Config.zActionTexture)
-            self.actionRenderableCache.addObject(renderable)
-            n += 1
-
 
     def makeActionTexture(
         self, actionTextureType, location, fromPlayer, direction, damage=None
     ):
-        renderable = self.actionRenderableCache.getObject()
+        renderable = renderableCache.getRenderable(TextureType.action)
 
         # manage texture
         renderable.texture.changeAnimation(
@@ -63,6 +46,7 @@ class TextureEmiter(object):
         if direction is Direction.left:
             location.x -= renderable.texture.width
         renderable.setLocation(location)
+        renderable.setZ(Config.zActionTexture)
         renderable.setActive(True)
         renderable.setName(
             name="ActionRenderable (actionTextureType={} fromPlayer={}, damage={})".format(

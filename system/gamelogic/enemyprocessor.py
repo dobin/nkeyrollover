@@ -1,9 +1,7 @@
 import esper
 import logging
 
-from texture.character.characteranimationtype import CharacterAnimationType
 from texture.character.charactertexture import CharacterTexture
-from game.enemytype import EnemyType
 from system.groupid import GroupId
 from system.graphics.renderable import Renderable
 from system.gamelogic.enemy import Enemy
@@ -11,7 +9,6 @@ from system.gamelogic.attackable import Attackable
 from system.gamelogic.esperdata import EsperData
 from system.gamelogic.ai import Ai
 from system.gamelogic.offensiveattack import OffensiveAttack
-from system.gamelogic.weapontype import WeaponType
 from messaging import messaging, MessageType
 import game.uniqueid
 from common.coordinates import Coordinates

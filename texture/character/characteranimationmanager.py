@@ -57,7 +57,8 @@ class CharacterAnimationManager(object):
         direction,
         subtype=0
     ):
-        # delay loading till first invocation
+        # delay loading till first invocation, as this is a singleton, and we dont 
+        # wanna load stuff when its first included
         if not self.isLoaded:
             self.init()
             self.isLoaded = True
