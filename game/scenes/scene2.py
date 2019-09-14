@@ -119,7 +119,7 @@ class Scene2(SceneBase):
             spawnLocation = self.getRandomSpawnCoords(rightSideBias=0.8)
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                enemyType = EnemyType.stickfigure,
+                enemyType = EnemyType.dragon,
                 spawnTime = None,  # waveIdx * intraWaveSpawnTime + n,
                 spawnX = playerTrapX,
                 spawnLocation = spawnLocation,

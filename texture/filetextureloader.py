@@ -6,25 +6,27 @@ from texture.character.characteranimationtype import CharacterAnimationType
 from texture.character.charactertexturetype import CharacterTextureType
 from texture.animation import Animation
 from common.direction import Direction
+from texture.phenomena.phenomenatype import PhenomenaType
 from utilities.colorpalette import ColorPalette
 from utilities.color import Color
 from common.coordinates import Coordinates
 from texture.action.actiontype import ActionType
 from system.gamelogic.weapontype import WeaponType
 from common.weaponhitarea import WeaponHitArea
+from common.weapondata import WeaponData
+from typing import List
 
 logger = logging.getLogger(__name__)
 
 
 class FileTextureLoader(object):
-    def __init__(self, isUnitTest=False):
-        self.isUnitTest = isUnitTest
+    def __init__(self):
+        pass
 
 
     def readAnimation(
         self, characterTextureType :CharacterTextureType,
         characterAnimationType :CharacterAnimationType,
-        isUnitTest :bool =False
     ) -> Animation:
         ct = characterTextureType.name
         cat = characterAnimationType.name
@@ -52,7 +54,7 @@ class FileTextureLoader(object):
 
     def readPhenomena(
         self,
-        phenomenaType,
+        phenomenaType :PhenomenaType,
     ) -> Animation:
         phenomenaName = phenomenaType.name
         filename = "data/textures/phenomena/{}.ascii".format(phenomenaName)
@@ -66,7 +68,7 @@ class FileTextureLoader(object):
 
     def readAction(
         self,
-        actionType,
+        actionType :ActionType,
     ) -> Animation:
         actionName = actionType.name
         filename = "data/textures/action/{}.ascii".format(actionName)
@@ -76,14 +78,54 @@ class FileTextureLoader(object):
         filenameYaml = "data/textures/action/{}.yaml".format(actionName)
         self.loadYamlIntoAnimation(filenameYaml, animation)
 
-        # Temporary
-        filenameHitDetect = "data/textures/action/{}_hitdetect.ascii".format(actionName)
-        animation.hitDetection = self.readHitDetectionFile(filenameHitDetect, actionType)
-
         return animation
 
 
-    def readHitDetectionFile(self, filename, actionType):
+    def readWeapon(
+        self,
+        weaponType: WeaponType
+    ) -> WeaponData:
+        weaponName = weaponType.name
+
+        filename = "data/weapons/{}.yaml".format(weaponName)
+        if not os.path.isfile(filename):
+            logger.debug("No weapon definition in {}, skipping".format(
+                filename
+            ))
+            return None
+
+        weaponData = self.readWeaponYamlFile(filename)
+
+        filenameHitDetect = "data/weapons/{}_hitdetect.ascii".format(weaponName)
+        weaponData.weaponHitArea = self.readHitDetectionFile(
+            filenameHitDetect, weaponType)
+
+        return weaponData
+
+
+    def readWeaponYamlFile(self, filename :str) -> WeaponData:
+        weapon = WeaponData()
+
+        with open(filename, 'r') as stream:
+            data = yaml.safe_load(stream)
+
+        try:
+            weapon.actionTextureType = ActionType[data['actionTextureType']]
+            weapon.hitDetectionDirection = Direction[data['hitDetectionDirection']]
+            weapon.damage = int(data['damage'])
+        except TypeError as error:
+            raise Exception("Error, missing field in yaml file {}, error {}".format(
+                filename, error
+            ))
+
+        return weapon
+
+
+    def readHitDetectionFile(
+        self,
+        filename :str,
+        weaponType :WeaponType
+    ) -> WeaponHitArea:
         if not os.path.isfile(filename):
             chargeHitArea = [
                 Coordinates(1, 0),
@@ -126,22 +168,49 @@ class FileTextureLoader(object):
                 Coordinates(10, 13),
                 Coordinates(12, 13),
             ]
+            hitAreaStandard = [
+                Coordinates(0, 0),
+                Coordinates(0, 1),
+                Coordinates(1, 0),
+                Coordinates(1, 1)
+            ]
 
-            self.weaponHitArea = {
-                ActionType.hit: WeaponHitArea(),
-                ActionType.hitSquare: WeaponHitArea(),
-                ActionType.hitLine: WeaponHitArea(),
-                ActionType.charge: WeaponHitArea(
-                    hitCd=chargeHitArea, hitCdWidth=14, hitCdHeight=1),
-                ActionType.spitfire: WeaponHitArea(
-                    hitCd=spitfireHitArea, hitCdWidth=12, hitCdHeight=13),
+            weaponHitArea = {
+                WeaponType.unittest: WeaponHitArea(
+                    hitCd=hitAreaStandard, width=2, height=2),
+                WeaponType.hit: WeaponHitArea(
+                    hitCd=hitAreaStandard, width=2, height=2),
+                WeaponType.hitSquare: WeaponHitArea(
+                    hitCd=hitAreaStandard, width=2, height=2),
+                WeaponType.hitLine: WeaponHitArea(
+                    hitCd=hitAreaStandard, width=2, height=2),
+                WeaponType.charge: WeaponHitArea(
+                    hitCd=chargeHitArea, width=14, height=1),
+                WeaponType.spitfire: WeaponHitArea(
+                    hitCd=spitfireHitArea, width=12, height=13),
             }
-        else:
-            print("AAAAAAAAAAAA")
-            pass
+            return weaponHitArea[weaponType]
+
+        lineList = [line.rstrip('\n') for line in open(filename)]
+        (res, maxWidth, maxHeight) = self.parseAnimationLineList(lineList)
+
+        hitCd = []
+        for (z, anim) in enumerate(res):
+            for (y, rows) in enumerate(anim):
+                for (x, column) in enumerate(rows):
+                    if column == 'x':
+                        hitCd.append(Coordinates(x, y))
+
+        weaponHitArea = WeaponHitArea(
+            hitCd=hitCd,
+            width=maxWidth,
+            height=maxHeight
+        )
+
+        return weaponHitArea
 
 
-    def loadYamlIntoAnimation(self, filename, animation):
+    def loadYamlIntoAnimation(self, filename :str, animation :Animation):
         with open(filename, 'r') as stream:
             data = yaml.safe_load(stream)
 
@@ -188,8 +257,35 @@ class FileTextureLoader(object):
 
     def readAnimationFile(self, filename :str) -> Animation:
         lineList = [line.rstrip('\n') for line in open(filename)]
-        res = []
 
+        (res, maxWidth, maxHeight) = self.parseAnimationLineList(lineList)
+
+        # replace whitespace ' ' with ''
+        for (z, anim) in enumerate(res):
+            for (y, rows) in enumerate(anim):
+                for (x, column) in enumerate(rows):
+                    if res[z][y][x] == ' ':
+                        res[z][y][x] = ''
+                    if res[z][y][x] == '€':
+                        res[z][y][x] = ' '
+
+        animation = Animation()
+        animation.arr = res
+        animation.width = maxWidth
+        animation.height = maxHeight
+        animation.frameCount = len(res)
+
+        logger.debug("Loaded {}: width={} height={} animations={}".format(
+            filename, animation.width, animation.height, animation.frameCount))
+
+        return animation
+
+
+    def parseAnimationLineList(
+        self,
+        lineList :List[List[str]]
+    ) -> (List[List[List[str]]], int, int):
+        res = []
         # find longest line to make animation
         maxWidth = 0
         for line in lineList:
@@ -217,28 +313,4 @@ class FileTextureLoader(object):
             maxHeight = len(tmp)
         res.append(tmp)
 
-        # replace whitespace ' ' with ''
-        for (z, anim) in enumerate(res):
-            for (y, rows) in enumerate(anim):
-                for (x, column) in enumerate(rows):
-                    if res[z][y][x] == ' ':
-                        res[z][y][x] = ''
-                    if res[z][y][x] == '€':
-                        res[z][y][x] = ' '
-
-        animation = Animation()
-        animation.arr = res
-        animation.width = maxWidth
-        animation.height = maxHeight
-        animation.frameCount = len(res)
-#        d = {
-#            'arr': res,
-#            'width': maxWidth,
-#            'height': maxHeight,
-#            'frameCount': len(res),
-#        }
-
-        logger.debug("Loaded {}: width={} height={} animations={}".format(
-            filename, animation.width, animation.height, animation.frameCount))
-
-        return animation
+        return (res, maxWidth, maxHeight)

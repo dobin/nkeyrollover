@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class WeaponType(Enum):
-    default = 0
+    unittest = 0
     hit = 1
     hitSquare = 2
     hitLine = 3

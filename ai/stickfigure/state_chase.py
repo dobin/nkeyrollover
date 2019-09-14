@@ -173,7 +173,7 @@ class StateChase(State):
             c.x += loc.x
             c.y += loc.y
             if direction is Direction.left:
-                c.x -= (weaponHitArea.hitCdWidth - 1)
+                c.x -= (weaponHitArea.width - 1)
         #return carr
 
 
