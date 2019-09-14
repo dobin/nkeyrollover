@@ -1,5 +1,6 @@
 import esper
 import logging
+import random
 
 from texture.character.charactertexture import CharacterTexture
 from system.groupid import GroupId
@@ -13,6 +14,8 @@ from messaging import messaging, MessageType
 import game.uniqueid
 from common.coordinates import Coordinates
 from utilities.objectcache import ObjectCache
+from config import Config
+from common.direction import Direction
 
 logger = logging.getLogger(__name__)
 
@@ -91,12 +94,33 @@ class EnemyProcessor(esper.Processor):
                     data = {}
                 )
 
+    def getSomeSpawnCoordinates(self, direction, textureWidth):
+        # X
+        if direction is Direction.right:
+            myx = self.viewport.getx() + Config.columns + 1
+        else:
+            myx = self.viewport.getx() - 1 - textureWidth
+
+        # Y
+        minY = Config.areaMoveable['miny']
+        maxY = Config.areaMoveable['maxy']
+        myy = random.randint(minY, maxY)
+
+        spawnCoords = Coordinates(myx, myy)
+        return spawnCoords
+
 
     def spawnEnemy(self, data):
         enemyType = data.enemyType
         coordinates = data.spawnLocation
 
         enemyCached = self.objectCache.getObject()
+
+        if coordinates is None:
+            coordinates = self.getSomeSpawnCoordinates(
+                data.spawnDirection, 
+                enemyCached.renderable.texture.width)
+
         enemySeed = self.enemyLoader.getSeedForEnemy(enemyType)
 
         entity = self.world.create_entity()

@@ -122,7 +122,7 @@ class StateChase(State):
                 messaging.add(
                     type=MessageType.EmitTextureMinimal,
                     data={
-                        'char': ',',
+                        'char': 'X',
                         'timeout': 0.2,
                         'coordinate': hitlocation,
                         'color': Color.grey

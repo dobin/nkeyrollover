@@ -10,17 +10,20 @@ from game.enemytype import EnemyType
 from utilities.entityfinder import EntityFinder
 import system.groupid
 from directmessaging import directMessaging, DirectMessageType
+from common.direction import Direction
 
 logger = logging.getLogger(__name__)
 
 
 class EnemyCell(object):
-    def __init__(self, id, enemyType, spawnTime, spawnX, spawnLocation):
+    def __init__(self, id, enemyType, spawnTime, spawnX, spawnLocation, spawnDirection):
         self.id = id
         self.enemyType = enemyType
         self.spawnTime = spawnTime
         self.spawnX = spawnX
-        self.spawnLocation = spawnLocation
+
+        self.spawnDirection = spawnDirection  # spawn left/right of current viewport
+        self.spawnLocation = spawnLocation  # spawn at this position
 
 
     def __repr__(self):
@@ -72,10 +75,11 @@ class Scene2(SceneBase):
         if Config.devMode:
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                enemyType = EnemyType.dragon,
+                enemyType = EnemyType.stickfigure,
                 spawnTime = None,
                 spawnX = 0,
                 spawnLocation = Coordinates(35, 8),
+                spawnDirection = None
             )
             self.enemyQueue.append(enemyCell)
 
@@ -85,6 +89,7 @@ class Scene2(SceneBase):
                 spawnTime = None,
                 spawnX = 0,
                 spawnLocation = Coordinates(85, 13),
+                spawnDirection = None
             )
             self.enemyQueue.append(enemyCell)
 
@@ -94,6 +99,7 @@ class Scene2(SceneBase):
                 spawnTime = None,
                 spawnX = 60,
                 spawnLocation = Coordinates(60 + 80, 13),
+                spawnDirection = None
             )
             self.enemyQueue.append(enemyCell)
             return
@@ -116,13 +122,21 @@ class Scene2(SceneBase):
         n = 0
         while n < numStickfigures:
             playerTrapX = waveIdx * intraWaveXoffset
-            spawnLocation = self.getRandomSpawnCoords(rightSideBias=0.8)
+            # spawnLocation = self.getRandomSpawnCoords(
+            #    trapX=playerTrapX, rightSideBias=0.8)
+
+            dir = Direction.left
+            roll = random.random()
+            if roll < 0.8:
+                dir = Direction.right
+
             enemyCell = EnemyCell(
                 id = self.enemyCount,
                 enemyType = EnemyType.stickfigure,
                 spawnTime = None,  # waveIdx * intraWaveSpawnTime + n,
                 spawnX = playerTrapX,
-                spawnLocation = spawnLocation,
+                spawnLocation = None,
+                spawnDirection = dir
             )
             self.enemyCount += 1
             enemyQueue.append(enemyCell)
@@ -132,13 +146,15 @@ class Scene2(SceneBase):
         n = 0
         while n < numCows:
             playerTrapX = waveIdx * intraWaveXoffset
-            spawnLocation = self.getRandomSpawnCoords(rightSideBias=0.8)
+            spawnLocation = self.getRandomSpawnCoords(
+                trapX=playerTrapX, rightSideBias=0.8)
             enemyCell = EnemyCell(
                 id = self.enemyCount,
                 enemyType = EnemyType.cow,
                 spawnTime = None,  # waveIdx * intraWaveSpawnTime,
                 spawnX = playerTrapX,
                 spawnLocation = spawnLocation,
+                spawnDirection = None,
             )
             self.enemyCount += 1
             enemyQueue.append(enemyCell)
@@ -224,17 +240,17 @@ class Scene2(SceneBase):
                         'waitTime': 0,
                     }
                 )
-                self.speechBubbles.pop(0)        
+                self.speechBubbles.pop(0)
 
 
-    def getRandomSpawnCoords(self, rightSideBias=0.5):
+    def getRandomSpawnCoords(self, trapX, rightSideBias=0.5):
         # X
         myx = 0
         roll = random.random()
         if roll < rightSideBias:
-            myx = self.viewport.getx() + Config.columns + 1
+            myx = trapX + Config.columns + 1
         else:
-            myx = self.viewport.getx() - 1  # - enemy.texture.width
+            myx = trapX - 1 - 5  # - enemy.texture.width
 
         # Y
         minY = Config.areaMoveable['miny']
