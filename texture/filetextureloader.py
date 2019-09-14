@@ -127,73 +127,21 @@ class FileTextureLoader(object):
         weaponType :WeaponType
     ) -> WeaponHitArea:
         if not os.path.isfile(filename):
-            chargeHitArea = [
-                Coordinates(1, 0),
-                Coordinates(3, 0),
-                Coordinates(5, 0),
-                Coordinates(7, 0),
-                Coordinates(9, 0),
-                Coordinates(11, 0),
-                Coordinates(13, 0),
-            ]
-            spitfireHitArea = [
-                Coordinates(6, 4),
-                Coordinates(8, 4),
-                Coordinates(10, 4),
-                Coordinates(12, 4),
-
-                Coordinates(2, 7),
-                Coordinates(4, 7),
-                Coordinates(6, 7),
-                Coordinates(8, 7),
-                Coordinates(10, 7),
-                Coordinates(12, 7),
-
-                Coordinates(2, 10),
-                Coordinates(4, 10),
-                Coordinates(6, 10),
-                Coordinates(8, 10),
-                Coordinates(10, 10),
-                Coordinates(12, 10),
-
-                Coordinates(2, 12),
-                Coordinates(4, 12),
-                Coordinates(6, 12),
-                Coordinates(8, 12),
-                Coordinates(10, 12),
-                Coordinates(12, 12),
-
-                Coordinates(6, 13),
-                Coordinates(8, 13),
-                Coordinates(10, 13),
-                Coordinates(12, 13),
-            ]
+            # default, if file would not exist
             hitAreaStandard = [
                 Coordinates(0, 0),
                 Coordinates(0, 1),
                 Coordinates(1, 0),
                 Coordinates(1, 1)
             ]
-
-            weaponHitArea = {
-                WeaponType.unittest: WeaponHitArea(
-                    hitCd=hitAreaStandard, width=2, height=2),
-                WeaponType.hit: WeaponHitArea(
-                    hitCd=hitAreaStandard, width=2, height=2),
-                WeaponType.hitSquare: WeaponHitArea(
-                    hitCd=hitAreaStandard, width=2, height=2),
-                WeaponType.hitLine: WeaponHitArea(
-                    hitCd=hitAreaStandard, width=2, height=2),
-                WeaponType.charge: WeaponHitArea(
-                    hitCd=chargeHitArea, width=14, height=1),
-                WeaponType.spitfire: WeaponHitArea(
-                    hitCd=spitfireHitArea, width=12, height=13),
-            }
-            return weaponHitArea[weaponType]
+            weaponHitArea = WeaponHitArea(
+                hitCd=hitAreaStandard, width=2, height=2),
+            return weaponHitArea
 
         lineList = [line.rstrip('\n') for line in open(filename)]
         (res, maxWidth, maxHeight) = self.parseAnimationLineList(lineList)
 
+        # only add positions indicated by 'x', ignore all other chars
         hitCd = []
         for (z, anim) in enumerate(res):
             for (y, rows) in enumerate(anim):
