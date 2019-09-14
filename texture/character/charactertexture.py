@@ -2,7 +2,7 @@ import logging
 
 from common.direction import Direction
 from texture.animationtexture import AnimationTexture
-from texture.character.characteranimationmanager import CharacterAnimationManager
+from texture.character.characteranimationmanager import characterAnimationManager
 from texture.character.characteranimationtype import CharacterAnimationType
 from texture.character.charactertexturetype import CharacterTextureType
 
@@ -12,19 +12,15 @@ logger = logging.getLogger('CharacterTexture')
 class CharacterTexture(AnimationTexture):
     def __init__(
             self,
-            characterTextureType :CharacterTextureType,
+            characterTextureType :CharacterTextureType =None,
             characterAnimationType :CharacterAnimationType =None,
             direction :Direction =Direction.none,
-            head :str =None,
-            body :str =None,
             name = '',
     ):
         super(CharacterTexture, self).__init__(name=name)
         self.previousAnimation = None
 
-        self.characterAnimationManager = CharacterAnimationManager(
-            head=head, body=body, characterTextureType=characterTextureType)
-
+        self.characterTextureType = characterTextureType
         self.characterAnimationType = characterAnimationType
         if characterAnimationType is not None:
             self.changeAnimation(characterAnimationType, direction)
@@ -50,7 +46,7 @@ class CharacterTexture(AnimationTexture):
             else:
                 # we are already interrupted. overwrite current animation, but dont
                 # touch the self.previousAnimation one
-                logging.warning("{}: Animation to {}, but already interrupted in {} (prev {})".format(
+                logging.debug("{}: Animation to {}, but already interrupted in {} (prev {})".format(
                     self.name,
                     characterAnimationType,
                     self.animation,
@@ -62,11 +58,18 @@ class CharacterTexture(AnimationTexture):
             self.name, characterAnimationType))
         self.setActive(True)
         self.characterAnimationType = characterAnimationType
-        self.animation = self.characterAnimationManager.getAnimation(
-            characterAnimationType, direction, subtype)
+        self.animation = characterAnimationManager.getAnimation(
+            characterTextureType=self.characterTextureType,
+            characterAnimationType=characterAnimationType,
+            direction=direction,
+            subtype=subtype)
         self.init()
         self.width = self.animation.width
         self.height = self.animation.height
+
+
+    def setCharacterTextureType(self, characterTextureType):
+        self.characterTextureType = characterTextureType
 
 
     def advance(self, deltaTime):

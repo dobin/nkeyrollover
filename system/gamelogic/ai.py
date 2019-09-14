@@ -10,22 +10,21 @@ from ai.stickfigure.state_spawn import StateSpawn
 from ai.stickfigure.state_wander import StateWander
 from ai.stickfigure.state_dead import StateDead
 from game.enemytype import EnemyType
+from system.gamelogic.esperdata import EsperData
 
 logger = logging.getLogger(__name__)
 
 
 class Ai():
-    def __init__(self, esperData, name, enemyType):
-        self.esperData = esperData
+    def __init__(self, name :str, enemyType :EnemyType =None):
         self.offensiveAttackEntity = None
         self.enemyType = enemyType
 
         self.name :str = 'Bot' + name
-        self.initAi()
 
 
-    def initAi(self):
-        self.brain :Brain = Brain(self.esperData)
+    def initAi(self, esperData):
+        self.brain :Brain = Brain(esperData)
 
         self.brain.register(StateSpawn)
         if self.enemyType is EnemyType.cow:
@@ -42,6 +41,10 @@ class Ai():
 
     def advance(self, deltaTime :float):
         self.brain.update(deltaTime)
+
+
+    def setEnemyType(self, enemyType):
+        self.enemyType = enemyType
 
 
     def __repr__(self):

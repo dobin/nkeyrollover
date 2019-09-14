@@ -51,7 +51,7 @@ class PlayerProcessor(esper.Processor):
         groupId = GroupId(id=myid)
         player = system.gamelogic.player.Player()
         attackable = Attackable(
-            initialHealth=100,
+            initialHealth=1000,
             stunTime=0.75)
 
         texture = CharacterTexture(

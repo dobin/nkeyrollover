@@ -61,7 +61,7 @@ class Scene2(SceneBase):
                 'text': 'I am here to chew game and kick ass'
             },
             {
-                'timeSpawn': 2.0,
+                'timeSpawn': 2.5,
                 'timeShow': 1.0,
                 'text': 'And I am all out of gum'
             },
@@ -69,8 +69,6 @@ class Scene2(SceneBase):
 
 
     def prepareEnemies(self):
-        waveIdx = 0
-        waveCount = 3
         if Config.devMode:
             enemyCell = EnemyCell(
                 id = self.enemyCount,
@@ -100,6 +98,8 @@ class Scene2(SceneBase):
             self.enemyQueue.append(enemyCell)
             return
 
+        waveIdx = 0
+        waveCount = 3
         while waveIdx < waveCount:
             self.prepareWave(waveIdx, self.enemyQueue)
             waveIdx += 1
@@ -119,7 +119,7 @@ class Scene2(SceneBase):
             spawnLocation = self.getRandomSpawnCoords(rightSideBias=0.8)
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                enemyType = EnemyType.dragon,
+                enemyType = EnemyType.stickfigure,
                 spawnTime = None,  # waveIdx * intraWaveSpawnTime + n,
                 spawnX = playerTrapX,
                 spawnLocation = spawnLocation,
@@ -184,25 +184,6 @@ class Scene2(SceneBase):
             self.enemySpawned.append(enemyCell)
             del self.enemyQueue[0]
 
-        # handle speech bubbles here, too
-        if len(self.speechBubbles) > 0:
-            speechEntry = self.speechBubbles[0]
-            if self.time > speechEntry['timeSpawn']:
-                playerEnt = EntityFinder.findPlayer(self.world)
-                playerGroupId = self.world.component_for_entity(
-                    playerEnt, system.groupid.GroupId)
-
-                directMessaging.add(
-                    groupId = playerGroupId.getId(),
-                    type = DirectMessageType.activateSpeechBubble,
-                    data = {
-                        'text': speechEntry['text'],
-                        'time': speechEntry['timeShow'],
-                        'waitTime': 0,
-                    }
-                )
-                self.speechBubbles.pop(0)
-
 
     def handleTime(self):
         if len(self.enemyQueue) == 0:
@@ -226,6 +207,24 @@ class Scene2(SceneBase):
 
     def advance(self, dt):
         self.time += dt
+
+        if len(self.speechBubbles) > 0:
+            speechEntry = self.speechBubbles[0]
+            if self.time > speechEntry['timeSpawn']:
+                playerEnt = EntityFinder.findPlayer(self.world)
+                playerGroupId = self.world.component_for_entity(
+                    playerEnt, system.groupid.GroupId)
+
+                directMessaging.add(
+                    groupId = playerGroupId.getId(),
+                    type = DirectMessageType.activateSpeechBubble,
+                    data = {
+                        'text': speechEntry['text'],
+                        'time': speechEntry['timeShow'],
+                        'waitTime': 0,
+                    }
+                )
+                self.speechBubbles.pop(0)        
 
 
     def getRandomSpawnCoords(self, rightSideBias=0.5):

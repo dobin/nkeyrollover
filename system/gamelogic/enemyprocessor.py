@@ -1,5 +1,4 @@
 import esper
-import random
 import logging
 
 from texture.character.characteranimationtype import CharacterAnimationType
@@ -16,8 +15,19 @@ from system.gamelogic.weapontype import WeaponType
 from messaging import messaging, MessageType
 import game.uniqueid
 from common.coordinates import Coordinates
+from utilities.objectcache import ObjectCache
 
 logger = logging.getLogger(__name__)
+
+
+class EnemyCached(object):
+    def __init__(self):
+        self.ai = None
+        self.groupId = None
+        self.renderable = None
+        self.tenemy = None
+        self.attackable = None
+        self.offensiveAttack = None
 
 
 class EnemyProcessor(esper.Processor):
@@ -25,13 +35,30 @@ class EnemyProcessor(esper.Processor):
         super().__init__()
         self.enemyLoader = enemyLoader
         self.viewport = viewport
+        self.num = 16
+        self.objectCache = ObjectCache(size=self.num)
+        self.didLoad = False
+
+
+    def init(self):
+        n = 0
+        while n < self.num:
+            enemyCached = self.createEnemyCached()
+            self.objectCache.addObject(enemyCached)
+            n += 1
 
 
     def process(self, deltaTime):
+        # workaround, because we dont have self.world in __init__()...
+        if not self.didLoad:
+            self.init()
+            self.didLoad = True
+
         for ent, player in self.world.get_component(Enemy):
             player.advance(deltaTime)
 
         self.checkSpawn()
+        self.checkDead()
 
 
     def checkSpawn(self):
@@ -39,61 +66,96 @@ class EnemyProcessor(esper.Processor):
             self.spawnEnemy(message.data)
 
 
+    def checkDead(self):
+        for ent, (ai, enemy) in self.world.get_components(Ai, Enemy):
+            # remove enemies which are completely dead
+            if ai.brain.state.name == 'dead':
+                # first, add it again to the cache
+                renderable = self.world.component_for_entity(ent, Renderable)
+                groupId = self.world.component_for_entity(ent, GroupId)
+                attackable = self.world.component_for_entity(ent, Attackable)
+                offensiveAttack = self.world.component_for_entity(ent, OffensiveAttack)
+                enemyCached = EnemyCached()
+                enemyCached.ai = ai
+                enemyCached.groupId = groupId
+                enemyCached.renderable = renderable
+                enemyCached.tenemy = enemy
+                enemyCached.attackable = attackable
+                enemyCached.offensiveAttack = offensiveAttack
+                self.objectCache.addObject(enemyCached)
+
+                # delete it
+                self.world.delete_entity(ent)
+
+                # message everyone that it is really dead now
+                messaging.add(
+                    type = MessageType.EntityDead,
+                    groupId = None,
+                    data = {}
+                )
+
+
     def spawnEnemy(self, data):
-        id = game.uniqueid.getUniqueId()
         enemyType = data.enemyType
         coordinates = data.spawnLocation
 
+        enemyCached = self.objectCache.getObject()
         enemySeed = self.enemyLoader.getSeedForEnemy(enemyType)
 
+        entity = self.world.create_entity()
+        esperData = EsperData(self.world, entity, enemyCached.renderable.name)  # ugly
+
+        enemyCached.tenemy.setEnemyInfo(enemySeed.enemyInfo)
+        enemyCached.attackable.setHealth(enemySeed.health)
+        enemyCached.attackable.setStunTime(0.75)
+        enemyCached.ai.setEnemyType(enemyType)
+        enemyCached.ai.initAi(esperData=esperData)
+        enemyCached.renderable.texture.setCharacterTextureType(
+            enemySeed.characterTextureType)
+        enemyCached.renderable.setActive(True)
+        enemyCached.renderable.setLocation(coordinates)
+        enemyCached.renderable.attackBaseLocation = Coordinates(
+            enemySeed.attackBaseLocation['x'],
+            enemySeed.attackBaseLocation['y']
+        )
+        enemyCached.offensiveAttack.switchWeapon(enemySeed.weaponType)
+
+        self.world.add_component(entity, enemyCached.ai)
+        self.world.add_component(entity, enemyCached.groupId)
+        self.world.add_component(entity, enemyCached.renderable)
+        self.world.add_component(entity, enemyCached.tenemy)
+        self.world.add_component(entity, enemyCached.attackable)
+        self.world.add_component(entity, enemyCached.offensiveAttack)
+
+
+    def createEnemyCached(self):
+        id = game.uniqueid.getUniqueId()
         name = "Bot " + str(id)
         groupId = GroupId(id=id)
-        enemy = self.world.create_entity()
-        esperData = EsperData(self.world, enemy, name)
-        tenemy = Enemy(name=name, enemyInfo=enemySeed.enemyInfo)
-        attackable = Attackable(
-            initialHealth=enemySeed.health,
-            stunTime=enemySeed.stunTime)
-        ai = Ai(
-            name=name,
-            esperData=esperData,
-            enemyType=enemyType)
+
+        tenemy = Enemy(name=name)
+        attackable = Attackable()
+        ai = Ai(name=name)
 
         texture = CharacterTexture(
-            characterAnimationType=CharacterAnimationType.standing,
-            head=self.getRandomHead(),
-            body=self.getRandomBody(),
-            characterTextureType=enemySeed.characterTextureType,
             name=name)
 
         renderable = Renderable(
             texture=texture,
             viewport=self.viewport,
             parent=None,
-            coordinates=coordinates,
             active=True,
             name=name)
-        renderable.attackBaseLocation = Coordinates(
-            enemySeed.attackBaseLocation['x'],
-            enemySeed.attackBaseLocation['y']
-        )
 
         offensiveAttack = OffensiveAttack(
             parentChar=tenemy,
             parentRenderable=renderable)
-        offensiveAttack.switchWeapon(enemySeed.weaponType)
 
-        self.world.add_component(enemy, ai)
-        self.world.add_component(enemy, groupId)
-        self.world.add_component(enemy, renderable)
-        self.world.add_component(enemy, tenemy)
-        self.world.add_component(enemy, attackable)
-        self.world.add_component(enemy, offensiveAttack)
-
-
-    def getRandomHead(self):
-        return random.choice(['^', 'o', 'O', 'v', 'V'])
-
-
-    def getRandomBody(self):
-        return random.choice(['X', 'o', 'O', 'v', 'V', 'M', 'm'])
+        enemyCached = EnemyCached()
+        enemyCached.ai = ai
+        enemyCached.groupId = groupId
+        enemyCached.renderable = renderable
+        enemyCached.tenemy = tenemy
+        enemyCached.attackable = attackable
+        enemyCached.offensiveAttack = offensiveAttack
+        return enemyCached

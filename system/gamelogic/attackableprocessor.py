@@ -80,7 +80,6 @@ class AttackableProcessor(esper.Processor):
                         meRenderable.setActive(False)
 
 
-
     def checkReceiveDamage(self):
         for msg in directMessaging.getByType(DirectMessageType.receiveDamage):
             entity = EntityFinder.findCharacterByGroupId(self.world, msg.groupId)

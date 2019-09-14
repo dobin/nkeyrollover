@@ -59,3 +59,12 @@ class Attackable():
 
     def advance(self, dt):
         self.stunTimer.advance(dt)
+
+
+    def setHealth(self, health): 
+        self.health = health
+        self.initialHealth = health
+
+
+    def setStunTime(self, stunTime):
+        self.stunTime = stunTime

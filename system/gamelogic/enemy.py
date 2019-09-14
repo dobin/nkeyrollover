@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 
 class Enemy():
-    def __init__(self, name, enemyInfo):
+    def __init__(self, name :str, enemyInfo :EnemyInfo =None):
         self.isPlayer = False
         self.name :str = 'Bot' + name
         self.enemyInfo :EnemyInfo = enemyInfo
@@ -14,6 +14,10 @@ class Enemy():
 
     def advance(self, deltaTime :float):
         pass
+
+
+    def setEnemyInfo(self, enemyInfo :EnemyInfo):
+        self.enemyInfo = enemyInfo
 
 
     def __repr__(self):
