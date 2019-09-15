@@ -6,6 +6,7 @@ from system.gamelogic.weapontype import WeaponType
 from utilities.timer import Timer
 from messaging import messaging, MessageType
 from texture.filetextureloader import FileTextureLoader
+from typing import List
 
 logger = logging.getLogger(__name__)
 
@@ -81,8 +82,9 @@ class OffensiveAttack():
         self.durationTimer.advance(deltaTime)
 
 
-    def getCurrentWeaponHitArea(self):
-        wha = self.weaponData[self.weaponType].weaponHitArea
+    def getCurrentWeaponHitArea(self, direction):
+        w = self.weaponData[self.weaponType]
+        wha = w.weaponHitArea[direction]
         return copy.deepcopy(wha)
 
 

@@ -15,6 +15,7 @@ from system.gamelogic.weapontype import WeaponType
 from common.weaponhitarea import WeaponHitArea
 from common.weapondata import WeaponData
 from typing import List
+from utilities.utilities import Utility
 
 logger = logging.getLogger(__name__)
 
@@ -97,8 +98,16 @@ class FileTextureLoader(object):
         weaponData = self.readWeaponYamlFile(filename)
 
         filenameHitDetect = "data/weapons/{}_hitdetect.ascii".format(weaponName)
-        weaponData.weaponHitArea = self.readHitDetectionFile(
-            filenameHitDetect, weaponType)
+        weaponData.weaponHitArea[Direction.left] = self.readHitDetectionFile(
+            filename=filenameHitDetect,
+            weaponType=weaponType,
+            direction=Direction.left,
+            weaponHitDirection=weaponData.hitDetectionDirection)
+        weaponData.weaponHitArea[Direction.right] = self.readHitDetectionFile(
+            filename=filenameHitDetect,
+            weaponType=weaponType,
+            direction=Direction.right,
+            weaponHitDirection=weaponData.hitDetectionDirection)
 
         return weaponData
 
@@ -124,7 +133,9 @@ class FileTextureLoader(object):
     def readHitDetectionFile(
         self,
         filename :str,
-        weaponType :WeaponType
+        weaponType :WeaponType,
+        direction :Direction,
+        weaponHitDirection :Direction
     ) -> WeaponHitArea:
         if not os.path.isfile(filename):
             # default, if file would not exist
@@ -140,6 +151,9 @@ class FileTextureLoader(object):
 
         lineList = [line.rstrip('\n') for line in open(filename)]
         (res, maxWidth, maxHeight) = self.parseAnimationLineList(lineList)
+
+        if direction is not weaponHitDirection:
+            Utility.mirrorFrames(res)
 
         # only add positions indicated by 'x', ignore all other chars
         hitCd = []
