@@ -8,6 +8,7 @@ from texture.phenomena.phenomenatype import PhenomenaType
 from texture.action.actiontype import ActionType
 from system.gamelogic.weapontype import WeaponType
 import game.isunittest
+from utilities.renderablecache import renderableCache
 
 
 class FileTextureLoaderTest(unittest.TestCase):
@@ -104,10 +105,12 @@ class FileTextureLoaderTest(unittest.TestCase):
         game.isunittest.setIsUnitTest()
 
         fileTextureLoader = FileTextureLoader()
+        renderableCache.init(viewport=None)
         weaponData = fileTextureLoader.readWeapon(WeaponType.unittest)
 
         self.assertTrue(weaponData.actionTextureType is ActionType.unittest)
         self.assertTrue(weaponData.hitDetectionDirection == Direction.left)
+        self.assertTrue(weaponData.damage == 10)
 
         self.assertTrue(weaponData.weaponHitArea.width == 5)
         self.assertTrue(weaponData.weaponHitArea.height == 3)

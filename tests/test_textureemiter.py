@@ -16,15 +16,17 @@ from system.graphics.renderableprocessor import RenderableProcessor
 from game.textureemiter import TextureEmiter
 from texture.action.actiontype import ActionType
 from common.direction import Direction
+from utilities.renderablecache import renderableCache
 
 
-class PhenomenaTextureTest(unittest.TestCase):
-    def test_phenomenatexture(self):
+class TextureEmiterTest(unittest.TestCase):
+    def test_actionemiter(self):
         game.isunittest.setIsUnitTest()
 
         self.viewport = MockWin(20, 10)
         self.world = esper.World()
         self.textureEmiter = TextureEmiter(viewport=self.viewport, world=self.world)
+        renderableCache.init(viewport=self.viewport)
 
         renderableProcessor = RenderableProcessor()
         movementProcessor = MovementProcessor()
