@@ -23,36 +23,11 @@ class SceneProcessor(esper.Processor):
         self.viewport = viewport
         self.sceneManager = sceneManager
         self.sceneManager.initScene()  # start first scene
+
         self.xCenter = Config.columns / 2 - 5
         self.state = State.brawl
         self.screenMoveTimer = Timer(0.1)
         self.lastKnownPlayerPos = None
-
-
-    def numEnemiesAlive(self) -> int:
-        count = 0
-        for _, ai in self.world.get_component(system.gamelogic.ai.Ai):
-            if ai.brain.state.name != 'dead' and ai.brain.state.name != 'dying':
-                count += 1
-
-        return count
-
-
-    def numEnemiesVisible(self) -> int:
-        count = 0
-        for _, (ai, renderable) in self.world.get_components(
-                system.gamelogic.ai.Ai, system.graphics.renderable.Renderable):
-            if (ai.brain.state.name != 'dead' and ai.brain.state.name != 'dying'
-                    and renderable.coordinates.x > self.viewport.getx()
-                    and renderable.coordinates.x < self.viewport.getRightX()):
-                count += 1
-
-        return count
-
-
-    def setState(self, state):
-        if self.state != state:
-            self.state = state
 
 
     def process(self, dt):
@@ -74,7 +49,8 @@ class SceneProcessor(esper.Processor):
                     self.setState(State.brawl)
 
             if self.state is State.brawl:
-                if self.numEnemiesVisible() == 0:
+                if (self.numEnemiesVisible() == 0
+                        and not self.enemiesLeftOfChar(self.lastKnownPlayerPos.x)):
                     self.screenMoveTimer.start()
                     self.setState(State.pushToEnemies)
 
@@ -166,3 +142,39 @@ class SceneProcessor(esper.Processor):
 
 
         self.sceneManager.advance(dt)
+
+
+    def numEnemiesAlive(self) -> int:
+        count = 0
+        for _, ai in self.world.get_component(system.gamelogic.ai.Ai):
+            if ai.brain.state.name != 'dead' and ai.brain.state.name != 'dying':
+                count += 1
+
+        return count
+
+
+    def numEnemiesVisible(self) -> int:
+        count = 0
+        for _, (ai, renderable) in self.world.get_components(
+                system.gamelogic.ai.Ai, system.graphics.renderable.Renderable):
+            if (ai.brain.state.name != 'dead' and ai.brain.state.name != 'dying'
+                    and renderable.coordinates.x > self.viewport.getx()
+                    and renderable.coordinates.x < self.viewport.getRightX()):
+                count += 1
+
+        return count
+
+
+    def enemiesLeftOfChar(self, playerX):
+        for _, (ai, renderable) in self.world.get_components(
+                system.gamelogic.ai.Ai, system.graphics.renderable.Renderable):
+            if (ai.brain.state.name != 'dead' and ai.brain.state.name != 'dying'
+                    and renderable.coordinates.x < playerX):
+                return True
+
+        return False
+
+
+    def setState(self, state):
+        if self.state != state:
+            self.state = state
