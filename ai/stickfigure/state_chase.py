@@ -93,7 +93,7 @@ class StateChase(State):
 
 
     def canAttackPlayer(self):
-        logging.info("{}: (slow) Check if i can attack player".format(self.name))
+        logging.info("{}: Check if i can attack player".format(self.name))
         meRenderable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.graphics.renderable.Renderable)
         meOffensiveAttack = self.brain.owner.world.component_for_entity(
@@ -109,9 +109,14 @@ class StateChase(State):
             self.lastKnownPlayerPosition = playerRenderable.getLocationAndSize()
         playerLocation = self.lastKnownPlayerPosition
 
+        return self.canAttackPlayer2(meRenderable, meOffensiveAttack, playerLocation)
+
+
+    def canAttackPlayer2(self, meRenderable, meOffensiveAttack, playerLocation):
         loc = meRenderable.getWeaponBaseLocation()
         direction = meRenderable.getDirection()
-        currentWeaponHitArea = meOffensiveAttack.getCurrentWeaponHitArea()
+        currentWeaponHitArea = meOffensiveAttack.getCurrentWeaponHitArea(
+            direction=direction)
         self.updateWeaponHitArea(
             currentWeaponHitArea,
             loc,
@@ -173,8 +178,7 @@ class StateChase(State):
             c.x += loc.x
             c.y += loc.y
             if direction is Direction.left:
-                c.x -= (weaponHitArea.width - 1)
-        #return carr
+                c.x -= weaponHitArea.width
 
 
     def getInputChase(self):
