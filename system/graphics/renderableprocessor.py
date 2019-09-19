@@ -71,7 +71,10 @@ class RenderableProcessor(esper.Processor):
                 directMessaging.add(
                     groupId=groupId.id,
                     type=DirectMessageType.receiveDamage,
-                    data=damage
+                    data={
+                        'damage': damage,
+                        'byPlayer': False,
+                    }
                 )
 
 
@@ -90,7 +93,10 @@ class RenderableProcessor(esper.Processor):
                 directMessaging.add(
                     groupId=groupId.id,
                     type=DirectMessageType.receiveDamage,
-                    data=damage
+                    data={
+                        'damage': damage,
+                        'byPlayer': True,
+                    }
                 )
                 damageSum += damage
 

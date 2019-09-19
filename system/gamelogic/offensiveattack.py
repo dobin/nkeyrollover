@@ -6,7 +6,6 @@ from system.gamelogic.weapontype import WeaponType
 from utilities.timer import Timer
 from messaging import messaging, MessageType
 from texture.filetextureloader import FileTextureLoader
-from typing import List
 
 logger = logging.getLogger(__name__)
 

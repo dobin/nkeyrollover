@@ -31,7 +31,7 @@ class OffensiveSkillProcessor(esper.Processor):
 
     def handlePlayerKeypress(self, key):
         playerSkill = self.getPlayerSkill()
-        if playerSkill is None: 
+        if playerSkill is None:
             # no player here yet
             return
 
@@ -59,7 +59,7 @@ class OffensiveSkillProcessor(esper.Processor):
 
     def getPlayerSkill(self):
         playerEntity = EntityFinder.findPlayer(self.world)
-        if playerEntity is None: 
+        if playerEntity is None:
             return None
 
         meGroupId = self.world.component_for_entity(
@@ -70,4 +70,3 @@ class OffensiveSkillProcessor(esper.Processor):
             meGroupId.getId())
 
         return offensiveSkillEntity
-        

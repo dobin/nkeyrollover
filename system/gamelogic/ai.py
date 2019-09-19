@@ -5,12 +5,13 @@ from ai.stickfigure.state_attack import StateAttack
 from ai.cow.state_attack import StateAttack as CowStateAttack
 from ai.stickfigure.state_attackwindup import StateAttackWindup
 from ai.stickfigure.state_chase import StateChase
+from ai.dragon.state_chase import DragonStateChase
 from ai.stickfigure.state_dying import StateDying
 from ai.stickfigure.state_spawn import StateSpawn
 from ai.stickfigure.state_wander import StateWander
 from ai.stickfigure.state_dead import StateDead
 from game.enemytype import EnemyType
-from system.gamelogic.esperdata import EsperData
+
 
 logger = logging.getLogger(__name__)
 
@@ -25,13 +26,15 @@ class Ai():
 
     def initAi(self, esperData):
         self.brain :Brain = Brain(esperData)
-
         self.brain.register(StateSpawn)
         if self.enemyType is EnemyType.cow:
             self.brain.register(CowStateAttack)
         else:
             self.brain.register(StateAttack)
-        self.brain.register(StateChase)
+        if self.enemyType is EnemyType.dragon:
+            self.brain.register(DragonStateChase)
+        else:
+            self.brain.register(StateChase)
         self.brain.register(StateWander)
         self.brain.register(StateDying)
         self.brain.register(StateDead)

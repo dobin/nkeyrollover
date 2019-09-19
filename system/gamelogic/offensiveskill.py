@@ -196,13 +196,6 @@ class OffensiveSkill(object):
                 'direction': meRenderable.direction,
             }
         )
-#        messaging.add(
-#            type=MessageType.PlayerAttack,
-#            data= {
-#                'hitLocations': hitLocations,
-#                'damage': self.damage[WeaponType.laser]
-#            }
-#        )
 
 
     def skillCleave(self):
@@ -220,13 +213,6 @@ class OffensiveSkill(object):
                 'direction': meRenderable.direction,
             }
         )
-#        messaging.add(
-#            type=MessageType.PlayerAttack,
-#            data= {
-#                'hitLocations': hitLocations,
-#                'damage': self.damage[WeaponType.cleave]
-#            }
-#        )
 
 
     def advance(self, dt):

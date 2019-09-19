@@ -1,5 +1,8 @@
 import logging
 
+logger = logging.getLogger(__name__)
+
+
 class Timer(object):
     def __init__(
         self, timerValue :float =0.0, instant :bool =False, active :bool =True
@@ -22,6 +25,7 @@ class Timer(object):
 
     def setTimer(self, timerValue: float):
         self.timerValue = timerValue
+        self.timeLeft = self.timerValue
 
 
     def reset(self):

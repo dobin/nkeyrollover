@@ -46,7 +46,7 @@ class ParticleProcessor(esper.Processor):
                 effectType=message.data['effectType'],
                 direction=message.data['direction'],
             )
-            byPlayer = message.data['byPlayer'],
+            byPlayer = message.data['byPlayer']
             damage = message.data['damage']
 
             if damage is not None:
@@ -54,17 +54,19 @@ class ParticleProcessor(esper.Processor):
 
 
     def handleHitLocations(self, hitLocations, byPlayer, damage):
-        for ent, (groupId, renderable, attackable, enemy) in self.world.get_components(
+        for ent, (groupId, renderable, attackable) in self.world.get_components(
             system.groupid.GroupId,
             system.graphics.renderable.Renderable,
             system.gamelogic.attackable.Attackable,
-            system.gamelogic.enemy.Enemy
         ):
             if renderable.isHitBy(hitLocations):
                 directMessaging.add(
                     groupId=groupId.id,
                     type=DirectMessageType.receiveDamage,
-                    data=damage
+                    data={
+                        'damage': damage,
+                        'byPlayer': byPlayer,
+                    }
                 )
 
 
@@ -166,4 +168,3 @@ class ParticleProcessor(esper.Processor):
                 n += 1
 
         return particleList
-

@@ -6,6 +6,7 @@ from system.graphics.renderable import Renderable
 from system.groupid import GroupId
 from system.gamelogic.enemy import Enemy
 from system.gamelogic.attackable import Attackable
+from system.gamelogic.player import Player
 from system.gamelogic.ai import Ai
 from utilities.colorpalette import ColorPalette
 from utilities.color import Color
@@ -93,7 +94,13 @@ class AttackableProcessor(esper.Processor):
                 entity, Attackable)
             meGroupId = self.world.component_for_entity(
                 entity, GroupId)
-            damage = msg.data
+            damage = msg.data['damage']
+            byPlayer = msg.data['byPlayer']
+            isPlayer = self.world.has_component(entity, Player)
+
+            # enemy can attack player, and vice-versa
+            if byPlayer ^ isPlayer:
+                continue
 
             # change health
             meAttackable.adjustHealth(-1 * damage)

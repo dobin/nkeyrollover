@@ -4,7 +4,6 @@ import logging
 from common.direction import Direction
 from stackfsm.states import BaseState as State
 from utilities.timer import Timer
-from common.coordinates import Coordinates
 from utilities.utilities import Utility
 from messaging import messaging, MessageType
 from directmessaging import directMessaging, DirectMessageType
@@ -12,9 +11,7 @@ import system.graphics.renderable
 import system.gamelogic.enemy
 from utilities.entityfinder import EntityFinder
 from config import Config
-import copy
 from utilities.color import Color
-
 
 logger = logging.getLogger(__name__)
 
@@ -27,10 +24,16 @@ class StateChase(State):
         meEnemy = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.enemy.Enemy)
 
+        # basically move speed
         self.lastInputTimer = Timer(
             meEnemy.enemyInfo.chaseStepDelay,
             instant=True)
+
+        # try attacking when timer is finished
         self.canAttackTimer = Timer()
+
+        # we need to know player location, or we could just handle on every new
+        # PlayerLocation message
         self.lastKnownPlayerPosition = None
 
 
@@ -46,6 +49,35 @@ class StateChase(State):
         self.canAttackTimer.reset()
 
 
+    def tryAttacking(self):
+        if self.canAttackTimer.timeIsUp():
+            logging.info("{}: Check if i can attack player".format(self.name))
+            if self.canAttackPlayer():
+                if (EntityFinder.numEnemiesInState(self.brain.owner.world, 'attack')
+                        < Config.enemiesInStateAttacking):
+                    self.brain.pop()
+                    self.brain.push("attackwindup")
+
+            self.canAttackTimer.reset()
+
+
+    def tryMoving(self):
+        # only move if we can not hit him (even on cooldown)
+        # this is quiet... taxing. and not really necessary?
+        # if not self.canAttackPlayer():
+
+        if True:
+            # movement speed, and direction
+            if self.lastInputTimer.timeIsUp():
+                self.getInputChase()
+                self.lastInputTimer.reset()
+
+
+    def trySkill(self):
+        # stickfigure has no skills
+        pass
+
+
     def process(self, dt):
         meAttackable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.attackable.Attackable)
@@ -56,28 +88,14 @@ class StateChase(State):
         self.lastInputTimer.advance(dt)
         self.canAttackTimer.advance(dt)
 
-        # can attack player - based on playerlocation messages
+        # update player position if new location
         self.checkForNewPlayerPosition()
-        if self.canAttackTimer.timeIsUp():
-            if self.canAttackPlayer():
-                if (EntityFinder.numEnemiesInState(self.brain.owner.world, 'attack') 
-                        < Config.enemiesInStateAttacking):
-                    self.brain.pop()
-                    self.brain.push("attackwindup")
-                    pass
 
-            self.canAttackTimer.reset()
-
+        self.tryAttacking()
         # note that if we want to attack, as identified a few lines above,
         # we will be in state attackWindup, and not reach here
-
-        # only move if we can not hit him (even on cooldown)
-        # if not self.canAttackPlayer():
-        if True:
-            # movement speed, and direction
-            if self.lastInputTimer.timeIsUp():
-                self.getInputChase()
-                self.lastInputTimer.reset()
+        self.trySkill()
+        self.tryMoving()
 
         # switch to wander if exhausted
         if self.timeIsUp():
@@ -93,7 +111,6 @@ class StateChase(State):
 
 
     def canAttackPlayer(self):
-        logging.info("{}: Check if i can attack player".format(self.name))
         meRenderable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.graphics.renderable.Renderable)
         meOffensiveAttack = self.brain.owner.world.component_for_entity(
