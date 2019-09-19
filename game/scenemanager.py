@@ -1,14 +1,16 @@
 import logging
 
+from game.scenes.sceneplayground import ScenePlayground
 from game.scenes.scene0 import Scene0
 from game.scenes.scene1 import Scene1
 from game.scenes.scene2 import Scene2
+from config import Config
 
 logger = logging.getLogger(__name__)
 
 
 class SceneManager(object):
-    """Manages a scene in the game. 
+    """Manages a scene in the game.
     * Acts on player.x or viewport.x
     * Defines the viewport and its movement
     * Defines when and where enemies spawn
@@ -21,11 +23,17 @@ class SceneManager(object):
         self.mapManager = mapManager
 
         self.scenes = [
+            ScenePlayground(viewport=viewport, world=world),  # playground
             Scene0(viewport=viewport, world=world),  # intro logo
             Scene1(viewport=viewport, world=world),  # intro animation
             Scene2(viewport=viewport, world=world),  # map
         ]
-        self.currentSceneIdx = 0
+
+        if Config.devMode:
+            self.currentSceneIdx = 0
+        else:
+            self.currentSceneIdx = 1
+
         self.currentScene = self.scenes[self.currentSceneIdx]
 
 
@@ -56,6 +64,8 @@ class SceneManager(object):
             self.nextScene()
 
 
-    def handlePlayerKeyPress(self):
+    def handlePlayerKeyPress(self, key):
         if self.currentScene.anyKeyFinishesScene:
             self.nextScene()
+
+        self.currentScene.handlePlayerKeyPress(key)

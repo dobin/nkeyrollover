@@ -53,8 +53,10 @@ python3.7 -m unittest
 
 ### Performance tests 
 
+
 ```
-python3.7 -m cProfile -s time nkeyrollover.py
+python3.7 -m cProfile -s time -o perf.txt nkeyrollover.py
+python3.7 readperf.py
 ```
 
 ## Telnet config 

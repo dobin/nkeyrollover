@@ -75,7 +75,7 @@ class Scene2(SceneBase):
         if Config.devMode:
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                enemyType = EnemyType.stickfigure,
+                enemyType = EnemyType.dragon,
                 spawnTime = None,
                 spawnX = 0,
                 spawnLocation = Coordinates(35, 8),

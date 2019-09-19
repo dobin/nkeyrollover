@@ -27,7 +27,6 @@ class SceneBase(object):
     def __repr__(self):
         return self.name
 
-
     def showPlayer(self):
         return self.isShowPlayer
 
@@ -42,6 +41,10 @@ class SceneBase(object):
 
     def getEndX(self):
         return self.end_x
+
+
+    def enter(self):
+        pass
 
 
     def sceneIsFinished(self) -> bool:
@@ -59,6 +62,9 @@ class SceneBase(object):
         pass
 
     def handleEnemyDeath(self):
+        pass
+
+    def handlePlayerKeyPress(self, key):
         pass
 
 

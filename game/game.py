@@ -23,12 +23,11 @@ from system.graphics.renderableminimalprocessor import RenderableMinimalProcesso
 from system.gamelogic.gametimeprocessor import GametimeProcessor
 from game.scenemanager import SceneManager
 from game.statusbar import StatusBar
-from game.particleemiter import ParticleEmiter
 from game.enemyloader import EnemyLoader
 from utilities.entityfinder import EntityFinder
 from messaging import messaging
 from directmessaging import directMessaging
-from utilities.renderablecache import renderableCache
+from system.singletons.renderablecache import renderableCache
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +47,6 @@ class Game(object):
             viewport=self.viewport,
             world=self.world,
             mapManager=self.mapManager)
-        self.particleEmiter :ParticleEmiter = ParticleEmiter()
         self.enemyLoader :EnemyLoader = EnemyLoader()
 
         self.pause :bool = False
@@ -129,7 +127,10 @@ class Game(object):
 
         # p handle:   MessageType         PlayerLocation
         # e handle:   MessageType         EntityDead
+        # p handle:   MessageType         PlayerKeypress
         # e generate: MessageType         SpawnEnemy
+        # p generate: MessageType         SpawnPlayer
+        # x generate: DirectMessageType   activateSpeechBubble
         self.world.add_processor(sceneProcessor)
 
         # e generate: MessageType         EntityDead
@@ -144,7 +145,7 @@ class Game(object):
         # x handle:  MessageType          EntityStun
         self.world.add_processor(characterAnimationProcessor)
 
-        # Nothing
+        # p handle.  MessageType          SpawnPlayer
         self.world.add_processor(playerProcessor)
 
         # p handle:   MessageType         PlayerAttack. (cd, convert to damage)

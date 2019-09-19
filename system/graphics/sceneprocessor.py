@@ -33,7 +33,7 @@ class SceneProcessor(esper.Processor):
     def process(self, dt):
         self.screenMoveTimer.advance(dt)
 
-        for message in messaging.getByType(MessageType.EntityDead):
+        for message in messaging.getByType(MessageType.EntityDying):
             # if no enemies are alive, we want to go to the next akt
             if self.numEnemiesAlive() == 0:
                 self.screenMoveTimer.start()
@@ -104,7 +104,7 @@ class SceneProcessor(esper.Processor):
                 self.numEnemiesAlive())
 
         for message in messaging.getByType(MessageType.PlayerKeypress):
-            self.sceneManager.handlePlayerKeyPress()
+            self.sceneManager.handlePlayerKeyPress(message.data['key'])
 
         # move screen animation
         if self.screenMoveTimer.timeIsUp() and self.lastKnownPlayerPos is not None:
