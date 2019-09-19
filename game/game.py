@@ -28,6 +28,7 @@ from utilities.entityfinder import EntityFinder
 from messaging import messaging
 from directmessaging import directMessaging
 from system.singletons.renderablecache import renderableCache
+from system.gamelogic.damageprocessor import DamageProcessor
 
 logger = logging.getLogger(__name__)
 
@@ -76,6 +77,7 @@ class Game(object):
             viewport=self.viewport,
             sceneManager=self.sceneManager,
         )
+        damageProcessor = DamageProcessor()
 
         self.inputProcessor :InputProcessor = inputProcessor  # for Statusbar:APM
         self.sceneProcessor :SceneProcessor = sceneProcessor  # for stats
@@ -114,6 +116,14 @@ class Game(object):
         # x generate: Message            EmitParticleEffect (skill)
         self.world.add_processor(offensiveSkillProcessor)
 
+        # x handle:   Message            EmitParticleEffect
+        # x emit:     Message            AttackAt
+        #skillDamageProcessor()
+
+        # x handle:   Message            PlayerAttack
+        # x emit:     Message            AttackAt
+        #attackDamageProcessor()
+
         # x handle:   DirectMessage      receiveDamage
         # x generate: Message            EntityStun
         # x generate: Message            EntityDying
@@ -150,12 +160,18 @@ class Game(object):
 
         # p handle:   Message            PlayerAttack (CD, convert to damage)
         # e handle:   Message            EnemyAttack
-        # x generate: DirectMessage      receiveDamage
+        ## x generate: DirectMessage      receiveDamage
+        #x generate: Message            AttackAt
         self.world.add_processor(renderableProcessor)
 
         # x handle:   Message            EmitParticleEffect
-        # x generate: DirectMessage      receiveDamage
+        ## x generate: DirectMessage      receiveDamage
+        #x generate: Message            AttackAt
         self.world.add_processor(particleProcessor)
+
+        # x handle:   Message            AttackAt
+        # x generate: DirectMessage      receiveDamage
+        self.world.add_processor(damageProcessor)
 
 
     def draw1(self, frame :int):

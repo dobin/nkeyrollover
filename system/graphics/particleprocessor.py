@@ -33,33 +33,13 @@ class ParticleProcessor(esper.Processor):
 
     def checkMessages(self):
         for message in messaging.getByType(MessageType.EmitParticleEffect):
-            hitLocations = self.particleEmiter.emit(
+            self.particleEmiter.emit(
                 loc=message.data['location'],
                 effectType=message.data['effectType'],
                 direction=message.data['direction'],
+                byPlayer=message.data['byPlayer'],
+                damage=message.data['damage']
             )
-            byPlayer = message.data['byPlayer']
-            damage = message.data['damage']
-
-            if damage is not None:
-                self.handleHitLocations(hitLocations, byPlayer, damage)
-
-
-    def handleHitLocations(self, hitLocations, byPlayer, damage):
-        for ent, (groupId, renderable, attackable) in self.world.get_components(
-            system.groupid.GroupId,
-            system.graphics.renderable.Renderable,
-            system.gamelogic.attackable.Attackable,
-        ):
-            if renderable.isHitBy(hitLocations):
-                directMessaging.add(
-                    groupId=groupId.id,
-                    type=DirectMessageType.receiveDamage,
-                    data={
-                        'damage': damage,
-                        'byPlayer': byPlayer,
-                    }
-                )
 
 
     def advance(self, dt):

@@ -18,15 +18,17 @@ class MessageType(Enum):
 
     EntityStun = 10  # to play stun animation
     EntityDying = 11  # to play death animation
-    EntityDead = 18
+    EntityDead = 12
 
-    SpawnPlayer = 12
-    SpawnEnemy = 13
+    SpawnPlayer = 13
+    SpawnEnemy = 14
 
-    EmitTextureMinimal = 14
-    EmitTexture = 15
-    EmitActionTexture = 16
-    EmitParticleEffect = 17
+    EmitTextureMinimal = 15
+    EmitTexture = 16
+    EmitActionTexture = 17
+    EmitParticleEffect = 18
+
+    AttackAt = 19
 
 
 class Message(object):

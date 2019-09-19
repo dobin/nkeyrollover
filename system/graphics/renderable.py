@@ -138,9 +138,9 @@ class Renderable(object):
 
 
     def collidesWithPoint(self, hitCoords :Coordinates):
-        if (hitCoords.x >= self.coordinates.x 
+        if (hitCoords.x >= self.coordinates.x
                 and hitCoords.x < self.coordinates.x + self.texture.width
-                and hitCoords.y >= self.coordinates.y 
+                and hitCoords.y >= self.coordinates.y
                 and hitCoords.y < self.coordinates.y + self.texture.height):
             return True
 

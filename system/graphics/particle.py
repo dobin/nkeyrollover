@@ -5,6 +5,7 @@ import curses
 from utilities.timer import Timer
 from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
+from messaging import messaging, MessageType
 
 logger = logging.getLogger(__name__)
 
@@ -21,13 +22,19 @@ class Particle(object):
         fadeout :bool =True,
         charType :int =0,
         byStep :bool =False,
-        active :bool =False
+        active :bool =False,
+        damage :int = 0,
+        damageEveryStep :bool =False,
+        byPlayer :bool =True,
     ):
         self.viewport = viewport
         self.movementTimer = Timer()
         self.init(
             x=x, y=y, life=life, angle=angle, speed=speed, fadeout=fadeout,
-            byStep=byStep, charType=charType, active=active)
+            byStep=byStep, charType=charType, active=active,
+            damage=damage,
+            damageEveryStep=damageEveryStep,
+            byPlayer=byPlayer)
 
 
     def init(
@@ -40,7 +47,10 @@ class Particle(object):
         fadeout :bool =True,
         byStep :bool =False,
         charType :int =0,
-        active :bool =False
+        active :bool =False,
+        damage :int =0,
+        damageEveryStep :bool =False,
+        byPlayer :bool =True,
     ):
         self.x = x
         self.y = y
@@ -51,6 +61,9 @@ class Particle(object):
         self.fadeout = fadeout
         self.byStep = byStep
         self.charType = charType
+        self.damage = damage
+        self.damageEveryStep = damageEveryStep
+        self.byPlayer = byPlayer
 
         self.angleInRadians = angle * math.pi / 180
         self.velocity = {
@@ -70,7 +83,7 @@ class Particle(object):
         self.active = active
 
 
-    def __repr__(self): 
+    def __repr__(self):
         # return "{}/{}  vel: {}/{}  life: {}".format(
         #     self.x, self.y, self.velocity['x'], self.velocity['y'], self.life
         # )
@@ -144,6 +157,20 @@ class Particle(object):
             # change pos
             self.x += xChange
             self.y += yChange
+
+            if (self.damageEveryStep and self.damage > 0
+                    and (xChange != 0 or yChange != 0)):
+                # hitLocations = [Coordinates(self.x, self.y)]
+                hitLocations = []
+                hitLocations.append(self)
+                messaging.add(
+                    type=MessageType.AttackAt,
+                    data= {
+                        'hitLocations': hitLocations,
+                        'damage': self.damage,
+                        'byPlayer': self.byPlayer,
+                    }
+                )
 
             if False:
                 print("")

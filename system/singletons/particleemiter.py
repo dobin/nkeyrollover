@@ -5,6 +5,7 @@ from common.direction import Direction
 from config import Config
 from system.graphics.particle import Particle
 from common.coordinates import Coordinates
+from messaging import messaging, MessageType
 
 logger = logging.getLogger(__name__)
 
@@ -36,25 +37,23 @@ class ParticleEmiter(object):
 
     def emit(
         self,
+        byPlayer :bool,
+        damage: int,
         loc :Coordinates,
         effectType :ParticleEffectType,
-        direction :Direction = Direction.none
+        direction :Direction = Direction.none,
     ):
-        particleList = None
-
         if effectType is ParticleEffectType.explosion:
-            particleList = self.createExplosion(loc, direction)
+            self.createExplosion(loc, direction, byPlayer, damage)
         if effectType is ParticleEffectType.laser:
-            particleList = self.createLaser(loc, direction)
+            self.createLaser(loc, direction, byPlayer, damage)
         if effectType is ParticleEffectType.cleave:
-            particleList = self.createCleave(loc, direction)
+            self.createCleave(loc, direction, byPlayer, damage)
         if effectType is ParticleEffectType.dragonExplosion:
-            particleList = self.createDragonExplosion(loc, direction)
-
-        return particleList
+            self.createDragonExplosion(loc, direction, byPlayer, damage)
 
 
-    def createDragonExplosion(self, loc, direction):
+    def createDragonExplosion(self, loc, direction, byPlayer, damage):
         particleList = []
         particleCount = 16
         life = 40
@@ -66,7 +65,8 @@ class ParticleEmiter(object):
             particle.init(
                 x=loc.x, y=loc.y, life=life, angle=angle,
                 speed=0.1, fadeout=True, byStep=False, charType=1,
-                active=True)
+                active=True,
+                damage=damage, damageEveryStep=True, byPlayer=byPlayer)
 
             # advance them out of the center a bit
             particle.makeStep(0.6, adjustLife=False)
@@ -78,7 +78,7 @@ class ParticleEmiter(object):
         return particleList
 
 
-    def createExplosion(self, loc, direction):
+    def createExplosion(self, loc, direction, byPlayer, damage):
         particleList = []
         particleCount = 16
         life = 40
@@ -96,10 +96,11 @@ class ParticleEmiter(object):
             particleList.append(particle)
             n += 1
 
+        self.createDamage(particleList, damage, byPlayer)
         return particleList
 
 
-    def createLaser(self, loc, direction):
+    def createLaser(self, loc, direction, byPlayer, damage):
         particleList = []
 
         particleCount = 16
@@ -118,16 +119,17 @@ class ParticleEmiter(object):
             particle.init(
                 x=basex + n * xinv, y=loc.y, life=life, angle=angle,
                 speed=0.0, fadeout=True, byStep=False, charType=0,
-                active=True)
+                active=True,
+                damage=10)
 
             self.particleActive.append(particle)
             particleList.append(particle)
             n += 1
 
-        return particleList
+        self.createDamage(particleList, damage, byPlayer)
 
 
-    def createCleave(self, loc, direction):
+    def createCleave(self, loc, direction, byPlayer, damage):
         particleList = []
 
         particleCount = 7
@@ -152,19 +154,32 @@ class ParticleEmiter(object):
             particle = self.particlePool.pop()
 
             basex = loc.x + xinv  # distance from char
-            logger.debug("New particle at: {}/{}".format(basex + xinv, loc.y + n))
+            x = basex + xinv
+            y = loc.y + n - int(particleCount / 2) + 1
             particle.init(
-                x=basex + xinv, y=loc.y + n - int(particleCount / 2) + 1,
+                x=x, y=y,
                 life=life,
                 angle=0,
                 speed=0.0,
                 fadeout=True,
                 byStep=False,
                 charType=0,
-                active=True)
+                active=True,
+                damage=10, damageAtStart=True)
 
             self.particleActive.append(particle)
             particleList.append(particle)
             n += 1
 
-        return particleList
+        self.createDamage(particleList, damage, byPlayer)
+
+
+    def createDamage(self, hitLocations, damage, byPlayer):
+        messaging.add(
+            type=MessageType.AttackAt,
+            data= {
+                'hitLocations': hitLocations,
+                'damage': damage,
+                'byPlayer': byPlayer,
+            }
+        )
