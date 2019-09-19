@@ -8,7 +8,7 @@ from texture.phenomena.phenomenatype import PhenomenaType
 from texture.action.actiontype import ActionType
 from system.gamelogic.weapontype import WeaponType
 import game.isunittest
-from utilities.renderablecache import renderableCache
+from system.singletons.renderablecache import renderableCache
 
 
 class FileTextureLoaderTest(unittest.TestCase):

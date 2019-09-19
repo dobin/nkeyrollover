@@ -47,10 +47,10 @@ class AttackableProcessor(esper.Processor):
 
     def checkHealth(self):
         # if enemies have less than 0 health, make them gonna die
-        for ent, (attackable, meEnemy, ai, meGroupId, meRenderable) in self.world.get_components(
+        for ent, (meAtk, meEnemy, ai, meGroupId, meRend) in self.world.get_components(
             Attackable, Enemy, Ai, GroupId, Renderable
         ):
-            if attackable.getHealth() <= 0:
+            if meAtk.getHealth() <= 0:
                 if ai.brain.state.name != 'dead' and ai.brain.state.name != 'dying':
                     # update state
                     ai.brain.pop()
@@ -64,7 +64,7 @@ class AttackableProcessor(esper.Processor):
 
                     # 50% chance to display a fancy death animation
                     if random.choice([True, False]):
-                        logger.info(meRenderable.name + " Death animation deluxe")
+                        logger.info(meRend.name + " Death animation deluxe")
 
                         effect = random.choice(
                             [TextureEmiterEffect.explode, TextureEmiterEffect.pushback])
@@ -72,13 +72,13 @@ class AttackableProcessor(esper.Processor):
                             type=MessageType.EmitTexture,
                             data = {
                                 'effect': effect,
-                                'pos': meRenderable.getLocation(),
-                                'frame': meRenderable.texture.getCurrentFrameCopy(),
-                                'charDirection': meRenderable.direction,
+                                'pos': meRend.getLocation(),
+                                'frame': meRend.texture.getCurrentFrameCopy(),
+                                'charDirection': meRend.direction,
                             }
                         )
 
-                        meRenderable.setActive(False)
+                        meRend.setActive(False)
 
 
     def checkReceiveDamage(self):

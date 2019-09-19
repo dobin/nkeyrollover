@@ -16,7 +16,7 @@ from system.graphics.renderableprocessor import RenderableProcessor
 from game.textureemiter import TextureEmiter
 from texture.action.actiontype import ActionType
 from common.direction import Direction
-from utilities.renderablecache import renderableCache
+from system.singletons.renderablecache import renderableCache
 
 
 class TextureEmiterTest(unittest.TestCase):

@@ -12,7 +12,7 @@ from system.graphics.renderable import Renderable
 from messaging import messaging, MessageType
 from texture.speech.speechtexture import SpeechTexture
 from config import Config
-from utilities.renderablecache import renderableCache
+from system.singletons.renderablecache import renderableCache
 from texture.texturetype import TextureType
 
 logger = logging.getLogger(__name__)
@@ -24,6 +24,9 @@ class TextureEmiterEffect(Enum):
 
 
 class TextureEmiter(object):
+    """Creates textures (via Renderables)
+
+    """
     def __init__(self, viewport :Viewport, world):
         self.viewport :Viewport = viewport
         self.world = world
@@ -39,7 +42,7 @@ class TextureEmiter(object):
             actionType=actionTextureType,
             direction=direction)
         renderable.texture.setName(
-            name="ActionTexture (actionTextureType={} fromPlayer={}, damage={})".format(
+            name="ActionTexture (actionTexture={} fromPlayer={}, damage={})".format(
                 actionTextureType, fromPlayer, damage))
 
         # manage renderable
@@ -49,7 +52,7 @@ class TextureEmiter(object):
         renderable.setZ(Config.zActionTexture)
         renderable.setActive(True)
         renderable.setName(
-            name="ActionRenderable (actionTextureType={} fromPlayer={}, damage={})".format(
+            name="ActionRenderable (actionTexture={} fromPlayer={}, damage={})".format(
                 actionTextureType, fromPlayer, damage))
 
         self.addRenderable(renderable)
