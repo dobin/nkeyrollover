@@ -165,20 +165,12 @@ class OffensiveSkill(object):
             data= {
                 'location': locCenter,
                 'effectType': ParticleEffectType.explosion,
-                'damage': None,
+                'damage': self.damage[WeaponType.explosion],
                 'byPlayer': True,
                 'direction': Direction.none,
             }
         )
 
-        hitLocations = Utility.getBorder(locCenter, distance=4, thicc=2)
-        messaging.add(
-            type=MessageType.PlayerAttack,
-            data= {
-                'hitLocations': hitLocations,
-                'damage': self.damage[WeaponType.explosion]
-            }
-        )
 
 
     def skillLaser(self):

@@ -23,7 +23,7 @@ class Particle(object):
         charType :int =0,
         byStep :bool =False,
         active :bool =False,
-        damage :int = 0,
+        damage :int =0,
         damageEveryStep :bool =False,
         byPlayer :bool =True,
     ):

@@ -54,7 +54,6 @@ class ParticleEmiter(object):
 
 
     def createDragonExplosion(self, loc, direction, byPlayer, damage):
-        particleList = []
         particleCount = 16
         life = 40
         n = 0
@@ -72,14 +71,10 @@ class ParticleEmiter(object):
             particle.makeStep(0.6, adjustLife=False)
 
             self.particleActive.append(particle)
-            particleList.append(particle)
             n += 1
-
-        return particleList
 
 
     def createExplosion(self, loc, direction, byPlayer, damage):
-        particleList = []
         particleCount = 16
         life = 40
         n = 0
@@ -90,14 +85,11 @@ class ParticleEmiter(object):
             particle.init(
                 x=loc.x, y=loc.y, life=life, angle=angle,
                 speed=0.1, fadeout=True, byStep=False, charType=0,
-                active=True)
+                active=True,
+                damage=damage, damageEveryStep=True, byPlayer=byPlayer)
 
             self.particleActive.append(particle)
-            particleList.append(particle)
             n += 1
-
-        self.createDamage(particleList, damage, byPlayer)
-        return particleList
 
 
     def createLaser(self, loc, direction, byPlayer, damage):
