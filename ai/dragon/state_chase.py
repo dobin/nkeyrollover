@@ -35,7 +35,7 @@ class DragonStateChase(StateChase):
                 type=MessageType.EmitParticleEffect,
                 data= {
                     'location': locCenter,
-                    'effectType': ParticleEffectType.explosion,
+                    'effectType': ParticleEffectType.dragonExplosion,
                     'damage': 50,
                     'byPlayer': False,
                     'direction': Direction.none,
