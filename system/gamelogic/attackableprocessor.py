@@ -99,7 +99,7 @@ class AttackableProcessor(esper.Processor):
             isPlayer = self.world.has_component(entity, Player)
 
             # enemy can attack player, and vice-versa
-            if byPlayer ^ isPlayer:
+            if not byPlayer ^ isPlayer:
                 continue
 
             # change health
