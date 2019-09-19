@@ -25,6 +25,7 @@ class _Config:
 
     # system config
     devMode = False
+    playground = True
     maxParticles = 128
     version = str(0.1)
 
@@ -40,7 +41,7 @@ class _Config:
 
     # enemy config
     enemyMovement = True  # freeze enemies for tests?
-    showEnemyWanderDest = True
+    showEnemyWanderDest = False
     showEnemyHitbox = False
     enemiesInStateAttacking = 1
     enemiesInStateChase = 2

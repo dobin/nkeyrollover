@@ -65,8 +65,11 @@ class ParticleEmiter(object):
 
             particle.init(
                 x=loc.x, y=loc.y, life=life, angle=angle,
-                speed=0.1, fadeout=True, byStep=False, charType=0,
+                speed=0.1, fadeout=True, byStep=False, charType=1,
                 active=True)
+
+            # advance them out of the center a bit
+            particle.makeStep(0.6, adjustLife=False)
 
             self.particleActive.append(particle)
             particleList.append(particle)

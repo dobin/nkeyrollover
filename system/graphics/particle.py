@@ -109,8 +109,16 @@ class Particle(object):
             else:
                 self.char = 'o'
 
+        if self.charType == 1:
+            if self.life > ((self.originalLife / 3) * 2):
+                self.char = '#'
+            elif self.life < ((self.originalLife / 3) * 1):
+                self.char = ':'
+            else:
+                self.char = '|'
 
-    def makeStep(self, dt):
+
+    def makeStep(self, dt, adjustLife=True):
         if self.life <= 0:
             self.active = False
             return
@@ -146,7 +154,8 @@ class Particle(object):
                 print("New    Pos:   X: {}  Y: {}".format(self.x, self.y))
                 print("")
 
-        self.life -= 1
+        if adjustLife:
+            self.life -= 1
 
 
     def draw(self):

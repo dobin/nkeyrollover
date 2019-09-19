@@ -29,7 +29,7 @@ class SceneManager(object):
             Scene2(viewport=viewport, world=world),  # map
         ]
 
-        if Config.devMode:
+        if Config.playground:
             self.currentSceneIdx = 0
         else:
             self.currentSceneIdx = 1

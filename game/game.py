@@ -86,75 +86,75 @@ class Game(object):
         self.world.add_processor(gametimeProcessor)
 
         # KeyboardInput:getInput()
-        # p generate  MessageType         PlayerKeypress
+        # p generate: Message            PlayerKeypress
 
-        # p handle:   MessageType         PlayerKeyPress (movement)
-        # p generate: DirectMessageType   movePlayer
+        # p handle:   Message            PlayerKeyPress (movement)
+        # p generate: DirectMessage      movePlayer
         self.world.add_processor(inputProcessor)
 
-        # p handle:   DirectMessageType   movePlayer
-        # e handle:   DirectMessageType   moveEnemy
-        # p generate: MessageType         PlayerLocation
-        # x generate: MessageType         EntityMoved
+        # p handle:   DirectMessage      movePlayer
+        # e handle:   DirectMessage      moveEnemy
+        # p generate: Message            PlayerLocation
+        # x generate: Message            EntityMoved
         self.world.add_processor(movementProcessor)
 
-        # e handle:   MessageType         PlayerLocation
-        # e generate: MessageType         EnemyAttack
-        # e generate: DirectMessageType   moveEnemy
-        # x generate: MessageType         EmitTextureMinimal
+        # p handle:   Message            PlayerLocation
+        # e generate: Message            EnemyAttack
+        # e generate: DirectMessage      moveEnemy
+        # x generate: Message            EmitTextureMinimal
         self.world.add_processor(aiProcessor)
 
-        # e handle:   DirectMessageType   moveEnemy
-        # p handle:   MessageType         PlayerKeyPress (space/attack, weaponselect)
-        # p generate: MessageType         PlayerAttack. (via OffensiveAttack)
+        # e handle:   DirectMessage      moveEnemy
+        # p handle:   Message            PlayerKeyPress (space/attack, weaponselect)
+        # p generate: Message            PlayerAttack (via OffensiveAttack)
         self.world.add_processor(offensiveAttackProcessor)
 
-        # p handle:   MessageType         PlayerKeyPress (skill activate)
-        # p generate: MessageType         PlayerAttack!
-        # p generate: MessageType         EmitParticleEffect (skill)
+        # p handle:   Message            PlayerKeyPress (skill activate)
+        # p generate: Message            PlayerAttack
+        # x generate: Message            EmitParticleEffect (skill)
         self.world.add_processor(offensiveSkillProcessor)
 
-        # x handle:   DirectMessageType   receiveDamage
-        # x generate: MessageType         EntityStun
-        # e generate: MessageType         EntityDying
-        # x generate: MessageType         EmitTexture
+        # x handle:   DirectMessage      receiveDamage
+        # x generate: Message            EntityStun
+        # x generate: Message            EntityDying
+        # x generate: Message            EmitTexture
         self.world.add_processor(attackableProcessor)
 
-        # x handle:   MessageType         EmitTextureMinimal
-        # x handle:   MessageType         EmitTexture
-        # p generate: MessageType         PlayerAttack. (via texture emiter)
-        self.world.add_processor(renderableMinimalProcessor)
-
-        # p handle:   MessageType         PlayerLocation
-        # e handle:   MessageType         EntityDead
-        # p handle:   MessageType         PlayerKeypress
-        # e generate: MessageType         SpawnEnemy
-        # p generate: MessageType         SpawnPlayer
-        # x generate: DirectMessageType   activateSpeechBubble
+        # p handle:   Message            PlayerLocation
+        # x handle:   Message            EntityDying
+        # p handle:   Message            PlayerKeypress
+        # e generate: Message            SpawnEnemy
+        # p generate: Message            SpawnPlayer
+        # x generate: DirectMessage      activateSpeechBubble
         self.world.add_processor(sceneProcessor)
 
-        # e generate: MessageType         EntityDead
-        # e handle:   MessageType         SpawnEnemy
+        # x generate: Message            EntityDead
+        # e handle:   Message            SpawnEnemy
         self.world.add_processor(enemyProcessor)
 
-        # e handle:  MessageType          EntityDying
-        # p handle:  MessageType          PlayerAttack.
-        # x handle:  MessageType          AttackWindup
-        # x handle:  MessageType          EntityAttack
-        # x handle:  MessageType          EntityMoved
-        # x handle:  MessageType          EntityStun
-        self.world.add_processor(characterAnimationProcessor)
-
-        # p handle.  MessageType          SpawnPlayer
+        # p handle.   Message            SpawnPlayer
         self.world.add_processor(playerProcessor)
 
-        # p handle:   MessageType         PlayerAttack. (cd, convert to damage)
-        # e handle:   MessageType         EnemyAttack
-        # x generate: DirectMessageType   receiveDamage
+        # x handle:   Message            EmitTextureMinimal
+        # x handle:   Message            EmitTexture
+        # p generate: Message            PlayerAttack (via texture emiter)
+        self.world.add_processor(renderableMinimalProcessor)
+
+        # e handle:   Message            EntityDying
+        # p handle:   Message            PlayerAttack (change animation)
+        # x handle:   Message            AttackWindup
+        # x handle:   Message            EntityAttack
+        # x handle:   Message            EntityMoved
+        # x handle:   Message            EntityStun
+        self.world.add_processor(characterAnimationProcessor)
+
+        # p handle:   Message            PlayerAttack (CD, convert to damage)
+        # e handle:   Message            EnemyAttack
+        # x generate: DirectMessage      receiveDamage
         self.world.add_processor(renderableProcessor)
 
-        # x handle:   MessageType         EmitParticleEffect
-        # x generate: DirectMessageType   receiveDamage
+        # x handle:   Message            EmitParticleEffect
+        # x generate: DirectMessage      receiveDamage
         self.world.add_processor(particleProcessor)
 
 
