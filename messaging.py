@@ -29,6 +29,7 @@ class MessageType(Enum):
     EmitParticleEffect = 18
 
     AttackAt = 19
+    Unittest = 20
 
 
 class Message(object):
@@ -66,7 +67,6 @@ class Messaging(object):
 
 
     def reset(self):
-        logger.debug("Reset message queue")
         self.messages.clear()
 
 

@@ -16,7 +16,8 @@ class EnemyLoaderTest(unittest.TestCase):
         enemyLoader = EnemyLoader()
         enemySeed = enemyLoader.getSeedForEnemy(EnemyType.unittest)
 
-        self.assertTrue(enemySeed.characterTextureType is CharacterTextureType.stickfigure)
+        self.assertTrue(enemySeed.characterTextureType
+                        is CharacterTextureType.stickfigure)
         self.assertTrue(enemySeed.weaponType is WeaponType.hitSquare)
         self.assertTrue(enemySeed.health == 100)
         self.assertTrue(enemySeed.enemyInfo.attackWindupTime == 1.0)
