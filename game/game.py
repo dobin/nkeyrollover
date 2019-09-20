@@ -112,17 +112,8 @@ class Game(object):
         self.world.add_processor(offensiveAttackProcessor)
 
         # p handle:   Message            PlayerKeyPress (skill activate)
-        # p generate: Message            PlayerAttack
         # x generate: Message            EmitParticleEffect (skill)
         self.world.add_processor(offensiveSkillProcessor)
-
-        # x handle:   Message            EmitParticleEffect
-        # x emit:     Message            AttackAt
-        #skillDamageProcessor()
-
-        # x handle:   Message            PlayerAttack
-        # x emit:     Message            AttackAt
-        #attackDamageProcessor()
 
         # x handle:   DirectMessage      receiveDamage
         # x generate: Message            EntityStun
@@ -147,7 +138,7 @@ class Game(object):
 
         # x handle:   Message            EmitTextureMinimal
         # x handle:   Message            EmitTexture
-        # p generate: Message            PlayerAttack (via texture emiter)
+        # x generate: Message            AttackAt (via TextureEmiter, ActionTexture)
         self.world.add_processor(renderableMinimalProcessor)
 
         # e handle:   Message            EntityDying
@@ -160,13 +151,11 @@ class Game(object):
 
         # p handle:   Message            PlayerAttack (CD, convert to damage)
         # e handle:   Message            EnemyAttack
-        ## x generate: DirectMessage      receiveDamage
-        #x generate: Message            AttackAt
+        # x generate: Message            AttackAt
         self.world.add_processor(renderableProcessor)
 
         # x handle:   Message            EmitParticleEffect
-        ## x generate: DirectMessage      receiveDamage
-        #x generate: Message            AttackAt
+        # x generate: Message            AttackAt
         self.world.add_processor(particleProcessor)
 
         # x handle:   Message            AttackAt

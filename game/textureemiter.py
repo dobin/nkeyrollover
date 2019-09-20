@@ -60,17 +60,12 @@ class TextureEmiter(object):
         if damage is not None:
             hitLocations = renderable.getTextureHitCoordinates()
 
-            msgType = None
-            if fromPlayer:
-                msgType = MessageType.PlayerAttack
-            else:
-                msgType = MessageType.EnemyAttack
-
             messaging.add(
-                type=msgType,
-                data={
+                type=MessageType.AttackAt,
+                data= {
                     'hitLocations': hitLocations,
                     'damage': damage,
+                    'byPlayer': fromPlayer,
                 }
             )
 
