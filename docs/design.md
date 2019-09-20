@@ -2,6 +2,8 @@
 
 ## Main Loop
 
+Note that drawing the map is not being done with a system (for performance reasons).
+
 * Draw1 (draw map)
 * Advance (let all systems/processors run)
 * Draw2 (draw some overlays)
@@ -9,7 +11,7 @@
 
 ## ECS
 
-State in components, code in systems. Systems which need state have Singletons. 
+State in components, code in systems. Systems which need state have singletons. 
 
 Components:
 * Renderable (position, texture)
@@ -24,12 +26,13 @@ Components:
 Entities: 
 * Player
 * Enemy
-* RenderableMinimal 
-  * TextureMinimal (with 1 char big texture)
-  * Effect
-* Renderable
-  * SpeechBubble
-  * ActionAttack
+* GFX
+    * based on RenderableMinimal:
+        * TextureMinimal (with 1 char big texture)
+        * Effect
+    * based on Renderable:
+        * SpeechBubble
+        * ActionAttack
 
 Other GFX:
 * Particle (managed via ParticleProcessor)
@@ -41,10 +44,28 @@ Textures:
 * Phenomena: Static things (e.g. trees, roflcopter)
 * Speech: Speech bubble
 
+
 ## Attacks vs. Skills
+
+Similar to Leage of Legends. Attacks are space (or autoattacks in LoL, left mouse 
+button). Skills are keys QWER.
 
 * Attacks: Use ActionTexture
 * Skills: Use Particles
+
+
+## File System
+
+* data/
+  * enemies/: Enemy Definition (cooldowns, health, texture type)
+  * map/: Map in XP format
+  * textures/: Stored ASCII textures (loaded via FileTextureLoader)
+    * Action/: for attacks
+    * Character/: Character animations (stickfigure, cow, dragon)
+    * Phenomena/: Static stuff (trees)
+  * weapons/: Information about Attacks
+    * .ascii: Hit detection texture (for enemies, AI)
+    * .yaml: Some information (damage, Texture)
 
 
 ## Pipeline
