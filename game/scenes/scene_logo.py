@@ -33,19 +33,16 @@ class SceneLogo(SceneBase):
         self.name = "Scene0 - Logo"
 
 
-    def enter(self): 
+    def enter(self):
         self.addRenderable(self.renderableLogo)
 
 
-    def sceneIsFinished(self): 
+    def sceneIsFinished(self):
         if self.timer.timeIsUp():
             return True
-        else: 
+        else:
             return False
 
 
-    def advance(self, dt): 
+    def advance(self, dt):
         self.timer.advance(dt)
-
-
-
