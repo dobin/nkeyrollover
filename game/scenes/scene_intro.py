@@ -25,7 +25,7 @@ class IntroSceneState(Enum):
 
 
 
-class Scene1(SceneBase):
+class SceneIntro(SceneBase):
     def __init__(self, viewport, world):
         super().__init__(world=world, viewport=viewport)
 
@@ -49,7 +49,7 @@ class Scene1(SceneBase):
             texture=texturePlayer,
             viewport=self.viewport,
             coordinates=coordinates,
-            active=False,
+            active=True,
         )
 
         self.renderableCopter = renderableCopter

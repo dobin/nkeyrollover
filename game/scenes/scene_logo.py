@@ -11,7 +11,7 @@ from texture.phenomena.phenomenatexture import PhenomenaTexture
 logger = logging.getLogger(__name__)
 
 
-class Scene0(SceneBase):
+class SceneLogo(SceneBase):
     def __init__(self, viewport, world):
         super().__init__(world=world, viewport=viewport)
 

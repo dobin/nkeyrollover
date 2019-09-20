@@ -1,9 +1,9 @@
 import logging
 
 from game.scenes.sceneplayground import ScenePlayground
-from game.scenes.scene0 import Scene0
-from game.scenes.scene1 import Scene1
-from game.scenes.scene2 import Scene2
+from game.scenes.scene_logo import SceneLogo
+from game.scenes.scene_intro import SceneIntro
+from game.scenes.scene_mapblame import SceneMapBlame
 from config import Config
 
 logger = logging.getLogger(__name__)
@@ -23,10 +23,10 @@ class SceneManager(object):
         self.mapManager = mapManager
 
         self.scenes = [
-            ScenePlayground(viewport=viewport, world=world),  # playground
-            Scene0(viewport=viewport, world=world),  # intro logo
-            Scene1(viewport=viewport, world=world),  # intro animation
-            Scene2(viewport=viewport, world=world),  # map
+            ScenePlayground(viewport=viewport, world=world),
+            SceneLogo(viewport=viewport, world=world),
+            SceneIntro(viewport=viewport, world=world),
+            SceneMapBlame(viewport=viewport, world=world),
         ]
 
         if Config.playground:

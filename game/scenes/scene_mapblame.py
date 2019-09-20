@@ -42,7 +42,7 @@ class Akt(object):
         self.enemyQueue = deque()
 
 
-class Scene2(SceneBase):
+class SceneMapBlame(SceneBase):
     def __init__(self, viewport, world):
         super().__init__(world=world, viewport=viewport)
         self.name = "Scene2"
