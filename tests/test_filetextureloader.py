@@ -112,20 +112,20 @@ class FileTextureLoaderTest(unittest.TestCase):
         self.assertTrue(weaponData.hitDetectionDirection == Direction.left)
         self.assertTrue(weaponData.damage == 10)
 
-        self.assertTrue(weaponData.weaponHitArea.width == 5)
-        self.assertTrue(weaponData.weaponHitArea.height == 3)
+        self.assertTrue(weaponData.weaponHitArea[Direction.left].width == 5)
+        self.assertTrue(weaponData.weaponHitArea[Direction.left].height == 3)
 
-        self.assertTrue(weaponData.weaponHitArea.hitCd[0].x == 1)
-        self.assertTrue(weaponData.weaponHitArea.hitCd[0].y == 0)
+        self.assertTrue(weaponData.weaponHitArea[Direction.left].hitCd[0].x == 1)
+        self.assertTrue(weaponData.weaponHitArea[Direction.left].hitCd[0].y == 0)
 
-        self.assertTrue(weaponData.weaponHitArea.hitCd[1].x == 3)
-        self.assertTrue(weaponData.weaponHitArea.hitCd[1].y == 0)
+        self.assertTrue(weaponData.weaponHitArea[Direction.left].hitCd[1].x == 3)
+        self.assertTrue(weaponData.weaponHitArea[Direction.left].hitCd[1].y == 0)
 
-        self.assertTrue(weaponData.weaponHitArea.hitCd[2].x == 0)
-        self.assertTrue(weaponData.weaponHitArea.hitCd[2].y == 1)
+        self.assertTrue(weaponData.weaponHitArea[Direction.left].hitCd[2].x == 0)
+        self.assertTrue(weaponData.weaponHitArea[Direction.left].hitCd[2].y == 1)
 
-        self.assertTrue(weaponData.weaponHitArea.hitCd[5].x == 3)
-        self.assertTrue(weaponData.weaponHitArea.hitCd[5].y == 2)
+        self.assertTrue(weaponData.weaponHitArea[Direction.left].hitCd[5].x == 3)
+        self.assertTrue(weaponData.weaponHitArea[Direction.left].hitCd[5].y == 2)
 
 
 if __name__ == '__main__':
