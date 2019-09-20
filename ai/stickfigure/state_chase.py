@@ -51,7 +51,7 @@ class StateChase(State):
 
     def tryAttacking(self):
         if self.canAttackTimer.timeIsUp():
-            logging.info("{}: Check if i can attack player".format(self.name))
+            logger.debug("{}: Check if i can attack player".format(self.name))
             if self.canAttackPlayer():
                 if (EntityFinder.numEnemiesInState(self.brain.owner.world, 'attack')
                         < Config.enemiesInStateAttacking):
@@ -225,29 +225,29 @@ class StateChase(State):
         distanceNormal = Utility.distance(playerLocation, attackBaseLocation)
         distanceInverted = Utility.distance(playerLocation, attackBaseLocationInverted)
 
-        # logging.info("--- Loc Enemy : {} / {}".format(
+        # logger.info("--- Loc Enemy : {} / {}".format(
         #     meRenderable.coordinates.x, 
         #     meRenderable.coordinates.x + meRenderable.texture.width - 1))
-        # logging.info("--- Loc Player: {}".format(playerRenderable.coordinates.x))
+        # logger.info("--- Loc Player: {}".format(playerRenderable.coordinates.x))
 
         # decide on which reference point we will take
         # and if we wanna change direction
         atkLoc = None
         dontChangeDirection = False
         if distanceNormal['x'] < distanceInverted['x']:
-            # logging.info("--- n: {}  i: {}   dontChange, use normal".format(
+            # logger.info("--- n: {}  i: {}   dontChange, use normal".format(
             #     distanceNormal['x'], distanceInverted['x']
             # ))
             dontChangeDirection = True
             atkLoc = attackBaseLocation
         else:
-            # logging.info("--- n: {}  i: {}   change, use inverted".format(
+            # logger.info("--- n: {}  i: {}   change, use inverted".format(
             #     distanceNormal['x'], distanceInverted['x']
             # ))
             dontChangeDirection = False
             atkLoc = attackBaseLocationInverted
 
-        # logging.info("--- Loc Atk    : {}".format(attackLoc.x))
+        # logger.info("--- Loc Atk    : {}".format(attackLoc.x))
 
         moveX = 0
         moveY = 0
@@ -255,24 +255,24 @@ class StateChase(State):
         # if yes, we are too close
         if (atkLoc.x >= plyrRend.coordinates.x
                 and atkLoc.x <= plyrRend.coordinates.x + plyrRend.texture.width - 1):
-            # logging.info("--- Overlap :-(")
+            # logger.info("--- Overlap :-(")
             # if refLoc.x >= playerRenderable.coordinates.x:
             if meRenderable.direction is Direction.left:
                 moveX = 1
             else:
                 moveX = -1
 
-            # logging.info("--- Overlap decision: {}".format(moveX))
+            # logger.info("--- Overlap decision: {}".format(moveX))
 
         else:
-            # logging.info("--- No overlap :-)")
+            # logger.info("--- No overlap :-)")
 
             playerref = 0
             if atkLoc.x <= playerLocation.x + int(plyrRend.texture.width / 2):
-                # logging.info("--- Enemy is left of player")
+                # logger.info("--- Enemy is left of player")
                 playerref = playerLocation.x
             else:
-                # logging.info("--- Enemy is right of player. Ex:{} Px:{}".format(
+                # logger.info("--- Enemy is right of player. Ex:{} Px:{}".format(
                 #     attackLoc.x, playerRenderable.coordinates.x
                 # ))
                 playerref = playerLocation.x + plyrRend.texture.width - 1
@@ -283,10 +283,10 @@ class StateChase(State):
             elif tempDistance < -keepDistance:
                 moveX = 1
 
-            # logging.info("--- Distance: {} because {} - {} ".format(
+            # logger.info("--- Distance: {} because {} - {} ".format(
             #     tempDistance, attackLoc.x, playerref))
 
-            # logging.info("--- Enemy: moveX: {} dontChangeDirection: {}".format(
+            # logger.info("--- Enemy: moveX: {} dontChangeDirection: {}".format(
             #     moveX, dontChangeDirection
             # ))
 

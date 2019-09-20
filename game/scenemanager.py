@@ -49,7 +49,6 @@ class SceneManager(object):
             self.currentSceneIdx, self.currentScene))
 
         if self.currentSceneIdx == 2:
-            logging.error("loadmap")
             self.mapManager.loadMap('map02')
         self.initScene()
 

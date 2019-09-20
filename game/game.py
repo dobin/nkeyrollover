@@ -217,15 +217,20 @@ class Game(object):
 
         o = []
 
-        o.append('Enemies:')
-        o.append('  Alive     : '
-            + str(EntityFinder.numEnemies(world=self.world)))
-        o.append('  Attacking : '
-            + str(EntityFinder.numEnemiesInState(world=self.world, state='attack')))
-        o.append('  Chasing   : '
-            + str(EntityFinder.numEnemiesInState(world=self.world, state='chase')))
-        o.append('  Wandering: '
-            + str(EntityFinder.numEnemiesInState(world=self.world, state='wander')))
+        enemiesAlive = EntityFinder.numEnemies(
+            world=self.world)
+        enemiesAttacking = EntityFinder.numEnemiesInState(
+            world=self.world, state='attack')
+        enemiesChasing = EntityFinder.numEnemiesInState(
+            world=self.world, state='chase')
+        enemiesWandering = EntityFinder.numEnemiesInState(
+            world=self.world, state='wander')
+
+        o.append("Enemies:")
+        o.append("  Alive     : {}".format(enemiesAlive))
+        o.append("  Attacking : {}".format(enemiesAttacking))
+        o.append("  Chasing   : {}".format(enemiesChasing))
+        o.append("  Wandering: {}".format(enemiesWandering))
 
         playerEntity = EntityFinder.findPlayer(self.world)
         playerRenderable = self.world.component_for_entity(

@@ -41,7 +41,6 @@ class RenderableCache(object):
 
     def getRenderable(self, textureType):
         renderable = self.cache[textureType].pop(0)
-        logging.info("BBBB: {}".format(renderable))
         return renderable
 
 

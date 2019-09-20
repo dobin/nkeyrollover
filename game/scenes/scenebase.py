@@ -30,7 +30,6 @@ class SceneBase(object):
     def showPlayer(self):
         return self.isShowPlayer
 
-
     def showMap(self):
         return self.isShowMap
 

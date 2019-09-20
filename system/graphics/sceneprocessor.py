@@ -7,6 +7,8 @@ from config import Config
 import system.gamelogic.ai
 import system.graphics.renderable
 from utilities.timer import Timer
+from directmessaging import directMessaging, DirectMessageType
+from utilities.entityfinder import EntityFinder
 
 logger = logging.getLogger(__name__)
 
@@ -104,7 +106,34 @@ class SceneProcessor(esper.Processor):
                 self.numEnemiesAlive())
 
         for message in messaging.getByType(MessageType.PlayerKeypress):
-            self.sceneManager.handlePlayerKeyPress(message.data['key'])
+            key = message.data['key']
+            self.sceneManager.handlePlayerKeyPress(key)
+
+            if key == ord('k'):
+                logger.info("Scene: Kill All Enemies")
+                self.killAllEnemies()
+
+            if key == ord('n'):
+                logger.info("Scene: Go to next part")
+                self.killAllEnemies()
+                enemyCell = self.sceneManager.currentScene.getNextEnemy()
+
+                playerEntity = EntityFinder.findPlayer(self.world)
+                meGroupId = self.world.component_for_entity(
+                    playerEntity, system.groupid.GroupId)
+                renderable = self.world.component_for_entity(
+                    playerEntity, system.graphics.renderable.Renderable)
+
+                distX = enemyCell.spawnX - renderable.coordinates.x
+
+                directMessaging.add(
+                    groupId = meGroupId.getId(),
+                    type = DirectMessageType.movePlayer,
+                    data = {
+                        'x': distX,
+                        'y': 0
+                    },
+                )
 
         # move screen animation
         if self.screenMoveTimer.timeIsUp() and self.lastKnownPlayerPos is not None:
@@ -142,6 +171,12 @@ class SceneProcessor(esper.Processor):
 
 
         self.sceneManager.advance(dt)
+
+
+    def killAllEnemies(self):
+        for _, ai in self.world.get_component(system.gamelogic.ai.Ai):
+            ai.brain.pop()
+            ai.brain.push('dead')
 
 
     def numEnemiesAlive(self) -> int:

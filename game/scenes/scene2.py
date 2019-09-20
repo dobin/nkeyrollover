@@ -50,7 +50,6 @@ class Scene2(SceneBase):
         self.isShowMap = True
 
         self.enemyQueue = deque()
-        self.enemySpawned = []
 
         self.maxEnemies = 6
         self.time = 0.0
@@ -75,7 +74,7 @@ class Scene2(SceneBase):
         if Config.devMode:
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                enemyType = EnemyType.dragon,
+                enemyType = EnemyType.stickfigure,
                 spawnTime = None,
                 spawnX = 0,
                 spawnLocation = Coordinates(35, 8),
@@ -87,7 +86,7 @@ class Scene2(SceneBase):
                 id = self.enemyCount,
                 enemyType = EnemyType.cow,
                 spawnTime = None,
-                spawnX = 0,
+                spawnX = 40,
                 spawnLocation = Coordinates(85, 13),
                 spawnDirection = None
             )
@@ -97,7 +96,7 @@ class Scene2(SceneBase):
                 id = self.enemyCount,
                 enemyType = EnemyType.stickfigure,
                 spawnTime = None,
-                spawnX = 60,
+                spawnX = 80,
                 spawnLocation = Coordinates(60 + 80, 13),
                 spawnDirection = None
             )
@@ -193,12 +192,15 @@ class Scene2(SceneBase):
         if numEnemiesAlive > self.maxEnemies:
             return
 
-        enemyCell = self.enemyQueue[0]
+        enemyCell = self.getNextEnemy()
         if enemyCell.spawnX < playerPosition.x:
             logger.info("Spawn: Pos: {}".format(playerPosition.x))
             self.spawnEnemy(enemyCell)
-            self.enemySpawned.append(enemyCell)
-            del self.enemyQueue[0]
+            self.enemyQueue.remove(enemyCell)
+
+
+    def getNextEnemy(self):
+        return self.enemyQueue[0]
 
 
     def handleTime(self):
@@ -213,7 +215,6 @@ class Scene2(SceneBase):
         if enemyCell.spawnTime < self.time:
             logger.info("Spawn: Time: {}".format(enemyCell.spawnTime))
             self.spawnEnemy(enemyCell)
-            self.enemySpawned.append(enemyCell)
             del self.enemyQueue[0]
 
 

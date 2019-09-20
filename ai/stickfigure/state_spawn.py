@@ -26,7 +26,6 @@ class StateSpawn(State):
         # just check regularly...
         if self.timeIsUp():
             if self.isMeOnScreen():
-                logging.info("Bot now on screen, going active!")
                 self.brain.pop()
                 if Config.devMode:
                     # make him come straight at us, sucker

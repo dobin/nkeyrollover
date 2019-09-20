@@ -33,15 +33,15 @@ class InputProcessor(esper.Processor):
 
     def handleKeyboardInput(self):
         playerEntity = EntityFinder.findPlayer(self.world)
-        if playerEntity is None: 
+        if playerEntity is None:
             return
 
         player = self.world.component_for_entity(
-                playerEntity, system.gamelogic.player.Player)
+            playerEntity, system.gamelogic.player.Player)
         renderable = self.world.component_for_entity(
-                playerEntity, system.graphics.renderable.Renderable)
+            playerEntity, system.graphics.renderable.Renderable)
         attackable = self.world.component_for_entity(
-                playerEntity, system.gamelogic.attackable.Attackable)
+            playerEntity, system.gamelogic.attackable.Attackable)
 
         didMove = False
         if attackable.isStunned:
@@ -96,5 +96,3 @@ class InputProcessor(esper.Processor):
         )
 
         return didMove
-
-

@@ -41,18 +41,20 @@ class CharacterTexture(AnimationTexture):
         if interrupt:
             if self.previousAnimation is None:
                 # store current animation, to restore it later
-                logging.info("{}: Interrupt, store current: {}".format(
+                logger.debug("{}: Interrupt, store current: {}".format(
                     self.name, self.animation))
                 self.previousAnimation = self.animation
             else:
                 # we are already interrupted. overwrite current animation, but dont
                 # touch the self.previousAnimation one
-                logging.debug("{}: Animation to {}, but already interrupted in {} (prev {})".format(
-                    self.name,
-                    characterAnimationType,
-                    self.animation,
-                    self.previousAnimation
-                ))
+                logger.debug(
+                    "{}: Animation to {}, but already int in {} (prev {})".format(
+                        self.name,
+                        characterAnimationType,
+                        self.animation,
+                        self.previousAnimation
+                    )
+                )
                 pass
 
         logger.info("{}: Change texture to: {}".format(
@@ -77,7 +79,7 @@ class CharacterTexture(AnimationTexture):
         super().advance(deltaTime)
 
         if self.previousAnimation is not None and self.isActive() is False:
-            logging.info("{}: Reset to: {}".format(
+            logger.debug("{}: Reset Animation to: {}".format(
                 self.name,
                 self.previousAnimation))
             self.animation = self.previousAnimation
