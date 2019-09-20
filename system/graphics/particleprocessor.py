@@ -3,12 +3,6 @@ import esper
 
 from game.viewport import Viewport
 from messaging import messaging, MessageType
-from directmessaging import directMessaging, DirectMessageType
-import system.gamelogic.attackable
-import system.gamelogic.enemy
-import system.gamelogic.player
-import system.graphics.renderable
-import system.groupid
 from system.singletons.particleemiter import ParticleEmiter
 
 logger = logging.getLogger(__name__)

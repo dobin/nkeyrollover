@@ -70,12 +70,6 @@ class TextureEmiter(object):
             )
 
 
-    def addRenderableAction(self, renderable, actionTexture):
-        entity = self.world.create_entity()
-        self.world.add_component(entity, actionTexture)
-        self.world.add_component(entity, renderable)
-
-
     def showCharAtPos(
         self, char :str, timeout :float, coordinate :Coordinates, color :Color
     ):

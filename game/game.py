@@ -60,7 +60,6 @@ class Game(object):
         gametimeProcessor = GametimeProcessor()
         aiProcessor = AiProcessor()
         characterAnimationProcessor = CharacterAnimationProcessor()
-        renderableProcessor = RenderableProcessor()
         playerProcessor = PlayerProcessor(
             viewport=self.viewport)
         enemyProcessor = EnemyProcessor(
@@ -70,6 +69,7 @@ class Game(object):
         offensiveSkillProcessor = OffensiveSkillProcessor()
         movementProcessor = MovementProcessor()
         inputProcessor = InputProcessor()
+        renderableProcessor = RenderableProcessor(textureEmiter=self.textureEmiter)
         renderableMinimalProcessor = RenderableMinimalProcessor(
             viewport=self.viewport,
             textureEmiter=self.textureEmiter)
@@ -113,6 +113,7 @@ class Game(object):
 
         # p handle:   Message            PlayerKeyPress (skill activate)
         # x generate: Message            EmitParticleEffect (skill)
+        # x generate: DirectMessage      activateSpeechBubble
         self.world.add_processor(offensiveSkillProcessor)
 
         # x handle:   DirectMessage      receiveDamage
@@ -149,9 +150,11 @@ class Game(object):
         # x handle:   Message            EntityStun
         self.world.add_processor(characterAnimationProcessor)
 
+        # x handle:   DirectMessage      activateSpeechBubble (emit)
         # p handle:   Message            PlayerAttack (CD, convert to damage)
         # e handle:   Message            EnemyAttack
         # x generate: Message            AttackAt
+        # x generate: DirectMessage      activateSpeechBubble (because of damage)
         self.world.add_processor(renderableProcessor)
 
         # x handle:   Message            EmitParticleEffect

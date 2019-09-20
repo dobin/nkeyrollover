@@ -66,7 +66,7 @@ class PlayerProcessor(esper.Processor):
             name='Player')
 
         esperData = EsperData(self.world, playerEntity, 'player')
-        characterSkill = OffensiveSkill(
+        offensiveSkill = OffensiveSkill(
             esperData=esperData,
             viewport=self.viewport)
 
@@ -75,7 +75,7 @@ class PlayerProcessor(esper.Processor):
             parentRenderable=renderable)
 
         self.world.add_component(playerEntity, groupId)
-        self.world.add_component(playerEntity, characterSkill)
+        self.world.add_component(playerEntity, offensiveSkill)
         self.world.add_component(playerEntity, renderable)
         self.world.add_component(playerEntity, player)
         self.world.add_component(playerEntity, attackable)

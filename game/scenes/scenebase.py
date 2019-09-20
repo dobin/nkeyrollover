@@ -72,9 +72,9 @@ class SceneBase(object):
             self.removeRenderable(entity)
 
 
-    def addRenderable(self, sprite):
+    def addRenderable(self, component):
         entity = self.world.create_entity()
-        self.world.add_component(entity, sprite)
+        self.world.add_component(entity, component)
         self.entities.append(entity)
         return entity
 

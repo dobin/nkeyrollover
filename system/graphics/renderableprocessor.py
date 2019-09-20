@@ -16,8 +16,9 @@ logger = logging.getLogger(__name__)
 
 
 class RenderableProcessor(esper.Processor):
-    def __init__(self):
+    def __init__(self, textureEmiter):
         super().__init__()
+        self.textureEmiter = textureEmiter
 
         # list of HEIGHT lists
         # used to add renderable objects in the right Z order for render()
@@ -30,7 +31,21 @@ class RenderableProcessor(esper.Processor):
         self.collisionDetection()
         self.advance(dt)
         self.render()
+        self.makeSpeechBubble()
 
+
+    def makeSpeechBubble(self):
+        for msg in directMessaging.getByType(DirectMessageType.activateSpeechBubble):
+            for ent, (renderable, groupId) in self.world.get_components(
+                system.graphics.renderable.Renderable,
+                system.groupid.GroupId
+            ):
+                if groupId.getId() == msg.groupId:
+                    self.textureEmiter.showSpeechBubble(
+                        displayText=msg.data['text'],
+                        time=msg.data['time'],
+                        parentRenderable=renderable
+                    )
 
     def advance(self, deltaTime):
         for _, rend in self.world.get_component(Renderable):

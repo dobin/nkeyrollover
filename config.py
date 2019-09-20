@@ -25,7 +25,7 @@ class _Config:
 
     # system config
     devMode = False
-    playground = True
+    playground = False
     maxParticles = 128
     version = str(0.1)
 
