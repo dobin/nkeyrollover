@@ -77,8 +77,6 @@ class MovementProcessor(esper.Processor):
         didChangeDirection = False
 
         if x > 0:
-            # if renderable.coordinates.x 
-            #    < Config.columns - renderable.texture.width - 1:
             if True:
                 renderable.coordinates.x += x
                 didMove = True

@@ -69,11 +69,17 @@ class InputProcessor(esper.Processor):
 
         if self.movementTimer.timeIsUp():
             if key == curses.KEY_LEFT:
-                x = -1
+                if Config.xDoubleStep:
+                    x = -2
+                else:
+                    x = -1
                 didMove = True
 
             elif key == curses.KEY_RIGHT:
-                x = 1
+                if Config.xDoubleStep:
+                    x = 2
+                else:
+                    x = 1
                 didMove = True
 
             elif key == curses.KEY_UP:

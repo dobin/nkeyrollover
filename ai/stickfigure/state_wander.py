@@ -91,9 +91,15 @@ class StateWander(State):
         x = 0
         y = 0
         if self.destCoord.x > meRenderable.coordinates.x:
-            x = 1
+            if Config.xDoubleStep:
+                x = 2
+            else:
+                x = 1
         elif self.destCoord.x < meRenderable.coordinates.x:
-            x = -1
+            if Config.xDoubleStep:
+                x = -2
+            else:
+                x = -1
 
         if self.destCoord.y > meRenderable.coordinates.y:
             y = 1

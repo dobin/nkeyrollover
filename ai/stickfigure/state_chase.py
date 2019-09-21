@@ -258,9 +258,15 @@ class StateChase(State):
             # logger.info("--- Overlap :-(")
             # if refLoc.x >= playerRenderable.coordinates.x:
             if meRenderable.direction is Direction.left:
-                moveX = 1
+                if Config.xDoubleStep:
+                    moveX = 2
+                else:
+                    moveX = 1
             else:
-                moveX = -1
+                if Config.xDoubleStep:
+                    moveX = -2
+                else:
+                    moveX = -1
 
             # logger.info("--- Overlap decision: {}".format(moveX))
 
@@ -279,9 +285,15 @@ class StateChase(State):
 
             tempDistance = atkLoc.x - playerref
             if tempDistance > keepDistance:
-                moveX = -1
+                if Config.xDoubleStep:
+                    moveX = -2
+                else:
+                    moveX = -1
             elif tempDistance < -keepDistance:
-                moveX = 1
+                if Config.xDoubleStep:
+                    moveX = 2
+                else:
+                    moveX = 1
 
             # logger.info("--- Distance: {} because {} - {} ".format(
             #     tempDistance, attackLoc.x, playerref))
