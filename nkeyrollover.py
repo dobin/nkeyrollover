@@ -56,7 +56,9 @@ class Keyrollover(object):
         self.menuwin.border()
 
         self.game = Game(win=self.win, menuwin=self.menuwin)
-        self.keyboardInput = KeyboardInput(game=self.game)
+        self.keyboardInput = KeyboardInput(
+            game=self.game,
+            viewport=self.game.viewport)
 
 
     def loadConfig(self):

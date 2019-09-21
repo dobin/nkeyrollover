@@ -9,9 +9,9 @@ logger = logging.getLogger(__name__)
 
 
 class KeyboardInput(object):
-    def __init__(self, game :Game):
+    def __init__(self, game :Game, viewport :Viewport):
         self.game :Game = game
-        self.viewport :Viewport = game.viewport
+        self.viewport :Viewport = viewport
 
 
     def getInput(self):

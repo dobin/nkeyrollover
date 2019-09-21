@@ -39,51 +39,53 @@ class Game(object):
 
         self.world :esper.World = esper.World()
         self.statusBar :StatusBar = StatusBar(world=self, menuwin=menuwin)
-        self.viewport :Viewport = Viewport(win=win, world=self)
-        self.textureEmiter :TextureEmiter = TextureEmiter(
-            viewport=self.viewport,
-            world=self.world)
-        self.mapManager :MapManager = MapManager(viewport=self.viewport)
-        self.sceneManager :SceneManager = SceneManager(
-            viewport=self.viewport,
-            world=self.world,
-            mapManager=self.mapManager)
-        self.enemyLoader :EnemyLoader = EnemyLoader()
-
         self.pause :bool = False
         self.gameRunning :bool = True
         self.showStats = False
 
-        renderableCache.init(viewport=self.viewport)
+        viewport :Viewport = Viewport(win=win, world=self)
+        textureEmiter :TextureEmiter = TextureEmiter(
+            viewport=viewport,
+            world=self.world)
+        mapManager :MapManager = MapManager(viewport=viewport)
+        sceneManager :SceneManager = SceneManager(
+            viewport=viewport,
+            world=self.world,
+            mapManager=mapManager)
+        enemyLoader :EnemyLoader = EnemyLoader()
+        renderableCache.init(viewport=viewport)
 
-        particleProcessor = ParticleProcessor(viewport=self.viewport)
+        particleProcessor = ParticleProcessor(viewport=viewport)
         gametimeProcessor = GametimeProcessor()
         aiProcessor = AiProcessor()
         characterAnimationProcessor = CharacterAnimationProcessor()
         playerProcessor = PlayerProcessor(
-            viewport=self.viewport)
+            viewport=viewport)
         enemyProcessor = EnemyProcessor(
-            viewport=self.viewport, enemyLoader=self.enemyLoader)
+            viewport=viewport, enemyLoader=enemyLoader)
         attackableProcessor = AttackableProcessor()
         offensiveAttackProcessor = OffensiveAttackProcessor()
         offensiveSkillProcessor = OffensiveSkillProcessor()
-        movementProcessor = MovementProcessor()
+        movementProcessor = MovementProcessor(mapManager)
         inputProcessor = InputProcessor()
-        renderableProcessor = RenderableProcessor(textureEmiter=self.textureEmiter)
+        renderableProcessor = RenderableProcessor(textureEmiter=textureEmiter)
         renderableMinimalProcessor = RenderableMinimalProcessor(
-            viewport=self.viewport,
-            textureEmiter=self.textureEmiter)
+            viewport=viewport,
+            textureEmiter=textureEmiter)
         sceneProcessor = SceneProcessor(
-            viewport=self.viewport,
-            sceneManager=self.sceneManager,
+            viewport=viewport,
+            sceneManager=sceneManager,
         )
         damageProcessor = DamageProcessor()
 
+        self.viewport :Viewport = viewport  # for keybaordinput
         self.inputProcessor :InputProcessor = inputProcessor  # for Statusbar:APM
         self.sceneProcessor :SceneProcessor = sceneProcessor  # for stats
+        self.mapManager :MapManager = mapManager  # to advance it
+        self.sceneManager :SceneManager = sceneManager  # to check for shopmap
 
         # Lots of comments to check if the order of the processors really work,
-        # as Messaging looses all messages on every iteration (use DirectMessaging 
+        # as Messaging looses all messages on every iteration (use DirectMessaging
         # instead)
         self.world.add_processor(gametimeProcessor)
 
