@@ -12,13 +12,15 @@ import system.groupid
 from messaging import messaging, MessageType
 from utilities.entityfinder import EntityFinder
 from directmessaging import directMessaging, DirectMessageType
+from game.mapmanager import MapManager
 
 logger = logging.getLogger(__name__)
 
 
 class MovementProcessor(esper.Processor):
-    def __init__(self):
+    def __init__(self, mapManager :MapManager):
         super().__init__()
+        self.mapManager :MapManager = mapManager
 
 
     def process(self, dt):
@@ -77,7 +79,7 @@ class MovementProcessor(esper.Processor):
         didChangeDirection = False
 
         if x > 0:
-            if True:
+            if renderable.coordinates.x + x < self.mapManager.getCurrentMapWidth():
                 renderable.coordinates.x += x
                 didMove = True
 
@@ -87,7 +89,7 @@ class MovementProcessor(esper.Processor):
                     didChangeDirection = True
 
         elif x < 0:
-            if renderable.coordinates.x > 1:
+            if renderable.coordinates.x + x > 1:
                 renderable.coordinates.x += x
                 didMove = True
                 if (not dontChangeDirection

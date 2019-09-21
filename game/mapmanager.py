@@ -32,6 +32,10 @@ class MapManager(object):
         self.loadMapRenderables(name)
 
 
+    def getCurrentMapWidth(self) -> int:
+        return self.xpmap['width']
+
+
     def advance(self, deltaTime):
         if self.mapRenderables is None:
             return
