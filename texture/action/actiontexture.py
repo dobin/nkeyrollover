@@ -1,9 +1,9 @@
 import logging
 
-from texture.action.actionanimationmanager import ActionAnimationManager
 from texture.animationtexture import AnimationTexture
 from common.coordinates import Coordinates
 from texture.texturetype import TextureType
+from texture.filetextureloader import fileTextureLoader
 
 logger = logging.getLogger(__name__)
 
@@ -11,14 +11,13 @@ logger = logging.getLogger(__name__)
 class ActionTexture(AnimationTexture):
     def __init__(self, actionType=None, direction=None, name=''):
         super(ActionTexture, self).__init__(type=TextureType.action, name=name)
-        self.actionAnimationManager = ActionAnimationManager()
 
         if actionType is not None:
             self.changeAnimation(actionType, direction)
 
 
     def changeAnimation(self, actionType, direction):
-        self.animation = self.actionAnimationManager.getAnimation(
+        self.animation = fileTextureLoader.actionAnimationManager.getAnimation(
             actionType,
             direction)
         self.init()

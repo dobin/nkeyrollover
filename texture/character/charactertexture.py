@@ -2,10 +2,10 @@ import logging
 
 from common.direction import Direction
 from texture.animationtexture import AnimationTexture
-from texture.character.characteranimationmanager import characterAnimationManager
 from texture.character.characteranimationtype import CharacterAnimationType
 from texture.character.charactertexturetype import CharacterTextureType
 from texture.texturetype import TextureType
+from texture.filetextureloader import fileTextureLoader
 
 logger = logging.getLogger('CharacterTexture')
 
@@ -61,7 +61,7 @@ class CharacterTexture(AnimationTexture):
             self.name, characterAnimationType))
         self.setActive(True)
         self.characterAnimationType = characterAnimationType
-        self.animation = characterAnimationManager.getAnimation(
+        self.animation = fileTextureLoader.characterAnimationManager.getAnimation(
             characterTextureType=self.characterTextureType,
             characterAnimationType=characterAnimationType,
             direction=direction,

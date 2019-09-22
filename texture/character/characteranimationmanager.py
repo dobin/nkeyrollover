@@ -1,11 +1,15 @@
 import logging
 import random
+import os
 
 from common.direction import Direction
 from texture.character.characteranimationtype import CharacterAnimationType
 from texture.character.charactertexturetype import CharacterTextureType
-from texture.filetextureloader import FileTextureLoader
 from utilities.utilities import Utility
+from texture.animation import Animation
+from utilities.colorpalette import ColorPalette
+from utilities.color import Color
+from texture.texturehelper import TextureHelper
 
 logger = logging.getLogger(__name__)
 
@@ -19,11 +23,11 @@ class CharacterAnimationObj(object):
 class CharacterAnimationManager(object):
     def __init__(self):
         self.characterAnimationObjs = {}
-        self.fileTextureLoader = FileTextureLoader()
-        self.isLoaded = False
 
 
-    def init(self):
+    def loadFiles(self):
+        self.characterAnimationObjs = {}
+
         for characterTextureType in CharacterTextureType:
             animationsLeft = {}
             animationsRight = {}
@@ -44,7 +48,12 @@ class CharacterAnimationManager(object):
             if characterTextureType is CharacterTextureType.stickfigure:
                 head = self.getRandomHead()
                 body = self.getRandomBody()
-                self.updateAllAnimations(characterAnimationObj, 1, 0, head, skip=CharacterAnimationType.dying)
+                self.updateAllAnimations(
+                    characterAnimationObj,
+                    1,
+                    0,
+                    head,
+                    skip=CharacterAnimationType.dying)
                 self.updateAllAnimations(characterAnimationObj, 1, 1, body)
 
             self.characterAnimationObjs[characterTextureType] = characterAnimationObj
@@ -57,12 +66,6 @@ class CharacterAnimationManager(object):
         direction,
         subtype=0
     ):
-        # delay loading till first invocation, as this is a singleton, and we dont 
-        # wanna load stuff when its first included
-        if not self.isLoaded:
-            self.init()
-            self.isLoaded = True
-
         characterAnimationObj = self.characterAnimationObjs[characterTextureType]
 
         if direction is Direction.left:
@@ -98,7 +101,7 @@ class CharacterAnimationManager(object):
         if animationType is CharacterAnimationType.dying:
             n = 0
             while n < 2:
-                animation = self.fileTextureLoader.readAnimation(
+                animation = self.readAnimation(
                     characterTextureType=characterTextureType,
                     characterAnimationType=animationType)
                 if animation.originalDirection is not direction:
@@ -107,7 +110,7 @@ class CharacterAnimationManager(object):
                 animations.append(animation)
                 n += 1
         else:
-            animation = self.fileTextureLoader.readAnimation(
+            animation = self.readAnimation(
                 characterTextureType=characterTextureType,
                 characterAnimationType=animationType)
             if animation.originalDirection is not direction:
@@ -128,5 +131,29 @@ class CharacterAnimationManager(object):
         return random.choice(['X', 'o', 'O', 'v', 'V', 'M', 'm'])
 
 
+    def readAnimation(
+        self, characterTextureType :CharacterTextureType,
+        characterAnimationType :CharacterAnimationType,
+    ) -> Animation:
+        ct = characterTextureType.name
+        cat = characterAnimationType.name
+        filename = "data/textures/character/{}/{}_{}.ascii".format(ct, ct, cat)
 
-characterAnimationManager = CharacterAnimationManager()
+        # return fake animation if file does not exist(yet)
+        if not os.path.isfile(filename):
+            animation = Animation()
+            animation.arr = [[['X']]]
+            animation.height = 1
+            animation.width = 1
+            animation.frameCount = 1
+            animation.frameTime = [10.0]
+            animation.frameColors = [ColorPalette.getColorByColor(Color.white)]
+            return animation
+
+        animation = TextureHelper.readAnimationFile(filename)
+        animation.name = "{}_{}".format(ct, cat)
+
+        filenameYaml = "data/textures/character/{}/{}_{}.yaml".format(ct, ct, cat)
+        TextureHelper.loadYamlIntoAnimation(filenameYaml, animation)
+
+        return animation

@@ -5,7 +5,7 @@ from config import Config
 from system.gamelogic.weapontype import WeaponType
 from utilities.timer import Timer
 from messaging import messaging, MessageType
-from texture.filetextureloader import FileTextureLoader
+from texture.filetextureloader import fileTextureLoader
 
 logger = logging.getLogger(__name__)
 
@@ -24,11 +24,6 @@ class OffensiveAttack():
 
         self.weaponType :WeaponType = WeaponType.hit
         self.selectedWeaponKey :str = '1'
-
-        fileTextureLoader = FileTextureLoader()
-        self.weaponData = {}
-        for weaponType in WeaponType:
-            self.weaponData[weaponType] = fileTextureLoader.readWeapon(weaponType)
 
 
     def switchWeaponByKey(self, key :str):
@@ -56,7 +51,9 @@ class OffensiveAttack():
         self.cooldownTimer.reset()  # activate cooldown
         self.durationTimer.reset()  # will setActive(false) when time is up
 
-        actionTextureType = self.weaponData[self.weaponType].actionTextureType
+        weaponData = fileTextureLoader.weaponAnimationManager.getWeaponData(self.weaponType)
+
+        actionTextureType = weaponData.actionTextureType
         location = self.parentRenderable.getWeaponBaseLocation()
         direction = self.parentRenderable.getDirection()
 
@@ -70,7 +67,7 @@ class OffensiveAttack():
                 'actionTextureType': actionTextureType,
                 'location': location,
                 'fromPlayer': self.parentChar.isPlayer,
-                'damage': self.weaponData[self.weaponType].damage,
+                'damage': weaponData.damage,
                 'direction': direction,
             }
         )
@@ -90,8 +87,8 @@ class OffensiveAttack():
 
 
     def getCurrentWeaponHitArea(self, direction):
-        w = self.weaponData[self.weaponType]
-        wha = w.weaponHitArea[direction]
+        weaponData = fileTextureLoader.weaponAnimationManager.getWeaponData(self.weaponType)
+        wha = weaponData.weaponHitArea[direction]
         return copy.deepcopy(wha)
 
 

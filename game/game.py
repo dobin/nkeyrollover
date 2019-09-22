@@ -29,6 +29,7 @@ from messaging import messaging
 from directmessaging import directMessaging
 from system.singletons.renderablecache import renderableCache
 from system.gamelogic.damageprocessor import DamageProcessor
+from texture.filetextureloader import fileTextureLoader
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +45,8 @@ class Game(object):
         self.showStats = False
         self.showLog = False
 
+        fileTextureLoader.loadFromFiles()
+
         viewport :Viewport = Viewport(win=win, world=self)
         textureEmiter :TextureEmiter = TextureEmiter(
             viewport=viewport,
@@ -55,6 +58,7 @@ class Game(object):
             mapManager=mapManager)
         enemyLoader :EnemyLoader = EnemyLoader()
         renderableCache.init(viewport=viewport)
+
 
         particleProcessor = ParticleProcessor(viewport=viewport)
         gametimeProcessor = GametimeProcessor()
