@@ -54,7 +54,7 @@ class SceneBase(object):
         pass
 
 
-    def handlePosition(self, playerPosition, viewportX):
+    def handlePosition(self, playerPosition, viewportX, numEnemiesAlive):
         pass
 
     def handleTime(self):

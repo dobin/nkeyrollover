@@ -25,6 +25,7 @@ class StateAttackWindup(State):
 
         self.setTimer(meEnemy.enemyInfo.attackWindupTime)
 
+
     def process(self, dt):
         meAttackable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.attackable.Attackable)

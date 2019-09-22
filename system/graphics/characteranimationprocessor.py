@@ -7,7 +7,6 @@ from messaging import messaging, MessageType
 import system.graphics.renderable
 import system.gamelogic.player
 from utilities.entityfinder import EntityFinder
-from game.textureemiter import TextureEmiterEffect
 
 logger = logging.getLogger(__name__)
 

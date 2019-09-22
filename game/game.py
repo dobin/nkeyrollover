@@ -104,7 +104,6 @@ class Game(object):
         self.world.add_processor(movementProcessor)
 
         # p handle:   Message            PlayerLocation
-        # e generate: Message            EnemyAttack
         # e generate: DirectMessage      moveEnemy
         # x generate: Message            EmitTextureMinimal
         self.world.add_processor(aiProcessor)
@@ -154,8 +153,6 @@ class Game(object):
         self.world.add_processor(characterAnimationProcessor)
 
         # x handle:   DirectMessage      activateSpeechBubble (emit)
-        # p handle:   Message            PlayerAttack (CD, convert to damage)
-        # e handle:   Message            EnemyAttack
         # x generate: Message            AttackAt
         # x generate: DirectMessage      activateSpeechBubble (because of damage)
         self.world.add_processor(renderableProcessor)
@@ -196,7 +193,7 @@ class Game(object):
             self.drawStats()
 
         # not drawing related, but who cares
-        if frame % 100 == 0:
+        if frame % 1000 == 0:
             self.logEntityStats()
 
         if self.pause:

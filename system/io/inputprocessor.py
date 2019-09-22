@@ -92,13 +92,15 @@ class InputProcessor(esper.Processor):
 
         meGroupId = self.world.component_for_entity(
             playerEntity, system.groupid.GroupId)
-        directMessaging.add(
-            groupId = meGroupId.getId(),
-            type = DirectMessageType.movePlayer,
-            data = {
-                'x': x,
-                'y': y
-            },
-        )
+
+        if didMove:
+            directMessaging.add(
+                groupId = meGroupId.getId(),
+                type = DirectMessageType.movePlayer,
+                data = {
+                    'x': x,
+                    'y': y
+                },
+            )
 
         return didMove

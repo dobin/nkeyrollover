@@ -16,11 +16,31 @@ class ScenePlayground(SceneBase):
 
     def handlePlayerKeyPress(self, key):
         loc = Coordinates(20, 15)
-        if key == 49:  # numpad 1
+        if key == 54:
             self.emitParticleEffect(loc, ParticleEffectType.explosion)
 
-        if key == 50:  # numpad 2
+        if key == 55:
             self.emitParticleEffect(loc, ParticleEffectType.dragonExplosion)
+
+        if key == ord('s'):
+            self.spawnPlayer()
+
+        if key == ord('a'):
+            self.reloadAllTextures()
+
+
+    def reloadAllTextures(self):
+        pass
+
+
+    def spawnPlayer(self):
+        coordinates = Coordinates(24, 13)
+        messaging.add(
+            type=MessageType.SpawnPlayer,
+            data={
+                'coordinates': coordinates
+            },
+        )
 
 
     def emitParticleEffect(self, loc, particleEffect):

@@ -27,8 +27,8 @@ class RenderableTest(unittest.TestCase):
         self.world = esper.World()
         self.textureEmiter = None
 
-        renderableProcessor = RenderableProcessor()
-        movementProcessor = MovementProcessor()
+        renderableProcessor = RenderableProcessor(textureEmiter=self.textureEmiter)
+        movementProcessor = MovementProcessor(mapManager=None)
         inputProcessor = InputProcessor()
         renderableMinimalProcessor = RenderableMinimalProcessor(
             viewport=self.viewport,

@@ -38,6 +38,11 @@ class SceneManager(object):
 
 
     def initScene(self):
+        if self.currentSceneIdx == 0:
+            self.mapManager.loadMap('map02')
+        if self.currentSceneIdx == 2:
+            self.mapManager.loadMap('map02')
+
         self.currentScene.enter()
 
 
@@ -48,8 +53,6 @@ class SceneManager(object):
         logger.info("Change to scene {}: {}".format(
             self.currentSceneIdx, self.currentScene))
 
-        if self.currentSceneIdx == 2:
-            self.mapManager.loadMap('map02')
         self.initScene()
 
 

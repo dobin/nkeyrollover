@@ -75,6 +75,14 @@ class OffensiveAttack():
             }
         )
 
+        if self.parentChar.isPlayer:
+            # indicate we are attacking, e.g. for playing attack animation
+            messaging.add(
+                type=MessageType.PlayerAttack,
+                data={
+                }
+            )
+
 
     def advance(self, deltaTime :float):
         self.cooldownTimer.advance(deltaTime)

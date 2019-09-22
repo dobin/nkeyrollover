@@ -16,17 +16,12 @@ class OffensiveAttackProcessor(esper.Processor):
 
     def process(self, dt):
         self.handlePlayerAttackKeyPressMessage()
-        self.handleEnemyAttackMessage()
         self.advance(dt)
 
 
     def advance(self, dt):
         for ent, offensiveAttack in self.world.get_component(OffensiveAttack):
             offensiveAttack.advance(dt)
-
-
-    def handleEnemyAttackMessage(self): 
-        pass
 
 
     def handlePlayerAttackKeyPressMessage(self):

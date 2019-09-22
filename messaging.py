@@ -7,10 +7,7 @@ logger = logging.getLogger(__name__)
 class MessageType(Enum):
     PlayerKeypress = 0  # to move, use attacks, skills
     PlayerLocation = 1  # to guide enemy, move viewport
-    PlayerAttack = 2  # change into attack animation, collision detection, and more
-
-    EnemyAttack = 4  # for collision detection, damage
-    EnemyLocation = 5  # (unused)
+    PlayerAttack = 2  # change into attack animation
 
     EntityMoved = 7  # to update walking animation
     attackWindup = 8  # to start attackWindup animation (on specific enemy)

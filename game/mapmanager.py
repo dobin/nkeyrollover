@@ -25,6 +25,7 @@ class MapManager(object):
         self.color :Color = ColorPalette.getColorByColor(Color.grey)
         self.mapRenderables = None
 
+
     def loadMap(self, name):
         self.openXpMap("data/map/{}.xp".format(name))
         # array of len(mapwidth), with arrays

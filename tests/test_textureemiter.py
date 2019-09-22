@@ -28,8 +28,8 @@ class TextureEmiterTest(unittest.TestCase):
         self.textureEmiter = TextureEmiter(viewport=self.viewport, world=self.world)
         renderableCache.init(viewport=self.viewport)
 
-        renderableProcessor = RenderableProcessor()
-        movementProcessor = MovementProcessor()
+        renderableProcessor = RenderableProcessor(textureEmiter=self.textureEmiter)
+        movementProcessor = MovementProcessor(mapManager=None)
         inputProcessor = InputProcessor()
         renderableMinimalProcessor = RenderableMinimalProcessor(
             viewport=self.viewport,
