@@ -42,6 +42,7 @@ class Game(object):
         self.pause :bool = False
         self.gameRunning :bool = True
         self.showStats = False
+        self.showLog = False
 
         viewport :Viewport = Viewport(win=win, world=self)
         textureEmiter :TextureEmiter = TextureEmiter(
@@ -266,3 +267,7 @@ class Game(object):
 
     def toggleStats(self):
         self.showStats = not self.showStats
+
+
+    def toggleLog(self):
+        self.showLog = not self.showLog

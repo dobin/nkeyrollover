@@ -37,7 +37,7 @@ class KeyboardInput(object):
             self.game.toggleStats()
 
         if key == 266:  # f2
-            pass
+            self.game.toggleLog()
 
         messaging.add(
             type=MessageType.PlayerKeypress,

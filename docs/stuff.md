@@ -1,6 +1,13 @@
-# Some Stuff
+# Keys
 
-## Playground
+In-game: 
+
+* F1: Show some stats
+* F2: Show log
+* p: Pause
+
+
+# Playground
 
 Empty map. 
 
