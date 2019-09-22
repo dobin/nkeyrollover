@@ -22,12 +22,10 @@ class ActionAnimationManager(object):
         for actiontype in ActionType:
             self.animationsLeft[actiontype] = self.createAnimation(
                 actiontype, Direction.left)
-            logging.info("LOADL: {}".format(actiontype))
 
         for actiontype in ActionType:
             self.animationsRight[actiontype] = self.createAnimation(
                 actiontype, Direction.right)
-            logging.info("LOADR: {}".format(actiontype))
 
 
     def getAnimation(self, actionType, direction):

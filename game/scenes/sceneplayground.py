@@ -4,6 +4,7 @@ from common.coordinates import Coordinates
 from common.direction import Direction
 from system.graphics.particleeffecttype import ParticleEffectType
 from utilities.color import Color
+from texture.filetextureloader import fileTextureLoader
 
 
 class ScenePlayground(SceneBase):
@@ -30,7 +31,7 @@ class ScenePlayground(SceneBase):
 
 
     def reloadAllTextures(self):
-        pass
+        fileTextureLoader.loadFromFiles()
 
 
     def spawnPlayer(self):
