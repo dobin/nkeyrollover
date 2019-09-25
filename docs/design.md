@@ -8,6 +8,14 @@ Note that drawing the map is not being done with a system (for performance reaso
 * Advance (let all systems/processors run)
 * Draw2 (draw some overlays)
 
+## Z Order 
+
+In advance():
+* all RenderableMinimal
+* all Renderable
+    * y-value is basically Z order
+    * plus optional Z in renderable
+* particles
 
 ## ECS
 
@@ -40,7 +48,7 @@ Other GFX:
 
 Textures:
 * Action: Used for attacks (e.g. swords attacks)
-* Character: Used for character
+* Character: player, enemy models
 * Phenomena: Static things (e.g. trees, roflcopter)
 * Speech: Speech bubble
 
@@ -48,7 +56,7 @@ Textures:
 ## Attacks vs. Skills
 
 Similar to Leage of Legends. Attacks are space (or autoattacks in LoL, left mouse 
-button). Skills are keys QWER.
+button), selected by key 1-4. Skills are keys QWER.
 
 * Attacks: Use ActionTexture
 * Skills: Use Particles
@@ -62,7 +70,7 @@ button). Skills are keys QWER.
   * textures/: Stored ASCII textures (loaded via FileTextureLoader)
     * Action/: for attacks
     * Character/: Character animations (stickfigure, cow, dragon)
-    * Phenomena/: Static stuff (trees)
+    * Phenomena/: Static stuff (logo, roflcopter, trees)
   * weapons/: Information about Attacks
     * .ascii: Hit detection texture (for enemies, AI)
     * .yaml: Some information (damage, Texture)
@@ -79,6 +87,10 @@ in the source code.
 
 If it is necessary to make a message survive a loop, use DirectMessage (uses a GroupId
 to identify a component. Message can be read exactly once). 
+
+* p: Player
+* e: Enemy
+* x: Both, other
 
 ```python
         self.world.add_processor(gametimeProcessor)
