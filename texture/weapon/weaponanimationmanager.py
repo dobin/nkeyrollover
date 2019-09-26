@@ -69,6 +69,11 @@ class WeaponAnimationManager(object):
             weapon.actionTextureType = ActionType[data['actionTextureType']]
             weapon.hitDetectionDirection = Direction[data['hitDetectionDirection']]
             weapon.damage = int(data['damage'])
+
+            if 'locationoffset' in data:
+                locationOffset = data['locationoffset']
+                weapon.locationOffset = Coordinates(locationOffset['x'], locationOffset['y'])
+
         except TypeError as error:
             raise Exception("Error, missing field in yaml file {}, error {}".format(
                 filename, error

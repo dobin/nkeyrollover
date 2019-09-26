@@ -6,6 +6,7 @@ from system.gamelogic.weapontype import WeaponType
 from utilities.timer import Timer
 from messaging import messaging, MessageType
 from texture.filetextureloader import fileTextureLoader
+from common.direction import Direction
 
 logger = logging.getLogger(__name__)
 
@@ -52,15 +53,21 @@ class OffensiveAttack():
         self.durationTimer.reset()  # will setActive(false) when time is up
 
         weaponData = fileTextureLoader.weaponAnimationManager.getWeaponData(self.weaponType)
-
-        actionTextureType = weaponData.actionTextureType
-        location = self.parentRenderable.getWeaponBaseLocation()
         direction = self.parentRenderable.getDirection()
+        actionTextureType = weaponData.actionTextureType
+
+        # handle weapon offset
+        location = self.parentRenderable.getWeaponBaseLocation()
+        if direction is Direction.left:
+            location.x += weaponData.locationOffset.x
+        else:
+            location.x -= weaponData.locationOffset.x
+        location.y += weaponData.locationOffset.y
 
         # EmitActionTexture will create Attack message for the player/enemy
-        # (data['damage'] is not None)
+        # (because data['damage'] is not None)
         # as we dont know here what the attack locations are,
-        # as they depend on the specific attack
+        # as they depend on the specific attack (texture)
         messaging.add(
             type=MessageType.EmitActionTexture,
             data={

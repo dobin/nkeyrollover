@@ -136,11 +136,11 @@ class Game(object):
         # x generate: DirectMessage      activateSpeechBubble
         self.world.add_processor(sceneProcessor)
 
-        # x generate: Message            EntityDead
         # e handle:   Message            SpawnEnemy
+        # x generate: Message            EntityDead
         self.world.add_processor(enemyProcessor)
 
-        # p handle.   Message            SpawnPlayer
+        # p handle:   Message            SpawnPlayer
         self.world.add_processor(playerProcessor)
 
         # x handle:   Message            EmitTextureMinimal

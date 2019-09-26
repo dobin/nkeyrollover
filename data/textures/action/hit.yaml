@@ -4,8 +4,26 @@ frameTime:
   - 0.1
   - 0.1
   - 0.1
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.4
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.1
 frameColors:
   - brightyellow
   - brightyellow
   - brightyellow
-direction: left
+  - brightyellow
+  - brightyellow
+  - brightyellow
+  - brightyellow
+  - brightyellow
+  - brightyellow
+  - brightyellow
+  - brightyellow
+  - brightyellow
+direction: right

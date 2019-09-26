@@ -35,6 +35,8 @@ class Renderable(object):
         # skill on left side
         self.attackBaseLocation = Coordinates(-1, 1)
 
+        self.weaponBaseLocation = Coordinates(0, -1)
+
         # if parent is given, this position will always be relative
         # to that parent
         self.parent :Renderable = parent
@@ -161,19 +163,30 @@ class Renderable(object):
 
 
     def getWeaponBaseLocation(self):
+        """The position of the attack weapon of the char. 
+        Used to:
+        - As Enemy/AI: check if we can attack player (chase)
+        - Use as baseline for attack texture (and therefore also hit detection)
+        """
         # Slow
         loc = copy.copy(self.getLocation())
 
-        loc.y -= 1
+        loc.y += self.weaponBaseLocation.y
         if self.direction is Direction.left:
-            loc.x -= -1
+            loc.x += self.weaponBaseLocation.x
         else:
-            loc.x += self.texture.width - 1
+            loc.x += (self.texture.width) - self.weaponBaseLocation.x
 
         return loc
 
 
     def getAttackBaseLocation(self):
+        """
+        Used to:
+        - As Enemy/AI: Check distance, direction to player (chase). Bigger enemies
+          basically define their feet as base, so they align with the player better.
+        """
+
         # Slow
         loc = copy.copy(self.getLocation())
 
@@ -181,7 +194,7 @@ class Renderable(object):
         if self.direction is Direction.left:
             loc.x += self.attackBaseLocation.x
         else:
-            loc.x += self.texture.width - 1 - self.attackBaseLocation.x
+            loc.x += (self.texture.width - 1) - self.attackBaseLocation.x
 
         return loc
 
@@ -194,7 +207,7 @@ class Renderable(object):
         if self.direction is Direction.right:
             loc.x += self.attackBaseLocation.x
         else:
-            loc.x += self.texture.width - 1 - self.attackBaseLocation.x
+            loc.x += (self.texture.width - 1) - self.attackBaseLocation.x
 
         return loc
 
