@@ -1,3 +1,4 @@
 actionTextureType: hitLine
 hitDetectionDirection: right
 damage: 20
+characterAnimationType: hitting

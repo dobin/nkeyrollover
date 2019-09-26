@@ -1,3 +1,4 @@
 actionTextureType: unittest
 hitDetectionDirection: left
 damage: 10
+characterAnimationType: hitting

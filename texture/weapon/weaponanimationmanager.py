@@ -10,6 +10,8 @@ from common.weapondata import WeaponData
 from common.coordinates import Coordinates
 from texture.action.actiontype import ActionType
 from texture.texturehelper import TextureHelper
+from texture.character.characteranimationtype import CharacterAnimationType
+
 import texture.filetextureloader
 
 logger = logging.getLogger("weaponAnimationManager")
@@ -70,6 +72,7 @@ class WeaponAnimationManager(object):
             weapon.actionTextureType = ActionType[data['actionTextureType']]
             weapon.hitDetectionDirection = Direction[data['hitDetectionDirection']]
             weapon.damage = int(data['damage'])
+            weapon.characterAnimationType = CharacterAnimationType[data['characterAnimationType']]
 
             actionAnimation = texture.filetextureloader.fileTextureLoader.actionAnimationManager.getAnimation(
                 weapon.actionTextureType, Direction.left)

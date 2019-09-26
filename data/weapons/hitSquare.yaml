@@ -1,3 +1,4 @@
 actionTextureType: hitSquare
 hitDetectionDirection: left
 damage: 20
+characterAnimationType: hitting

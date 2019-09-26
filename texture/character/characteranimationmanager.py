@@ -142,12 +142,15 @@ class CharacterAnimationManager(object):
         # return fake animation if file does not exist(yet)
         if not os.path.isfile(filename):
             animation = Animation()
-            animation.arr = [[['X']]]
-            animation.height = 1
-            animation.width = 1
+            animation.arr = [[['X', 'X', 'X'], ['X', 'X', 'X'], ['X', 'X', 'X']]]
+            animation.height = 3
+            animation.width = 3
             animation.frameCount = 1
             animation.frameTime = [10.0]
             animation.frameColors = [ColorPalette.getColorByColor(Color.white)]
+            logger.debug("Could not find animation {}, replacing".format(
+                filename
+            ))
             return animation
 
         animation = TextureHelper.readAnimationFile(filename)

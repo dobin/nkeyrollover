@@ -76,7 +76,7 @@ class SceneMapBlame(SceneBase):
                 id = self.enemyCount,
                 enemyType = EnemyType.stickfigure,
                 spawnTime = None,
-                spawnX = 0,
+                spawnX = 35,
                 spawnLocation = Coordinates(35, 8),
                 spawnDirection = None
             )

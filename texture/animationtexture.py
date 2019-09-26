@@ -87,11 +87,11 @@ class AnimationTexture(Texture):
             return
 
         if self.animation is None:
-            m = "{}: Trying to access animation which does not exist"
+            m = "Animation {}: Trying to access animation which does not exist"
             raise Exception(m.format(self.name))
 
         if self.frameIndex >= len(self.animation.arr):
-            m = "{}: Trying to access frameId {} on arr with len {}, actual len {}"
+            m = "Animation {}: Trying to access frameId {} on arr with len {}, actual len {}"
             raise Exception(m.format(
                 self.name,
                 self.frameIndex,

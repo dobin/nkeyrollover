@@ -1,0 +1,29 @@
+endless: False
+advanceByStep: False
+frameTime:
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.4
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.1
+frameColors:
+  - white
+  - white
+  - white
+  - white
+  - white
+  - white
+  - white
+  - white
+  - white
+  - white
+  - white
+  - white
+direction: right

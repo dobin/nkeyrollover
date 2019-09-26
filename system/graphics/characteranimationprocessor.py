@@ -74,7 +74,7 @@ class CharacterAnimationProcessor(esper.Processor):
                     playerEntity, system.graphics.renderable.Renderable)
 
                 playerRenderable.texture.changeAnimation(
-                    CharacterAnimationType.hitting,
+                    message.data['characterAttackAnimationType'],
                     playerRenderable.direction,
                     interrupt=True)
 

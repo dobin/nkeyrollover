@@ -32,9 +32,8 @@ class Renderable(object):
         self.direction = direction
         self.name = name
 
-        # skill on left side
+        # coordinates are based on left side orientation of renderable
         self.attackBaseLocation = Coordinates(-1, 1)
-
         self.weaponBaseLocation = Coordinates(0, -1)
 
         # if parent is given, this position will always be relative

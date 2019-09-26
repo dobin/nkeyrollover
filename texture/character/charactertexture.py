@@ -20,6 +20,8 @@ class CharacterTexture(AnimationTexture):
     ):
         super(CharacterTexture, self).__init__(type=TextureType.character, name=name)
         self.previousAnimation = None
+        self.previousFrameIndex = None
+        self.previousFrameTimeLeft = None
 
         self.characterTextureType = characterTextureType
         self.characterAnimationType = characterAnimationType
@@ -44,6 +46,8 @@ class CharacterTexture(AnimationTexture):
                 logger.debug("{}: Interrupt, store current: {}".format(
                     self.name, self.animation))
                 self.previousAnimation = self.animation
+                self.previousFrameIndex = self.frameIndex
+                self.previousFrameTimeLeft = self.frameTimeLeft
             else:
                 # we are already interrupted. overwrite current animation, but dont
                 # touch the self.previousAnimation one
@@ -72,6 +76,7 @@ class CharacterTexture(AnimationTexture):
 
 
     def setCharacterTextureType(self, characterTextureType):
+        logging.info("Set Character texture to: {}".format(characterTextureType))
         self.characterTextureType = characterTextureType
 
 
@@ -83,5 +88,7 @@ class CharacterTexture(AnimationTexture):
                 self.name,
                 self.previousAnimation))
             self.animation = self.previousAnimation
+            self.frameIndex = self.previousFrameIndex
+            self.frameTimeLeft = self.previousFrameTimeLeft
             self.previousAnimation = None
             self.setActive(True)

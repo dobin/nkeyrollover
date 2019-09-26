@@ -52,7 +52,8 @@ class OffensiveAttack():
         self.cooldownTimer.reset()  # activate cooldown
         self.durationTimer.reset()  # will setActive(false) when time is up
 
-        weaponData = fileTextureLoader.weaponAnimationManager.getWeaponData(self.weaponType)
+        weaponData = fileTextureLoader.weaponAnimationManager.getWeaponData(
+            self.weaponType)
         direction = self.parentRenderable.getDirection()
         actionTextureType = weaponData.actionTextureType
 
@@ -84,7 +85,11 @@ class OffensiveAttack():
             messaging.add(
                 type=MessageType.PlayerAttack,
                 data={
+                    # for playerProcessor
                     'attackAnimationLength': weaponData.animationLength,
+
+                    # for characterAnimationProcessor
+                    'characterAttackAnimationType': weaponData.characterAnimationType
                 }
             )
 

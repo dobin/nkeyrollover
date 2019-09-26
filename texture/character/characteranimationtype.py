@@ -9,3 +9,5 @@ class CharacterAnimationType(Enum):
     dying = 4
     hitwindup = 5
     stun = 6
+
+    hit = 7
