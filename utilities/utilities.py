@@ -5,6 +5,7 @@ from texture.character.charactertexturetype import CharacterTextureType
 from texture.character.characteranimationtype import CharacterAnimationType
 from texture.animation import Animation
 from common.coordinates import Coordinates, ExtCoordinates
+from common.direction import Direction
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,16 @@ class Utility(object):
         # res['sum'] = res['x'] + res['y']
         res['sum'] = math.sqrt(res['x'] ** 2 + res['y'] ** 2)
         return res
+
+
+    @staticmethod
+    def updateCoordinateListWithBase(weaponHitArea, loc, direction):
+        carr = weaponHitArea.hitCd
+        for c in carr:
+            c.x += loc.x
+            c.y += loc.y
+            if direction is Direction.left:
+                c.x -= weaponHitArea.width
 
 
     @staticmethod

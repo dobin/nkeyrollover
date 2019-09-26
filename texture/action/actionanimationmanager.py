@@ -36,7 +36,7 @@ class ActionAnimationManager(object):
 
 
     def createAnimation(self, actionType, direction):
-        animation = self.readAction(actionType=actionType)
+        animation = self.loadActionTextureFiles(actionType=actionType)
         if animation.originalDirection is not direction:
             Utility.mirrorFrames(animation.arr)
 
@@ -45,7 +45,7 @@ class ActionAnimationManager(object):
         return animation
 
 
-    def readAction(self, actionType :ActionType) -> Animation:
+    def loadActionTextureFiles(self, actionType :ActionType) -> Animation:
         actionName = actionType.name
         filename = "data/textures/action/{}.ascii".format(actionName)
         animation = TextureHelper.readAnimationFile(filename)

@@ -134,7 +134,7 @@ class StateChase(State):
         direction = meRenderable.getDirection()
         currentWeaponHitArea = meOffensiveAttack.getCurrentWeaponHitArea(
             direction=direction)
-        self.updateWeaponHitArea(
+        Utility.updateCoordinateListWithBase(
             currentWeaponHitArea,
             loc,
             direction)
@@ -187,15 +187,6 @@ class StateChase(State):
             res['y'] = d2
 
         return res
-
-
-    def updateWeaponHitArea(self, weaponHitArea, loc, direction):
-        carr = weaponHitArea.hitCd
-        for c in carr:
-            c.x += loc.x
-            c.y += loc.y
-            if direction is Direction.left:
-                c.x -= weaponHitArea.width
 
 
     def getInputChase(self):

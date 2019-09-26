@@ -57,18 +57,6 @@ class TextureEmiter(object):
 
         self.addRenderable(renderable)
 
-        if damage is not None:
-            hitLocations = renderable.getTextureHitCoordinates()
-
-            messaging.add(
-                type=MessageType.AttackAt,
-                data= {
-                    'hitLocations': hitLocations,
-                    'damage': damage,
-                    'byPlayer': fromPlayer,
-                }
-            )
-
 
     def showCharAtPos(
         self, char :str, timeout :float, coordinate :Coordinates, color :Color

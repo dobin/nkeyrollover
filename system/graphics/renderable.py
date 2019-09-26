@@ -148,19 +148,6 @@ class Renderable(object):
         return False
 
 
-    def getTextureHitCoordinates(self, animationIdx=0):
-        # Only works on ActionTexture's
-        locations = self.texture.getTextureHitCoordinates(animationIdx=0)
-        baseLocation = self.getLocation()
-
-        # make relative coordinates absolute
-        for location in locations:
-            location.x += baseLocation.x
-            location.y += baseLocation.y
-
-        return locations
-
-
     def getWeaponBaseLocation(self):
         """The position of the attack weapon of the char. 
         Used to:

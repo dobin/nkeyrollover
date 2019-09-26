@@ -1,5 +1,5 @@
 actionTextureType: hit
-hitDetectionDirection: left
+hitDetectionDirection: right
 damage: 20
 locationoffset:
   x: 7

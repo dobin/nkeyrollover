@@ -51,6 +51,9 @@ class WeaponAnimationManager(object):
             direction=Direction.right,
             weaponHitDirection=weaponData.hitDetectionDirection)
 
+        if len(weaponData.weaponHitArea[Direction.right].hitCd) == 0:
+            logging.warning("No hitdetection for weapon {}, sure?".format(weaponName))
+
         self.weaponData[weaponType] = weaponData
 
 

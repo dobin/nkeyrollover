@@ -7,6 +7,8 @@ from utilities.timer import Timer
 from messaging import messaging, MessageType
 from texture.filetextureloader import fileTextureLoader
 from common.direction import Direction
+from utilities.color import Color
+from utilities.utilities import Utility
 
 logger = logging.getLogger(__name__)
 
@@ -65,10 +67,6 @@ class OffensiveAttack():
             location.x -= weaponData.locationOffset.x
         location.y += weaponData.locationOffset.y
 
-        # EmitActionTexture will create Attack message for the player/enemy
-        # (because data['damage'] is not None)
-        # as we dont know here what the attack locations are,
-        # as they depend on the specific attack (texture)
         messaging.add(
             type=MessageType.EmitActionTexture,
             data={
@@ -79,6 +77,32 @@ class OffensiveAttack():
                 'direction': direction,
             }
         )
+
+        if weaponData.damage is not None:
+            weaponHitArea = copy.deepcopy(weaponData.weaponHitArea[direction])
+            Utility.updateCoordinateListWithBase(
+                weaponHitArea=weaponHitArea, loc=location, direction=direction)
+
+            messaging.add(
+                type=MessageType.AttackAt,
+                data= {
+                    'hitLocations': weaponHitArea.hitCd,
+                    'damage': weaponData.damage,
+                    'byPlayer': self.parentChar.isPlayer,
+                }
+            )
+
+            if Config.showAttackDestinations:
+                for hitlocation in weaponHitArea.hitCd:
+                    messaging.add(
+                        type=MessageType.EmitTextureMinimal,
+                        data={
+                            'char': 'X',
+                            'timeout': 0.2,
+                            'coordinate': hitlocation,
+                            'color': Color.grey
+                        }
+                    )
 
         if self.parentChar.isPlayer:
             # indicate we are attacking, e.g. for playing attack animation
@@ -92,6 +116,9 @@ class OffensiveAttack():
                     'characterAttackAnimationType': weaponData.characterAnimationType
                 }
             )
+        else:
+            # enemy AI state machine is doing it itself
+            pass
 
 
     def advance(self, deltaTime :float):
