@@ -28,6 +28,17 @@ class PlayerProcessor(esper.Processor):
     def process(self, deltaTime):
         self.advance(deltaTime)
         self.checkSpawn()
+        self.checkAttack()
+
+
+    def checkAttack(self):
+        for message in messaging.getByType(MessageType.PlayerAttack):
+            # most likely just one such message
+            playerEntity = EntityFinder.findPlayer(self.world)
+            player = self.world.component_for_entity(
+                playerEntity, system.gamelogic.player.Player)
+
+            player.setAttacking(attackTime=message.data['attackAnimationLength'])
 
 
     def checkSpawn(self):

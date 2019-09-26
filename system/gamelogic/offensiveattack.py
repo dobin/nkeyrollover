@@ -84,6 +84,7 @@ class OffensiveAttack():
             messaging.add(
                 type=MessageType.PlayerAttack,
                 data={
+                    'attackAnimationLength': weaponData.animationLength,
                 }
             )
 
@@ -94,7 +95,8 @@ class OffensiveAttack():
 
 
     def getCurrentWeaponHitArea(self, direction):
-        weaponData = fileTextureLoader.weaponAnimationManager.getWeaponData(self.weaponType)
+        weaponData = fileTextureLoader.weaponAnimationManager.getWeaponData(
+            self.weaponType)
         wha = weaponData.weaponHitArea[direction]
         return copy.deepcopy(wha)
 

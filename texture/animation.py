@@ -17,5 +17,12 @@ class Animation(object):
         self.originalDirection = None
 
 
+    def getAnimationLength(self):
+        n = 0
+        for frameTime in self.frameTime:
+            n += frameTime
+        return n
+
+
     def __repr__(self):
         return str(self.name)

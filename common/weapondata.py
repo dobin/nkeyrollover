@@ -12,4 +12,8 @@ class WeaponData(object):
         self.damage :int = None
         self.locationOffset :Coordinates = Coordinates(0, 0)
 
-        self.hitDetectionDirection = None  # not really used here anymore
+        # calculated based on actionTextureType
+        self.animationLength :int = None
+
+        # not really used at runtime
+        self.hitDetectionDirection = None

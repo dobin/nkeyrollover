@@ -141,6 +141,7 @@ class Game(object):
         self.world.add_processor(enemyProcessor)
 
         # p handle:   Message            SpawnPlayer
+        # p handle:   Message            PlayerAttack
         self.world.add_processor(playerProcessor)
 
         # x handle:   Message            EmitTextureMinimal

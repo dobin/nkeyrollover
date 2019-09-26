@@ -10,6 +10,7 @@ from common.weapondata import WeaponData
 from common.coordinates import Coordinates
 from texture.action.actiontype import ActionType
 from texture.texturehelper import TextureHelper
+import texture.filetextureloader
 
 logger = logging.getLogger("weaponAnimationManager")
 
@@ -70,9 +71,14 @@ class WeaponAnimationManager(object):
             weapon.hitDetectionDirection = Direction[data['hitDetectionDirection']]
             weapon.damage = int(data['damage'])
 
+            actionAnimation = texture.filetextureloader.fileTextureLoader.actionAnimationManager.getAnimation(
+                weapon.actionTextureType, Direction.left)
+            weapon.animationLength = actionAnimation.getAnimationLength()
+
             if 'locationoffset' in data:
                 locationOffset = data['locationoffset']
-                weapon.locationOffset = Coordinates(locationOffset['x'], locationOffset['y'])
+                weapon.locationOffset = Coordinates(
+                    locationOffset['x'], locationOffset['y'])
 
         except TypeError as error:
             raise Exception("Error, missing field in yaml file {}, error {}".format(
