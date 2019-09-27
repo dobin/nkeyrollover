@@ -57,11 +57,15 @@ class OffensiveAttackProcessor(esper.Processor):
         if playerEntity is None:
             return None
 
-        meGroupId = self.world.component_for_entity(
-            playerEntity, system.groupid.GroupId)
-
+        # Not so nice, should be done in handlePlayerKeyPress
+        mePlayer = self.world.component_for_entity(
+            playerEntity, system.gamelogic.player.Player)
+        if mePlayer.isAttacking:
+            return None
 
         # find characterattack for player
+        meGroupId = self.world.component_for_entity(
+            playerEntity, system.groupid.GroupId)
         ret = EntityFinder.findOffensiveAttackByGroupId(self.world, meGroupId.getId())
 
         return ret
