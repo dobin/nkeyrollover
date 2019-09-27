@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.7
 
 import curses
 import time
@@ -30,13 +30,13 @@ class Keyrollover(object):
 
         if Config.devMode:
             logging.basicConfig(
-                filename='app.log',
+                filename='nkeyrollover.log',
                 filemode='a',
                 level=logging.INFO,
                 format='%(asctime)s %(levelname)-07s %(name)32s: %(message)s')
         else:
             logging.basicConfig(
-                filename='/tmp/nkeyrollover.log',
+                filename='nkeyrollover.log',
                 filemode='a',
                 level=logging.INFO,
                 format='%(asctime)s %(levelname)-07s %(name)32s: %(message)s')

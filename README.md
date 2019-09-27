@@ -70,12 +70,14 @@ Install:
 # chown game:game nkeyrollover/app.log
 ```
 
-
-### With password
-
 Configure:
 ```
 # adduser game # password game
+```
+
+### With password
+
+```
 # chsh -s '/opt/nkeyrollover/nkeyrollover.py' game
 ```
 
@@ -89,5 +91,9 @@ man telnetd:
 
 inetd.conf:
 ```
-telnet          stream  tcp     nowait  telnetd /usr/sbin/tcpd  /usr/sbin/in.telnetd -L /opt/nkeyrollover/nkeyrollover.py
+telnet          stream  tcp     nowait  telnetd /usr/sbin/tcpd  /usr/sbin/in.telnetd -L /opt/nkeyrollover/nkeyrollover-inetd.sh
+```
+
+```
+# service inetd restart
 ```
