@@ -70,8 +70,24 @@ Install:
 # chown game:game nkeyrollover/app.log
 ```
 
+
+### With password
+
 Configure:
 ```
 # adduser game # password game
 # chsh -s '/opt/nkeyrollover/nkeyrollover.py' game
+```
+
+### Without password
+
+man telnetd:
+```
+     -L loginprg  This option may be used to specify a different login program.  By default, /usr/lib/telnetlogin is used.
+
+```
+
+inetd.conf:
+```
+telnet          stream  tcp     nowait  telnetd /usr/sbin/tcpd  /usr/sbin/in.telnetd -L /opt/nkeyrollover/nkeyrollover.py
 ```

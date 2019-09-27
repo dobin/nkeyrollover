@@ -36,7 +36,7 @@ class Keyrollover(object):
                 format='%(asctime)s %(levelname)-07s %(name)32s: %(message)s')
         else:
             logging.basicConfig(
-                filename='app.log',
+                filename='/tmp/nkeyrollover.log',
                 filemode='a',
                 level=logging.INFO,
                 format='%(asctime)s %(levelname)-07s %(name)32s: %(message)s')
