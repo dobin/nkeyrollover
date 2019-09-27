@@ -3,7 +3,7 @@
 import unittest
 
 from common.direction import Direction
-from texture.filetextureloader import FileTextureLoader
+from texture.filetextureloader import fileTextureLoader
 from texture.phenomena.phenomenatype import PhenomenaType
 from texture.action.actiontype import ActionType
 from system.gamelogic.weapontype import WeaponType
@@ -14,9 +14,9 @@ from system.singletons.renderablecache import renderableCache
 class FileTextureLoaderTest(unittest.TestCase):
     def test_loadTexturePhenomena(self):
         game.isunittest.setIsUnitTest()
-
-        fileTextureLoader = FileTextureLoader()
-        animation = fileTextureLoader.readPhenomena(PhenomenaType.unittest)
+        fileTextureLoader.loadFromFiles()
+        animation = fileTextureLoader.phenomenaAnimationManager.readPhenomena(
+            PhenomenaType.unittest)
 
         self.assertTrue(animation.height == 2)
         self.assertTrue(animation.width == 2)
@@ -55,8 +55,9 @@ class FileTextureLoaderTest(unittest.TestCase):
     def test_loadTextureAction(self):
         game.isunittest.setIsUnitTest()
 
-        fileTextureLoader = FileTextureLoader()
-        animation = fileTextureLoader.readAction(ActionType.unittest)
+        fileTextureLoader.loadFromFiles()
+        animation = fileTextureLoader.actionAnimationManager.getAnimation(
+            ActionType.unittest, Direction.left)
 
         self.assertTrue(animation.height == 3)
         self.assertTrue(animation.width == 4)
@@ -104,9 +105,10 @@ class FileTextureLoaderTest(unittest.TestCase):
     def test_loadWeapon(self):
         game.isunittest.setIsUnitTest()
 
-        fileTextureLoader = FileTextureLoader()
+        fileTextureLoader.loadFromFiles()
         renderableCache.init(viewport=None)
-        weaponData = fileTextureLoader.readWeapon(WeaponType.unittest)
+        weaponData = fileTextureLoader.weaponAnimationManager.getWeaponData(
+            WeaponType.unittest)
 
         self.assertTrue(weaponData.actionTextureType is ActionType.unittest)
         self.assertTrue(weaponData.hitDetectionDirection == Direction.left)

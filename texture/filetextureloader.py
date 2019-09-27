@@ -18,9 +18,9 @@ class FileTextureLoader(object):
 
     def loadFromFiles(self):
         logger.info("(Re)loading textures from files")
+        self.actionAnimationManager.loadFiles()
         self.characterAnimationManager.loadFiles()
         self.phenomenaAnimationManager.loadFiles()
-        self.actionAnimationManager.loadFiles()
         self.weaponAnimationManager.loadFiles()
 
 
