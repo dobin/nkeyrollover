@@ -19,11 +19,6 @@ class OffensiveAttack():
         self.parentChar = parentChar
         self.parentRenderable = parentRenderable
 
-        # really necessary?
-        self.durationTimer = Timer(0.0, active=False)
-        self.durationTimer.setTimer(Config.playerAttackAnimationLen)
-        self.durationTimer.reset()
-
         self.cooldownTimer :Timer = Timer(Config.playerAttacksCd, instant=True)
 
         self.weaponType :WeaponType = WeaponType.hit
@@ -56,7 +51,6 @@ class OffensiveAttack():
 
     def attack(self):
         self.cooldownTimer.reset()  # activate cooldown
-        self.durationTimer.reset()  # will setActive(false) when time is up
 
         weaponData = fileTextureLoader.weaponAnimationManager.getWeaponData(
             self.weaponType)
@@ -123,7 +117,6 @@ class OffensiveAttack():
 
     def advance(self, deltaTime :float):
         self.cooldownTimer.advance(deltaTime)
-        self.durationTimer.advance(deltaTime)
 
 
     def getCurrentWeaponHitArea(self):
