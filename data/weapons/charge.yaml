@@ -2,3 +2,6 @@ actionTextureType: charge
 hitDetectionDirection: left
 damage: 10
 characterAnimationType: hitting
+locationoffset:
+  x: 0
+  y: 2

@@ -9,7 +9,10 @@ from texture.character.characteranimationtype import CharacterAnimationType
 class WeaponData(object):
     def __init__(self):
         self.actionTextureType :ActionType = None
+
+        self.weaponHitDetect :Dict[Direction, WeaponHitArea] = {}
         self.weaponHitArea :Dict[Direction, WeaponHitArea] = {}
+
         self.damage :int = None
         self.locationOffset :Coordinates = Coordinates(0, 0)
         self.characterAnimationType :CharacterAnimationType = None

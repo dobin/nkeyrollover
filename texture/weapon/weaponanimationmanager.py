@@ -39,19 +39,32 @@ class WeaponAnimationManager(object):
 
         weaponData = self.readWeaponYamlFile(filename)
 
-        filenameHitDetect = "data/weapons/{}_hitdetect.ascii".format(weaponName)
+        filenameHitArea = "data/weapons/{}_hitarea.ascii".format(weaponName)
         weaponData.weaponHitArea[Direction.left] = self.readHitDetectionFile(
-            filename=filenameHitDetect,
+            filename=filenameHitArea,
             weaponType=weaponType,
             direction=Direction.left,
             weaponHitDirection=weaponData.hitDetectionDirection)
         weaponData.weaponHitArea[Direction.right] = self.readHitDetectionFile(
+            filename=filenameHitArea,
+            weaponType=weaponType,
+            direction=Direction.right,
+            weaponHitDirection=weaponData.hitDetectionDirection)
+        if len(weaponData.weaponHitArea[Direction.right].hitCd) == 0:
+            logging.warning("No hitarea for weapon {}, sure?".format(weaponName))
+
+        filenameHitDetect = "data/weapons/{}_hitdetect.ascii".format(weaponName)
+        weaponData.weaponHitDetect[Direction.left] = self.readHitDetectionFile(
+            filename=filenameHitDetect,
+            weaponType=weaponType,
+            direction=Direction.left,
+            weaponHitDirection=weaponData.hitDetectionDirection)
+        weaponData.weaponHitDetect[Direction.right] = self.readHitDetectionFile(
             filename=filenameHitDetect,
             weaponType=weaponType,
             direction=Direction.right,
             weaponHitDirection=weaponData.hitDetectionDirection)
-
-        if len(weaponData.weaponHitArea[Direction.right].hitCd) == 0:
+        if len(weaponData.weaponHitDetect[Direction.right].hitCd) == 0:
             logging.warning("No hitdetection for weapon {}, sure?".format(weaponName))
 
         self.weaponData[weaponType] = weaponData

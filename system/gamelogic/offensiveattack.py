@@ -126,11 +126,20 @@ class OffensiveAttack():
         self.durationTimer.advance(deltaTime)
 
 
-    def getCurrentWeaponHitArea(self, direction):
+    def getCurrentWeaponHitArea(self):
+        direction = self.parentRenderable.getDirection()
+
         weaponData = fileTextureLoader.weaponAnimationManager.getWeaponData(
             self.weaponType)
-        wha = weaponData.weaponHitArea[direction]
-        return copy.deepcopy(wha)
+        wha = copy.deepcopy(weaponData.weaponHitDetect[direction])
+
+        loc = self.getWeaponBaseLocation()
+        Utility.updateCoordinateListWithBase(
+            wha,
+            loc,
+            direction)
+
+        return wha
 
 
     def getWeaponBaseLocation(self):

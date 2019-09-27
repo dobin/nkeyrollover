@@ -136,14 +136,7 @@ class StateChase(State):
 
 
     def canAttackPlayer2(self, meRenderable, meOffensiveAttack, playerLocation):
-        loc = meOffensiveAttack.getWeaponBaseLocation()
-        direction = meRenderable.getDirection()
-        currentWeaponHitArea = meOffensiveAttack.getCurrentWeaponHitArea(
-            direction=direction)
-        Utility.updateCoordinateListWithBase(
-            currentWeaponHitArea,
-            loc,
-            direction)
+        currentWeaponHitArea = meOffensiveAttack.getCurrentWeaponHitArea()
 
         if Config.showEnemyHitbox:
             for hitlocation in currentWeaponHitArea.hitCd:

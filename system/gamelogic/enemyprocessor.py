@@ -120,7 +120,7 @@ class EnemyProcessor(esper.Processor):
 
         if coordinates is None:
             coordinates = self.getSomeSpawnCoordinates(
-                data.spawnDirection, 
+                data.spawnDirection,
                 enemyCached.renderable.texture.width)
 
         enemySeed = self.enemyLoader.getSeedForEnemy(enemyType)
