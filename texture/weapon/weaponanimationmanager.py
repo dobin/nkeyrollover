@@ -126,9 +126,14 @@ class WeaponAnimationManager(object):
                 hitCd=hitAreaStandard, width=2, height=2),
             return weaponHitArea
 
-        lineList = [line.rstrip('\n') for line in open(filename)]
-        (res, maxWidth, maxHeight) = TextureHelper.parseAnimationLineList(lineList)
+        with open(filename) as f:
+            lineList = f.readlines()
 
+        for (idx, msg) in enumerate(lineList):
+            lineList[idx] = lineList[idx].lstrip('\n')
+            lineList[idx] = lineList[idx].rstrip('\n')
+
+        (res, maxWidth, maxHeight) = TextureHelper.parseAnimationLineList(lineList)
         if direction is not weaponHitDirection:
             Utility.mirrorFrames(res)
 

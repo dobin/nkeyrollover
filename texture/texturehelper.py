@@ -58,7 +58,12 @@ class TextureHelper(object):
 
     @staticmethod
     def readAnimationFile(filename :str) -> Animation:
-        lineList = [line.rstrip('\n') for line in open(filename)]
+        with open(filename) as f:
+            lineList = f.readlines()
+
+        for (idx, msg) in enumerate(lineList):
+            lineList[idx] = lineList[idx].lstrip('\n')
+            lineList[idx] = lineList[idx].rstrip('\n')
 
         (res, maxWidth, maxHeight) = TextureHelper.parseAnimationLineList(lineList)
 
