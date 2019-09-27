@@ -55,7 +55,7 @@ class SceneMapBlame(SceneBase):
         if Config.devMode:
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                enemyType = EnemyType.stickfigure,
+                enemyType = EnemyType.cow,
                 spawnTime = None,
                 spawnX = 35,
                 spawnLocation = Coordinates(35, 8),
@@ -86,22 +86,25 @@ class SceneMapBlame(SceneBase):
 
         waveIdx = 0
         waveCount = 9
-        while waveIdx < waveCount:
-            self.prepareWave(waveIdx, self.enemyQueue)
-            waveIdx += 1
 
-
-    def prepareWave(self, waveIdx, enemyQueue):
-        # intraWaveSpawnTime = 3
         intraWaveXoffset = 50
+        waveX = 30
+        while waveIdx < waveCount:
+            self.prepareWave(waveX, self.enemyQueue)
+            waveIdx += 1
+            waveX += intraWaveXoffset
+
+
+    def prepareWave(self, waveX, enemyQueue):
+        # intraWaveSpawnTime = 3
 
         numStickfigures = 10
-        numCows = 2
+        numCows = 3
         numDragons = 1
 
         n = 0
         while n < numStickfigures:
-            playerTrapX = waveIdx * intraWaveXoffset
+            playerTrapX = waveX
             # spawnLocation = self.getRandomSpawnCoords(
             #    trapX=playerTrapX, rightSideBias=0.8)
 
@@ -124,7 +127,7 @@ class SceneMapBlame(SceneBase):
 
         n = 0
         while n < numCows:
-            playerTrapX = waveIdx * intraWaveXoffset
+            playerTrapX = waveX + 20
             # spawnLocation = self.getRandomSpawnCoords(
             #    trapX=playerTrapX, rightSideBias=0.8)
             enemyCell = EnemyCell(
@@ -141,7 +144,7 @@ class SceneMapBlame(SceneBase):
 
         n = 0
         while n < numDragons:
-            playerTrapX = waveIdx * intraWaveXoffset
+            playerTrapX = waveX + 40
             # spawnLocation = self.getRandomSpawnCoords(
             #    trapX=playerTrapX, rightSideBias=0.8)
             enemyCell = EnemyCell(
