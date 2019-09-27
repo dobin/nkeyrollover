@@ -60,7 +60,6 @@ class OffensiveAttack():
         # handle weapon offset
         location = self.getWeaponBaseLocation()
 
-
         messaging.add(
             type=MessageType.EmitActionTexture,
             data={

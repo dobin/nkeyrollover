@@ -104,11 +104,12 @@ class AnimationTexture(Texture):
             color = self.animation.frameColors[self.frameIndex]
 
         # Note: For performance reason, replace enumerate with a while loop
+        currentFrame = self.getCurrentFrame()
         y = 0
-        while y < len(self.animation.arr[self.frameIndex]):
+        while y < len(currentFrame):
             x = 0
-            while x < len(self.animation.arr[self.frameIndex][y]):
-                column = self.animation.arr[self.frameIndex][y][x]
+            while x < len(currentFrame[y]):
+                column = currentFrame[y][x]
                 if column != '':
                     viewport.addstr(
                         pos.y + y,
@@ -118,6 +119,10 @@ class AnimationTexture(Texture):
 
                 x += 1
             y += 1
+
+
+    def getCurrentFrame(self):
+        return self.animation.arr[self.frameIndex]
 
 
     def getCurrentFrameCopy(self):

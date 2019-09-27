@@ -139,11 +139,19 @@ class Renderable(object):
 
 
     def collidesWithPoint(self, hitCoords :Coordinates):
+        # broad check
         if (hitCoords.x >= self.coordinates.x
                 and hitCoords.x < self.coordinates.x + self.texture.width
                 and hitCoords.y >= self.coordinates.y
                 and hitCoords.y < self.coordinates.y + self.texture.height):
             return True
+
+            # precise check
+            currentFrame = self.texture.getCurrentFrame()
+            xOff = hitCoords.x - self.coordinates.x
+            yOff = hitCoords.y - self.coordinates.y
+            if currentFrame[xOff][yOff] != '':
+                return True
 
         return False
 

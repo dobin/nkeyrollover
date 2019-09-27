@@ -152,7 +152,7 @@ class StateChase(State):
 
         # only one of the hitlocations need to hit
         for hitLocation in currentWeaponHitArea.hitCd:
-            canAttack = Utility.pointIn(
+            canAttack = Utility.isPointInArea(
                 hitLocation,
                 playerLocation)
 

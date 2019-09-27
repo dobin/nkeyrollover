@@ -36,7 +36,7 @@ class Utility(object):
 
 
     @staticmethod
-    def pointIn(coord1 :Coordinates, location2 :ExtCoordinates):
+    def isPointInArea(coord1 :Coordinates, location2 :ExtCoordinates):
         if coord1.x >= location2.x and coord1.x < location2.x + location2.width and coord1.y >= location2.y and coord1.y < location2.y + location2.height:
             return True
         else:
