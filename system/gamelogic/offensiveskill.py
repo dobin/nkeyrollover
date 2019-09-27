@@ -2,7 +2,6 @@ import logging
 
 from system.graphics.particleeffecttype import ParticleEffectType
 from utilities.timer import Timer
-from utilities.utilities import Utility
 from system.gamelogic.weapontype import WeaponType
 import system.gamelogic.attackable
 import system.graphics.renderable
@@ -35,7 +34,7 @@ class OffensiveSkill(object):
         self.damage = {
             WeaponType.explosion: 100,
             WeaponType.laser: 100,
-            WeaponType.cleave: 100,
+            WeaponType.cleave: 1,
             WeaponType.heal: 0,
             WeaponType.port: 0,
         }

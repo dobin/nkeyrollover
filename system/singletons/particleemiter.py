@@ -112,7 +112,7 @@ class ParticleEmiter(object):
                 x=basex + n * xinv, y=loc.y, life=life, angle=angle,
                 speed=0.0, fadeout=True, byStep=False, charType=0,
                 active=True,
-                damage=10)
+                damage=damage)
 
             self.particleActive.append(particle)
             particleList.append(particle)
@@ -145,19 +145,25 @@ class ParticleEmiter(object):
         while n < particleCount:
             particle = self.particlePool.pop()
 
+            if direction is Direction.left:
+                angle = 180
+            else:
+                angle = 0
+
             basex = loc.x + xinv  # distance from char
             x = basex + xinv
             y = loc.y + n - int(particleCount / 2) + 1
             particle.init(
                 x=x, y=y,
                 life=life,
-                angle=0,
-                speed=0.0,
+                angle=angle,
+                speed=0.1,
                 fadeout=True,
                 byStep=False,
                 charType=0,
                 active=True,
-                damage=10, damageAtStart=True)
+                damage=damage,
+                damageEveryStep=True)
 
             self.particleActive.append(particle)
             particleList.append(particle)
