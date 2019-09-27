@@ -30,14 +30,12 @@ class OffensiveAttackProcessor(esper.Processor):
 
 
     def handlePlayerKeypress(self, key):
-        playerAttack = self.getPlayerAttack()
+        playerAttack, mePlayer = self.getPlayerAttack()
         if playerAttack is None:
             # No player here yet
             return
 
-        if key == ord(' '):
-            playerAttack.attack()
-
+        # can change weapon even when attacking
         if key == ord('1'):
             playerAttack.switchWeaponByKey('1')
 
@@ -50,22 +48,23 @@ class OffensiveAttackProcessor(esper.Processor):
         if key == ord('4'):
             playerAttack.switchWeaponByKey('4')
 
+        if not mePlayer.isAttacking:
+            if key == ord(' '):
+                playerAttack.attack()
+
 
     def getPlayerAttack(self):
         # find player
         playerEntity = EntityFinder.findPlayer(self.world)
         if playerEntity is None:
-            return None
+            return None, None
 
-        # Not so nice, should be done in handlePlayerKeyPress
         mePlayer = self.world.component_for_entity(
             playerEntity, system.gamelogic.player.Player)
-        if mePlayer.isAttacking:
-            return None
 
         # find characterattack for player
         meGroupId = self.world.component_for_entity(
             playerEntity, system.groupid.GroupId)
         ret = EntityFinder.findOffensiveAttackByGroupId(self.world, meGroupId.getId())
 
-        return ret
+        return ret, mePlayer
