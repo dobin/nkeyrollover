@@ -21,7 +21,7 @@ class OffensiveAttack():
 
         self.cooldownTimer :Timer = Timer(Config.playerAttacksCd, instant=True)
 
-        self.weaponType :WeaponType = WeaponType.hit
+        self.weaponType :WeaponType = WeaponType.hitWhip
         self.selectedWeaponKey :str = '1'
 
         # coordinates are based on left side orientation of renderable
@@ -31,7 +31,7 @@ class OffensiveAttack():
     def switchWeaponByKey(self, key :str):
         self.selectedWeaponKey = key
         if key == '1':
-            self.switchWeapon(WeaponType.hit)
+            self.switchWeapon(WeaponType.hitWhip)
 
         if key == '2':
             self.switchWeapon(WeaponType.hitSquare)

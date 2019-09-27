@@ -10,4 +10,4 @@ class CharacterAnimationType(Enum):
     hitwindup = 5
     stun = 6
 
-    hit = 7
+    hitWhip = 7

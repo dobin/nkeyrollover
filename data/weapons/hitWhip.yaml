@@ -1,7 +1,7 @@
-actionTextureType: hit
+actionTextureType: hitWhip
 hitDetectionDirection: right
 damage: 20
 locationoffset:
   x: 7
   y: -1
-characterAnimationType: hit
+characterAnimationType: hitWhip

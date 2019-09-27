@@ -3,7 +3,7 @@ from enum import Enum
 
 class WeaponType(Enum):
     unittest = 0
-    hit = 1
+    hitWhip = 1
     hitSquare = 2
     hitLine = 3
     jumpKick = 4
