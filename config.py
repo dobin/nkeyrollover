@@ -43,7 +43,8 @@ class _Config:
     # enemy config
     enemyMovement = True  # freeze enemies for tests?
     showEnemyWanderDest = False
-    showEnemyHitbox = False
+    showEnemyHitbox = True
+    showAttackDestinations = True
     enemiesInStateAttacking = 1
     enemiesInStateChase = 2
 

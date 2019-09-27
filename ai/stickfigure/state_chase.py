@@ -12,6 +12,7 @@ import system.gamelogic.enemy
 from utilities.entityfinder import EntityFinder
 from config import Config
 from utilities.color import Color
+from common.coordinates import ExtCoordinates
 
 logger = logging.getLogger(__name__)
 
@@ -121,16 +122,21 @@ class StateChase(State):
             # find it directly via player entity
             # this is every time we go into chase state
             playerEntity = EntityFinder.findPlayer(self.brain.owner.world)
-            playerRenderable = self.brain.owner.world.component_for_entity(
-                playerEntity, system.graphics.renderable.Renderable)
-            self.lastKnownPlayerPosition = playerRenderable.getLocationAndSize()
+            # player not spawned
+            if playerEntity is not None:
+                playerRenderable = self.brain.owner.world.component_for_entity(
+                    playerEntity, system.graphics.renderable.Renderable)
+                self.lastKnownPlayerPosition = playerRenderable.getLocationAndSize()
         playerLocation = self.lastKnownPlayerPosition
+
+        if playerLocation is None:
+            return False
 
         return self.canAttackPlayer2(meRenderable, meOffensiveAttack, playerLocation)
 
 
     def canAttackPlayer2(self, meRenderable, meOffensiveAttack, playerLocation):
-        loc = meRenderable.getWeaponBaseLocation()
+        loc = meOffensiveAttack.getWeaponBaseLocation()
         direction = meRenderable.getDirection()
         currentWeaponHitArea = meOffensiveAttack.getCurrentWeaponHitArea(
             direction=direction)
@@ -207,6 +213,10 @@ class StateChase(State):
         attackBaseLocationInverted = meRenderable.getAttackBaseLocationInverted()
 
         playerEntity = EntityFinder.findPlayer(self.brain.owner.world)
+        # player not spawned
+        if not playerEntity:
+            return
+
         plyrRend = self.brain.owner.world.component_for_entity(
             playerEntity, system.graphics.renderable.Renderable)
         playerLocation = plyrRend.getLocation()

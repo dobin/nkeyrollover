@@ -115,6 +115,9 @@ class Game(object):
         # e handle:   DirectMessage      moveEnemy
         # p handle:   Message            PlayerKeyPress (space/attack, weaponselect)
         # p generate: Message            PlayerAttack (via OffensiveAttack)
+        # x generate: Message            AttackAt (via OffensiveAttack)
+        # x generate: Message            EmitActionTexture (via OffensiveAttack)
+        # x generate: Message            EmitTextureMinimal (via OffensiveAttack)
         self.world.add_processor(offensiveAttackProcessor)
 
         # p handle:   Message            PlayerKeyPress (skill activate)
@@ -146,7 +149,6 @@ class Game(object):
 
         # x handle:   Message            EmitTextureMinimal
         # x handle:   Message            EmitTexture
-        # x generate: Message            AttackAt (via TextureEmiter, ActionTexture)
         self.world.add_processor(renderableMinimalProcessor)
 
         # e handle:   Message            EntityDying

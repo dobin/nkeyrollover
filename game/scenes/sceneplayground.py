@@ -5,6 +5,8 @@ from common.direction import Direction
 from system.graphics.particleeffecttype import ParticleEffectType
 from utilities.color import Color
 from texture.filetextureloader import fileTextureLoader
+from game.enemytype import EnemyType
+from .enemycell import EnemyCell
 
 
 class ScenePlayground(SceneBase):
@@ -26,6 +28,9 @@ class ScenePlayground(SceneBase):
         if key == ord('s'):
             self.spawnPlayer()
 
+        if key == ord('d'):
+            self.spawnDragon()
+
         if key == ord('a'):
             self.reloadAllTextures()
 
@@ -34,8 +39,24 @@ class ScenePlayground(SceneBase):
         fileTextureLoader.loadFromFiles()
 
 
+    def spawnDragon(self):
+        coordinates = Coordinates(30, 7)
+        enemyCell = EnemyCell(
+            id = 1,
+            enemyType = EnemyType.dragon,
+            spawnTime = None,
+            spawnX = 0,
+            spawnLocation = coordinates,
+            spawnDirection = Direction.left
+        )
+        messaging.add(
+            type=MessageType.SpawnEnemy,
+            data=enemyCell,
+        )
+
+
     def spawnPlayer(self):
-        coordinates = Coordinates(24, 13)
+        coordinates = Coordinates(25, 13)
         messaging.add(
             type=MessageType.SpawnPlayer,
             data={

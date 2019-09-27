@@ -128,6 +128,8 @@ class StateWander(State):
 
         # note that getLocation() will return a reference. we need to copy it here.
         playerEntity = EntityFinder.findPlayer(self.brain.owner.world)
+        if not playerEntity:
+            return
         playerRenderable = self.brain.owner.world.component_for_entity(
             playerEntity, system.graphics.renderable.Renderable)
 

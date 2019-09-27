@@ -9,6 +9,7 @@ from texture.filetextureloader import fileTextureLoader
 from common.direction import Direction
 from utilities.color import Color
 from utilities.utilities import Utility
+from common.coordinates import Coordinates
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +28,9 @@ class OffensiveAttack():
 
         self.weaponType :WeaponType = WeaponType.hit
         self.selectedWeaponKey :str = '1'
+
+        # coordinates are based on left side orientation of renderable
+        self.weaponBaseLocation = Coordinates(0, -1)
 
 
     def switchWeaponByKey(self, key :str):
@@ -60,12 +64,8 @@ class OffensiveAttack():
         actionTextureType = weaponData.actionTextureType
 
         # handle weapon offset
-        location = self.parentRenderable.getWeaponBaseLocation()
-        if direction is Direction.left:
-            location.x += weaponData.locationOffset.x
-        else:
-            location.x -= weaponData.locationOffset.x
-        location.y += weaponData.locationOffset.y
+        location = self.getWeaponBaseLocation()
+
 
         messaging.add(
             type=MessageType.EmitActionTexture,
@@ -131,6 +131,32 @@ class OffensiveAttack():
             self.weaponType)
         wha = weaponData.weaponHitArea[direction]
         return copy.deepcopy(wha)
+
+
+    def getWeaponBaseLocation(self):
+        """The position of the attack weapon of the char. 
+        Used to:
+        - As Enemy/AI: check if we can attack player (chase)
+        - Use as baseline for attack texture (and therefore also hit detection)
+        """
+        # Slow
+        loc = copy.copy(self.parentRenderable.getLocation())
+
+        loc.y += self.weaponBaseLocation.y
+        if self.parentRenderable.direction is Direction.left:
+            loc.x += self.weaponBaseLocation.x
+        else:
+            loc.x += (self.parentRenderable.texture.width) - self.weaponBaseLocation.x
+
+        weaponData = fileTextureLoader.weaponAnimationManager.getWeaponData(
+            self.weaponType)
+        if self.parentRenderable.direction is Direction.left:
+            loc.x += weaponData.locationOffset.x
+        else:
+            loc.x -= weaponData.locationOffset.x
+        loc.y += weaponData.locationOffset.y
+
+        return loc
 
 
     def getWeaponStr(self):

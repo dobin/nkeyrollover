@@ -1,4 +1,7 @@
 actionTextureType: spitfire
 hitDetectionDirection: left
 damage: 90
+locationoffset:
+  x: 4
+  y: 6
 characterAnimationType: hitting

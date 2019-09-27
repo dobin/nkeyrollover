@@ -148,24 +148,6 @@ class Renderable(object):
         return False
 
 
-    def getWeaponBaseLocation(self):
-        """The position of the attack weapon of the char. 
-        Used to:
-        - As Enemy/AI: check if we can attack player (chase)
-        - Use as baseline for attack texture (and therefore also hit detection)
-        """
-        # Slow
-        loc = copy.copy(self.getLocation())
-
-        loc.y += self.weaponBaseLocation.y
-        if self.direction is Direction.left:
-            loc.x += self.weaponBaseLocation.x
-        else:
-            loc.x += (self.texture.width) - self.weaponBaseLocation.x
-
-        return loc
-
-
     def getAttackBaseLocation(self):
         """
         Used to:

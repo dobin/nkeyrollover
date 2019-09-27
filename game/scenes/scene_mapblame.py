@@ -11,28 +11,9 @@ from utilities.entityfinder import EntityFinder
 import system.groupid
 from directmessaging import directMessaging, DirectMessageType
 from common.direction import Direction
+from .enemycell import EnemyCell
 
 logger = logging.getLogger(__name__)
-
-
-class EnemyCell(object):
-    def __init__(self, id, enemyType, spawnTime, spawnX, spawnLocation, spawnDirection):
-        self.id = id
-        self.enemyType = enemyType
-        self.spawnTime = spawnTime
-        self.spawnX = spawnX
-
-        self.spawnDirection = spawnDirection  # spawn left/right of current viewport
-        self.spawnLocation = spawnLocation  # spawn at this position
-
-
-    def __repr__(self):
-        return "{} {} @{} @{} @{}".format(
-            self.id,
-            self.enemyType,
-            self.spawnTime,
-            self.spawnX,
-            self.spawnLocation)
 
 
 class Akt(object):

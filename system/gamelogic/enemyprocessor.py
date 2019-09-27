@@ -16,6 +16,8 @@ from common.coordinates import Coordinates
 from utilities.objectcache import ObjectCache
 from config import Config
 from common.direction import Direction
+from texture.character.characteranimationtype import CharacterAnimationType
+
 
 logger = logging.getLogger(__name__)
 
@@ -133,6 +135,9 @@ class EnemyProcessor(esper.Processor):
         enemyCached.ai.initAi(esperData=esperData)
         enemyCached.renderable.texture.setCharacterTextureType(
             enemySeed.characterTextureType)
+        enemyCached.renderable.texture.changeAnimation(
+            CharacterAnimationType.standing,
+            enemyCached.renderable.direction)
         enemyCached.renderable.setActive(True)
         enemyCached.renderable.setLocation(coordinates)
         enemyCached.renderable.attackBaseLocation = Coordinates(
@@ -140,6 +145,7 @@ class EnemyProcessor(esper.Processor):
             enemySeed.attackBaseLocation['y']
         )
         enemyCached.offensiveAttack.switchWeapon(enemySeed.weaponType)
+
 
         self.world.add_component(entity, enemyCached.ai)
         self.world.add_component(entity, enemyCached.groupId)
