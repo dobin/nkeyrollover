@@ -8,3 +8,7 @@ class WeaponHitArea(object):
         self.hitCd :List[Coordinates] = hitCd
         self.width = width
         self.height = height
+
+
+    def __repr__(self):
+        return "W: {} H: {} HitCD: {}".format(self.width, self.height, self.hitCd)

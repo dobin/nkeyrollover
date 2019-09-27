@@ -30,10 +30,10 @@ class Attackable():
                 stunCount += 1
 
         if stunCount <= self.maxStunCount:
-            logger.debug("Stun check: Can be stunned")
+            logger.info("Stun check: Can be stunned {} {} {}".format(stunCount, timeRef, self.maxStunCount))
             return True
         else:
-            logger.debug("Stun check: Can not be stunned")
+            logger.info("Stun check: Can not be stunned {} {}".format(stunCount, timeRef))
             return False
 
 
@@ -61,10 +61,17 @@ class Attackable():
         self.stunTimer.advance(dt)
 
 
-    def setHealth(self, health): 
+    def setHealth(self, health):
         self.health = health
         self.initialHealth = health
 
 
     def setStunTime(self, stunTime):
         self.stunTime = stunTime
+
+
+    def setStunTimeFrame(self, stunTimeFrame):
+        self.stunTimeFrame = stunTimeFrame
+
+    def setMaxStunCount(self, maxStunCount):
+        self.maxStunCount = maxStunCount
