@@ -23,9 +23,15 @@ The timeframe for ASCII games was very short, and the art was lost forever.
 
 Or was it?
 
-"Do not fold, spindle or mutilate. I am a student"
+## Videos
 
-https://en.wikipedia.org/wiki/Text-based_game
+* (Asciinema v0.3v2)[https://asciinema.org/a/ZaUxKWxRHMBljvz26MRy9lmcv]
+
+## Play It
+
+```
+telnet dobin.ch
+```
 
 ## Requirements
 
@@ -52,7 +58,6 @@ python3.7 -m unittest
 ```
 
 ### Performance tests 
-
 
 ```
 python3.7 -m cProfile -s time -o perf.txt nkeyrollover.py
