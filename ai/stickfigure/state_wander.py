@@ -151,26 +151,28 @@ class StateWander(State):
     def pickDestAroundPlayer(self, coord :Coordinates, meRenderable):
         ptRight = random.choice([True, False])
         ptDown = random.choice([True, False])
+        distanceX = 6
+        distanceY = 4
 
         if ptRight:
-            coord.x += 6 + random.randint(0, 5)
+            coord.x += distanceX + random.randint(0, 5)
         else:
-            coord.x -= 6 + random.randint(0, 5)
+            coord.x -= distanceX + random.randint(0, 5)
 
         if ptDown:
-            coord.y += 4 + random.randint(0, 5)
+            coord.y += distanceY + random.randint(0, 5)
             if coord.y > Config.rows - 2 - meRenderable.texture.height:
                 coord.y = Config.rows - 2 - meRenderable.texture.height
         else:
-            coord.y -= 4 + random.randint(0, 5)
+            coord.y -= distanceY + random.randint(0, 5)
             # +1 so they can overlap only a bit on top
             if coord.y < Config.topborder - meRenderable.texture.height + 1:
                 coord.y = Config.topborder - meRenderable.texture.height + 1
 
         # make sure destination is on-screen
-        if coord.x < Config.topborder:
-            coord.x = Config.topborder
-        if coord.x > Config.rows + meRenderable.texture.height:
-            coord.x = Config.rows + meRenderable.texture.height
+        if coord.y < Config.topborder:
+            coord.y = Config.topborder
+        if coord.y > Config.rows + meRenderable.texture.height:
+            coord.y = Config.rows + meRenderable.texture.height
 
         return coord
