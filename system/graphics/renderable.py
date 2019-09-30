@@ -189,7 +189,7 @@ class Renderable(object):
 
 
     def isOnScreen(self, wiggle :int =0):
-        if (self.coordinates.x > self.viewport.getx() - wiggle
+        if (self.coordinates.x + self.texture.width > self.viewport.getx() - wiggle
                 and self.coordinates.x < self.viewport.getRightX() + wiggle):
             return True
         else:
