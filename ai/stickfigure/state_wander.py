@@ -12,6 +12,7 @@ import system.graphics.renderable
 import system.gamelogic.enemy
 from directmessaging import directMessaging, DirectMessageType
 from messaging import messaging, MessageType
+from ai.aihelper import AiHelper
 
 logger = logging.getLogger(__name__)
 
@@ -88,23 +89,8 @@ class StateWander(State):
         if not Config.enemyMovement:
             return
 
-        x = 0
-        y = 0
-        if self.destCoord.x > meRenderable.coordinates.x:
-            if Config.xDoubleStep:
-                x = 2
-            else:
-                x = 1
-        elif self.destCoord.x < meRenderable.coordinates.x:
-            if Config.xDoubleStep:
-                x = -2
-            else:
-                x = -1
-
-        if self.destCoord.y > meRenderable.coordinates.y:
-            y = 1
-        elif self.destCoord.y < meRenderable.coordinates.y:
-            y = -1
+        x, y = AiHelper.getVectorToPlayer(
+            source=meRenderable.coordinates, dest=self.destCoord)
 
         directMessaging.add(
             groupId = meGroupId.getId(),
@@ -132,10 +118,9 @@ class StateWander(State):
             return
         playerRenderable = self.brain.owner.world.component_for_entity(
             playerEntity, system.graphics.renderable.Renderable)
-
         self.destCoord.x = playerRenderable.getLocation().x
         self.destCoord.y = playerRenderable.getLocation().y
-        self.destCoord = self.pickDestAroundPlayer(self.destCoord, meRenderable)
+        self.destCoord = AiHelper.pickDestAroundPlayer(self.destCoord, meRenderable)
         if Config.showEnemyWanderDest:
             messaging.add(
                 type=MessageType.EmitTextureMinimal,
@@ -146,33 +131,3 @@ class StateWander(State):
                     'color': Color.grey
                 }
             )
-
-
-    def pickDestAroundPlayer(self, coord :Coordinates, meRenderable):
-        ptRight = random.choice([True, False])
-        ptDown = random.choice([True, False])
-        distanceX = 6
-        distanceY = 4
-
-        if ptRight:
-            coord.x += distanceX + random.randint(0, 5)
-        else:
-            coord.x -= distanceX + random.randint(0, 5)
-
-        if ptDown:
-            coord.y += distanceY + random.randint(0, 5)
-            if coord.y > Config.rows - 2 - meRenderable.texture.height:
-                coord.y = Config.rows - 2 - meRenderable.texture.height
-        else:
-            coord.y -= distanceY + random.randint(0, 5)
-            # +1 so they can overlap only a bit on top
-            if coord.y < Config.topborder - meRenderable.texture.height + 1:
-                coord.y = Config.topborder - meRenderable.texture.height + 1
-
-        # make sure destination is on-screen
-        if coord.y < Config.topborder:
-            coord.y = Config.topborder
-        if coord.y > Config.rows + meRenderable.texture.height:
-            coord.y = Config.rows + meRenderable.texture.height
-
-        return coord
