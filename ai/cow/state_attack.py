@@ -19,7 +19,7 @@ class StateAttack(State):
 
     def __init__(self, brain):
         State.__init__(self, brain)
-        self.attackTimer = Timer()  # Timer(0.5, instant=False) # windup and cooldown
+        self.attackMoveTimer = Timer()  # Timer(0.5, instant=False) # windup and cooldown
 
 
     def on_enter(self):
@@ -28,7 +28,7 @@ class StateAttack(State):
         meGroupId = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.groupid.GroupId)
 
-        self.attackTimer.init()
+        self.attackMoveTimer.init()
         messaging.add(
             type=MessageType.EntityAttack,
             groupId=meGroupId.getId(),
@@ -38,7 +38,7 @@ class StateAttack(State):
         # self.attackTimer.setTimer(meEnemy.enemyInfo.attackTime)
         # self.setTimer(meEnemy.enemyInfo.attackTime)
         self.stepsTodo = 30
-        self.attackTimer.setTimer(0.1)
+        self.attackMoveTimer.setTimer(0.1)
         self.setTimer(3.0)
 
         # even though we attack multiple times (each step)
@@ -51,22 +51,24 @@ class StateAttack(State):
 
 
     def process(self, dt):
-        self.attackTimer.advance(dt)
+        self.attackMoveTimer.advance(dt)
 
-        if self.attackTimer.timeIsUp():
+        if self.attackMoveTimer.timeIsUp():
             logger.info("{}: I'm attacking".format(self.owner))
 
             if self.stepsTodo > 0:
-                self.attackTimer.reset()
+                self.attackMoveTimer.reset()
                 self.stepsTodo -= 1
+
                 meRenderable = self.brain.owner.world.component_for_entity(
                     self.brain.owner.entity, Renderable)
                 meGroupId = self.brain.owner.world.component_for_entity(
                     self.brain.owner.entity, system.groupid.GroupId)
 
-                offensiveAttack = self.brain.owner.world.component_for_entity(
-                    self.brain.owner.entity, OffensiveAttack)
-                offensiveAttack.attack()
+                if self.stepsTodo % 2 == 0:
+                    offensiveAttack = self.brain.owner.world.component_for_entity(
+                        self.brain.owner.entity, OffensiveAttack)
+                    offensiveAttack.attack()
 
                 if meRenderable.direction is Direction.left:
                     x = -1
@@ -83,7 +85,7 @@ class StateAttack(State):
                     },
                 )
             else:
-                self.attackTimer.stop()
+                self.attackMoveTimer.stop()
 
         if self.timeIsUp():
             # too long attacking. lets switch to chasing

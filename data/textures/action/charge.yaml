@@ -4,6 +4,6 @@ frameTime:
   - 0.1
   - 0.1
 frameColors:
-  - brightyellow
-  - brightyellow
+  - yellow
+  - yellow
 direction: left
