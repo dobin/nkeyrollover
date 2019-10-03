@@ -39,6 +39,11 @@ class CharacterAnimationManager(object):
                 animationsRight[animationType] = self.createAnimations(
                     animationType, characterTextureType, Direction.right)
 
+            # fix dragon atm
+            if characterTextureType is CharacterTextureType.dragon:
+                self.fixInsideWhitespace(animationsLeft)
+                self.fixInsideWhitespace(animationsRight)
+
             characterAnimationObj = CharacterAnimationObj(
                 animationsLeft=animationsLeft,
                 animationsRight=animationsRight
@@ -78,6 +83,39 @@ class CharacterAnimationManager(object):
                 logger.error("Animation {} Tried to access subtype no {} of animation with len {}"
                     .format(characterAnimationType, subtype, len(characterAnimationObj.animationsRight[characterAnimationType])))
             return characterAnimationObj.animationsRight[characterAnimationType][subtype]
+
+
+    def fixInsideWhitespace(self, animations):
+        for key in animations:
+            for animation in animations[key]:
+                for a in animation.arr:
+                    for line in a:
+                        self.fixLineWhitespace(line)
+
+
+    def fixLineWhitespace(self, line):
+        left = 0
+        r = 0
+
+        n = 0
+        while n < len(line):
+            if line[n] != '':
+                left = n
+                break
+            n += 1
+
+        n = len(line) - 1
+        while n > 0:
+            if line[n] != '':
+                r = n
+                break
+            n -= 1
+
+        n = left
+        while n < r:
+            if line[n] == '':
+                line[n] = ' '
+            n += 1
 
 
     def updateAllAnimations(self, characterAnimationObj, x, y, char, skip=None):
