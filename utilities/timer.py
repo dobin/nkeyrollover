@@ -25,7 +25,7 @@ class Timer(object):
 
     def setTimer(self, timerValue: float):
         self.timerValue = timerValue
-        self.timeLeft = self.timerValue
+        self.init()
 
 
     def reset(self):

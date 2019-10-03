@@ -3,7 +3,7 @@ weaponType: charge
 health: 200
 enemyInfo:
   attackWindupTime: 1.0
-  attackTime: 1.0
+  attackStateTime: 1.0
   dyingTime: 1.0
   enemyCanAttackPeriod: 0.3
   wanderTime: 5.0

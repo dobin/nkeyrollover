@@ -3,6 +3,7 @@ class EnemyInfo(object):
         # static lenghts
         self.attackWindupTime = 1.0
         self.spawnTime = 1.0
+        self.attackStateTime = 1.0
         self.attackTime = 1.0  # should be synchronized with attack animation
         self.dyingTime = 1.0
         self.enemyCanAttackPeriod = 0.3

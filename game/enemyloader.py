@@ -36,6 +36,7 @@ class EnemyLoader(object):
         enemySeed.stunCount = data['stunCount']
         enemySeed.stunTimeFrame = data['stunTimeFrame']
 
+
         if 'attackBaseLocation' in data:
             enemySeed.attackBaseLocation = data['attackBaseLocation']
         else:
@@ -47,7 +48,7 @@ class EnemyLoader(object):
         enemyInfo = data['enemyInfo']
         try:
             enemySeed.enemyInfo.attackWindupTime = enemyInfo['attackWindupTime']
-            enemySeed.enemyInfo.attackTime = enemyInfo['attackTime']
+            enemySeed.enemyInfo.attackStateTime = enemyInfo['attackStateTime']
             enemySeed.enemyInfo.dyingTime = enemyInfo['dyingTime']
             enemySeed.enemyInfo.enemyCanAttackPeriod = enemyInfo['enemyCanAttackPeriod']
             enemySeed.enemyInfo.wanderTime = enemyInfo['wanderTime']
@@ -57,6 +58,11 @@ class EnemyLoader(object):
             enemySeed.enemyInfo.chaseTimeRnd = enemyInfo['chaseTimeRnd']
             enemySeed.enemyInfo.chaseStepDelay = enemyInfo['chaseStepDelay']
             enemySeed.enemyInfo.attackWindupTime = enemyInfo['attackWindupTime']
+
+            if 'attackTime' in enemyInfo:
+                enemySeed.enemyInfo.attackTime = enemyInfo['attackTime']
+            else:
+                enemySeed.enemyInfo.attackTime = enemySeed.enemyInfo.attackStateTime
         except KeyError as error:
             raise Exception("Error, missing field in yaml file {}, error {}".format(
                 filename, error

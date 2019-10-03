@@ -17,7 +17,7 @@ class StateAttack(State):
 
     def __init__(self, brain):
         State.__init__(self, brain)
-        self.attackTimer = Timer()  # Timer(0.5, instant=False) # windup and cooldown
+        self.attackTimer = Timer(instant=True)
 
 
     def on_enter(self):
@@ -26,9 +26,8 @@ class StateAttack(State):
         meGroupId = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.groupid.GroupId)
 
-        self.attackTimer.init()
         self.attackTimer.setTimer(meEnemy.enemyInfo.attackTime)
-        self.setTimer(meEnemy.enemyInfo.attackTime)
+        self.setTimer(meEnemy.enemyInfo.attackStateTime)
 
         messaging.add(
             type=MessageType.EntityAttack,
