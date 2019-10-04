@@ -32,6 +32,8 @@ class SkillManager(object):
             return None
 
         skillData = self.readSkillYamlFile(filename)
+        skillData.skillType = skillType
+
         self.skillData[skillType] = skillData
 
 
@@ -45,7 +47,7 @@ class SkillManager(object):
             if 'particleeffect' in data:
                 skill.particleEffectType = ParticleEffectType[data['particleeffect']]
             skill.damage = int(data['damage'])
-
+            skill.cooldown = float(data['cooldown'])
         except TypeError as error:
             raise Exception("Error, missing field in yaml file {}, error {}".format(
                 filename, error

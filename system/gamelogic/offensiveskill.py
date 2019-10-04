@@ -22,16 +22,20 @@ class OffensiveSkill(object):
         self.skillStatus = [
             'q', 'w', 'e', 'r', 'f', 'g'
         ]
-        self.cooldownTimers = {
-            'q': Timer(1.0, instant=True),
-            'w': Timer(1.0, instant=True),
-            'e': Timer(5.0, instant=True),
-            'r': Timer(3.0, instant=True),
 
-            'c': Timer(1.0, instant=True),
-            'f': Timer(30.0, instant=True),
-            'g': Timer(5.0, instant=True),
+        self.keyAssignment = {
+            'q': fileOffenseLoader.skillManager.getSkillData(SkillType.cleave),
+            'w': fileOffenseLoader.skillManager.getSkillData(SkillType.laser),
+            'e': fileOffenseLoader.skillManager.getSkillData(SkillType.port),
+            'r': fileOffenseLoader.skillManager.getSkillData(SkillType.explosion),
+            'f': fileOffenseLoader.skillManager.getSkillData(SkillType.heal),
+            'g': fileOffenseLoader.skillManager.getSkillData(SkillType.port),
         }
+
+        self.cooldownTimers = {}
+        for key in self.keyAssignment:
+            self.cooldownTimers[key] = Timer(self.keyAssignment[key].cooldown, instant=True)
+
         self.data = {
             SkillType.port: {
                 'distance': 20,
@@ -60,39 +64,9 @@ class OffensiveSkill(object):
         if key == 'c':
             self.skillSay('hoi')
 
-        if key == 'f':
-            skillType = SkillType.heal
+        if key in self.keyAssignment:
             if self.isRdy(key):
-                self.doSkillType(skillType)
-                self.cooldownTimers[key].reset()
-
-        if key == 'g':
-            skillType = SkillType.port
-            if self.isRdy(key):
-                self.doSkillType(skillType)
-                self.cooldownTimers[key].reset()
-
-        if key == 'q':
-            skillType = SkillType.cleave
-            if self.isRdy(key):
-                self.doSkillType(skillType)
-                self.cooldownTimers[key].reset()
-
-        if key == 'w':
-            skillType = SkillType.laser
-            if self.isRdy(key):
-                self.doSkillType(skillType)
-                self.cooldownTimers[key].reset()
-
-        if key == 'e':
-            skillType = SkillType.port
-            if self.isRdy(key):
-                self.doSkillType(skillType)
-                self.cooldownTimers[key].reset()
-
-        if key == 'r':
-            skillType = SkillType.explosion
-            if self.isRdy(key):
+                skillType = self.keyAssignment[key].skillType
                 self.doSkillType(skillType)
                 self.cooldownTimers[key].reset()
 
