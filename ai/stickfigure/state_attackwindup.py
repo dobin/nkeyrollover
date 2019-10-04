@@ -27,11 +27,12 @@ class StateAttackWindup(State):
 
 
     def process(self, dt):
-        #meAttackable = self.brain.owner.world.component_for_entity(
-        #    self.brain.owner.entity, system.gamelogic.attackable.Attackable)
-        #if meAttackable.isStunned:
-        #    self.brain.pop()
-        #    self.brain.push("chase")
+        # if we get stunned at any time, cancel attackwindup
+        meAttackable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.attackable.Attackable)
+        if meAttackable.isStunned:
+            self.brain.pop()
+            self.brain.push("chase")
 
         if self.timeIsUp():
             # windup time done, lets do the attack
