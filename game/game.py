@@ -140,6 +140,7 @@ class Game(object):
         self.world.add_processor(sceneProcessor)
 
         # e handle:   Message            SpawnEnemy
+        # e generate: Message            EntityAttack
         # x generate: Message            EntityDead
         self.world.add_processor(enemyProcessor)
 
@@ -152,7 +153,7 @@ class Game(object):
         self.world.add_processor(renderableMinimalProcessor)
 
         # e handle:   Message            EntityDying
-        # p handle:   Message            PlayerAttack (change animation)
+        # p handle:   Message            PlayerAttack
         # x handle:   Message            AttackWindup
         # x handle:   Message            EntityAttack
         # x handle:   Message            EntityMoved

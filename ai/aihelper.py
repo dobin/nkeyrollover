@@ -50,29 +50,6 @@ class AiHelper(object):
 
 
     @staticmethod
-    def distance(r1, r2):
-        res = {
-            'x': 0,
-            'y': 0,
-        }
-
-        d1 = r1.coordinates.x - (r2.coordinates.x + r2.texture.width - 1)
-        d2 = (r1.coordinates.x + r1.texture.width - 1) - r2.coordinats.x
-        if d1 < d2:
-            res['x'] = d1
-        elif d1 > d2:
-            res['x'] = d2
-
-        d1 = r1.coordinates.y - (r2.coordinates.y + r2.texture.height)
-        d2 = (r1.coordinates.y + r1.texture.height) - r2.coordinats.y
-        if d1 < d2:
-            res['y'] = d1
-        elif d1 > d2:
-            res['y'] = d2
-
-        return res
-
-    @staticmethod
     def getAttackVectorToPlayer(owner, meRenderable):
         # enemy will walk to this distance
         # allows player to come close

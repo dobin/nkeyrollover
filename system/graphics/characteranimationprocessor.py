@@ -12,14 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class CharacterAnimationProcessor(esper.Processor):
-    """Update the texture of renderable which are CharacterAnimations.
-
-    Accesses events:
-    * MessageType.EntityMoved
-    * MessageType.PlayerAttack
-    * MessageType.attackWindup
-    * MessageType.EntityAttack
-    """
+    """Update the texture of renderable which are CharacterAnimations."""
     def __init__(self):
         super().__init__()
 
@@ -68,6 +61,7 @@ class CharacterAnimationProcessor(esper.Processor):
     def animationUpdateAttack(self):
         messages = messaging.get()
         for message in messages:
+            ##
             if message.type == MessageType.PlayerAttack:
                 playerEntity = EntityFinder.findPlayer(self.world)
                 playerRenderable = self.world.component_for_entity(
@@ -89,6 +83,7 @@ class CharacterAnimationProcessor(esper.Processor):
                     entityRenderable.direction,
                     interrupt=True)
 
+            ##
             if message.type == MessageType.EntityAttack:
                 entity = EntityFinder.findCharacterByGroupId(
                     self.world, message.groupId)

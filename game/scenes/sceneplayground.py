@@ -19,10 +19,13 @@ class ScenePlayground(SceneBase):
 
     def handlePlayerKeyPress(self, key):
         loc = Coordinates(20, 15)
-        if key == 54:
+        if key == 54:  # 6
             self.emitParticleEffect(loc, ParticleEffectType.explosion)
 
-        if key == 55:
+        if key == 55:  # 7
+            self.emitParticleEffect(loc, ParticleEffectType.dragonExplosion)
+
+        if key == 56:  # 8
             self.emitParticleEffect(loc, ParticleEffectType.dragonExplosion)
 
         if key == ord('s'):
@@ -71,7 +74,7 @@ class ScenePlayground(SceneBase):
             data= {
                 'location': loc,
                 'effectType': particleEffect,
-                'damage': None,
+                'damage': 0,
                 'byPlayer': True,
                 'direction': Direction.none,
             }

@@ -49,6 +49,8 @@ class SceneMapBlame(SceneBase):
                 'text': 'And I am all out of gum'
             },
         ]
+        if Config.devMode:
+            self.speechBubbles = []
 
 
     def prepareEnemies(self):
@@ -67,7 +69,7 @@ class SceneMapBlame(SceneBase):
                 id = self.enemyCount,
                 enemyType = EnemyType.stickfigure,
                 spawnTime = None,
-                spawnX = 35,
+                spawnX = 40,
                 spawnLocation = Coordinates(40, 8),
                 spawnDirection = None
             )
@@ -77,7 +79,7 @@ class SceneMapBlame(SceneBase):
                 id = self.enemyCount,
                 enemyType = EnemyType.cow,
                 spawnTime = None,
-                spawnX = 40,
+                spawnX = 45,
                 spawnLocation = Coordinates(86, 13),
                 spawnDirection = None
             )
