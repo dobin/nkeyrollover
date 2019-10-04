@@ -55,10 +55,20 @@ class SceneMapBlame(SceneBase):
         if Config.devMode:
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                enemyType = EnemyType.dragon,
+                enemyType = EnemyType.stickfigure,
                 spawnTime = None,
                 spawnX = 35,
-                spawnLocation = Coordinates(35, 8),
+                spawnLocation = Coordinates(36, 8),
+                spawnDirection = None
+            )
+            self.enemyQueue.append(enemyCell)
+
+            enemyCell = EnemyCell(
+                id = self.enemyCount,
+                enemyType = EnemyType.stickfigure,
+                spawnTime = None,
+                spawnX = 35,
+                spawnLocation = Coordinates(40, 8),
                 spawnDirection = None
             )
             self.enemyQueue.append(enemyCell)
@@ -68,7 +78,7 @@ class SceneMapBlame(SceneBase):
                 enemyType = EnemyType.cow,
                 spawnTime = None,
                 spawnX = 40,
-                spawnLocation = Coordinates(85, 13),
+                spawnLocation = Coordinates(86, 13),
                 spawnDirection = None
             )
             self.enemyQueue.append(enemyCell)
@@ -161,6 +171,9 @@ class SceneMapBlame(SceneBase):
 
 
     def spawnEnemy(self, enemyCell):
+        if enemyCell.spawnX % 2 != 0:
+            logger.warning("Spawn enemy at uneven location!")
+
         messaging.add(
             type=MessageType.SpawnEnemy,
             data=enemyCell,

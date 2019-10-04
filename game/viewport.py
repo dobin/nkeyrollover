@@ -65,4 +65,3 @@ class Viewport(object):
     def adjustViewport(self, x):
         if self.x + x > 0:
             self.x += x
-
