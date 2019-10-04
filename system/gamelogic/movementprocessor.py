@@ -60,21 +60,39 @@ class MovementProcessor(esper.Processor):
             entity = EntityFinder.findCharacterByGroupId(self.world, msg.groupId)
             meRenderable = self.world.component_for_entity(
                 entity, system.graphics.renderable.Renderable)
-            self.moveRenderable(
-                meRenderable,
-                msg.groupId,
-                msg.data['x'],
-                msg.data['y'],
-                msg.data['dontChangeDirection'],
-                msg.data['updateTexture'])
+
+            # Note: same x/y calc like in self.moveRenderable()
+            extCoords = meRenderable.getLocationAndSize()
+            extCoords.x += msg.data['x']
+            extCoords.y += msg.data['y']
+
+            if self.isDestinationEmpty(meRenderable, extCoords):
+                self.moveRenderable(
+                    meRenderable,
+                    msg.groupId,
+                    msg.data['x'],
+                    msg.data['y'],
+                    msg.data['dontChangeDirection'],
+                    msg.data['updateTexture'])
+
+
+    def isDestinationEmpty(self, renderable, extCoords :ExtCoordinates) -> bool:
+        """Check if renderable/extCoords overlaps with any other renderables"""
+        for ent, otherRend in self.world.get_component(system.graphics.renderable.Renderable):
+            dist = otherRend.distanceToBorder(extCoords)
+            if dist['x'] <= 0 and dist['y'] <= 0:
+                if not renderable == otherRend:
+                    return False
+
+        return True
 
 
     def moveRenderable(
         self, renderable, groupId, x :int =0, y :int =0,
         dontChangeDirection :bool =False,
         updateTexture :bool =True
-    ):
-        """Move this renderable in x/y direction, if allowed. Update direction too"""
+    ) -> bool:
+        """Move this renderable in x/y direction, if map allows. Update direction too"""
         didMove = False
         didChangeDirection = False
 

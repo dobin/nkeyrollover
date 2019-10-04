@@ -156,6 +156,40 @@ class Renderable(object):
         return False
 
 
+    def distanceToBorder(self, extCoords):
+        """Distance from my border to the border of extCoords.
+
+        If renderables are adjectant, distance is 0.
+        """
+        if self.coordinates.x < extCoords.x:
+            # Me   Extcoords
+            distX = extCoords.x - (self.coordinates.x + self.texture.width)
+        elif self.coordinates.x > extCoords.x:
+            # Extcoords   Me
+            distX = self.coordinates.x - (extCoords.x + extCoords.width)
+        else:
+            # Extcoords
+            # Me
+            distX = 0
+
+        # Me
+        # Extcoords
+        if self.coordinates.y < extCoords.y:
+            distY = extCoords.y - (self.coordinates.y + self.texture.height)
+        elif self.coordinates.y > extCoords.y:
+            distY = self.coordinates.y - (extCoords.y + extCoords.height)
+        else:
+            distY = 0
+
+        res = {
+            'x': distX,
+            'y': distY,
+            'sum': distX + distY
+        }
+
+        return res
+
+
     def getAttackBaseLocation(self):
         """
         Used to:

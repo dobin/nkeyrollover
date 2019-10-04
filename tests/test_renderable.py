@@ -21,7 +21,7 @@ from system.graphics.renderableprocessor import RenderableProcessor
 
 
 class RenderableTest(unittest.TestCase):
-    def test_renderable(self):
+    def test_renderableBasic(self):
         game.isunittest.setIsUnitTest()
         fileTextureLoader.loadFromFiles()
 
@@ -90,10 +90,6 @@ class RenderableTest(unittest.TestCase):
         self.assertTrue(attackLocation.x == 9)
         self.assertTrue(attackLocation.y == 11)
 
-        # weaponBaseLoc = renderable.getWeaponBaseLocation()
-        # self.assertTrue(weaponBaseLoc.x == 12)
-        # self.assertTrue(weaponBaseLoc.y == 9)
-
         p = Coordinates(9, 9)
         self.assertFalse(renderable.isHitBy([p]))
         p = Coordinates(13, 13)
@@ -107,6 +103,114 @@ class RenderableTest(unittest.TestCase):
         attackLocation = renderable.getAttackBaseLocation()
         self.assertTrue(attackLocation.x == 9)
         self.assertTrue(attackLocation.y == 11)
+
+
+    def test_renderableDistanceToBorder(self):
+        game.isunittest.setIsUnitTest()
+        fileTextureLoader.loadFromFiles()
+
+        self.viewport = MockWin(20, 10)
+        self.world = esper.World()
+        self.textureEmiter = None
+
+        renderableProcessor = RenderableProcessor(textureEmiter=self.textureEmiter)
+        movementProcessor = MovementProcessor(mapManager=None)
+        inputProcessor = InputProcessor()
+        renderableMinimalProcessor = RenderableMinimalProcessor(
+            viewport=self.viewport,
+            textureEmiter=self.textureEmiter)
+        self.world.add_processor(inputProcessor)
+        self.world.add_processor(movementProcessor)
+        self.world.add_processor(renderableMinimalProcessor)
+        self.world.add_processor(renderableProcessor)
+
+        # Player
+        playerEntity = self.world.create_entity()
+        texture = CharacterTexture(
+            characterTextureType=CharacterTextureType.player,
+            characterAnimationType=CharacterAnimationType.standing,
+            name='Player')
+
+        coordinates = Coordinates(
+            10,
+            10
+        )
+        playerRenderable = Renderable(
+            texture=texture,
+            viewport=self.viewport,
+            parent=None,
+            coordinates=coordinates,
+            direction=Direction.right,
+            name='Player')
+
+        self.world.add_component(playerEntity, playerRenderable)
+        # /Player
+
+        # Enemy
+        enemyEntity = self.world.create_entity()
+        texture = CharacterTexture(
+            characterTextureType=CharacterTextureType.player,
+            characterAnimationType=CharacterAnimationType.standing,
+            name='Enemy')
+
+        coordinates = Coordinates(
+            13,
+            10
+        )
+        enemyRenderable = Renderable(
+            texture=texture,
+            viewport=self.viewport,
+            parent=None,
+            coordinates=coordinates,
+            direction=Direction.right,
+            name='Enemy')
+
+        self.world.add_component(enemyEntity, enemyRenderable)
+        # /Enemy
+
+        # process it
+        targetFrameTime = 1.0 / Config.fps
+        self.world.process(targetFrameTime)
+        self.viewport.internalPrint()
+
+        extCoords = playerRenderable.getLocationAndSize()
+
+        # x adjectant
+        distance = enemyRenderable.distanceToBorder(extCoords)
+        self.assertTrue(distance['x'] == 0)
+        self.assertTrue(distance['y'] == 0)
+
+        # x one space distance
+        enemyRenderable.coordinates.x += 1
+        distance = enemyRenderable.distanceToBorder(extCoords)
+        self.assertTrue(distance['x'] == 1)
+        self.assertTrue(distance['y'] == 0)
+
+        # x inside 1
+        enemyRenderable.coordinates.x -= 2
+        distance = enemyRenderable.distanceToBorder(extCoords)
+        self.assertTrue(distance['x'] == -1)
+        self.assertTrue(distance['y'] == 0)
+
+        # x inside 2
+        enemyRenderable.coordinates.x -= 1
+        distance = enemyRenderable.distanceToBorder(extCoords)
+        self.assertTrue(distance['x'] == -2)
+        self.assertTrue(distance['y'] == 0)
+
+        # y inside 2
+        enemyRenderable.coordinates.x += 2
+        enemyRenderable.coordinates.y -= 1
+        distance = enemyRenderable.distanceToBorder(extCoords)
+        self.assertTrue(distance['x'] == 0)
+        self.assertTrue(distance['y'] == -2)
+
+        # y
+        enemyRenderable.coordinates.y -= 2
+        self.viewport.clear()
+        distance = enemyRenderable.distanceToBorder(extCoords)
+        self.assertTrue(distance['x'] == 0)
+        self.assertTrue(distance['y'] == 0)
 
 
 if __name__ == '__main__':
