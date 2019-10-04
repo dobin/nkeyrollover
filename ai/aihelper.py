@@ -183,26 +183,29 @@ class AiHelper(object):
 
 
     @staticmethod
-    def pickDestAroundPlayer(coord :Coordinates, meRenderable):
+    def pickDestAroundPlayer(meRenderable, distanceX, distanceY):
         ptRight = random.choice([True, False])
         ptDown = random.choice([True, False])
-        distanceX = 6
-        distanceY = 4
+
+        coord = Coordinates(
+            meRenderable.getLocation().x,
+            meRenderable.getLocation().y
+        )
 
         if ptRight:
-            coord.x += distanceX + random.randint(0, 5)
+            coord.x += distanceX + random.randint(2, 6)
         else:
-            coord.x -= distanceX + random.randint(0, 5)
+            coord.x -= distanceX + random.randint(2, 6)
 
         if ptDown:
-            coord.y += distanceY + random.randint(0, 5)
-            if coord.y > Config.rows - 2 - meRenderable.texture.height:
-                coord.y = Config.rows - 2 - meRenderable.texture.height
+            coord.y += distanceY + random.randint(-2, 2)
+            #if coord.y > Config.rows - 2 - meRenderable.texture.height:
+            #    coord.y = Config.rows - 2 - meRenderable.texture.height
         else:
-            coord.y -= distanceY + random.randint(0, 5)
+            coord.y -= distanceY + random.randint(-2, 2)
             # +1 so they can overlap only a bit on top
-            if coord.y < Config.topborder - meRenderable.texture.height + 1:
-                coord.y = Config.topborder - meRenderable.texture.height + 1
+            #if coord.y < Config.topborder - meRenderable.texture.height + 1:
+            #    coord.y = Config.topborder - meRenderable.texture.height + 1
 
         # make sure destination is on-screen
         if coord.y < Config.topborder:

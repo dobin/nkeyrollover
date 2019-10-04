@@ -118,9 +118,10 @@ class StateWander(State):
             return
         playerRenderable = self.brain.owner.world.component_for_entity(
             playerEntity, system.graphics.renderable.Renderable)
-        self.destCoord.x = playerRenderable.getLocation().x
-        self.destCoord.y = playerRenderable.getLocation().y
-        self.destCoord = AiHelper.pickDestAroundPlayer(self.destCoord, meRenderable)
+        self.destCoord = AiHelper.pickDestAroundPlayer(
+            playerRenderable,
+            distanceX=meRenderable.texture.width,
+            distanceY=meRenderable.texture.height)
         if Config.showEnemyWanderDest:
             messaging.add(
                 type=MessageType.EmitTextureMinimal,

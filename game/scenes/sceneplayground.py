@@ -7,6 +7,9 @@ from utilities.color import Color
 from texture.filetextureloader import fileTextureLoader
 from game.enemytype import EnemyType
 from .enemycell import EnemyCell
+from utilities.entityfinder import EntityFinder
+from ai.aihelper import AiHelper
+import system.graphics.renderable
 
 
 class ScenePlayground(SceneBase):
@@ -15,6 +18,8 @@ class ScenePlayground(SceneBase):
         self.name = "Playground"
         self.isShowPlayer = True
         self.isShowMap = True
+
+        self.playerCoords = Coordinates(25, 13)
 
 
     def handlePlayerKeyPress(self, key):
@@ -26,7 +31,7 @@ class ScenePlayground(SceneBase):
             self.emitParticleEffect(loc, ParticleEffectType.dragonExplosion)
 
         if key == 56:  # 8
-            self.emitParticleEffect(loc, ParticleEffectType.dragonExplosion)
+            self.showDestAroundPlayer()
 
         if key == ord('s'):
             self.spawnPlayer()
@@ -40,6 +45,26 @@ class ScenePlayground(SceneBase):
 
     def reloadAllTextures(self):
         fileTextureLoader.loadFromFiles()
+
+
+    def showDestAroundPlayer(self):
+        playerEntity = EntityFinder.findPlayer(self.world)
+        meRenderable = self.world.component_for_entity(
+            playerEntity, system.graphics.renderable.Renderable)
+
+        destCoord = AiHelper.pickDestAroundPlayer(
+            meRenderable,
+            distanceX=meRenderable.texture.width,
+            distanceY=meRenderable.texture.height)
+        messaging.add(
+            type=MessageType.EmitTextureMinimal,
+            data={
+                'char': '.',
+                'timeout': 10.0,
+                'coordinate': destCoord,
+                'color': Color.grey
+            }
+        )
 
 
     def spawnDragon(self):
@@ -59,7 +84,7 @@ class ScenePlayground(SceneBase):
 
 
     def spawnPlayer(self):
-        coordinates = Coordinates(25, 13)
+        coordinates = self.playerCoords
         messaging.add(
             type=MessageType.SpawnPlayer,
             data={
