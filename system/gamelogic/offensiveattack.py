@@ -5,7 +5,7 @@ from config import Config
 from system.gamelogic.weapontype import WeaponType
 from utilities.timer import Timer
 from messaging import messaging, MessageType
-from texture.filetextureloader import fileTextureLoader
+from game.offenseloader.fileoffenseloader import fileOffenseLoader
 from common.direction import Direction
 from utilities.color import Color
 from utilities.utilities import Utility
@@ -52,7 +52,7 @@ class OffensiveAttack():
     def attack(self):
         self.cooldownTimer.reset()  # activate cooldown
 
-        weaponData = fileTextureLoader.weaponAnimationManager.getWeaponData(
+        weaponData = fileOffenseLoader.weaponManager.getWeaponData(
             self.weaponType)
         direction = self.parentRenderable.getDirection()
         actionTextureType = weaponData.actionTextureType
@@ -121,7 +121,7 @@ class OffensiveAttack():
     def getCurrentWeaponHitArea(self):
         direction = self.parentRenderable.getDirection()
 
-        weaponData = fileTextureLoader.weaponAnimationManager.getWeaponData(
+        weaponData = fileOffenseLoader.weaponManager.getWeaponData(
             self.weaponType)
         wha = copy.deepcopy(weaponData.weaponHitDetect[direction])
 
@@ -149,7 +149,7 @@ class OffensiveAttack():
         else:
             loc.x += (self.parentRenderable.texture.width) - self.weaponBaseLocation.x
 
-        weaponData = fileTextureLoader.weaponAnimationManager.getWeaponData(
+        weaponData = fileOffenseLoader.weaponManager.getWeaponData(
             self.weaponType)
         if self.parentRenderable.direction is Direction.left:
             loc.x += weaponData.locationOffset.x

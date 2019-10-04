@@ -3,7 +3,6 @@ import logging
 from texture.character.characteranimationmanager import CharacterAnimationManager
 from texture.phenomena.phenomenaanimationmanager import PhenomenaAnimationManager
 from texture.action.actionanimationmanager import ActionAnimationManager
-from texture.weapon.weaponanimationmanager import WeaponAnimationManager
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +12,6 @@ class FileTextureLoader(object):
         self.characterAnimationManager = CharacterAnimationManager()
         self.phenomenaAnimationManager = PhenomenaAnimationManager()
         self.actionAnimationManager = ActionAnimationManager()
-        self.weaponAnimationManager = WeaponAnimationManager()
 
 
     def loadFromFiles(self):
@@ -21,7 +19,6 @@ class FileTextureLoader(object):
         self.actionAnimationManager.loadFiles()
         self.characterAnimationManager.loadFiles()
         self.phenomenaAnimationManager.loadFiles()
-        self.weaponAnimationManager.loadFiles()
 
 
 fileTextureLoader = FileTextureLoader()

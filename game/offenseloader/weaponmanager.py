@@ -14,10 +14,10 @@ from texture.character.characteranimationtype import CharacterAnimationType
 
 import texture.filetextureloader
 
-logger = logging.getLogger("weaponAnimationManager")
+logger = logging.getLogger(__name__)
 
 
-class WeaponAnimationManager(object):
+class WeaponManager(object):
     def __init__(self):
         self.weaponData = {}
 
@@ -31,6 +31,7 @@ class WeaponAnimationManager(object):
     def loadWeaponData(self, weaponType):
         weaponName = weaponType.name
         filename = "data/weapons/{}.yaml".format(weaponName)
+
         if not os.path.isfile(filename):
             logger.debug("No weapon definition in {}, skipping".format(
                 filename

@@ -2,13 +2,14 @@ import logging
 
 from system.graphics.particleeffecttype import ParticleEffectType
 from utilities.timer import Timer
-from system.gamelogic.weapontype import WeaponType
 import system.gamelogic.attackable
 import system.graphics.renderable
 import system.groupid
 from messaging import messaging, MessageType
 from directmessaging import directMessaging, DirectMessageType
 from common.direction import Direction
+from game.offenseloader.fileoffenseloader import fileOffenseLoader
+from game.offenseloader.skilltype import SkillType
 
 logger = logging.getLogger(__name__)
 
@@ -31,75 +32,68 @@ class OffensiveSkill(object):
             'f': Timer(30.0, instant=True),
             'g': Timer(5.0, instant=True),
         }
-        self.damage = {
-            WeaponType.explosion: 100,
-            WeaponType.laser: 100,
-            WeaponType.cleave: 1,
-            WeaponType.heal: 0,
-            WeaponType.port: 0,
-        }
         self.data = {
-            WeaponType.port: {
+            SkillType.port: {
                 'distance': 20,
             }
         }
 
 
-    def doSkillType(self, weaponType :WeaponType):
-        if weaponType is WeaponType.explosion:
+    def doSkillType(self, skillType :SkillType):
+        if skillType is SkillType.explosion:
             self.skillExplosion()
-        elif weaponType is WeaponType.laser:
+        elif skillType is SkillType.laser:
             self.skillLaser()
-        elif weaponType is WeaponType.cleave:
+        elif skillType is SkillType.cleave:
             self.skillCleave()
-        elif weaponType is WeaponType.heal:
+        elif skillType is SkillType.heal:
             self.skillHeal()
-        elif weaponType is WeaponType.port:
+        elif skillType is SkillType.port:
             self.skillPort()
         else:
-            logger.error("Unknown skill {}".format(weaponType))
+            logger.error("Unknown skill {}".format(skillType))
 
 
     def doSkill(self, key):
-        weaponType = None
+        skillType = None
 
         if key == 'c':
             self.skillSay('hoi')
 
         if key == 'f':
-            weaponType = WeaponType.heal
+            skillType = SkillType.heal
             if self.isRdy(key):
-                self.doSkillType(weaponType)
+                self.doSkillType(skillType)
                 self.cooldownTimers[key].reset()
 
         if key == 'g':
-            weaponType = WeaponType.port
+            skillType = SkillType.port
             if self.isRdy(key):
-                self.doSkillType(weaponType)
+                self.doSkillType(skillType)
                 self.cooldownTimers[key].reset()
 
         if key == 'q':
-            weaponType = WeaponType.cleave
+            skillType = SkillType.cleave
             if self.isRdy(key):
-                self.doSkillType(weaponType)
+                self.doSkillType(skillType)
                 self.cooldownTimers[key].reset()
 
         if key == 'w':
-            weaponType = WeaponType.laser
+            skillType = SkillType.laser
             if self.isRdy(key):
-                self.doSkillType(weaponType)
+                self.doSkillType(skillType)
                 self.cooldownTimers[key].reset()
 
         if key == 'e':
-            weaponType = WeaponType.port
+            skillType = SkillType.port
             if self.isRdy(key):
-                self.doSkillType(weaponType)
+                self.doSkillType(skillType)
                 self.cooldownTimers[key].reset()
 
         if key == 'r':
-            weaponType = WeaponType.explosion
+            skillType = SkillType.explosion
             if self.isRdy(key):
-                self.doSkillType(weaponType)
+                self.doSkillType(skillType)
                 self.cooldownTimers[key].reset()
 
 
@@ -139,10 +133,10 @@ class OffensiveSkill(object):
             self.esperData.entity, system.groupid.GroupId)
 
         moveX = 0
-        if meRenderable.direction is Direction.left: 
-            moveX = -self.data[WeaponType.port]['distance']
-        if meRenderable.direction is Direction.right: 
-            moveX = self.data[WeaponType.port]['distance']
+        if meRenderable.direction is Direction.left:
+            moveX = -self.data[SkillType.port]['distance']
+        if meRenderable.direction is Direction.right:
+            moveX = self.data[SkillType.port]['distance']
 
         directMessaging.add(
             type = DirectMessageType.movePlayer,
@@ -159,17 +153,18 @@ class OffensiveSkill(object):
             self.esperData.entity, system.graphics.renderable.Renderable)
 
         locCenter = meRenderable.getLocationCenter()
+        damage = fileOffenseLoader.skillManager.getSkillData(SkillType.explosion).damage
+        particleEffectType = fileOffenseLoader.skillManager.getSkillData(SkillType.explosion).particleEffectType
         messaging.add(
             type=MessageType.EmitParticleEffect,
             data= {
                 'location': locCenter,
-                'effectType': ParticleEffectType.explosion,
-                'damage': self.damage[WeaponType.explosion],
+                'effectType': particleEffectType,
+                'damage': damage,
                 'byPlayer': True,
                 'direction': Direction.none,
             }
         )
-
 
 
     def skillLaser(self):
@@ -177,12 +172,14 @@ class OffensiveSkill(object):
             self.esperData.entity, system.graphics.renderable.Renderable)
 
         locCenter = meRenderable.getLocationCenter()
+        damage = fileOffenseLoader.skillManager.getSkillData(SkillType.laser).damage
+        particleEffectType = fileOffenseLoader.skillManager.getSkillData(SkillType.laser).particleEffectType
         messaging.add(
             type=MessageType.EmitParticleEffect,
             data= {
                 'location': locCenter,
-                'effectType': ParticleEffectType.laser,
-                'damage': self.damage[WeaponType.laser],
+                'effectType': particleEffectType,
+                'damage': damage,
                 'byPlayer': True,
                 'direction': meRenderable.direction,
             }
@@ -194,12 +191,14 @@ class OffensiveSkill(object):
             self.esperData.entity, system.graphics.renderable.Renderable)
 
         locCenter = meRenderable.getLocationCenter()
+        damage = fileOffenseLoader.skillManager.getSkillData(SkillType.cleave).damage
+        particleEffectType = fileOffenseLoader.skillManager.getSkillData(SkillType.cleave).particleEffectType
         messaging.add(
             type=MessageType.EmitParticleEffect,
             data= {
                 'location': locCenter,
-                'effectType': ParticleEffectType.cleave,
-                'damage': self.damage[WeaponType.cleave],
+                'effectType': particleEffectType,
+                'damage': damage,
                 'byPlayer': True,
                 'direction': meRenderable.direction,
             }

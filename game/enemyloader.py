@@ -36,7 +36,6 @@ class EnemyLoader(object):
         enemySeed.stunCount = data['stunCount']
         enemySeed.stunTimeFrame = data['stunTimeFrame']
 
-
         if 'attackBaseLocation' in data:
             enemySeed.attackBaseLocation = data['attackBaseLocation']
         else:
