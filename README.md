@@ -25,7 +25,7 @@ Or was it?
 
 ## Videos
 
-* (Asciinema v0.3v2)[https://asciinema.org/a/ZaUxKWxRHMBljvz26MRy9lmcv]
+* [Asciinema v0.3v2](https://asciinema.org/a/ZaUxKWxRHMBljvz26MRy9lmcv)
 
 ## Play It
 
