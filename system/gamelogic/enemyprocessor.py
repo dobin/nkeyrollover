@@ -12,7 +12,8 @@ from system.gamelogic.ai import Ai
 from system.gamelogic.offensiveattack import OffensiveAttack
 from messaging import messaging, MessageType
 import game.uniqueid
-from common.coordinates import Coordinates
+from common.coordinates import Coordinates, ExtCoordinates
+from utilities.entityfinder import EntityFinder
 from utilities.objectcache import ObjectCache
 from config import Config
 from common.direction import Direction
@@ -96,7 +97,7 @@ class EnemyProcessor(esper.Processor):
                     data = {}
                 )
 
-    def getSomeSpawnCoordinates(self, direction, textureWidth):
+    def getSomeSpawnCoordinates(self, direction, textureWidth, textureHeight):
         # X
         if direction is Direction.right:
             myx = self.viewport.getx() + Config.columns + 1
@@ -108,8 +109,21 @@ class EnemyProcessor(esper.Processor):
         maxY = Config.areaMoveable['maxy']
         myy = random.randint(minY, maxY)
 
-        spawnCoords = Coordinates(myx, myy)
-        return spawnCoords
+        extCoords = ExtCoordinates(myx, myy, textureWidth, textureHeight)
+
+        spotFree = False
+        while not spotFree:
+            if EntityFinder.isDestinationEmpty(
+                world=self.world, renderable=None, extCoords=extCoords
+            ):
+                spotFree = True
+            else:
+                if direction is Direction.right:
+                    extCoords.x += 3
+                else:
+                    extCoords.x -= 3
+
+        return extCoords
 
 
     def spawnEnemy(self, data):
@@ -121,7 +135,8 @@ class EnemyProcessor(esper.Processor):
         if coordinates is None:
             coordinates = self.getSomeSpawnCoordinates(
                 data.spawnDirection,
-                enemyCached.renderable.texture.width)
+                enemyCached.renderable.texture.width,
+                enemyCached.renderable.texture.height)
 
         enemySeed = self.enemyLoader.getSeedForEnemy(enemyType)
 

@@ -66,7 +66,7 @@ class MovementProcessor(esper.Processor):
             extCoords.x += msg.data['x']
             extCoords.y += msg.data['y']
 
-            if self.isDestinationEmpty(meRenderable, extCoords):
+            if EntityFinder.isDestinationEmpty(self.world, meRenderable, extCoords):
                 self.moveRenderable(
                     meRenderable,
                     msg.groupId,
@@ -74,17 +74,6 @@ class MovementProcessor(esper.Processor):
                     msg.data['y'],
                     msg.data['dontChangeDirection'],
                     msg.data['updateTexture'])
-
-
-    def isDestinationEmpty(self, renderable, extCoords :ExtCoordinates) -> bool:
-        """Check if renderable/extCoords overlaps with any other renderables"""
-        for ent, otherRend in self.world.get_component(system.graphics.renderable.Renderable):
-            dist = otherRend.distanceToBorder(extCoords)
-            if dist['x'] <= 0 and dist['y'] <= 0:
-                if not renderable == otherRend:
-                    return False
-
-        return True
 
 
     def moveRenderable(
