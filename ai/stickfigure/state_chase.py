@@ -44,8 +44,12 @@ class StateChase(State):
             -100 * meEnemy.enemyInfo.chaseTimeRnd,
             100 * meEnemy.enemyInfo.chaseTimeRnd)
         self.setTimer(meEnemy.enemyInfo.chaseTime + (stateTimeRnd / 100))
+
         self.canAttackTimer.setTimer(meEnemy.enemyInfo.enemyCanAttackPeriod)
         self.canAttackTimer.reset()
+
+        if not Config.enemyAttacking:
+            self.canAttackTimer.setActive(False)
 
 
     def tryAttacking(self):

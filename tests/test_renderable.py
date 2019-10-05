@@ -11,7 +11,7 @@ from texture.character.characteranimationtype import CharacterAnimationType
 from system.graphics.renderable import Renderable
 from common.direction import Direction
 from texture.filetextureloader import fileTextureLoader
-
+from utilities.entityfinder import EntityFinder
 from tests.mockwin import MockWin
 import game.isunittest
 from system.gamelogic.movementprocessor import MovementProcessor
@@ -170,44 +170,65 @@ class RenderableTest(unittest.TestCase):
 
         # process it
         targetFrameTime = 1.0 / Config.fps
-        self.world.process(targetFrameTime)
-        self.viewport.internalPrint()
-
         extCoords = playerRenderable.getLocationAndSize()
 
         # x adjectant
         distance = enemyRenderable.distanceToBorder(extCoords)
         self.assertTrue(distance['x'] == 0)
         self.assertTrue(distance['y'] == 0)
+        ret = EntityFinder.isDestinationEmpty(
+            self.world, enemyRenderable, enemyRenderable.getLocationAndSize())
+        self.assertTrue(ret)
 
         # x one space distance
         enemyRenderable.coordinates.x += 1
         distance = enemyRenderable.distanceToBorder(extCoords)
         self.assertTrue(distance['x'] == 1)
         self.assertTrue(distance['y'] == 0)
+        ret = EntityFinder.isDestinationEmpty(
+            self.world, enemyRenderable, enemyRenderable.getLocationAndSize())
+        self.assertTrue(ret)
 
         # x inside 1
+        #  o o      
+        # /|/|\     
+        # / / \ 
         enemyRenderable.coordinates.x -= 2
         distance = enemyRenderable.distanceToBorder(extCoords)
         self.assertTrue(distance['x'] == -1)
         self.assertTrue(distance['y'] == 0)
+        ret = EntityFinder.isDestinationEmpty(
+            self.world, enemyRenderable, enemyRenderable.getLocationAndSize())
+        self.assertFalse(ret)
 
         # x inside 2
         enemyRenderable.coordinates.x -= 1
         distance = enemyRenderable.distanceToBorder(extCoords)
         self.assertTrue(distance['x'] == -2)
         self.assertTrue(distance['y'] == 0)
+        ret = EntityFinder.isDestinationEmpty(
+            self.world, enemyRenderable, enemyRenderable.getLocationAndSize())
+        self.assertFalse(ret)
 
-        # y inside 2
+        # y 2
         enemyRenderable.coordinates.x += 2
         enemyRenderable.coordinates.y -= 1
         distance = enemyRenderable.distanceToBorder(extCoords)
+
         self.assertTrue(distance['x'] == 0)
         self.assertTrue(distance['y'] == -2)
+        ret = EntityFinder.isDestinationEmpty(
+            self.world, enemyRenderable, enemyRenderable.getLocationAndSize())
+        self.assertTrue(ret)
 
-        # y
+        # y 3
         enemyRenderable.coordinates.y -= 2
-        self.viewport.clear()
+        distance = enemyRenderable.distanceToBorder(extCoords)
+        self.assertTrue(distance['x'] == 0)
+        self.assertTrue(distance['y'] == 0)
+
+        # y above each other
+        enemyRenderable.coordinates.x -= 3
         distance = enemyRenderable.distanceToBorder(extCoords)
         self.assertTrue(distance['x'] == 0)
         self.assertTrue(distance['y'] == 0)

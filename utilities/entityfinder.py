@@ -16,9 +16,13 @@ class EntityFinder(object):
         """Check if renderable/extCoords overlaps with any other renderables"""
         for ent, otherRend in world.get_component(system.graphics.renderable.Renderable):
             dist = otherRend.distanceToBorder(extCoords)
+            # fast check: distance
             if dist['x'] <= 0 and dist['y'] <= 0:
                 if not renderable == otherRend:
-                    return False
+                    # slower check: overlap
+                    overlap = otherRend.overlapsWithCoordinates(extCoords)
+                    if overlap:
+                        return False
 
         return True
 

@@ -61,21 +61,54 @@ class MovementProcessor(esper.Processor):
             meRenderable = self.world.component_for_entity(
                 entity, system.graphics.renderable.Renderable)
 
+            # coords to test if we can move to it
             # Note: same x/y calc like in self.moveRenderable()
             extCoords = meRenderable.getLocationAndSize()
             extCoords.x += msg.data['x']
             extCoords.y += msg.data['y']
 
-            if (msg.data['force']
-                    or EntityFinder.isDestinationEmpty(
-                        self.world, meRenderable, extCoords)):
+            # these are the actual x/y position change we will use to move
+            x = msg.data['x']
+            y = msg.data['y']
+
+            if msg.data['force']:
+                canMove = True
+            else:
+                canMove = EntityFinder.isDestinationEmpty(
+                    self.world, meRenderable, extCoords)
+
+                if not canMove:
+                    # seems we cannot move in the chose direction.
+                    # if there are two components in the coordinates, just try one of
+                    # them
+                    if x != 0 and y != 0:
+                        # try x. yes this is ugly, but fast
+                        x = msg.data['x']
+                        y = 0
+                        extCoords.y -= msg.data['y']
+                        canMove = EntityFinder.isDestinationEmpty(
+                            self.world, meRenderable, extCoords)
+
+                        if not canMove:
+                            # try y... ugh
+                            x = 0
+                            y = msg.data['y']
+                            extCoords.x -= msg.data['x']
+                            extCoords.y += msg.data['y']
+                            canMove = EntityFinder.isDestinationEmpty(
+                                self.world, meRenderable, extCoords)
+
+            if canMove:
                 self.moveRenderable(
                     meRenderable,
                     msg.groupId,
-                    msg.data['x'],
-                    msg.data['y'],
+                    x,
+                    y,
                     msg.data['dontChangeDirection'],
                     msg.data['updateTexture'])
+
+                ret = EntityFinder.isDestinationEmpty(
+                    self.world, meRenderable, meRenderable.getLocationAndSize())
 
 
     def moveRenderable(

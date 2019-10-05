@@ -156,6 +156,16 @@ class Renderable(object):
         return False
 
 
+    def overlapsWithCoordinates(self, coords :Coordinates):
+        if (self.coordinates.x + self.texture.width > coords.x
+                and self.coordinates.x < coords.x + coords.width):
+            if (self.coordinates.y < coords.y + coords.height
+                    and self.coordinates.y + self.texture.height > coords.y):
+                return True
+
+        return False
+
+
     def distanceToBorder(self, extCoords):
         """Distance from my border to the border of extCoords.
 
