@@ -82,6 +82,7 @@ class StateAttack(State):
                         'y': 0,
                         'dontChangeDirection': False,
                         'updateTexture': False,
+                        'force': True
                     },
                 )
             else:

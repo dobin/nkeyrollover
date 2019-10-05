@@ -66,7 +66,9 @@ class MovementProcessor(esper.Processor):
             extCoords.x += msg.data['x']
             extCoords.y += msg.data['y']
 
-            if EntityFinder.isDestinationEmpty(self.world, meRenderable, extCoords):
+            if (msg.data['force']
+                    or EntityFinder.isDestinationEmpty(
+                        self.world, meRenderable, extCoords)):
                 self.moveRenderable(
                     meRenderable,
                     msg.groupId,

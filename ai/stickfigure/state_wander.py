@@ -100,6 +100,7 @@ class StateWander(State):
                 'y': y,
                 'dontChangeDirection': False,
                 'updateTexture': True,
+                'force': False,
             },
         )
 
