@@ -129,15 +129,7 @@ class EnemyProcessor(esper.Processor):
     def spawnEnemy(self, data):
         enemyType = data.enemyType
         coordinates = data.spawnLocation
-
         enemyCached = self.objectCache.getObject()
-
-        if coordinates is None:
-            coordinates = self.getSomeSpawnCoordinates(
-                data.spawnDirection,
-                enemyCached.renderable.texture.width,
-                enemyCached.renderable.texture.height)
-
         enemySeed = self.enemyLoader.getSeedForEnemy(enemyType)
 
         entity = self.world.create_entity()
@@ -148,7 +140,6 @@ class EnemyProcessor(esper.Processor):
         enemyCached.attackable.setMaxStunCount(enemySeed.stunCount)
         enemyCached.attackable.setStunTime(enemySeed.stunTime)
         enemyCached.attackable.setStunTimeFrame(enemySeed.stunTimeFrame)
-
         enemyCached.ai.setEnemyType(enemyType)
         enemyCached.ai.initAi(esperData=esperData)
         enemyCached.renderable.texture.setCharacterTextureType(
@@ -156,6 +147,14 @@ class EnemyProcessor(esper.Processor):
         enemyCached.renderable.texture.changeAnimation(
             CharacterAnimationType.standing,
             enemyCached.renderable.direction)
+
+        # after texture config above
+        if coordinates is None:
+            coordinates = self.getSomeSpawnCoordinates(
+                data.spawnDirection,
+                enemyCached.renderable.texture.width,
+                enemyCached.renderable.texture.height)
+
         enemyCached.renderable.setActive(True)
         enemyCached.renderable.setLocation(coordinates)
         enemyCached.renderable.attackBaseLocation = Coordinates(

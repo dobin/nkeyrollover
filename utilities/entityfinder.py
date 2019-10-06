@@ -22,6 +22,9 @@ class EntityFinder(object):
                     # slower check: overlap
                     overlap = otherRend.overlapsWithCoordinates(extCoords)
                     if overlap:
+                        logging.info("{} Cant go to {}/{}".format(
+                            otherRend, extCoords.x, extCoords.y
+                        ))
                         return False
 
         return True
