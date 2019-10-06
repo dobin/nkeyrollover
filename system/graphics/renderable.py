@@ -144,13 +144,12 @@ class Renderable(object):
                 and hitCoords.x < self.coordinates.x + self.texture.width
                 and hitCoords.y >= self.coordinates.y
                 and hitCoords.y < self.coordinates.y + self.texture.height):
-            return True
 
             # precise check
             currentFrame = self.texture.getCurrentFrame()
             xOff = hitCoords.x - self.coordinates.x
             yOff = hitCoords.y - self.coordinates.y
-            if currentFrame[xOff][yOff] != '':
+            if currentFrame[yOff][xOff] != '':
                 return True
 
         return False
