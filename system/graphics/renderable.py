@@ -155,6 +155,23 @@ class Renderable(object):
         return False
 
 
+    def overlapsWithTexture(self, renderable):
+        # function not yet used or finished. just a reminder
+        myTextureArr = self.texture.getCurrentFrame()
+        hisTextureArr = renderable.texture.getCurrentFrame()
+
+        xOff = self.coordinates.x - renderable.coordinates.x
+        yOff = self.coordinates.y - renderable.coordinates.y
+
+        y = 0
+        while y < len(myTextureArr):
+            x = 0
+            while x < len(myTextureArr[y]):
+                column = myTextureArr[y][x]
+                if column != '':
+                    pass
+
+
     def overlapsWithCoordinates(self, coords :Coordinates):
         if (self.coordinates.x + self.texture.width > coords.x
                 and self.coordinates.x < coords.x + coords.width):
