@@ -45,6 +45,8 @@ class StateWander(State):
             self.brain.owner.entity, system.graphics.renderable.Renderable)
         meAttackable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.gamelogic.attackable.Attackable)
+        meEnemy = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.enemy.Enemy)
 
         if meAttackable.isStunned:
             return
@@ -74,7 +76,7 @@ class StateWander(State):
                     message.data,
                     meRenderable.getLocation())
 
-                if distance['sum'] < 10:
+                if distance['sum'] < meEnemy.enemyInfo.wanderAttackDistance:
                     logger.info("{}: Player is close, chasing".format(self.owner))
                     self.brain.pop()
                     self.brain.push("chase")

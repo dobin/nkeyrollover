@@ -58,10 +58,15 @@ class EnemyLoader(object):
             enemySeed.enemyInfo.chaseStepDelay = enemyInfo['chaseStepDelay']
             enemySeed.enemyInfo.attackWindupTime = enemyInfo['attackWindupTime']
 
+            # optionals
             if 'attackTime' in enemyInfo:
                 enemySeed.enemyInfo.attackTime = enemyInfo['attackTime']
             else:
                 enemySeed.enemyInfo.attackTime = enemySeed.enemyInfo.attackStateTime
+
+            if 'wanderAttackDistance' in enemyInfo:
+                enemySeed.enemyInfo.wanderAttackDistance = enemyInfo['wanderAttackDistance']
+
         except KeyError as error:
             raise Exception("Error, missing field in yaml file {}, error {}".format(
                 filename, error
