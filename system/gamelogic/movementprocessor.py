@@ -98,6 +98,21 @@ class MovementProcessor(esper.Processor):
                             canMove = EntityFinder.isDestinationEmpty(
                                 self.world, meRenderable, extCoords)
 
+                # check if we are stuck
+                if not canMove:
+                    # renderable=none so we can check ourselves
+                    isStuck = not EntityFinder.isDestinationEmpty(
+                        self.world, meRenderable, meRenderable.getLocationAndSize()
+                    )
+                    if isStuck:
+                        # force our way out of here
+                        x = msg.data['x']
+                        y = msg.data['y']
+                        canMove = True
+                    else:
+                        # not stuck, just wait until we are free
+                        pass
+
             if canMove:
                 self.moveRenderable(
                     meRenderable,
@@ -106,9 +121,6 @@ class MovementProcessor(esper.Processor):
                     y,
                     msg.data['dontChangeDirection'],
                     msg.data['updateTexture'])
-
-                ret = EntityFinder.isDestinationEmpty(
-                    self.world, meRenderable, meRenderable.getLocationAndSize())
 
 
     def moveRenderable(
