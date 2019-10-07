@@ -100,17 +100,17 @@ class MovementProcessor(esper.Processor):
 
                 # check if we are stuck
                 if not canMove:
-                    # renderable=none so we can check ourselves
                     isStuck = not EntityFinder.isDestinationEmpty(
                         self.world, meRenderable, meRenderable.getLocationAndSize()
                     )
                     if isStuck:
-                        # force our way out of here
+                        # force our way out of here. do intended path
                         x = msg.data['x']
                         y = msg.data['y']
                         canMove = True
                     else:
-                        # not stuck, just wait until we are free
+                        # not stuck, just wait until we are free,
+                        # as another enemy most likely blocks our way
                         pass
 
             if canMove:
