@@ -6,6 +6,8 @@ from config import Config
 from system.graphics.particle import Particle
 from common.coordinates import Coordinates
 from messaging import messaging, MessageType
+from utilities.colorpalette import ColorPalette
+from utilities.color import Color
 
 logger = logging.getLogger(__name__)
 
@@ -51,6 +53,40 @@ class ParticleEmiter(object):
             self.createCleave(loc, direction, byPlayer, damage)
         if effectType is ParticleEffectType.dragonExplosion:
             self.createDragonExplosion(loc, direction, byPlayer, damage)
+        if effectType is ParticleEffectType.floatingDamage:
+            self.createFloatingDamage(loc, direction, byPlayer, damage)
+
+
+    def createFloatingDamage(self, loc, direction, byPlayer, damage):
+        dmgStr = str(damage)
+
+        speed = 0.1
+        if byPlayer:
+            color = ColorPalette.getColorByColor(Color.brightcyan)
+        else:
+            color = ColorPalette.getColorByColor(Color.cyan)
+
+
+        n = 0
+        for char in dmgStr:
+            particle = self.particlePool.pop()
+            particle.init(
+                x=loc.x + n, y=loc.y,
+                life=10,
+                angle=90,
+                speed=speed,
+                fadeout=False,
+                byStep=False,
+                charType=0,
+                active=True,
+                damage=0,
+                damageEveryStep=False,
+                byPlayer=byPlayer,
+                color=color)
+            particle.char = dmgStr[n]
+            self.particleActive.append(particle)
+
+            n += 1
 
 
     def createDragonExplosion(self, loc, direction, byPlayer, damage):
@@ -63,7 +99,7 @@ class ParticleEmiter(object):
 
             particle.init(
                 x=loc.x, y=loc.y, life=life, angle=angle,
-                speed=0.1, fadeout=True, byStep=False, charType=1,
+                speed=0.1, fadeout=True, byStep=False, charType=2,
                 active=True,
                 damage=damage, damageEveryStep=True, byPlayer=byPlayer)
 
@@ -84,7 +120,7 @@ class ParticleEmiter(object):
 
             particle.init(
                 x=loc.x, y=loc.y, life=life, angle=angle,
-                speed=0.1, fadeout=True, byStep=False, charType=0,
+                speed=0.1, fadeout=True, byStep=False, charType=1,
                 active=True,
                 damage=damage, damageEveryStep=True, byPlayer=byPlayer)
 
@@ -110,7 +146,7 @@ class ParticleEmiter(object):
             basex = loc.x + (xinv * 6)  # distance from char
             particle.init(
                 x=basex + n * xinv, y=loc.y, life=life, angle=angle,
-                speed=0.0, fadeout=True, byStep=False, charType=0,
+                speed=0.0, fadeout=True, byStep=False, charType=1,
                 active=True,
                 damage=damage)
 
@@ -137,7 +173,7 @@ class ParticleEmiter(object):
         # particle = self.particlePool.pop()
         # particle.init(
         #         x=loc.x, y=loc.y, life=life, angle=0,
-        #         speed=0.0, fadeout=True, byStep=False, charType=0,
+        #         speed=0.0, fadeout=True, byStep=False, charType=1,
         #         active=True)
         # particleList.append(particle)
         # self.particleActive.append(particle)
@@ -160,7 +196,7 @@ class ParticleEmiter(object):
                 speed=0.1,
                 fadeout=True,
                 byStep=False,
-                charType=0,
+                charType=1,
                 active=True,
                 damage=damage,
                 damageEveryStep=True)

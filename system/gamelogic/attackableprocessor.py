@@ -14,6 +14,9 @@ from messaging import messaging, MessageType
 from directmessaging import directMessaging, DirectMessageType
 from utilities.entityfinder import EntityFinder
 from game.textureemiter import TextureEmiterEffect
+from system.graphics.particleeffecttype import ParticleEffectType
+from config import Config
+from common.direction import Direction
 
 logger = logging.getLogger(__name__)
 
@@ -130,3 +133,15 @@ class AttackableProcessor(esper.Processor):
                 else:
                     meRenderable.texture.setOverwriteColorFor(
                         0.1, ColorPalette.getColorByColor(Color.red))
+
+                if Config.showEnemyDamageNumbers:
+                    messaging.add(
+                        type=MessageType.EmitParticleEffect,
+                        data= {
+                            'location': meRenderable.getLocation(),
+                            'effectType': ParticleEffectType.floatingDamage,
+                            'damage': damage,
+                            'byPlayer': byPlayer,
+                            'direction': Direction.none,
+                        }
+                    )

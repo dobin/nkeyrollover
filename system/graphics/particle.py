@@ -51,6 +51,7 @@ class Particle(object):
         damage :int =0,
         damageEveryStep :bool =False,
         byPlayer :bool =True,
+        color =None,
     ):
         self.x = x
         self.y = y
@@ -73,7 +74,13 @@ class Particle(object):
 
         self.color = None
         self.colorOpt = 0
-        self.setColor()
+        if self.fadeout:
+            self.fadeoutSetColor()
+        elif color is None:
+            self.color = ColorPalette.getColorByColorType(ColorType.particle, self.viewport)
+        else: 
+            self.color = color
+
         self.setChar()
 
         self.rx = 0.0
@@ -104,7 +111,7 @@ class Particle(object):
         self.makeStep(dt)
 
 
-    def setColor(self):
+    def fadeoutSetColor(self):
         self.color = ColorPalette.getColorByColorType(ColorType.particle, self.viewport)
 
         if self.life > (self.originalLife / 2):
@@ -114,7 +121,7 @@ class Particle(object):
 
 
     def setChar(self):
-        if self.charType == 0:
+        if self.charType == 1:
             if self.life > ((self.originalLife / 3) * 2):
                 self.char = 'O'
             elif self.life < ((self.originalLife / 3) * 1):
@@ -122,7 +129,7 @@ class Particle(object):
             else:
                 self.char = 'o'
 
-        if self.charType == 1:
+        if self.charType == 2:
             if self.life > ((self.originalLife / 3) * 2):
                 self.char = '#'
             elif self.life < ((self.originalLife / 3) * 1):
@@ -137,7 +144,7 @@ class Particle(object):
             return
 
         if self.fadeout:
-            self.setColor()
+            self.fadeoutSetColor()
         self.setChar()
 
         if self.speed > 0:

@@ -1,6 +1,5 @@
 import logging
 
-from system.graphics.particleeffecttype import ParticleEffectType
 from utilities.timer import Timer
 import system.gamelogic.attackable
 import system.graphics.renderable
