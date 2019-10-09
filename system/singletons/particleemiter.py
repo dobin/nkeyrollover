@@ -98,7 +98,7 @@ class ParticleEmiter(object):
         if byPlayer:
             color = ColorPalette.getColorByColor(Color.brightcyan)
         else:
-            color = ColorPalette.getColorByColor(Color.cyan)
+            color = ColorPalette.getColorByColor(Color.red)
 
         n = 0
         for char in dmgStr:

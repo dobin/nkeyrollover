@@ -109,6 +109,14 @@ class Renderable(object):
         return loc
 
 
+    def getLocationTopCenter(self):
+        # slow, but its currently only used by rare events like skillExplosion
+        loc = copy.copy(self.getLocation())
+        # this will round down
+        loc.x += int(self.texture.width / 2)
+        return loc
+
+
     def advanceStep(self):
         if not self.isActive():
             return

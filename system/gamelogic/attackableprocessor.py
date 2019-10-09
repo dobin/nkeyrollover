@@ -139,7 +139,7 @@ class AttackableProcessor(esper.Processor):
                     messaging.add(
                         type=MessageType.EmitParticleEffect,
                         data= {
-                            'location': meRenderable.getLocation(),
+                            'location': meRenderable.getLocationTopCenter(),
                             'effectType': ParticleEffectType.floatingDamage,
                             'damage': damage,
                             'byPlayer': byPlayer,
