@@ -6,6 +6,7 @@ from utilities.timer import Timer
 from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
 from messaging import messaging, MessageType
+from common.direction import Direction
 
 logger = logging.getLogger(__name__)
 
@@ -72,14 +73,10 @@ class Particle(object):
             'y': -speed * math.sin(self.angleInRadians)
         }
 
-        self.color = None
-        self.colorOpt = 0
-        if self.fadeout:
-            self.fadeoutSetColor()
-        elif color is None:
-            self.color = ColorPalette.getColorByColorType(ColorType.particle, self.viewport)
-        else: 
+        self.color = ColorPalette.getColorByColorType(ColorType.particle, self.viewport)
+        if color is not None:
             self.color = color
+        self.colorOpt = 0
 
         self.setChar()
 
@@ -112,8 +109,6 @@ class Particle(object):
 
 
     def fadeoutSetColor(self):
-        self.color = ColorPalette.getColorByColorType(ColorType.particle, self.viewport)
-
         if self.life > (self.originalLife / 2):
             self.colorOpt = curses.A_BOLD
         else:
@@ -121,6 +116,9 @@ class Particle(object):
 
 
     def setChar(self):
+        if self.charType == 0:
+            pass
+
         if self.charType == 1:
             if self.life > ((self.originalLife / 3) * 2):
                 self.char = 'O'
@@ -136,6 +134,15 @@ class Particle(object):
                 self.char = ':'
             else:
                 self.char = '|'
+
+        if self.charType == 3:
+            if self.life > ((self.originalLife / 3) * 2):
+                self.char = '-'
+                logging.info("CCCC: {}".format(self.char))
+            elif self.life < ((self.originalLife / 3) * 1):
+                self.char = '.'
+            else:
+                self.char = '-'
 
 
     def makeStep(self, dt, adjustLife=True):
@@ -176,23 +183,23 @@ class Particle(object):
                         'hitLocations': hitLocations,
                         'damage': self.damage,
                         'byPlayer': self.byPlayer,
+                        'direction': Direction.none,
                     }
                 )
 
             if False:
-                print("")
-                print("Real change:  X: {}  Y: {}".format(xFloat, yFloat))
-                print("Round change: X: {}  Y: {}".format(xChange, yChange))
-                print("Change Rest:  X: {}  Y: {}".format(changeRestX, changeRestY))
-                print("New    Rest:  X: {}  Y: {}".format(self.rx, self.ry))
-                print("New    Pos:   X: {}  Y: {}".format(self.x, self.y))
-                print("")
+                logging.info("Real change:  X: {}  Y: {}".format(xFloat, yFloat))
+                logging.info("Round change: X: {}  Y: {}".format(xChange, yChange))
+                logging.info("Change Rest:  X: {}  Y: {}".format(changeRestX, changeRestY))
+                logging.info("New    Rest:  X: {}  Y: {}".format(self.rx, self.ry))
+                logging.info("New    Pos:   X: {}  Y: {}".format(self.x, self.y))
 
         if adjustLife:
             self.life -= 1
 
 
     def draw(self):
+        logging.info("DRAW: {}".format(self.char))
         self.viewport.addstr(self.y, self.x, self.char, self.color | self.colorOpt)
 
 

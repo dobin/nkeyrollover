@@ -46,6 +46,22 @@ class ScenePlayground(SceneBase):
         if key == ord('x'):
             self.deathAnimation()
 
+        if key == ord('c'):
+            self.showBurst()
+
+
+    def showBurst(self):
+        messaging.add(
+            type=MessageType.EmitParticleEffect,
+            data= {
+                'location': Coordinates(10, 10),
+                'effectType': ParticleEffectType.hitBurst,
+                'damage': 0,
+                'byPlayer': True,
+                'direction': Direction.left,
+            }
+        )
+
 
     def reloadAllTextures(self):
         fileTextureLoader.loadFromFiles()

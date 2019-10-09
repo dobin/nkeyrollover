@@ -82,6 +82,7 @@ class OffensiveAttack():
                     'hitLocations': weaponHitArea.hitCd,
                     'damage': weaponData.damage,
                     'byPlayer': self.parentChar.isPlayer,
+                    'direction': direction,
                 }
             )
 

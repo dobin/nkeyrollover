@@ -9,3 +9,4 @@ class ParticleEffectType(Enum):
     dragonExplosion = 3
 
     floatingDamage = 4
+    hitBurst = 5

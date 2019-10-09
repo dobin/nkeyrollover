@@ -99,6 +99,7 @@ class AttackableProcessor(esper.Processor):
                 entity, GroupId)
             damage = msg.data['damage']
             byPlayer = msg.data['byPlayer']
+            direction = msg.data['direction']
             isPlayer = self.world.has_component(entity, Player)
 
             # enemy can attack player, and vice-versa
@@ -145,3 +146,16 @@ class AttackableProcessor(esper.Processor):
                             'direction': Direction.none,
                         }
                     )
+
+                if Config.showBurstOnImpact:
+                    if damage > Config.showBurstOnImpactDamage:
+                        messaging.add(
+                            type=MessageType.EmitParticleEffect,
+                            data= {
+                                'location': meRenderable.getLocationCenter(),
+                                'effectType': ParticleEffectType.hitBurst,
+                                'damage': 0,
+                                'byPlayer': byPlayer,
+                                'direction': direction,
+                            }
+                        )

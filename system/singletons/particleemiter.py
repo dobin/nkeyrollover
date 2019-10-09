@@ -55,6 +55,47 @@ class ParticleEmiter(object):
             self.createDragonExplosion(loc, direction, byPlayer, damage)
         if effectType is ParticleEffectType.floatingDamage:
             self.createFloatingDamage(loc, direction, byPlayer, damage)
+        if effectType is ParticleEffectType.hitBurst:
+            self.createHitBurst(loc, direction, byPlayer, damage)
+
+
+    def createHitBurst(self, loc, direction, byPlayer, damage):
+        particleCount = 1
+        life = 20
+        n = 0
+        spacingAngle = 3.0
+
+        #if direction is Direction.right:
+        #    xinv = 2
+        #else:
+        #    xinv = -1
+
+        while n < particleCount:
+            particle = self.particlePool.pop()
+            if direction is Direction.right:
+                angle = (spacingAngle * particleCount / 2) - (spacingAngle * n)
+            else:
+                angle = 180 + (spacingAngle * particleCount / 2) - (spacingAngle * n)
+
+            #basex = loc.x + xinv  # distance from char
+            #x = basex + xinv
+            x = loc.x
+            y = loc.y
+            particle.init(
+                x=x, y=y,
+                life=life,
+                angle=angle,
+                speed=0.1,
+                fadeout=True,
+                byStep=False,
+                charType=3,
+                active=True,
+                damage=damage,
+                damageEveryStep=True,
+                color=ColorPalette.getColorByColor(Color.grey))
+
+            self.particleActive.append(particle)
+            n += 1
 
 
     def createFloatingDamage(self, loc, direction, byPlayer, damage):
@@ -65,7 +106,6 @@ class ParticleEmiter(object):
             color = ColorPalette.getColorByColor(Color.brightcyan)
         else:
             color = ColorPalette.getColorByColor(Color.cyan)
-
 
         n = 0
         for char in dmgStr:
@@ -154,7 +194,7 @@ class ParticleEmiter(object):
             particleList.append(particle)
             n += 1
 
-        self.createDamage(particleList, damage, byPlayer)
+        self.createDamage(particleList, damage, byPlayer, direction)
 
 
     def createCleave(self, loc, direction, byPlayer, damage):
@@ -205,15 +245,16 @@ class ParticleEmiter(object):
             particleList.append(particle)
             n += 1
 
-        self.createDamage(particleList, damage, byPlayer)
+        self.createDamage(particleList, damage, byPlayer, direction)
 
 
-    def createDamage(self, hitLocations, damage, byPlayer):
+    def createDamage(self, hitLocations, damage, byPlayer, direction):
         messaging.add(
             type=MessageType.AttackAt,
             data= {
                 'hitLocations': hitLocations,
                 'damage': damage,
                 'byPlayer': byPlayer,
+                'direction': direction,
             }
         )
