@@ -26,7 +26,7 @@ class _Config:
     # system config
     devMode = False
     playground = False
-    maxParticles = 128
+    maxParticles = 512
     version = str(0.1)
 
     # some z orders
@@ -49,7 +49,9 @@ class _Config:
     enemiesInStateAttacking = 1
     enemiesInStateChase = 2
 
-    playerAttackAnimationLen = 0.2  # not yet used
+    showEnemyDamageNumbers = True
+    showBurstOnImpact = True
+    showBurstOnImpactDamage = 19  # how much damage to activate Burst
 
 
 Config = _Config()

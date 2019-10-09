@@ -138,7 +138,6 @@ class Particle(object):
         if self.charType == 3:
             if self.life > ((self.originalLife / 3) * 2):
                 self.char = '-'
-                logging.info("CCCC: {}".format(self.char))
             elif self.life < ((self.originalLife / 3) * 1):
                 self.char = '.'
             else:
@@ -199,7 +198,6 @@ class Particle(object):
 
 
     def draw(self):
-        logging.info("DRAW: {}".format(self.char))
         self.viewport.addstr(self.y, self.x, self.char, self.color | self.colorOpt)
 
 
