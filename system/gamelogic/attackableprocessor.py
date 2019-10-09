@@ -122,6 +122,11 @@ class AttackableProcessor(esper.Processor):
                         groupId = meGroupId.getId(),
                     )
 
+                healthPercentage = meAttackable.getHealthPercentage()
                 # color the texture if we are not dead
-                meRenderable.texture.setOverwriteColorFor(
-                    1.0 - 1.0 / damage , ColorPalette.getColorByColor(Color.red))
+                if healthPercentage > 0.5:
+                    meRenderable.texture.setOverwriteColorFor(
+                        0.1, ColorPalette.getColorByColor(Color.yellow))
+                else:
+                    meRenderable.texture.setOverwriteColorFor(
+                        0.1, ColorPalette.getColorByColor(Color.red))

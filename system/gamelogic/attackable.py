@@ -57,6 +57,10 @@ class Attackable():
         return self.health
 
 
+    def getHealthPercentage(self):
+        p = self.health / self.initialHealth
+        return p
+
     def advance(self, dt):
         self.stunTimer.advance(dt)
 
@@ -72,6 +76,7 @@ class Attackable():
 
     def setStunTimeFrame(self, stunTimeFrame):
         self.stunTimeFrame = stunTimeFrame
+
 
     def setMaxStunCount(self, maxStunCount):
         self.maxStunCount = maxStunCount
