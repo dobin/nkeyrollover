@@ -104,7 +104,8 @@ class ParticleEmiter(object):
         for char in dmgStr:
             particle = self.particlePool.pop()
             particle.init(
-                x=loc.x + n, y=loc.y,
+                x=loc.x + n,
+                y=loc.y - 1,
                 life=10,
                 angle=90,
                 speed=speed,
