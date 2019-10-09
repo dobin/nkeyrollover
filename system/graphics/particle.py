@@ -137,11 +137,11 @@ class Particle(object):
 
         if self.charType == 3:
             if self.life > ((self.originalLife / 3) * 2):
-                self.char = '-'
+                self.char = 'O'
             elif self.life < ((self.originalLife / 3) * 1):
                 self.char = '.'
             else:
-                self.char = '-'
+                self.char = 'o'
 
 
     def makeStep(self, dt, adjustLife=True):

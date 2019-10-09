@@ -60,16 +60,11 @@ class ParticleEmiter(object):
 
 
     def createHitBurst(self, loc, direction, byPlayer, damage):
-        particleCount = 1
+        particleCount = 5
         life = 20
+        spacingAngle = 10.0
+
         n = 0
-        spacingAngle = 3.0
-
-        #if direction is Direction.right:
-        #    xinv = 2
-        #else:
-        #    xinv = -1
-
         while n < particleCount:
             particle = self.particlePool.pop()
             if direction is Direction.right:
@@ -77,8 +72,6 @@ class ParticleEmiter(object):
             else:
                 angle = 180 + (spacingAngle * particleCount / 2) - (spacingAngle * n)
 
-            #basex = loc.x + xinv  # distance from char
-            #x = basex + xinv
             x = loc.x
             y = loc.y
             particle.init(

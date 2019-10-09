@@ -152,7 +152,7 @@ class AttackableProcessor(esper.Processor):
                         messaging.add(
                             type=MessageType.EmitParticleEffect,
                             data= {
-                                'location': meRenderable.getLocationCenter(),
+                                'location': meRenderable.getAttackBaseLocationInverted(),
                                 'effectType': ParticleEffectType.hitBurst,
                                 'damage': 0,
                                 'byPlayer': byPlayer,
