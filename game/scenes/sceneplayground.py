@@ -10,6 +10,7 @@ from .enemycell import EnemyCell
 from utilities.entityfinder import EntityFinder
 from ai.aihelper import AiHelper
 import system.graphics.renderable
+from texture.character.characteranimationtype import CharacterAnimationType
 
 
 class ScenePlayground(SceneBase):
@@ -42,9 +43,24 @@ class ScenePlayground(SceneBase):
         if key == ord('a'):
             self.reloadAllTextures()
 
+        if key == ord('x'):
+            self.deathAnimation()
+
 
     def reloadAllTextures(self):
         fileTextureLoader.loadFromFiles()
+
+
+    def deathAnimation(self):
+        playerEntity = EntityFinder.findPlayer(self.world)
+        meRenderable = self.world.component_for_entity(
+            playerEntity, system.graphics.renderable.Renderable)
+
+        meRenderable.texture.changeAnimation(
+            characterAnimationType=CharacterAnimationType.dying,
+            direction=meRenderable.direction,
+            subtype=0,
+            interrupt=True)
 
 
     def showDestAroundPlayer(self):

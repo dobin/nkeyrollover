@@ -6,6 +6,10 @@ from system.gamelogic.weapontype import WeaponType
 from texture.character.charactertexturetype import CharacterTextureType
 from ai.enemyinfo import EnemyInfo
 from .enemyseed import EnemySeed
+from common.direction import Direction
+from texture.filetextureloader import fileTextureLoader
+from texture.character.characteranimationtype import CharacterAnimationType
+
 
 logger = logging.getLogger(__name__)
 
@@ -46,9 +50,10 @@ class EnemyLoader(object):
 
         enemyInfo = data['enemyInfo']
         try:
+            enemySeed.enemyInfo.enemyType = enemyType
             enemySeed.enemyInfo.attackWindupTime = enemyInfo['attackWindupTime']
             enemySeed.enemyInfo.attackStateTime = enemyInfo['attackStateTime']
-            enemySeed.enemyInfo.dyingTime = enemyInfo['dyingTime']
+
             enemySeed.enemyInfo.enemyCanAttackPeriod = enemyInfo['enemyCanAttackPeriod']
             enemySeed.enemyInfo.wanderTime = enemyInfo['wanderTime']
             enemySeed.enemyInfo.wanderTimeRnd = enemyInfo['wanderTimeRnd']
@@ -57,6 +62,14 @@ class EnemyLoader(object):
             enemySeed.enemyInfo.chaseTimeRnd = enemyInfo['chaseTimeRnd']
             enemySeed.enemyInfo.chaseStepDelay = enemyInfo['chaseStepDelay']
             enemySeed.enemyInfo.attackWindupTime = enemyInfo['attackWindupTime']
+
+            # set state_dying length to dying animation length
+            animation = fileTextureLoader.characterAnimationManager.getAnimation(
+                characterTextureType=enemySeed.characterTextureType,
+                characterAnimationType=CharacterAnimationType.dying,
+                direction=Direction.left,
+            )
+            enemySeed.enemyInfo.dyingTime = animation.getAnimationLength()
 
             # optionals
             if 'attackTime' in enemyInfo:

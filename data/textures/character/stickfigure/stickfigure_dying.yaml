@@ -1,5 +1,11 @@
-endless: True
+endless: False
 advanceByStep: False
 frameColors:
   - grey
-direction: symmetrical
+  - grey
+  - grey
+direction: left
+frameTime:
+  - 0.2
+  - 0.2
+  - 0.2

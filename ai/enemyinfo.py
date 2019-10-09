@@ -7,6 +7,7 @@ class EnemyInfo(object):
         self.attackTime = 1.0  # should be synchronized with attack animation
         self.dyingTime = 1.0
         self.enemyCanAttackPeriod = 0.3
+        self.wanderAttackDistance = 10
 
         # can have range
         self.wanderTime = 5.0

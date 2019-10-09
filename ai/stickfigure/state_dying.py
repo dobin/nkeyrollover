@@ -26,4 +26,3 @@ class StateDying(State):
             logger.info("{}: Died enough, set to dead".format(self.owner))
             self.brain.pop()
             self.brain.push("dead")
-

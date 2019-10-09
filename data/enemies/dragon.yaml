@@ -4,7 +4,6 @@ health: 1000
 enemyInfo:
   attackWindupTime: 1.5
   attackStateTime: 1.0
-  dyingTime: 1.0
   enemyCanAttackPeriod: 0.3
   wanderTime: 1.0
   wanderTimeRnd: 0.5
