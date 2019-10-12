@@ -15,6 +15,8 @@ from texture.character.charactertexture import CharacterTexture
 from texture.character.charactertexturetype import CharacterTextureType
 from game.textureemiter import TextureEmiter
 from system.singletons.renderablecache import renderableCache
+from utilities.color import Color
+from utilities.colorpalette import ColorPalette
 
 logger = logging.getLogger(__name__)
 
@@ -101,13 +103,16 @@ class SceneIntro(SceneBase):
 
     def handleState(self):
         # interactive, aka a hack, but it works
-        if self.state is IntroSceneState.wait1 or self.state is IntroSceneState.flydown or self.state is IntroSceneState.drop or self.state is IntroSceneState.flyup:
-            self.viewport.addstr(5, 40,  "N Key Rollover", curses.color_pair(5))
-            self.viewport.addstr(6, 40,  "Adventures of ASCIIMAN", curses.color_pair(5))
-            self.viewport.addstr(8, 40,  "Select attack: 1 2 3 4", curses.color_pair(1))
-            self.viewport.addstr(9, 40,  "Attack       : space", curses.color_pair(1))
-            self.viewport.addstr(10, 40, "Skills       : q w e r", curses.color_pair(1))
-            self.viewport.addstr(11, 40, "Heal, Port   : f g", curses.color_pair(1))
+        if (self.state is IntroSceneState.wait1
+                or self.state is IntroSceneState.flydown
+                or self.state is IntroSceneState.drop
+                or self.state is IntroSceneState.flyup):
+            self.viewport.addstr(5, 40,  "N Key Rollover", ColorPalette.getColorByColor(Color.blue))
+            self.viewport.addstr(6, 40,  "Escape from Hong Kong", ColorPalette.getColorByColor(Color.brightblue))
+            self.viewport.addstr(8, 40,  "Select attack: 1 2 3 4", ColorPalette.getColorByColor(Color.cyan))
+            self.viewport.addstr(9, 40,  "Attack       : space", ColorPalette.getColorByColor(Color.cyan))
+            self.viewport.addstr(10, 40, "Skills       : q w e r", ColorPalette.getColorByColor(Color.cyan))
+            self.viewport.addstr(11, 40, "Heal, Port   : f g", ColorPalette.getColorByColor(Color.cyan))
 
         # state
         if self.state is IntroSceneState.wait1:
