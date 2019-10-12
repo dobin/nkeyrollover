@@ -3,7 +3,6 @@ weaponType: hitSquare
 health: 100
 enemyInfo:
   attackWindupTime: 0.8
-  attackTime: 0.5  # can attack twice
   attackStateTime: 1.0  # how long the attack state lasts
   enemyCanAttackPeriod: 0.3
   wanderTime: 5.0

@@ -71,6 +71,13 @@ class CharacterAnimationManager(object):
         direction,
         subtype=0
     ):
+        if len(self.characterAnimationObjs) == 0:
+            raise Exception("Tried to access character animation, but none are loaded")
+
+        if characterTextureType not in self.characterAnimationObjs:
+            logging.error("Can't access {}, loaded: {}".format(
+                characterTextureType, len(self.characterAnimationObjs)
+            ))
         characterAnimationObj = self.characterAnimationObjs[characterTextureType]
 
         if direction is Direction.left:

@@ -53,6 +53,14 @@ class StateAttack(State):
     def process(self, dt):
         self.attackMoveTimer.advance(dt)
 
+        # check if we got stunned
+        meAttackable = self.brain.owner.world.component_for_entity(
+            self.brain.owner.entity, system.gamelogic.attackable.Attackable)
+        if meAttackable.isStunned:
+            self.brain.pop()
+            self.brain.push("chase")
+
+        # check if we should do one attack step
         if self.attackMoveTimer.timeIsUp():
             logger.info("{}: I'm attacking".format(self.owner))
 
