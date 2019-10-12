@@ -9,6 +9,10 @@ from system.gamelogic.offensiveattack import OffensiveAttack
 from system.gamelogic.offensiveskill import OffensiveSkill
 from system.groupid import GroupId
 from utilities.entityfinder import EntityFinder
+from system.singletons.apm import apm
+from system.singletons.damagestat import damageStat
+
+logger = logging.getLogger(__name__)
 
 
 class StatusBar(object):
@@ -22,12 +26,10 @@ class StatusBar(object):
         # if n > 100:
         #    fps = 1000 * (float)(n) / (float)(current_milli_time() - self.startTime)
         #    #fps = self.workTime * 1000.0
-
         playerEntity = EntityFinder.findPlayer(self.world.world)
-        if playerEntity is None: 
+        if playerEntity is None:
             # No player here yet
             return
-
 
         #self.menuwin.erase()
         #self.menuwin.border()
@@ -41,7 +43,7 @@ class StatusBar(object):
 
         #s += "  FPS: %.0f" % (fps)
         color = ColorPalette.getColorByColorType(ColorType.menu, None)
-        self.menuwin.addstr(1, 2, s, color )
+        self.menuwin.addstr(1, 2, s, color)
 
         self.printSkillbar(color, playerEntity)
         self.printAttackbar(color, playerEntity)
@@ -52,7 +54,7 @@ class StatusBar(object):
         playerOffensiveSkill = self.world.world.component_for_entity(
             playerEntity, OffensiveSkill)
 
-        basex = 54
+        basex = 34
         n = 0
         for skill in playerOffensiveSkill.skillStatus:
             if playerOffensiveSkill.isRdy(skill):
@@ -68,15 +70,24 @@ class StatusBar(object):
         playerOffensiveAttack = EntityFinder.findOffensiveAttackByGroupId(
             self.world.world,
             playerGroupId.getId())
-        
-        weaponIdx = 62
-        self.menuwin.addstr(1,
+
+        weaponIdx = 42
+        self.menuwin.addstr(
+            1,
             weaponIdx,
             'W:' + playerOffensiveAttack.getWeaponStr(),
             color)
 
-        weaponIdx = 62
-        self.menuwin.addstr(1,
+        weaponIdx = 52
+        self.menuwin.addstr(
+            1,
             weaponIdx,
-            'APM:' + str(int(self.world.inputProcessor.apm.getApm() * 60)),
+            'APM:' + str(int(apm.getApm() * 60)),
+            color)
+
+        weaponIdx = 62
+        self.menuwin.addstr(
+            1,
+            weaponIdx,
+            'DMG/s:' + str(int(damageStat.getDamageStat())),
             color)

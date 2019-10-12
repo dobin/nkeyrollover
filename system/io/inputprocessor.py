@@ -9,7 +9,7 @@ import system.graphics.renderable
 import system.gamelogic.player
 import system.gamelogic.attackable
 from directmessaging import directMessaging, DirectMessageType
-from utilities.apm import Apm
+from system.singletons.apm import apm
 from utilities.entityfinder import EntityFinder
 
 logger = logging.getLogger(__name__)
@@ -19,7 +19,6 @@ class InputProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
         self.movementTimer = Timer(1.0 / Config.movementKeysPerSec, instant=True)
-        self.apm = Apm()
 
 
     def process(self, deltaTime):
@@ -50,7 +49,7 @@ class InputProcessor(esper.Processor):
             return
 
         for message in messaging.getByType(MessageType.PlayerKeypress):
-            self.apm.tick(message.data['time'])
+            apm.tick(message.data['time'])
             didMoveTmp = self.handleKeyPress(
                 message.data['key'], player, renderable, playerEntity)
             if didMoveTmp:

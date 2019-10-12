@@ -29,3 +29,6 @@ class Apm(object):
         apm :float = (1.0 / self.time) * self.count
         #apm = apm / 60
         return apm
+
+
+apm = Apm()

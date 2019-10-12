@@ -86,7 +86,6 @@ class Game(object):
         damageProcessor = DamageProcessor()
 
         self.viewport :Viewport = viewport  # for keybaordinput
-        self.inputProcessor :InputProcessor = inputProcessor  # for Statusbar:APM
         self.sceneProcessor :SceneProcessor = sceneProcessor  # for stats
         self.mapManager :MapManager = mapManager  # to advance it
         self.sceneManager :SceneManager = sceneManager  # to check for shopmap

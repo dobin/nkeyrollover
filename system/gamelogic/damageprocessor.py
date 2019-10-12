@@ -8,6 +8,8 @@ from system.gamelogic.player import Player
 from messaging import messaging, MessageType
 from directmessaging import directMessaging, DirectMessageType
 from config import Config
+from utilities.timer import Timer
+from system.singletons.damagestat import damageStat
 
 logger = logging.getLogger(__name__)
 
@@ -15,9 +17,15 @@ logger = logging.getLogger(__name__)
 class DamageProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
+        self.dmgTimer = Timer(1.0)
 
 
     def process(self, dt):
+        self.dmgTimer.advance(dt)
+        if self.dmgTimer.timeIsUp():
+            damageStat.addDamage(-10)
+            self.dmgTimer.reset()
+
         damageSumPlayer = 0
         for msg in messaging.getByType(MessageType.AttackAt):
             for entity, (meAtk, groupId, renderable) in self.world.get_components(
@@ -56,3 +64,5 @@ class DamageProcessor(esper.Processor):
                         'time': 1.0,
                     }
                 )
+
+        damageStat.addDamage(damageSumPlayer)
