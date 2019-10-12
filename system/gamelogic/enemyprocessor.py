@@ -18,6 +18,7 @@ from utilities.objectcache import ObjectCache
 from config import Config
 from common.direction import Direction
 from texture.character.characteranimationtype import CharacterAnimationType
+from game.enemyloader import EnemyLoader
 
 
 logger = logging.getLogger(__name__)
@@ -34,9 +35,9 @@ class EnemyCached(object):
 
 
 class EnemyProcessor(esper.Processor):
-    def __init__(self, viewport, enemyLoader):
+    def __init__(self, viewport):
         super().__init__()
-        self.enemyLoader = enemyLoader
+        self.enemyLoader :EnemyLoader = EnemyLoader()
         self.viewport = viewport
         self.num = 16
         self.objectCache = ObjectCache(size=self.num)

@@ -23,7 +23,6 @@ from system.graphics.renderableminimalprocessor import RenderableMinimalProcesso
 from system.gamelogic.gametimeprocessor import GametimeProcessor
 from game.scenemanager import SceneManager
 from game.statusbar import StatusBar
-from game.enemyloader import EnemyLoader
 from utilities.entityfinder import EntityFinder
 from messaging import messaging
 from directmessaging import directMessaging
@@ -58,9 +57,7 @@ class Game(object):
             viewport=viewport,
             world=self.world,
             mapManager=mapManager)
-        enemyLoader :EnemyLoader = EnemyLoader()
         renderableCache.init(viewport=viewport)
-
 
         particleProcessor = ParticleProcessor(viewport=viewport)
         gametimeProcessor = GametimeProcessor()
@@ -69,7 +66,7 @@ class Game(object):
         playerProcessor = PlayerProcessor(
             viewport=viewport)
         enemyProcessor = EnemyProcessor(
-            viewport=viewport, enemyLoader=enemyLoader)
+            viewport=viewport)
         attackableProcessor = AttackableProcessor()
         offensiveAttackProcessor = OffensiveAttackProcessor()
         offensiveSkillProcessor = OffensiveSkillProcessor()
@@ -85,10 +82,9 @@ class Game(object):
         )
         damageProcessor = DamageProcessor()
 
-        self.viewport :Viewport = viewport  # for keybaordinput
-        self.sceneProcessor :SceneProcessor = sceneProcessor  # for stats
-        self.mapManager :MapManager = mapManager  # to advance it
-        self.sceneManager :SceneManager = sceneManager  # to check for shopmap
+        self.viewport :Viewport = viewport  # for keyboardinput in nkeyrollover.py
+        self.mapManager :MapManager = mapManager  # map is handled here in game
+        self.sceneManager :SceneManager = sceneManager  # to check for showmap here in game
 
         # Lots of comments to check if the order of the processors really work,
         # as Messaging looses all messages on every iteration (use DirectMessaging
