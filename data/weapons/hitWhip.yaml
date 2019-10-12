@@ -1,6 +1,6 @@
 actionTextureType: hitWhip
 hitDetectionDirection: right
-damage: 20
+damage: 50
 locationoffset:
   x: 7
   y: -1
