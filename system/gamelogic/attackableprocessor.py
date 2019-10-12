@@ -110,52 +110,77 @@ class AttackableProcessor(esper.Processor):
             meAttackable.adjustHealth(-1 * damage)
 
             # dont stun if there is no health left
-            if meAttackable.getHealth() > 0.0:
-                if meAttackable.isStunnable():
-                    stunTime = meAttackable.stunTime
-                    meAttackable.stunTimer.setTimer(timerValue=stunTime)
-                    meAttackable.stunTimer.start()
-                    meAttackable.isStunned = True
-                    meAttackable.addStun(stunTime=stunTime)
+            if meAttackable.getHealth() <= 0.0:
+                return
 
-                    messaging.add(
-                        type=MessageType.EntityStun,
-                        data={
-                            'timerValue': stunTime,
-                        },
-                        groupId = meGroupId.getId(),
-                    )
+            # handle: stun
+            if meAttackable.isStunnable():
+                stunTime = meAttackable.stunTime
+                meAttackable.stunTimer.setTimer(timerValue=stunTime)
+                meAttackable.stunTimer.start()
+                meAttackable.isStunned = True
+                meAttackable.addStun(stunTime=stunTime)
 
-                healthPercentage = meAttackable.getHealthPercentage()
-                # color the texture if we are not dead
-                if healthPercentage > 0.5:
-                    meRenderable.texture.setOverwriteColorFor(
-                        0.1, ColorPalette.getColorByColor(Color.yellow))
+                messaging.add(
+                    type=MessageType.EntityStun,
+                    data={
+                        'timerValue': stunTime,
+                    },
+                    groupId = meGroupId.getId(),
+                )
+
+            # handle: knockback
+            if True:
+                if direction is Direction.left: 
+                    x = -1
                 else:
-                    meRenderable.texture.setOverwriteColorFor(
-                        0.1, ColorPalette.getColorByColor(Color.red))
+                    x = 1
 
-                if Config.showEnemyDamageNumbers:
+                directMessaging.add(
+                    groupId = meGroupId.getId(),
+                    type = DirectMessageType.moveEnemy,
+                    data = {
+                        'x': x,
+                        'y': 0,
+                        'dontChangeDirection': True,
+                        'updateTexture': False,
+                        'force': True,
+                    },
+                )
+
+            # gfx: set texture color
+            healthPercentage = meAttackable.getHealthPercentage()
+            # color the texture if we are not dead
+            if healthPercentage > 0.5:
+                meRenderable.texture.setOverwriteColorFor(
+                    0.1, ColorPalette.getColorByColor(Color.yellow))
+            else:
+                meRenderable.texture.setOverwriteColorFor(
+                    0.1, ColorPalette.getColorByColor(Color.red))
+
+            # gfx: show floating damage numbers
+            if Config.showEnemyDamageNumbers:
+                messaging.add(
+                    type=MessageType.EmitParticleEffect,
+                    data= {
+                        'location': meRenderable.getLocationTopCenter(),
+                        'effectType': ParticleEffectType.floatingDamage,
+                        'damage': damage,
+                        'byPlayer': byPlayer,
+                        'direction': Direction.none,
+                    }
+                )
+
+            # gfx: emit on-hit particles
+            if Config.showBurstOnImpact:
+                if damage > Config.showBurstOnImpactDamage:
                     messaging.add(
                         type=MessageType.EmitParticleEffect,
                         data= {
-                            'location': meRenderable.getLocationTopCenter(),
-                            'effectType': ParticleEffectType.floatingDamage,
-                            'damage': damage,
+                            'location': meRenderable.getAttackBaseLocationInverted(),
+                            'effectType': ParticleEffectType.hitBurst,
+                            'damage': 0,
                             'byPlayer': byPlayer,
-                            'direction': Direction.none,
+                            'direction': direction,
                         }
                     )
-
-                if Config.showBurstOnImpact:
-                    if damage > Config.showBurstOnImpactDamage:
-                        messaging.add(
-                            type=MessageType.EmitParticleEffect,
-                            data= {
-                                'location': meRenderable.getAttackBaseLocationInverted(),
-                                'effectType': ParticleEffectType.hitBurst,
-                                'damage': 0,
-                                'byPlayer': byPlayer,
-                                'direction': direction,
-                            }
-                        )
