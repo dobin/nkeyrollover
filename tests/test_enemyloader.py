@@ -4,6 +4,7 @@ import unittest
 
 from game.enemyloader import EnemyLoader
 from game.enemytype import EnemyType
+from texture.filetextureloader import fileTextureLoader
 from texture.character.charactertexturetype import CharacterTextureType
 from system.gamelogic.weapontype import WeaponType
 import game.isunittest
@@ -13,6 +14,7 @@ class EnemyLoaderTest(unittest.TestCase):
     def test_loadEnemy(self):
         game.isunittest.setIsUnitTest()
 
+        fileTextureLoader.loadFromFiles()
         enemyLoader = EnemyLoader()
         enemySeed = enemyLoader.getSeedForEnemy(EnemyType.unittest)
 

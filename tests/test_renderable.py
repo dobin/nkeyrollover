@@ -94,8 +94,14 @@ class RenderableTest(unittest.TestCase):
         p = Coordinates(9, 9)
         self.assertFalse(renderable.isHitBy([p]))
         p = Coordinates(13, 13)
+
+        # in sprite, but dest is empty
         self.assertFalse(renderable.isHitBy([p]))
         p = Coordinates(10, 10)
+        # in sprite, but on head (not empty)
+        self.assertFalse(renderable.isHitBy([p]))
+        p = Coordinates(11, 10)
+
         self.assertTrue(renderable.isHitBy([p]))
         p = Coordinates(12, 12)
         self.assertTrue(renderable.isHitBy([p]))
