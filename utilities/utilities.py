@@ -132,6 +132,7 @@ class Utility(object):
         animation: Animation, animationType :CharacterAnimationType,
         characterTextureType :CharacterTextureType
     ):
+        logging.debug("Load: {} {}".format(animationType, characterTextureType))
         if len(animation.arr) != animation.frameCount:
             raise Exception("Animation {} / {} invalid: frameCount={}, but array contains {}"
                 .format(characterTextureType, animationType.name, animation.frameCount, len(animation.arr)))

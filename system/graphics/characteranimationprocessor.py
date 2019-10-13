@@ -33,7 +33,7 @@ class CharacterAnimationProcessor(esper.Processor):
 
             meRenderable.texture.changeAnimation(
                 characterAnimationType=CharacterAnimationType.knockdown,
-                direction=meRenderable.direction,
+                direction=message.data['direction'],
                 interrupt=True)
 
 
