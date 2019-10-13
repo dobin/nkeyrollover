@@ -117,6 +117,7 @@ class OffensiveSkill(object):
             data = {
                 'x': moveX,
                 'y': 0,
+                'dontChangeDirection': False,
             }
         )
 

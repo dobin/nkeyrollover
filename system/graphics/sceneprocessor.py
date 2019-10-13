@@ -131,7 +131,8 @@ class SceneProcessor(esper.Processor):
                     type = DirectMessageType.movePlayer,
                     data = {
                         'x': distX,
-                        'y': 0
+                        'y': 0,
+                        'dontChangeDirection': False,
                     },
                 )
 
