@@ -17,12 +17,14 @@ from game.textureemiter import TextureEmiter
 from texture.action.actiontype import ActionType
 from common.direction import Direction
 from system.singletons.renderablecache import renderableCache
+from texture.filetextureloader import fileTextureLoader
 
 
 class TextureEmiterTest(unittest.TestCase):
     def test_actionemiter(self):
         game.isunittest.setIsUnitTest()
 
+        fileTextureLoader.loadFromFiles()
         self.viewport = MockWin(20, 10)
         self.world = esper.World()
         self.textureEmiter = TextureEmiter(viewport=self.viewport, world=self.world)
@@ -45,7 +47,6 @@ class TextureEmiterTest(unittest.TestCase):
             location=location,
             fromPlayer=True,
             direction=Direction.right,
-            damage=100
         )
 
         messages = messaging.getByType(MessageType.PlayerAttack)
