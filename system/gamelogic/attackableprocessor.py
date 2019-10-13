@@ -140,7 +140,7 @@ class AttackableProcessor(esper.Processor):
                     )
 
             # handle: knockback
-            if knockback:
+            if knockback and random.random() < meAttackable.knockbackChance:
                 if direction is Direction.left:
                     x = -1
                 else:
