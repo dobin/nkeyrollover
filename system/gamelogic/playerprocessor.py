@@ -14,6 +14,7 @@ from system.gamelogic.attackable import Attackable
 from system.gamelogic.offensiveattack import OffensiveAttack
 from utilities.entityfinder import EntityFinder
 from system.gamelogic.player import Player
+from common.direction import Direction
 
 logger = logging.getLogger(__name__)
 
@@ -74,6 +75,7 @@ class PlayerProcessor(esper.Processor):
             viewport=self.viewport,
             parent=None,
             coordinates=spawnCoordinates,
+            direction=Direction.right,
             name='Player')
 
         esperData = EsperData(self.world, playerEntity, 'player')
