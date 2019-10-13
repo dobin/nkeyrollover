@@ -123,17 +123,25 @@ class AttackableProcessor(esper.Processor):
                 meAttackable.isStunned = True
                 meAttackable.addStun(stunTime=stunTime)
 
-                messaging.add(
-                    type=MessageType.EntityStun,
-                    data={
-                        'timerValue': stunTime,
-                    },
-                    groupId = meGroupId.getId(),
-                )
+                # handle: knockdown
+                if random.random() < meAttackable.knockdownChance:
+                    messaging.add(
+                        type=MessageType.EntityKnockdown,
+                        data={},
+                        groupId = meGroupId.getId(),
+                    )
+                else:
+                    messaging.add(
+                        type=MessageType.EntityStun,
+                        data={
+                            'timerValue': stunTime,
+                        },
+                        groupId = meGroupId.getId(),
+                    )
 
             # handle: knockback
             if knockback:
-                if direction is Direction.left: 
+                if direction is Direction.left:
                     x = -1
                 else:
                     x = 1

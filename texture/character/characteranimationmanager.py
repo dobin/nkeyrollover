@@ -58,8 +58,18 @@ class CharacterAnimationManager(object):
                     1,
                     0,
                     head,
-                    skip=CharacterAnimationType.dying)
-                self.updateAllAnimations(characterAnimationObj, 1, 1, body)
+                    skip=[
+                        CharacterAnimationType.dying,
+                        CharacterAnimationType.knockdown
+                    ])
+                self.updateAllAnimations(
+                    characterAnimationObj,
+                    1,
+                    1,
+                    body,
+                    skip=[
+                        CharacterAnimationType.knockdown
+                    ])
 
             self.characterAnimationObjs[characterTextureType] = characterAnimationObj
 
@@ -132,7 +142,7 @@ class CharacterAnimationManager(object):
 
     def updateAllAnimationsIn(self, x, y, char, animations, skip=None):
         for key in animations:
-            if key == skip:
+            if skip is not None and key in skip:
                 continue
 
             for animation in animations[key]:

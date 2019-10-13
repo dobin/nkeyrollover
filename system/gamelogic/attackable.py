@@ -8,14 +8,18 @@ logger = logging.getLogger(__name__)
 
 
 class Attackable():
-    def __init__(self, initialHealth=100, stunTime=0.75, stunCount=3, stunTimeFrame=3):
+    def __init__(
+        self, initialHealth=100, stunTime=0.75, stunCount=3, stunTimeFrame=3, 
+        knockdownChance=0.0
+    ):
         self.health = initialHealth
         self.initialHealth = initialHealth
+
+        self.knockdownChance = knockdownChance
 
         self.maxStunCount = stunCount
         self.stunTimeFrame = stunTimeFrame
         self.stunTime = stunTime
-
         self.isStunned = False
         self.stunTimer = Timer(0.0)
         self.stunTimer.setActive(False)
@@ -80,3 +84,7 @@ class Attackable():
 
     def setMaxStunCount(self, maxStunCount):
         self.maxStunCount = maxStunCount
+
+
+    def setKnockdownChance(self, knockdownChance):
+        self.knockdownChance = knockdownChance

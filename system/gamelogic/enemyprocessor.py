@@ -141,6 +141,7 @@ class EnemyProcessor(esper.Processor):
         enemyCached.attackable.setMaxStunCount(enemySeed.stunCount)
         enemyCached.attackable.setStunTime(enemySeed.stunTime)
         enemyCached.attackable.setStunTimeFrame(enemySeed.stunTimeFrame)
+        enemyCached.attackable.setKnockdownChance(enemySeed.knockdownChance)
         enemyCached.ai.setEnemyType(enemyType)
         enemyCached.ai.initAi(esperData=esperData)
         enemyCached.renderable.texture.setCharacterTextureType(

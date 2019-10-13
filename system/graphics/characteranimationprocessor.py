@@ -22,6 +22,19 @@ class CharacterAnimationProcessor(esper.Processor):
         self.animationUpdateAttack()
         self.animationUpdateStun()
         self.animationUpdateDying()
+        self.animationUpdateKnockdown()
+
+
+    def animationUpdateKnockdown(self):
+        for message in messaging.getByType(MessageType.EntityKnockdown):
+            entity = EntityFinder.findCharacterByGroupId(self.world, message.groupId)
+            meRenderable = self.world.component_for_entity(
+                entity, system.graphics.renderable.Renderable)
+
+            meRenderable.texture.changeAnimation(
+                characterAnimationType=CharacterAnimationType.knockdown,
+                direction=meRenderable.direction,
+                interrupt=True)
 
 
     def animationUpdateDying(self):
@@ -61,7 +74,7 @@ class CharacterAnimationProcessor(esper.Processor):
     def animationUpdateAttack(self):
         messages = messaging.get()
         for message in messages:
-            ##
+            # player
             if message.type == MessageType.PlayerAttack:
                 playerEntity = EntityFinder.findPlayer(self.world)
                 playerRenderable = self.world.component_for_entity(
@@ -72,18 +85,7 @@ class CharacterAnimationProcessor(esper.Processor):
                     playerRenderable.direction,
                     interrupt=True)
 
-            if message.type == MessageType.attackWindup:
-                entity = EntityFinder.findCharacterByGroupId(
-                    self.world, message.groupId)
-                entityRenderable = self.world.component_for_entity(
-                    entity, system.graphics.renderable.Renderable)
-
-                entityRenderable.texture.changeAnimation(
-                    CharacterAnimationType.hitwindup,
-                    entityRenderable.direction,
-                    interrupt=True)
-
-            ##
+            # enemies
             if message.type == MessageType.EntityAttack:
                 entity = EntityFinder.findCharacterByGroupId(
                     self.world, message.groupId)
@@ -92,6 +94,19 @@ class CharacterAnimationProcessor(esper.Processor):
 
                 entityRenderable.texture.changeAnimation(
                     CharacterAnimationType.hitting,
+                    entityRenderable.direction,
+                    interrupt=True)
+
+
+            # only for enemies
+            if message.type == MessageType.attackWindup:
+                entity = EntityFinder.findCharacterByGroupId(
+                    self.world, message.groupId)
+                entityRenderable = self.world.component_for_entity(
+                    entity, system.graphics.renderable.Renderable)
+
+                entityRenderable.texture.changeAnimation(
+                    CharacterAnimationType.hitwindup,
                     entityRenderable.direction,
                     interrupt=True)
 

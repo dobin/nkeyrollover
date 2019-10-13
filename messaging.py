@@ -28,6 +28,8 @@ class MessageType(Enum):
     AttackAt = 19
     Unittest = 20
 
+    EntityKnockdown = 21
+
 
 class Message(object):
     def __init__(self, type, data, groupId):

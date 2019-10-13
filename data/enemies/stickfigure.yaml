@@ -14,3 +14,4 @@ enemyInfo:
 stunTime: 0.75
 stunCount: 3
 stunTimeFrame: 3
+knockdownChance: 0.5
