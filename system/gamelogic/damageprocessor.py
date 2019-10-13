@@ -35,6 +35,7 @@ class DamageProcessor(esper.Processor):
                 damage = msg.data['damage']
                 byPlayer = msg.data['byPlayer']
                 direction = msg.data['direction']
+                knockback = msg.data['knockback']
 
                 if renderable.isHitBy(hitLocations):
                     directMessaging.add(
@@ -44,6 +45,7 @@ class DamageProcessor(esper.Processor):
                             'damage': damage,
                             'byPlayer': byPlayer,
                             'direction': direction,
+                            'knockback': knockback,
                         }
                     )
 

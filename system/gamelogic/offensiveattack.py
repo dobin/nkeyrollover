@@ -66,12 +66,19 @@ class OffensiveAttack():
                 'actionTextureType': actionTextureType,
                 'location': location,
                 'fromPlayer': self.parentChar.isPlayer,
-                'damage': weaponData.damage,
                 'direction': direction,
             }
         )
 
         if weaponData.damage is not None:
+            damage = weaponData.damage
+            if weaponData.damageRoll is not None:
+                damage += Utility.diceRoll(weaponData.damageRoll)
+
+            knockback = False
+            if weaponData.knockbackDmg is not None and damage > weaponData.knockbackDmg:
+                knockback = True
+
             weaponHitArea = copy.deepcopy(weaponData.weaponHitArea[direction])
             Utility.updateCoordinateListWithBase(
                 weaponHitArea=weaponHitArea, loc=location, direction=direction)
@@ -80,9 +87,10 @@ class OffensiveAttack():
                 type=MessageType.AttackAt,
                 data= {
                     'hitLocations': weaponHitArea.hitCd,
-                    'damage': weaponData.damage,
+                    'damage': damage,
                     'byPlayer': self.parentChar.isPlayer,
                     'direction': direction,
+                    'knockback': knockback,
                 }
             )
 

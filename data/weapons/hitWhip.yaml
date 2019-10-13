@@ -1,6 +1,8 @@
 actionTextureType: hitWhip
 hitDetectionDirection: right
-damage: 50
+damage: 40
+damageRoll: 1d32
+knockbackDmg: 65
 locationoffset:
   x: 7
   y: -1

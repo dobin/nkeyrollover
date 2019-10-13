@@ -100,6 +100,13 @@ class WeaponManager(object):
                 weapon.locationOffset = Coordinates(
                     locationOffset['x'], locationOffset['y'])
 
+            if 'damageRoll' in data:
+                weapon.damageRoll = data['damageRoll']
+
+            if 'knockbackDmg' in data:
+                weapon.knockbackDmg = int(data['knockbackDmg'])
+
+
         except TypeError as error:
             raise Exception("Error, missing field in yaml file {}, error {}".format(
                 filename, error

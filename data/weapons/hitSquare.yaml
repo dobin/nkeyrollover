@@ -1,4 +1,6 @@
 actionTextureType: hitSquare
 hitDetectionDirection: left
 damage: 20
+damageRoll: 1d6
+knockbackDmg: 23
 characterAnimationType: hitting

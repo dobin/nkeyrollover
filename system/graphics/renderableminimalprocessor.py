@@ -43,7 +43,6 @@ class RenderableMinimalProcessor(esper.Processor):
                 actionTextureType = message.data['actionTextureType'],
                 location = message.data['location'],
                 fromPlayer = message.data['fromPlayer'],
-                damage = message.data['damage'],
                 direction = message.data['direction']
             )
 

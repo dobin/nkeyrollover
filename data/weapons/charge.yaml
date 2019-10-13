@@ -1,6 +1,8 @@
 actionTextureType: charge
 hitDetectionDirection: left
 damage: 10
+damageRoll: 1d4
+knockbackDmg: 10
 characterAnimationType: hitting
 locationoffset:
   x: 0

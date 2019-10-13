@@ -97,9 +97,11 @@ class AttackableProcessor(esper.Processor):
                 entity, Attackable)
             meGroupId = self.world.component_for_entity(
                 entity, GroupId)
+
             damage = msg.data['damage']
             byPlayer = msg.data['byPlayer']
             direction = msg.data['direction']
+            knockback = msg.data['knockback']
             isPlayer = self.world.has_component(entity, Player)
 
             # enemy can attack player, and vice-versa
@@ -130,7 +132,7 @@ class AttackableProcessor(esper.Processor):
                 )
 
             # handle: knockback
-            if True:
+            if knockback:
                 if direction is Direction.left: 
                     x = -1
                 else:

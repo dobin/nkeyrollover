@@ -1,5 +1,6 @@
 import logging
 import math
+import random
 
 from texture.character.charactertexturetype import CharacterTextureType
 from texture.character.characteranimationtype import CharacterAnimationType
@@ -11,6 +12,13 @@ logger = logging.getLogger(__name__)
 
 
 class Utility(object):
+    @staticmethod
+    def diceRoll(diceStr):
+        # like "1d6"
+        d = int(diceStr.split('d')[1])
+        return random.randint(1, d)
+
+
     @staticmethod
     def distance(coord1 :Coordinates, coord2 :Coordinates):
         res = {

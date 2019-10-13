@@ -14,6 +14,9 @@ class WeaponData(object):
         self.weaponHitArea :Dict[Direction, WeaponHitArea] = {}
 
         self.damage :int = None
+        self.damageRoll :str = None
+        self.knockbackDmg :int = None
+
         self.locationOffset :Coordinates = Coordinates(0, 0)
         self.characterAnimationType :CharacterAnimationType = None
 

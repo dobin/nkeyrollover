@@ -33,7 +33,7 @@ class TextureEmiter(object):
 
 
     def makeActionTexture(
-        self, actionTextureType, location, fromPlayer, direction, damage=None
+        self, actionTextureType, location, fromPlayer, direction
     ):
         renderable = renderableCache.getRenderable(TextureType.action)
 
@@ -42,8 +42,8 @@ class TextureEmiter(object):
             actionType=actionTextureType,
             direction=direction)
         renderable.texture.setName(
-            name="ActionTexture (actionTexture={} fromPlayer={}, damage={})".format(
-                actionTextureType, fromPlayer, damage))
+            name="ActionTexture (actionTexture={} fromPlayer={})".format(
+                actionTextureType, fromPlayer))
 
         # manage renderable
         if direction is Direction.left:
@@ -52,8 +52,8 @@ class TextureEmiter(object):
         renderable.setZ(Config.zActionTexture)
         renderable.setActive(True)
         renderable.setName(
-            name="ActionRenderable (actionTexture={} fromPlayer={}, damage={})".format(
-                actionTextureType, fromPlayer, damage))
+            name="ActionRenderable (actionTexture={} fromPlayer={})".format(
+                actionTextureType, fromPlayer))
 
         self.addRenderable(renderable)
 
