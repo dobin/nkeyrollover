@@ -157,6 +157,18 @@ class Renderable(object):
             currentFrame = self.texture.getCurrentFrame()
             xOff = hitCoords.x - self.coordinates.x
             yOff = hitCoords.y - self.coordinates.y
+
+            if yOff > len(currentFrame):
+                logging.error("CollideWithPoint error: {} {}".format(
+                    yOff, len(currentFrame)
+                ))
+                return False
+            if xOff > len(currentFrame[yOff]):
+                logging.error("CollideWithPoint error: {} {}".format(
+                    xOff, len(currentFrame[yOff])
+                ))
+                return False
+
             if currentFrame[yOff][xOff] != '':
                 return True
 
