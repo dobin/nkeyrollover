@@ -15,4 +15,4 @@ stunTime: 0.75
 stunCount: 3
 stunTimeFrame: 3
 wanderAttackDistance: 20
-knockdownChance: 0.1
+knockdownChance: 0.2
