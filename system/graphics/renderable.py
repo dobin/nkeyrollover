@@ -158,12 +158,12 @@ class Renderable(object):
             xOff = hitCoords.x - self.coordinates.x
             yOff = hitCoords.y - self.coordinates.y
 
-            if yOff > len(currentFrame):
+            if yOff >= len(currentFrame):
                 logging.error("CollideWithPoint error: {} {}".format(
                     yOff, len(currentFrame)
                 ))
                 return False
-            if xOff > len(currentFrame[yOff]):
+            if xOff >= len(currentFrame[yOff]):
                 logging.error("CollideWithPoint error: {} {}".format(
                     xOff, len(currentFrame[yOff])
                 ))
