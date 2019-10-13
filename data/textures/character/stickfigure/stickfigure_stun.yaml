@@ -2,4 +2,4 @@ endless: True
 advanceByStep: False
 frameColors:
   - white
-direction: right
+direction: left
