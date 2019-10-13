@@ -183,6 +183,7 @@ class Particle(object):
                         'damage': self.damage,
                         'byPlayer': self.byPlayer,
                         'direction': Direction.none,
+                        'knockback': False,
                     }
                 )
 
