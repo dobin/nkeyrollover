@@ -142,9 +142,9 @@ class AttackableProcessor(esper.Processor):
             # handle: knockback
             if knockback and random.random() < meAttackable.knockbackChance:
                 if direction is Direction.left:
-                    x = -1
+                    x = -2
                 else:
-                    x = 1
+                    x = 2
 
                 directMessaging.add(
                     groupId = meGroupId.getId(),
