@@ -42,7 +42,8 @@ class MovementProcessor(esper.Processor):
                 playerRenderable,
                 playerGroupId.getId(),
                 msg.data['x'],
-                msg.data['y'])
+                msg.data['y'],
+                msg.data['dontChangeDirection'])
 
             if didMove:
                 extcords = ExtCoordinates(

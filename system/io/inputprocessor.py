@@ -67,6 +67,8 @@ class InputProcessor(esper.Processor):
         y = 0
 
         if self.movementTimer.timeIsUp():
+            dontChangeDirection = False
+
             if key == curses.KEY_LEFT:
                 if Config.xDoubleStep:
                     x = -2
@@ -75,6 +77,29 @@ class InputProcessor(esper.Processor):
                 didMove = True
 
             elif key == curses.KEY_RIGHT:
+                if Config.xDoubleStep:
+                    x = 2
+                else:
+                    x = 1
+                didMove = True
+
+            if key == 393:  # shift left
+                dontChangeDirection = True
+                if Config.xDoubleStep:
+                    x = -2
+                else:
+                    x = -1
+                didMove = True
+
+            elif key == curses.KEY_RIGHT:
+                if Config.xDoubleStep:
+                    x = 2
+                else:
+                    x = 1
+                didMove = True
+
+            if key == 402:  # shift right
+                dontChangeDirection = True
                 if Config.xDoubleStep:
                     x = 2
                 else:
@@ -98,7 +123,8 @@ class InputProcessor(esper.Processor):
                 type = DirectMessageType.movePlayer,
                 data = {
                     'x': x,
-                    'y': y
+                    'y': y,
+                    'dontChangeDirection': dontChangeDirection,
                 },
             )
 
