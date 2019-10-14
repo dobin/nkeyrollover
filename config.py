@@ -46,8 +46,8 @@ class _Config:
     showEnemyWanderDest = False
     showEnemyHitbox = False
     showAttackDestinations = False
-    enemiesInStateAttacking = 1
-    enemiesInStateChase = 2
+    enemiesInStateAttacking = 2
+    enemiesInStateChase = 3
 
     showEnemyDamageNumbers = True
     showBurstOnImpact = True
