@@ -111,6 +111,10 @@ class AnimationTexture(Texture):
             while x < len(currentFrame[y]):
                 column = currentFrame[y][x]
                 if column != '':
+                    # This only works for non UTF8 chars :-(
+                    # and background is utf8, so not usable
+                    # ch = viewport.win.inch(pos.y + y, pos.x + x)
+                    # color = ch & curses.A_COLOR
                     viewport.addstr(
                         pos.y + y,
                         pos.x + x,
