@@ -76,7 +76,7 @@ class ScenePlayground(SceneBase):
             characterAnimationType=CharacterAnimationType.dying,
             direction=meRenderable.direction,
             subtype=0,
-            interrupt=True)
+            interrupt=False)
 
 
     def showDestAroundPlayer(self):

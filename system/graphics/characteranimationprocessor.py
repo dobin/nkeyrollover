@@ -48,7 +48,7 @@ class CharacterAnimationProcessor(esper.Processor):
                 characterAnimationType=CharacterAnimationType.dying,
                 direction=meRenderable.direction,
                 subtype=animationIndex,
-                interrupt=True)
+                interrupt=False)
 
 
     def animationUpdateMove(self):

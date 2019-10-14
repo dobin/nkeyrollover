@@ -1,7 +1,11 @@
 endless: False
 advanceByStep: False
 frameColors:
-  - white
+  - red
+  - blue
+  - yellow
 direction: right
 frameTime: 
-  - 0.3
+  - 0.6
+  - 0.6
+  - 0.8

@@ -78,7 +78,7 @@ class AnimationTexture(Texture):
                         logger.error("Frameidx {} larget than frametime arr {}".format(
                             self.frameIndex, self.animation.frameTime))
                     self.frameTimeLeft = self.animation.frameTime[self.frameIndex]
-                    self.frameIndex = (self.frameIndex + 1) % self.animation.frameCount
+                    self.frameIndex += 1
 
 
     def draw(self, viewport, pos):
