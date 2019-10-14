@@ -127,9 +127,7 @@ class AttackableProcessor(esper.Processor):
                 if random.random() < meAttackable.knockdownChance:
                     messaging.add(
                         type=MessageType.EntityKnockdown,
-                        data={
-                            'direction': direction,
-                        },
+                        data={},
                         groupId = meGroupId.getId(),
                     )
                 else:
