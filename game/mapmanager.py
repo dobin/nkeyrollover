@@ -11,6 +11,7 @@ from game.viewport import Viewport
 from system.graphics.renderableminimal import RenderableMinimal
 from system.graphics.renderable import Renderable
 from common.coordinates import Coordinates
+from game.mapgenerator import MapGenerator
 
 logger = logging.getLogger(__name__)
 
@@ -24,10 +25,13 @@ class MapManager(object):
         self.xpmap = None
         self.color :Color = ColorPalette.getColorByColor(Color.grey)
         self.mapRenderables = None
+        self.mapGenerator = MapGenerator()
 
 
     def loadMap(self, name):
-        self.openXpMap("data/map/{}.xp".format(name))
+        #self.openXpMap("data/map/{}.xp".format(name))
+        self.xpmap = self.mapGenerator.generate()
+
         # array of len(mapwidth), with arrays
         self.mapRenderables = [None] * self.xpmap['width']
         self.loadMapRenderables(name)
