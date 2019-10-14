@@ -82,6 +82,7 @@ class Game(object):
         )
         damageProcessor = DamageProcessor()
 
+        self.sceneProcessor :SceneProcessor = sceneProcessor  # show F1 stats
         self.viewport :Viewport = viewport  # for keyboardinput in nkeyrollover.py
         self.mapManager :MapManager = mapManager  # map is handled here in game
         self.sceneManager :SceneManager = sceneManager  # to check for showmap here in game
