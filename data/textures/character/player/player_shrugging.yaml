@@ -4,6 +4,6 @@ frameTime:
   - 0.1
   - 0.5
 frameColors:
-  - white
-  - white
+  - brightwhite
+  - brightwhite
 direction: symmetrical

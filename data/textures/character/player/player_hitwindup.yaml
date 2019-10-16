@@ -1,5 +1,5 @@
 endless: False
 advanceByStep: False
 frameColors:
-  - white
+  - brightwhite
 direction: right

@@ -8,10 +8,10 @@ frameTime:
   - 0.2
   - 0.1
 frameColors:
-  - white
-  - white
-  - white
-  - white
-  - white
-  - white
+  - brightwhite
+  - brightwhite
+  - brightwhite
+  - brightwhite
+  - brightwhite
+  - brightwhite
 direction: right
