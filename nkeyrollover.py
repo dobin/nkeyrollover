@@ -13,6 +13,9 @@ from game.game import Game
 from utilities.utilities import Utility
 from system.io.keyboardinput import KeyboardInput
 
+fpsOverrun = []
+frameCount = 0
+
 
 class Keyrollover(object):
     def __init__(self, screen):
@@ -63,6 +66,9 @@ class Keyrollover(object):
 
 
     def loop(self):
+        global frameCount
+        global fpsOverrun
+
         n = 0
         targetFrameTime = 1.0 / Config.fps  # we try to keep it...
         timeStart = 0
@@ -71,9 +77,6 @@ class Keyrollover(object):
 
         while self.game.gameRunning:
             timeStart = time.time()
-
-            # asciimatics workaround to clear buffer
-            self.win._buffer.clear(Screen.COLOUR_WHITE, 0, 0)
 
             self.game.draw1(n)
             self.game.advance(targetFrameTime, n)
@@ -88,6 +91,7 @@ class Keyrollover(object):
             if workTime > targetFrameTime:
                 logging.warning("{}: Could not keep FPS! Worktime was: {}ms".format(
                     n, workTime * 100.0))
+                fpsOverrun.append(workTime * 100.0)
 
             targetSleepTime = targetFrameTime - workTime
             if targetSleepTime < 0:
@@ -95,10 +99,18 @@ class Keyrollover(object):
             else:
                 time.sleep(targetSleepTime)
             n = n + 1
+            frameCount = n
 
+
+def evaluateFpsOverrun():
+    logging.info("Frm: {}".format(frameCount))
+    logging.info("Cnt: {} ({}%)".format(len(fpsOverrun), len(fpsOverrun) / frameCount))
+    #logging.info("All: {}".format(fpsOverrun))
+    logging.info("Max: {}".format(max(fpsOverrun)))
 
 
 def signal_handler(sig, frame):
+    evaluateFpsOverrun()
     sys.exit(0)
 
 
