@@ -2,6 +2,7 @@ import logging
 
 from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
+from utilities.color import Color
 from system.gamelogic.attackable import Attackable
 from system.gamelogic.player import Player
 from system.gamelogic.offensiveattack import OffensiveAttack
@@ -11,6 +12,7 @@ from utilities.entityfinder import EntityFinder
 from system.singletons.apm import apm
 from system.singletons.damagestat import damageStat
 from asciimatics.screen import Screen
+from config import Config
 
 logger = logging.getLogger(__name__)
 
@@ -38,18 +40,20 @@ class StatusBar(object):
         player = self.world.world.component_for_entity(
             playerEntity, Player)
 
-        s = "Health: " + str(playerAttackable.getHealth())
+        color = ColorPalette.getColorByColor(Color.black)
+        bgcolor = ColorPalette.getColorByColor(Color.white)
+
+        s = " Health: " + str(playerAttackable.getHealth())
         s += "  Points: " + str(player.points)
-
+        s += " " * (Config.columns - 2 - len(s))
         #s += "  FPS: %.0f" % (fps)
-        color = ColorPalette.getColorByColorType(ColorType.menu, None)
-        self.viewport.addstr(1, 2, s, color)
+        self.viewport.addstrStatic(1, 1, s, color, bg=bgcolor)
 
-        self.printSkillbar(color, playerEntity)
-        self.printAttackbar(color, playerEntity)
+        self.printSkillbar(color, bgcolor, playerEntity)
+        self.printAttackbar(color, bgcolor, playerEntity)
 
 
-    def printSkillbar(self, color, playerEntity):
+    def printSkillbar(self, color, bgcolor, playerEntity):
         playerOffensiveSkill = self.world.world.component_for_entity(
             playerEntity, OffensiveSkill)
 
@@ -57,13 +61,13 @@ class StatusBar(object):
         n = 0
         for skill in playerOffensiveSkill.skillStatus:
             if playerOffensiveSkill.isRdy(skill):
-                self.viewport.addstr(1, basex + n, skill, Screen.COLOUR_BLACK, bg=Screen.COLOUR_GREEN)
+                self.viewport.addstrStatic(1, basex + n, skill, Screen.COLOUR_BLACK, bg=Screen.COLOUR_GREEN)
             else:
-                self.viewport.addstr(1, basex + n, skill, Screen.COLOUR_BLACK, bg=Screen.COLOUR_RED)
+                self.viewport.addstrStatic(1, basex + n, skill, Screen.COLOUR_BLACK, bg=Screen.COLOUR_RED)
 
             n += 1
 
-    def printAttackbar(self, color, playerEntity):
+    def printAttackbar(self, color, bgcolor, playerEntity):
         playerGroupId = self.world.world.component_for_entity(
             playerEntity, GroupId)
         playerOffensiveAttack = EntityFinder.findOffensiveAttackByGroupId(
@@ -71,22 +75,25 @@ class StatusBar(object):
             playerGroupId.getId())
 
         weaponIdx = 42
-        self.viewport.addstr(
+        self.viewport.addstrStatic(
             1,
             weaponIdx,
             'W:' + playerOffensiveAttack.getWeaponStr(),
-            color)
+            color,
+            bg=bgcolor)
 
         weaponIdx = 52
-        self.viewport.addstr(
+        self.viewport.addstrStatic(
             1,
             weaponIdx,
             'APM:' + str(int(apm.getApm() * 60)),
-            color)
+            color,
+            bg=bgcolor)
 
         weaponIdx = 62
-        self.viewport.addstr(
+        self.viewport.addstrStatic(
             1,
             weaponIdx,
             'DMG/s:' + str(int(damageStat.getDamageStat())),
-            color)
+            color,
+            bg=bgcolor)

@@ -31,6 +31,8 @@ from texture.filetextureloader import fileTextureLoader
 from game.offenseloader.fileoffenseloader import fileOffenseLoader
 from utilities.colorpalette import ColorPalette
 from utilities.color import Color
+from config import Config
+from asciimatics.screen import Screen
 
 logger = logging.getLogger(__name__)
 
@@ -173,12 +175,99 @@ class Game(object):
         # x generate: DirectMessage      receiveDamage
         self.world.add_processor(damageProcessor)
 
+        self.box = self.createBg(Config.columns, Config.rows)
+
 
     def draw1(self, frame :int):
         """Draws backmost layer (e.g. map)"""
+        # clear buffer
+        self.viewport.win._buffer._double_buffer = self.copyBg()
+
         if self.sceneManager.currentScene.showMap():
-            self.statusBar.drawStatusbar()
             self.mapManager.draw()
+
+
+    def copyBg(self):
+        box = [line[:] for line in self.box]
+        return box
+
+
+    def createBg(self, width, height, uni=False):
+        box = []
+        width = self.viewport.win._buffer._width
+        height = self.viewport.win._buffer._height
+
+        fg = ColorPalette.getColorByColor(Color.black)
+        bg = ColorPalette.getColorByColor(Color.black)
+        attr = Screen.A_BOLD
+        w = 1
+
+        tl = (ord(u"┌"), fg, attr, bg, w)
+        tr = (ord(u"┐"), fg, attr, bg, w)
+        bl = (ord(u"└"), fg, attr, bg, w)
+        br = (ord(u"┘"), fg, attr, bg, w)
+        h = (ord(u"─"), fg, attr, bg, w)
+        v = (ord(u"│"), fg, attr, bg, w)
+        s = (ord(u" "), fg, attr, bg, w)
+
+        meWidth = Config.columns
+        meHeight = Config.rows
+
+        # top line
+        line = []
+        line.append(tl)
+        n = 0
+        while n < meWidth - 2:
+            line.append(h)
+            n += 1
+        line.append(tr)
+        while n < width:
+            line.append(s)
+            n += 1
+        box.append(line)
+
+        # middle
+        for _ in range(meHeight - 2):
+            line = []
+            line.append(v)
+            n = 0
+            while n < meWidth - 2:
+                line.append(s)
+                n += 1
+            line.append(v)
+
+            # rest
+            while n < width:
+                line.append(s)
+                n += 1
+
+            box.append(line)
+
+        # bottom line
+        line = []
+        line.append(bl)
+        n = 0
+        while n < meWidth - 2:
+            line.append(h)
+            n += 1
+        line.append(br)
+        while n < width:
+            line.append(s)
+            n += 1
+        box.append(line)
+
+        # rest
+        y = meHeight
+        while y < height:
+            line = []
+            n = 0
+            while n < width:
+                line.append(s)
+                n += 1
+            y += 1
+            box.append(line)
+
+        return box
 
 
     def advance(self, deltaTime :float, frame :int):
@@ -197,6 +286,9 @@ class Game(object):
 
     def draw2(self, frame :int):
         """Draws foremost layer (e.g. "pause" sign)"""
+        if self.sceneManager.currentScene.showMap():
+            self.statusBar.drawStatusbar()
+
         if self.showStats:
             self.drawStats()
 

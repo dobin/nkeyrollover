@@ -23,6 +23,11 @@ class Viewport(object):
         return self.x + Config.columns - 2
 
 
+    def addstrStatic(self, y, x, char, color, attr=0, bg=0):
+        """Print at a static location (does not move with map)"""
+        self.win.print_at(char, x, y, color, attr, bg=bg)
+
+
     def addstr(self, y, x, char, color, attr=0, bg=0, knownDrawable=False, setbg=False):
         # Note: This function should be as fast as possible.
 
