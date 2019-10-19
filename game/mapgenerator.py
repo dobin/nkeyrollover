@@ -116,8 +116,9 @@ class MapGenerator(object):
 
         m = ' '
         color = random.choice([
-            ColorPalette.getColorByColor(Color.green),
             ColorPalette.getColorByColor(Color.blue),
+            ColorPalette.getColorByColor(Color.blue),
+            ColorPalette.getColorByColor(Color.black),
         ])
         # attr = random.choice(
         #     None,
