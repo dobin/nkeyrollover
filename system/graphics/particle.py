@@ -1,6 +1,6 @@
 import math
 import logging
-import curses
+from asciimatics.screen import Screen
 
 from utilities.timer import Timer
 from utilities.colorpalette import ColorPalette
@@ -110,7 +110,7 @@ class Particle(object):
 
     def fadeoutSetColor(self):
         if self.life > (self.originalLife / 2):
-            self.colorOpt = curses.A_BOLD
+            self.colorOpt = Screen.A_BOLD
         else:
             self.colorOpt = 0
 
@@ -199,7 +199,7 @@ class Particle(object):
 
 
     def draw(self):
-        self.viewport.addstr(self.y, self.x, self.char, self.color | self.colorOpt)
+        self.viewport.addstr(self.y, self.x, self.char, self.color, self.colorOpt)
 
 
     def isActive(self):

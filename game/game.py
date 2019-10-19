@@ -1,5 +1,4 @@
 import logging
-import curses
 import esper
 
 from system.graphics.particleprocessor import ParticleProcessor
@@ -30,25 +29,28 @@ from system.singletons.renderablecache import renderableCache
 from system.gamelogic.damageprocessor import DamageProcessor
 from texture.filetextureloader import fileTextureLoader
 from game.offenseloader.fileoffenseloader import fileOffenseLoader
+from utilities.colorpalette import ColorPalette
+from utilities.color import Color
 
 logger = logging.getLogger(__name__)
 
 
 class Game(object):
     def __init__(self, win, menuwin):
-        self.win = win
-
-        self.world :esper.World = esper.World()
-        self.statusBar :StatusBar = StatusBar(world=self, menuwin=menuwin)
         self.pause :bool = False
         self.gameRunning :bool = True
         self.showStats = False
         self.showLog = False
 
+        self.win = win
+        self.world :esper.World = esper.World()
+
+        viewport :Viewport = Viewport(win=win, world=self)
+        self.statusBar :StatusBar = StatusBar(world=self, viewport=viewport)
+
         fileTextureLoader.loadFromFiles()
         fileOffenseLoader.loadFromFiles()
 
-        viewport :Viewport = Viewport(win=win, world=self)
         textureEmiter :TextureEmiter = TextureEmiter(
             viewport=viewport,
             world=self.world)
@@ -203,7 +205,11 @@ class Game(object):
             self.logEntityStats()
 
         if self.pause:
-            self.win.addstr(12, 40, "Paused", curses.color_pair(7))
+            self.win.addstr(
+                12,
+                40,
+                "Paused",
+                ColorPalette.getColorByColor(Color.white))
 
 
     def logEntityStats(self):

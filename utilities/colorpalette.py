@@ -1,5 +1,5 @@
 import logging
-import curses
+from asciimatics.screen import Screen
 
 from .colortype import ColorType
 from game.viewport import Viewport
@@ -10,28 +10,6 @@ logger = logging.getLogger(__name__)
 
 
 class ColorPalette(object):
-    @staticmethod
-    def cursesInitColor():
-        # Initialize color pairs
-        curses.start_color()
-
-        curses.init_pair(1, curses.COLOR_GREEN, 0)
-        curses.init_pair(2, curses.COLOR_MAGENTA, 0)
-        curses.init_pair(3, curses.COLOR_RED, 0)
-        curses.init_pair(4, curses.COLOR_YELLOW, 0)
-        curses.init_pair(5, curses.COLOR_BLUE, 0)
-        curses.init_pair(6, curses.COLOR_CYAN, 0)
-        curses.init_pair(7, curses.COLOR_WHITE, 0)
-        curses.init_pair(8, curses.COLOR_BLACK, 0)
-
-        # for skill indication
-        curses.init_pair(9, curses.COLOR_WHITE, curses.COLOR_GREEN)
-        curses.init_pair(10, curses.COLOR_WHITE, curses.COLOR_RED)
-
-        # intro
-        curses.init_pair(11, curses.COLOR_BLACK, curses.COLOR_BLUE)
-
-
     @staticmethod
     def getColorByStr(s):
         return Color[s]
@@ -48,45 +26,45 @@ class ColorPalette(object):
             return color.name
 
         if color is Color.brightwhite:
-            return curses.color_pair(7) | curses.A_BOLD
+            return Screen.COLOUR_WHITE | Screen.A_BOLD
         elif color is Color.white:
-            return curses.color_pair(7)
+            return Screen.COLOUR_WHITE
         elif color is Color.grey:
-            return curses.color_pair(8) | curses.A_BOLD
+            return Screen.COLOUR_BLACK | Screen.A_BOLD
         elif color is Color.black:
-            return curses.color_pair(8)
+            return Screen.COLOUR_BLACK
 
         elif color is Color.brightblue:
-            return curses.color_pair(5) | curses.A_BOLD
+            return Screen.COLOUR_BLUE | Screen.A_BOLD
         elif color is Color.blue:
-            return curses.color_pair(5)
+            return Screen.COLOUR_BLUE
         elif color is Color.brightcyan:
-            return curses.color_pair(6) | curses.A_BOLD
+            return Screen.COLOUR_CYAN | Screen.A_BOLD
         elif color is Color.cyan:
-            return curses.color_pair(6)
+            return Screen.COLOUR_CYAN
 
         elif color is Color.brightyellow:
-            return curses.color_pair(4) | curses.A_BOLD
+            return Screen.COLOUR_YELLOW | Screen.A_BOLD
         elif color is Color.yellow:
-            return curses.color_pair(4)
+            return Screen.COLOUR_YELLOW
 
         elif color is Color.brightred:
-            return curses.color_pair(3) | curses.A_BOLD
+            return Screen.COLOUR_RED | Screen.A_BOLD
         elif color is Color.red:
-            return curses.color_pair(3)
+            return Screen.COLOUR_RED
         elif color is Color.brightmagenta:
-            return curses.color_pair(2) | curses.A_BOLD
+            return Screen.COLOUR_MAGENTA | Screen.A_BOLD
         elif color is Color.magenta:
-            return curses.color_pair(2)
+            return Screen.COLOUR_MAGENTA
 
         elif color is Color.brightgreen:
-            return curses.color_pair(1) | curses.A_BOLD
+            return Screen.COLOUR_GREEN | Screen.A_BOLD
         elif color is Color.green:
-            return curses.color_pair(1)
+            return Screen.COLOUR_GREEN
 
         else:
             logger.error("Unknown color: " + str(color))
-            return curses.color_pair(1)
+            return Screen.COLOUR_WHITE
 
 
     @staticmethod
@@ -115,7 +93,7 @@ class ColorPalette(object):
             color = ColorPalette.getColorByColor(Color.white)
 
         elif colorType is ColorType.background:
-            color = ColorPalette.getColorByColor(Color.grey)
+            color = ColorPalette.getColorByColor(Color.white)
 
 
         else:

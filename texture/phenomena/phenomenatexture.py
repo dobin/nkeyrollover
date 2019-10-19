@@ -8,8 +8,11 @@ logger = logging.getLogger(__name__)
 
 
 class PhenomenaTexture(AnimationTexture):
-    def __init__(self, phenomenaType=None, direction=None, name='Phenomena'):
-        super(PhenomenaTexture, self).__init__(type=TextureType.phenomena, name=name)
+    def __init__(
+        self, phenomenaType=None, direction=None, name='Phenomena', setbg=False
+    ):
+        super(PhenomenaTexture, self).__init__(
+            type=TextureType.phenomena, name=name, setbg=setbg)
 
         if phenomenaType is not None:
             self.changeAnimation(phenomenaType, direction)

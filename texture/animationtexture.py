@@ -8,8 +8,9 @@ logger = logging.getLogger(__name__)
 
 class AnimationTexture(Texture):
     # abstract class
-    def __init__(self, type, name=''):
+    def __init__(self, type, name='', setbg=False):
         super(AnimationTexture, self).__init__(type=type, name=name)
+        self.setbg = setbg
         self.animation :Animation = None
         self.init()
 
@@ -111,15 +112,12 @@ class AnimationTexture(Texture):
             while x < len(currentFrame[y]):
                 column = currentFrame[y][x]
                 if column != '':
-                    # This only works for non UTF8 chars :-(
-                    # and background is utf8, so not usable
-                    # ch = viewport.win.inch(pos.y + y, pos.x + x)
-                    # color = ch & curses.A_COLOR
                     viewport.addstr(
                         pos.y + y,
                         pos.x + x,
                         column,
-                        color)
+                        color,
+                        setbg=self.setbg)
 
                 x += 1
             y += 1

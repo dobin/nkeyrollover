@@ -96,14 +96,17 @@ class MapManager(object):
                         y=y,
                         x=x,
                         char=char,
-                        options=cell_data['color'],
-                        knownDrawable=True)
+                        color=cell_data['color'],
+                        attr=cell_data['attr'],
+                        bg=cell_data['bgcolor'],
+                        knownDrawable=True,
+                        setbg=True)
                 y += 1
             x += 1
 
 
     def loadMapRenderables(self, map):
-        t = PhenomenaTexture(phenomenaType=PhenomenaType.tree1)
+        t = PhenomenaTexture(phenomenaType=PhenomenaType.tree1, setbg=True)
         r = Renderable(
             texture=t,
             viewport=self.viewport,
@@ -112,7 +115,7 @@ class MapManager(object):
         )
         self.addTextureToMap(r)
 
-        t = PhenomenaTexture(phenomenaType=PhenomenaType.tree4)
+        t = PhenomenaTexture(phenomenaType=PhenomenaType.tree4, setbg=True)
         r = Renderable(
             texture=t,
             viewport=self.viewport,

@@ -1,5 +1,4 @@
 import logging
-import curses
 from enum import Enum
 
 from utilities.timer import Timer

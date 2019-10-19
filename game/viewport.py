@@ -23,7 +23,7 @@ class Viewport(object):
         return self.x + Config.columns - 2
 
 
-    def addstr(self, y, x, char, options=None, knownDrawable=False):
+    def addstr(self, y, x, char, color, attr=0, bg=0, knownDrawable=False, setbg=False):
         # Note: This function should be as fast as possible.
 
         x = x - self.x  # getScreenCoords() - fast version
@@ -32,10 +32,14 @@ class Viewport(object):
             if not self.isPointDrawableXY(x, y):
                 return
 
-        if options is None:
-            self.win.addstr(y, x, char)
-        else:
-            self.win.addstr(y, x, char, options)
+        if not setbg:
+            # we dont actively set a background. assume existing background color
+            # if set
+            ret = self.win.get_from(x, y)
+            if ret is not None and ret[3] != 0:  # ret[3] is bg color
+                bg = ret[3]
+
+        self.win.print_at(char, x, y, color, attr, bg=bg)
 
 
     def getScreenCoords(self, coords):

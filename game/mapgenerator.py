@@ -4,6 +4,7 @@ import random
 
 from utilities.color import Color
 from utilities.colorpalette import ColorPalette
+from asciimatics.screen import Screen
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +39,9 @@ class MapGenerator(object):
         # generate complete map
         emptyCell = {
             'keycode': '',
-            'color': ColorPalette.getColorByColor(Color.grey)
+            'color': ColorPalette.getColorByColor(Color.black),
+            'bgcolor': ColorPalette.getColorByColor(Color.black),
+            'attr': 0,
         }
         cells = [[copy.copy(emptyCell) for i in range(height)] for j in range(width)]
 
@@ -49,6 +52,7 @@ class MapGenerator(object):
         x = 0
         while x < width:
             cells[x][y]['keycode'] = '─'
+            cells[x][y]['attr'] = Screen.A_BOLD
             x += 1
 
         # street horizontal
@@ -58,6 +62,8 @@ class MapGenerator(object):
             if x % 6 == 0:
                 cells[x][y]['keycode'] = '─'
                 cells[x + 1][y]['keycode'] = '─'
+                cells[x][y]['attr'] = Screen.A_BOLD
+                cells[x + 1][y]['attr'] = Screen.A_BOLD
             x += 1
 
         # street vertical/diagonal
@@ -71,6 +77,7 @@ class MapGenerator(object):
                 yy = 24
                 while xx < 16:
                     cells[x + xx][yy]['keycode'] = '/'
+                    cells[x + xx][yy]['attr'] = Screen.A_BOLD
                     xx += 1
                     yy -= 1
             x += 1
@@ -79,7 +86,7 @@ class MapGenerator(object):
         x = 0
         while x < width - 8:
             xOff = random.choice([-1, -2, 0, 1, 2])
-            theight = random.choice([4, 5, 6, 7, 8])
+            theight = random.choice([4, 5, 6, 7])
             yOff = self.topborder - theight + 1
             twidth = random.choice([4, 5, 6])
 
@@ -101,11 +108,22 @@ class MapGenerator(object):
     def createTower(self, height, width):
         emptyCell = {
             'keycode': '',
-            'color': ColorPalette.getColorByColor(Color.grey)
+            'color': ColorPalette.getColorByColor(Color.black),
+            'bgcolor': ColorPalette.getColorByColor(Color.black),
+            'attr': 0,
         }
         cells = [[copy.copy(emptyCell) for i in range(height)] for j in range(width)]
 
-        m = random.choice(['░', '▒', '▓'])
+        m = ' '
+        color = random.choice([
+            ColorPalette.getColorByColor(Color.green),
+            ColorPalette.getColorByColor(Color.blue),
+        ])
+        # attr = random.choice(
+        #     None,
+        #     Screen.A_BOLD
+        # )
+
         x = 0
         while x < len(cells):
             y = 0
@@ -113,28 +131,37 @@ class MapGenerator(object):
                 # corner bottom left
                 if x == 0 and y == len(cells[0]) - 1:
                     cells[x][y]['keycode'] = '┴'
+                    cells[x][y]['attr'] = Screen.A_BOLD
                 # corner top left
                 elif x == 0 and y == 0:
                     cells[x][y]['keycode'] = '┌'
+                    cells[x][y]['attr'] = Screen.A_BOLD
 
                 # corner bottom right
                 elif x == len(cells) - 1 and y == len(cells[0]) - 1:
                     cells[x][y]['keycode'] = '┴'
+                    cells[x][y]['attr'] = Screen.A_BOLD
                 # corner top right
                 elif x == len(cells) - 1 and y == 0:
                     cells[x][y]['keycode'] = '┐'
+                    cells[x][y]['attr'] = Screen.A_BOLD
 
                 elif x == 0:
                     cells[x][y]['keycode'] = '│'
+                    cells[x][y]['attr'] = Screen.A_BOLD
                 elif x == len(cells) - 1:
                     cells[x][y]['keycode'] = '│'
+                    cells[x][y]['attr'] = Screen.A_BOLD
                 elif y == 0:
                     cells[x][y]['keycode'] = '─'
+                    cells[x][y]['attr'] = Screen.A_BOLD
                 elif y == len(cells[0]) - 1:
                     cells[x][y]['keycode'] = '─'
+                    cells[x][y]['attr'] = Screen.A_BOLD
 
                 else:
                     cells[x][y]['keycode'] = m
+                    cells[x][y]['bgcolor'] = color
 
                 y += 1
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.7
 
-import curses
+from asciimatics.screen import Screen
 import time
 import signal
 import sys
@@ -12,12 +12,11 @@ from config import Config
 from game.game import Game
 from utilities.utilities import Utility
 from system.io.keyboardinput import KeyboardInput
-from utilities.colorpalette import ColorPalette
 
 
 class Keyrollover(object):
-    def __init__(self):
-        self.win = None
+    def __init__(self, screen):
+        self.win = screen
         self.menuwin = None
         self.game = None
         self.init()
@@ -44,16 +43,8 @@ class Keyrollover(object):
         logger = logging.getLogger(__name__)
         logger.record("-----------------Start------------------------")
 
-        self.win = curses.newwin(Config.rows, Config.columns, 2, 0)
-        curses.noecho()
-        curses.cbreak()
-        self.win.keypad(1)
-        curses.curs_set(0)
-        self.win.nodelay(1)  # make getch() nonblocking
-        ColorPalette.cursesInitColor()
-
-        self.menuwin = curses.newwin(3, Config.columns, 0, 0)
-        self.menuwin.border()
+        # self.menuwin = curses.newwin(3, Config.columns, 0, 0)
+        # self.menuwin.border()
 
         self.game = Game(win=self.win, menuwin=self.menuwin)
         self.keyboardInput = KeyboardInput(
@@ -77,18 +68,19 @@ class Keyrollover(object):
         timeStart = 0
         timeEnd = 0
         workTime = 0
+
         while self.game.gameRunning:
             timeStart = time.time()
-            self.win.erase()
-            self.win.border()
+
+            # asciimatics workaround to clear buffer
+            self.win._buffer.clear(Screen.COLOUR_WHITE, 0, 0)
 
             self.game.draw1(n)
             self.game.advance(targetFrameTime, n)
             self.game.draw2(n)
 
-            # has to be after draw, as getch() does a refresh
-            # https://stackoverflow.com/questions/19748685/curses-library-why-does-getch-clear-my-screen
             self.keyboardInput.getInput()
+            self.win.refresh()
 
             # fps logistics
             timeEnd = time.time()
@@ -104,27 +96,17 @@ class Keyrollover(object):
                 time.sleep(targetSleepTime)
             n = n + 1
 
-        # Clean up before exiting
-        curses.nocbreak()
-        self.win.keypad(0)
-        curses.echo()
-        curses.endwin()
 
 
 def signal_handler(sig, frame):
-    # Clean up before exiting
-    curses.nocbreak()
-    curses.echo()
-    curses.endwin()
-
     sys.exit(0)
 
 
-def main(stdscr):
+def main(screen):
     signal.signal(signal.SIGINT, signal_handler)
-    keyrollover = Keyrollover()
+    keyrollover = Keyrollover(screen)
     keyrollover.loop()
 
 
 if __name__ == '__main__':
-    curses.wrapper(main)
+    Screen.wrapper(main, unicode_aware=True)

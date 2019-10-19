@@ -1,4 +1,5 @@
 import logging
+from asciimatics.screen import Screen
 
 from messaging import messaging, MessageType
 import system.singletons.gametime
@@ -16,11 +17,11 @@ class KeyboardInput(object):
 
     def getInput(self):
         gotInput = False
-        key = self.viewport.win.getch()
-        while key != -1:
+        event = self.viewport.win.get_event()
+        while event is not None:
             gotInput = True
-            self.handleInput(key)
-            key = self.viewport.win.getch()
+            self.handleInput(event.key_code)
+            event = self.viewport.win.get_event()
 
         return gotInput
 
@@ -30,13 +31,13 @@ class KeyboardInput(object):
         if key == ord('p'):
             self.game.togglePause()
 
-        if key == 27:  # esc
+        if key == Screen.KEY_ESCAPE:  # esc
             self.game.quitGame()
 
-        if key == 265:  # f1
+        if key == Screen.KEY_F1:  # f1
             self.game.toggleStats()
 
-        if key == 266:  # f2
+        if key == Screen.KEY_F2:  # f2
             self.game.toggleLog()
 
         messaging.add(

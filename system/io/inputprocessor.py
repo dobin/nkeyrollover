@@ -1,6 +1,6 @@
 import esper
-import curses
 import logging
+from asciimatics.screen import Screen
 
 from utilities.timer import Timer
 from messaging import messaging, MessageType
@@ -69,14 +69,14 @@ class InputProcessor(esper.Processor):
         if self.movementTimer.timeIsUp():
             dontChangeDirection = False
 
-            if key == curses.KEY_LEFT:
+            if key == Screen.KEY_LEFT:
                 if Config.xDoubleStep:
                     x = -2
                 else:
                     x = -1
                 didMove = True
 
-            elif key == curses.KEY_RIGHT:
+            elif key == Screen.KEY_RIGHT:
                 if Config.xDoubleStep:
                     x = 2
                 else:
@@ -91,7 +91,7 @@ class InputProcessor(esper.Processor):
                     x = -1
                 didMove = True
 
-            elif key == curses.KEY_RIGHT:
+            elif key == Screen.KEY_RIGHT:
                 if Config.xDoubleStep:
                     x = 2
                 else:
@@ -106,11 +106,11 @@ class InputProcessor(esper.Processor):
                     x = 1
                 didMove = True
 
-            elif key == curses.KEY_UP:
+            elif key == Screen.KEY_UP:
                 y = -1
                 didMove = True
 
-            elif key == curses.KEY_DOWN:
+            elif key == Screen.KEY_DOWN:
                 y = 1
                 didMove = True
 

@@ -1,5 +1,4 @@
 import logging
-import curses
 
 from utilities.colorpalette import ColorPalette
 from utilities.colortype import ColorType
@@ -11,14 +10,15 @@ from system.groupid import GroupId
 from utilities.entityfinder import EntityFinder
 from system.singletons.apm import apm
 from system.singletons.damagestat import damageStat
+from asciimatics.screen import Screen
 
 logger = logging.getLogger(__name__)
 
 
 class StatusBar(object):
-    def __init__(self, world, menuwin):
+    def __init__(self, world, viewport):
         self.world = world
-        self.menuwin = menuwin
+        self.viewport = viewport
 
 
     def drawStatusbar(self):
@@ -31,8 +31,8 @@ class StatusBar(object):
             # No player here yet
             return
 
-        #self.menuwin.erase()
-        #self.menuwin.border()
+        #self.viewport.erase()
+        #self.viewport.border()
         playerAttackable = self.world.world.component_for_entity(
             playerEntity, Attackable)
         player = self.world.world.component_for_entity(
@@ -43,11 +43,10 @@ class StatusBar(object):
 
         #s += "  FPS: %.0f" % (fps)
         color = ColorPalette.getColorByColorType(ColorType.menu, None)
-        self.menuwin.addstr(1, 2, s, color)
+        self.viewport.addstr(1, 2, s, color)
 
         self.printSkillbar(color, playerEntity)
         self.printAttackbar(color, playerEntity)
-        self.menuwin.refresh()
 
 
     def printSkillbar(self, color, playerEntity):
@@ -58,9 +57,9 @@ class StatusBar(object):
         n = 0
         for skill in playerOffensiveSkill.skillStatus:
             if playerOffensiveSkill.isRdy(skill):
-                self.menuwin.addstr(1, basex + n, skill, curses.color_pair(9))
+                self.viewport.addstr(1, basex + n, skill, Screen.COLOUR_BLACK, bg=Screen.COLOUR_GREEN)
             else:
-                self.menuwin.addstr(1, basex + n, skill, curses.color_pair(10))
+                self.viewport.addstr(1, basex + n, skill, Screen.COLOUR_BLACK, bg=Screen.COLOUR_RED)
 
             n += 1
 
@@ -72,21 +71,21 @@ class StatusBar(object):
             playerGroupId.getId())
 
         weaponIdx = 42
-        self.menuwin.addstr(
+        self.viewport.addstr(
             1,
             weaponIdx,
             'W:' + playerOffensiveAttack.getWeaponStr(),
             color)
 
         weaponIdx = 52
-        self.menuwin.addstr(
+        self.viewport.addstr(
             1,
             weaponIdx,
             'APM:' + str(int(apm.getApm() * 60)),
             color)
 
         weaponIdx = 62
-        self.menuwin.addstr(
+        self.viewport.addstr(
             1,
             weaponIdx,
             'DMG/s:' + str(int(damageStat.getDamageStat())),
