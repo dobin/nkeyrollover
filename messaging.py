@@ -30,6 +30,9 @@ class MessageType(Enum):
 
     EntityKnockdown = 21
 
+    Gameover = 22
+    EmitPhenomenaTexture = 23
+
 
 class Message(object):
     def __init__(self, type, data, groupId):

@@ -49,6 +49,32 @@ class AttackableProcessor(esper.Processor):
 
 
     def checkHealth(self):
+        # player
+        playerEntity = EntityFinder.findPlayer(self.world)
+        if playerEntity is not None:
+            player = self.world.component_for_entity(
+                playerEntity, Player)
+
+            if player.isAlive:
+                playerAttackable = self.world.component_for_entity(
+                    playerEntity, Attackable)
+                playerGroupId = self.world.component_for_entity(
+                    playerEntity, GroupId)
+
+                if playerAttackable.getHealth() <= 0:
+                    player.setAlive(False)
+
+                    messaging.add(
+                        type = MessageType.EntityDying,
+                        groupId = playerGroupId.getId(),
+                        data = {}
+                    )
+                    messaging.add(
+                        type = MessageType.Gameover,
+                        data = {}
+                    )
+
+
         # if enemies have less than 0 health, make them gonna die
         for ent, (meAtk, meEnemy, ai, meGroupId, meRend) in self.world.get_components(
             Attackable, Enemy, Ai, GroupId, Renderable

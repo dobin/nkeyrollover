@@ -46,6 +46,13 @@ class RenderableMinimalProcessor(esper.Processor):
                 direction = message.data['direction']
             )
 
+        for message in messaging.getByType(MessageType.EmitPhenomenaTexture):
+            self.textureEmiter.makePhenomenaTexture(
+                phenomenaTextureType = message.data['phenomenaTextureType'],
+                location = message.data['location'],
+                direction = message.data['direction']
+            )
+
 
     def advance(self, dt):
         for ent, rend in self.world.get_component(RenderableMinimal):

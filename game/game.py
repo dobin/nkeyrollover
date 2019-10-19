@@ -131,11 +131,13 @@ class Game(object):
         # x generate: Message            EntityStun
         # x generate: Message            EntityDying
         # x generate: Message            EmitTexture
+        # x generate: Message            Gameover
         self.world.add_processor(attackableProcessor)
 
         # p handle:   Message            PlayerLocation
         # x handle:   Message            EntityDying
         # p handle:   Message            PlayerKeypress
+        # x handle:   Message            Gameover
         # e generate: Message            SpawnEnemy
         # p generate: Message            SpawnPlayer
         # x generate: DirectMessage      activateSpeechBubble

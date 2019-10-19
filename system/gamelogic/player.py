@@ -11,6 +11,7 @@ class Player():
         self.points = 0
         self.isPlayer = True
         self.isAttacking = False
+        self.isAlive = True
 
         self.attackTimer = Timer(0.0)
 
@@ -28,6 +29,10 @@ class Player():
 
         self.attackTimer.setTimer(attackTime)
         self.attackTimer.start()
+
+
+    def setAlive(self, alive):
+        self.isAlive = alive
 
 
     def __repr__(self):

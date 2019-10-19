@@ -9,6 +9,9 @@ import system.graphics.renderable
 from utilities.timer import Timer
 from directmessaging import directMessaging, DirectMessageType
 from utilities.entityfinder import EntityFinder
+from texture.phenomena.phenomenatype import PhenomenaType
+from common.coordinates import Coordinates
+from common.direction import Direction
 
 logger = logging.getLogger(__name__)
 
@@ -34,6 +37,16 @@ class SceneProcessor(esper.Processor):
 
     def process(self, dt):
         self.screenMoveTimer.advance(dt)
+
+        for message in messaging.getByType(MessageType.Gameover):
+            messaging.add(
+                type=MessageType.EmitPhenomenaTexture,
+                data={
+                    'phenomenaTextureType': PhenomenaType.gameover,
+                    'location': Coordinates(10, 10),
+                    'direction': Direction.right,
+                }
+            )
 
         for message in messaging.getByType(MessageType.EntityDying):
             # if no enemies are alive, we want to go to the next akt

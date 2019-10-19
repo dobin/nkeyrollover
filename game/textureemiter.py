@@ -32,6 +32,32 @@ class TextureEmiter(object):
         self.world = world
 
 
+    def makePhenomenaTexture(
+        self, phenomenaTextureType, location, direction
+    ):
+        renderable = renderableCache.getRenderable(TextureType.phenomena)
+
+        # manage texture
+        renderable.texture.changeAnimation(
+            phenomenaType=phenomenaTextureType,
+            direction=direction)
+        renderable.texture.setName(
+            name="PhenomenaRenderable (phenomenaTextureType={})".format(
+                phenomenaTextureType))
+
+        # manage renderable
+        if direction is Direction.left:
+            location.x -= renderable.texture.width
+        renderable.setLocation(location)
+        renderable.setZ(Config.zActionTexture)
+        renderable.setActive(True)
+        renderable.setName(
+            name="PhenomenaRenderable (phenomenaTextureType={})".format(
+                phenomenaTextureType))
+
+        self.addRenderable(renderable)
+
+
     def makeActionTexture(
         self, actionTextureType, location, fromPlayer, direction
     ):
