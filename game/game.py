@@ -175,7 +175,7 @@ class Game(object):
         # x generate: DirectMessage      receiveDamage
         self.world.add_processor(damageProcessor)
 
-        self.box = self.createBg(Config.columns, Config.rows)
+        self.bg = self.createBg(Config.columns, Config.rows)
 
 
     def draw1(self, frame :int):
@@ -188,7 +188,7 @@ class Game(object):
 
 
     def copyBg(self):
-        box = [line[:] for line in self.box]
+        box = [line[:] for line in self.bg]
         return box
 
 
@@ -227,20 +227,19 @@ class Game(object):
         box.append(line)
 
         # middle
+        line = []
+        line.append(v)
+        n = 0
+        while n < meWidth - 2:
+            line.append(s)
+            n += 1
+        line.append(v)
+
+        # rest
+        while n < width:
+            line.append(s)
+            n += 1
         for _ in range(meHeight - 2):
-            line = []
-            line.append(v)
-            n = 0
-            while n < meWidth - 2:
-                line.append(s)
-                n += 1
-            line.append(v)
-
-            # rest
-            while n < width:
-                line.append(s)
-                n += 1
-
             box.append(line)
 
         # bottom line
