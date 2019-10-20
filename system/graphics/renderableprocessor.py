@@ -31,6 +31,20 @@ class RenderableProcessor(esper.Processor):
         self.advance(dt)
         self.render()
         self.makeSpeechBubble()
+        self.checkGameRestart()
+
+
+    def checkGameRestart(self):
+        for message in messaging.getByType(MessageType.GameRestart):
+            for ent, rend in self.world.get_component(Renderable):
+                renderableCache.addRenderable(rend, rend.texture.type)
+                self.world.delete_entity(ent)
+
+            directMessaging.add(
+                type=DirectMessageType.GameStart,
+                data={},
+                groupId=0,
+            )
 
 
     def makeSpeechBubble(self):

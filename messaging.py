@@ -32,6 +32,8 @@ class MessageType(Enum):
 
     Gameover = 22
     EmitPhenomenaTexture = 23
+    GameRestart = 24
+    Deleted = 25
 
 
 class Message(object):

@@ -9,6 +9,7 @@ class DirectMessageType(Enum):
     movePlayer = 1
     moveEnemy = 2
     receiveDamage = 3
+    GameStart = 4
 
 
 class DirectMessage(object):

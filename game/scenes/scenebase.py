@@ -67,6 +67,9 @@ class SceneBase(object):
         pass
 
 
+    def init(self):
+        pass
+
     def leave(self):
         for entity in self.entities:
             self.removeRenderable(entity)

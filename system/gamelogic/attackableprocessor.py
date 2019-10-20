@@ -61,8 +61,9 @@ class AttackableProcessor(esper.Processor):
                 playerGroupId = self.world.component_for_entity(
                     playerEntity, GroupId)
 
-                if playerAttackable.getHealth() <= 0:
+                if playerAttackable.isActive and playerAttackable.getHealth() <= 0:
                     player.setAlive(False)
+                    playerAttackable.setActive(False)
 
                     messaging.add(
                         type = MessageType.EntityDying,

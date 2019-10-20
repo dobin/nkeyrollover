@@ -50,6 +50,7 @@ class RenderableMinimalProcessor(esper.Processor):
             self.textureEmiter.makePhenomenaTexture(
                 phenomenaTextureType = message.data['phenomenaTextureType'],
                 location = message.data['location'],
+                staticLocation = message.data['staticLocation'],
                 direction = message.data['direction']
             )
 

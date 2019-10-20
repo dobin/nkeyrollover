@@ -49,6 +49,14 @@ class InputProcessor(esper.Processor):
             return
 
         for message in messaging.getByType(MessageType.PlayerKeypress):
+            if not player.isAlive:
+                messaging.add(
+                    type = MessageType.GameRestart,
+                    data = {},
+                )
+                message.type = MessageType.Deleted
+                return
+
             apm.tick(message.data['time'])
             didMoveTmp = self.handleKeyPress(
                 message.data['key'], player, renderable, playerEntity)

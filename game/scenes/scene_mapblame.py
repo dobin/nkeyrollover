@@ -26,17 +26,13 @@ class Akt(object):
 class SceneMapBlame(SceneBase):
     def __init__(self, viewport, world):
         super().__init__(world=world, viewport=viewport)
-        self.name = "Scene2"
+        self.name = "MapBlame"
         self.isShowPlayer = True
         self.isShowMap = True
-
-        self.enemyQueue = deque()
-
+        self.enemyQueue = None
         self.maxEnemies = 6
-        self.time = 0.0
         self.enemyCount = 0
 
-        self.prepareEnemies()
         self.speechBubbles = [
             {
                 'timeSpawn': 1.0,
@@ -52,12 +48,20 @@ class SceneMapBlame(SceneBase):
         if Config.devMode:
             self.speechBubbles = []
 
+        self.init()
+
+
+    def init(self):
+        self.time = 0.0
+        self.enemyQueue = deque()  # note: Important that this is in init()
+        self.prepareEnemies()
+
 
     def prepareEnemies(self):
         if Config.devMode:
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                enemyType = EnemyType.cow,
+                enemyType = EnemyType.stickfigure,
                 spawnTime = None,
                 spawnX = 25,
                 spawnLocation = Coordinates(36, 8),

@@ -83,6 +83,8 @@ class SceneIntro(SceneBase):
         self.name = "Scene1 - Intro Animation"
         self.anyKeyFinishesScene = True
 
+        self.init()
+
 
     def advance(self, dt):
         self.myTimer.advance(dt)

@@ -33,6 +33,16 @@ class EntityFinder(object):
 
 
     @staticmethod
+    def findByGroupId(world, id):
+        for ent, (groupId, renderable) in world.get_components(
+            system.groupid.GroupId,
+            system.graphics.renderable.Renderable,
+        ):
+            if groupId.getId() == id:
+                return ent
+
+
+    @staticmethod
     def findCharacterByGroupId(world, id):
         for ent, (groupId, renderable, player) in world.get_components(
             system.groupid.GroupId,

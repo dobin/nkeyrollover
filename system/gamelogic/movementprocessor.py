@@ -59,6 +59,10 @@ class MovementProcessor(esper.Processor):
     def moveEnemy(self):
         for msg in directMessaging.getByType(DirectMessageType.moveEnemy):
             entity = EntityFinder.findCharacterByGroupId(self.world, msg.groupId)
+            if entity is None:
+                # May be already deleted?
+                continue
+
             meRenderable = self.world.component_for_entity(
                 entity, system.graphics.renderable.Renderable)
 

@@ -33,7 +33,7 @@ class TextureEmiter(object):
 
 
     def makePhenomenaTexture(
-        self, phenomenaTextureType, location, direction
+        self, phenomenaTextureType, location, staticLocation, direction=Direction.right
     ):
         renderable = renderableCache.getRenderable(TextureType.phenomena)
 
@@ -48,6 +48,8 @@ class TextureEmiter(object):
         # manage renderable
         if direction is Direction.left:
             location.x -= renderable.texture.width
+        if staticLocation:
+            location.x += self.viewport.getx()
         renderable.setLocation(location)
         renderable.setZ(Config.zActionTexture)
         renderable.setActive(True)

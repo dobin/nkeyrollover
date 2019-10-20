@@ -46,9 +46,6 @@ class Keyrollover(object):
         logger = logging.getLogger(__name__)
         logger.record("-----------------Start------------------------")
 
-        # self.menuwin = curses.newwin(3, Config.columns, 0, 0)
-        # self.menuwin.border()
-
         self.game = Game(win=self.win, menuwin=self.menuwin)
         self.keyboardInput = KeyboardInput(
             game=self.game,
@@ -104,9 +101,11 @@ class Keyrollover(object):
 
 def evaluateFpsOverrun():
     logging.info("Frm: {}".format(frameCount))
-    logging.info("Cnt: {} ({}%)".format(len(fpsOverrun), len(fpsOverrun) / frameCount))
+    percent = (len(fpsOverrun) / frameCount) * 100
+    logging.info("Cnt: {} ({}%)".format(len(fpsOverrun), percent))
     #logging.info("All: {}".format(fpsOverrun))
-    logging.info("Max: {}".format(max(fpsOverrun)))
+    if len(fpsOverrun) > 0:
+        logging.info("Max: {}".format(max(fpsOverrun)))
 
 
 def signal_handler(sig, frame):

@@ -28,39 +28,57 @@ class SceneManager(object):
             SceneIntro(viewport=viewport, world=world),
             SceneMapBlame(viewport=viewport, world=world),
         ]
+        self.initAllScenes()
+
+        self.currentSceneIdx = None
+        self.currentScene = None
 
         if Config.playground:
-            self.currentSceneIdx = 0
+            self.setScene(0)
+        elif Config.devMode:
+            self.setScene(1)
         else:
-            self.currentSceneIdx = 1
+            self.setScene(1)
 
+
+    def initAllScenes(self):
+        for scene in self.scenes:
+            scene.init()
+
+
+    def setScene(self, idx):
+        self.currentSceneIdx = idx
         self.currentScene = self.scenes[self.currentSceneIdx]
 
-
-    def initScene(self):
         if self.currentSceneIdx == 0:
             self.mapManager.loadMap('map02')
         if self.currentSceneIdx == 2:
             self.mapManager.loadMap('map02')
 
+
+    def startScene(self):
+        self.viewport.reset()
         self.currentScene.enter()
 
 
     def nextScene(self):
-        self.currentScene.leave()
-        self.currentSceneIdx += 1
-        self.currentScene = self.scenes[self.currentSceneIdx]
         logger.info("Change to scene {}: {}".format(
             self.currentSceneIdx, self.currentScene))
 
-        self.initScene()
+        self.currentScene.leave()
+        self.setScene(self.currentSceneIdx + 1)
+        self.startScene()
+
+
+    def restartScene(self):
+        self.currentScene.leave()
+        self.currentScene.init()
+        self.startScene()
 
 
     def advance(self, dt):
         self.currentScene.advance(dt)
         self.currentScene.handleTime()
-
-        # handleEnemyDeath()
 
         if self.currentScene.sceneIsFinished():
             self.nextScene()

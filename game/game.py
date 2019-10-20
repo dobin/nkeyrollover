@@ -101,6 +101,7 @@ class Game(object):
 
         # p handle:   Message            PlayerKeyPress (movement)
         # p generate: DirectMessage      movePlayer
+        # x generate: Message            GameRestart
         self.world.add_processor(inputProcessor)
 
         # p handle:   DirectMessage      movePlayer
@@ -138,6 +139,7 @@ class Game(object):
         # x handle:   Message            EntityDying
         # p handle:   Message            PlayerKeypress
         # x handle:   Message            Gameover
+        # x handle:   DirectMessage      GameStart
         # e generate: Message            SpawnEnemy
         # p generate: Message            SpawnPlayer
         # x generate: DirectMessage      activateSpeechBubble
@@ -165,8 +167,10 @@ class Game(object):
         self.world.add_processor(characterAnimationProcessor)
 
         # x handle:   DirectMessage      activateSpeechBubble (emit)
+        # x handle:   Message            GameRestart
         # x generate: Message            AttackAt
         # x generate: DirectMessage      activateSpeechBubble (because of damage)
+        # x generate: DirectMessage      GameStart
         self.world.add_processor(renderableProcessor)
 
         # x handle:   Message            EmitParticleEffect

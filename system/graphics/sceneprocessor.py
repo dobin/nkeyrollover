@@ -27,8 +27,7 @@ class SceneProcessor(esper.Processor):
         super().__init__()
         self.viewport = viewport
         self.sceneManager = sceneManager
-        self.sceneManager.initScene()  # start first scene
-
+        self.sceneManager.startScene()  # start first scene
         self.xCenter = Config.columns / 2 - 5
         self.state = State.brawl
         self.screenMoveTimer = Timer(0.1)
@@ -44,9 +43,13 @@ class SceneProcessor(esper.Processor):
                 data={
                     'phenomenaTextureType': PhenomenaType.gameover,
                     'location': Coordinates(10, 10),
+                    'staticLocation': True,
                     'direction': Direction.right,
                 }
             )
+
+        for message in directMessaging.getByType(DirectMessageType.GameStart):
+            self.sceneManager.restartScene()
 
         for message in messaging.getByType(MessageType.EntityDying):
             # if no enemies are alive, we want to go to the next akt

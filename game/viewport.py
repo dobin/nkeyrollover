@@ -10,9 +10,14 @@ class Viewport(object):
     def __init__(self, win, world):
         self.win = win
         self.world = world
-        self.x = 0
         # For performance reason, we pre-allocate coords for use in getScreenCoords()
         self.viewportCoords = Coordinates()
+        self.x = 0
+        self.reset()
+
+
+    def reset(self):
+        self.x = 0
 
 
     def getx(self):

@@ -5,7 +5,8 @@ import system.gamelogic.attackable
 import system.graphics.renderable
 import system.groupid
 from messaging import messaging, MessageType
-from directmessaging import directMessaging, DirectMessageType
+#from directmessaging import directMessaging, DirectMessageType
+import directmessaging
 from common.direction import Direction
 from game.offenseloader.fileoffenseloader import fileOffenseLoader
 from game.offenseloader.skilltype import SkillType
@@ -33,7 +34,8 @@ class OffensiveSkill(object):
 
         self.cooldownTimers = {}
         for key in self.keyAssignment:
-            self.cooldownTimers[key] = Timer(self.keyAssignment[key].cooldown, instant=True)
+            self.cooldownTimers[key] = Timer(
+                self.keyAssignment[key].cooldown, instant=True)
 
         self.data = {
             SkillType.port: {
@@ -78,9 +80,9 @@ class OffensiveSkill(object):
         meGroupId = self.esperData.world.component_for_entity(
             self.esperData.entity, system.groupid.GroupId)
 
-        directMessaging.add(
+        directmessaging.directMessaging.add(
             groupId = meGroupId.getId(),
-            type = DirectMessageType.activateSpeechBubble,
+            type = directmessaging.DirectMessageType.activateSpeechBubble,
             data = {
                 'text': 'hoi',
                 'time': 0.5,
@@ -111,8 +113,8 @@ class OffensiveSkill(object):
         if meRenderable.direction is Direction.right:
             moveX = self.data[SkillType.port]['distance']
 
-        directMessaging.add(
-            type = DirectMessageType.movePlayer,
+        directmessaging.directMessaging.add(
+            type = directmessaging.DirectMessageType.movePlayer,
             groupId = meGroupId.getId(),
             data = {
                 'x': moveX,
@@ -128,7 +130,8 @@ class OffensiveSkill(object):
 
         locCenter = meRenderable.getLocationCenter()
         damage = fileOffenseLoader.skillManager.getSkillData(SkillType.explosion).damage
-        particleEffectType = fileOffenseLoader.skillManager.getSkillData(SkillType.explosion).particleEffectType
+        particleEffectType = fileOffenseLoader.skillManager.getSkillData(
+            SkillType.explosion).particleEffectType
         messaging.add(
             type=MessageType.EmitParticleEffect,
             data= {
@@ -147,7 +150,8 @@ class OffensiveSkill(object):
 
         locCenter = meRenderable.getLocationCenter()
         damage = fileOffenseLoader.skillManager.getSkillData(SkillType.laser).damage
-        particleEffectType = fileOffenseLoader.skillManager.getSkillData(SkillType.laser).particleEffectType
+        particleEffectType = fileOffenseLoader.skillManager.getSkillData(
+            SkillType.laser).particleEffectType
         messaging.add(
             type=MessageType.EmitParticleEffect,
             data= {
@@ -166,7 +170,8 @@ class OffensiveSkill(object):
 
         locCenter = meRenderable.getLocationCenter()
         damage = fileOffenseLoader.skillManager.getSkillData(SkillType.cleave).damage
-        particleEffectType = fileOffenseLoader.skillManager.getSkillData(SkillType.cleave).particleEffectType
+        particleEffectType = fileOffenseLoader.skillManager.getSkillData(
+            SkillType.cleave).particleEffectType
         messaging.add(
             type=MessageType.EmitParticleEffect,
             data= {
