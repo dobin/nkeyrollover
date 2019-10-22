@@ -109,7 +109,7 @@ class MovementProcessor(esper.Processor):
                         self.world, meRenderable, meRenderable.getLocationAndSize()
                     )
                     if isStuck:
-                        logger.info("{}: Is stuck, but able to move".format(meRenderable))
+                        logger.info("{}: Overlaps, force way out".format(meRenderable))
                         # force our way out of here. do intended path
                         x = msg.data['x']
                         y = msg.data['y']
@@ -117,7 +117,7 @@ class MovementProcessor(esper.Processor):
                     else:
                         # not stuck, just wait until we are free,
                         # as another enemy most likely blocks our way
-                        logger.info("{}: Is stuck, and unable to move".format(meRenderable))
+                        logger.info("{}: Does not overlap, wait until moving".format(meRenderable))
                         pass
 
             if canMove:
