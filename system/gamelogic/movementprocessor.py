@@ -109,6 +109,7 @@ class MovementProcessor(esper.Processor):
                         self.world, meRenderable, meRenderable.getLocationAndSize()
                     )
                     if isStuck:
+                        logger.info("{}: Is stuck, but able to move".format(meRenderable))
                         # force our way out of here. do intended path
                         x = msg.data['x']
                         y = msg.data['y']
@@ -116,6 +117,7 @@ class MovementProcessor(esper.Processor):
                     else:
                         # not stuck, just wait until we are free,
                         # as another enemy most likely blocks our way
+                        logger.info("{}: Is stuck, and unable to move".format(meRenderable))
                         pass
 
             if canMove:
@@ -138,7 +140,8 @@ class MovementProcessor(esper.Processor):
         didChangeDirection = False
 
         if x > 0:
-            if renderable.coordinates.x + x < self.mapManager.getCurrentMapWidth():
+            if (renderable.canMoveOutsideMap
+                    or renderable.coordinates.x + x < self.mapManager.getCurrentMapWidth()):
                 renderable.coordinates.x += x
                 didMove = True
 
@@ -148,7 +151,8 @@ class MovementProcessor(esper.Processor):
                     didChangeDirection = True
 
         elif x < 0:
-            if renderable.coordinates.x + x > 1:
+            if (renderable.canMoveOutsideMap
+                    or renderable.coordinates.x + x > 1):
                 renderable.coordinates.x += x
                 didMove = True
                 if (not dontChangeDirection
@@ -157,13 +161,14 @@ class MovementProcessor(esper.Processor):
                     didChangeDirection = True
 
         if y > 0:
-            if renderable.coordinates.y < Config.rows - renderable.texture.height - 1:
+            if (renderable.canMoveOutsideMap
+                    or renderable.coordinates.y < Config.rows - renderable.texture.height - 1):
                 renderable.coordinates.y += y
                 didMove = True
 
         elif y < 0:
-            if (renderable.coordinates.y
-                    > Config.areaMoveable['miny'] - renderable.texture.height + 1):
+            if (renderable.canMoveOutsideMap
+                    or renderable.coordinates.y > Config.areaMoveable['miny'] - renderable.texture.height + 1):
                 renderable.coordinates.y += y
                 didMove = True
 

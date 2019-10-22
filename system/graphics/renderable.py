@@ -25,7 +25,8 @@ class Renderable(object):
         active :bool =True,
         useParentDirection =False,
         direction=Direction.left,
-        name=''
+        name='',
+        canMoveOutsideMap=True
     ):
         self.viewport :Viewport = viewport
         self.texture :Texture = texture
@@ -46,6 +47,8 @@ class Renderable(object):
 
         # if this is being rendered
         self.active :bool = active
+
+        self.canMoveOutsideMap = canMoveOutsideMap
 
         # coordinates
         self.coordinates :Coordinates = Coordinates(0, 0)

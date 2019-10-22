@@ -76,7 +76,8 @@ class PlayerProcessor(esper.Processor):
             parent=None,
             coordinates=spawnCoordinates,
             direction=Direction.right,
-            name='Player')
+            name='Player',
+            canMoveOutsideMap=False)
 
         esperData = EsperData(self.world, playerEntity, 'player')
         offensiveSkill = OffensiveSkill(

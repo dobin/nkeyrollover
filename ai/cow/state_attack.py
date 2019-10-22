@@ -28,7 +28,6 @@ class StateAttack(State):
         meGroupId = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.groupid.GroupId)
 
-        self.attackMoveTimer.init()
         messaging.add(
             type=MessageType.EntityAttack,
             groupId=meGroupId.getId(),
@@ -38,6 +37,7 @@ class StateAttack(State):
         # self.attackTimer.setTimer(meEnemy.enemyInfo.attackTime)
         # self.setTimer(meEnemy.enemyInfo.attackTime)
         self.stepsTodo = 30
+        self.attackMoveTimer.init()
         self.attackMoveTimer.setTimer(0.1)
         self.setTimer(3.0)
 
@@ -62,7 +62,7 @@ class StateAttack(State):
 
         # check if we should do one attack step
         if self.attackMoveTimer.timeIsUp():
-            logger.info("{}: I'm attacking".format(self.owner))
+            logger.info("{}: I'm attacking, step {}".format(self.owner, self.stepsTodo))
 
             if self.stepsTodo > 0:
                 self.attackMoveTimer.reset()
