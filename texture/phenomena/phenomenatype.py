@@ -10,3 +10,4 @@ class PhenomenaType(Enum):
     tree3 = 5
     tree4 = 6
     gameover = 7
+    skillBlock = 8

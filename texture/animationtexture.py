@@ -73,7 +73,6 @@ class AnimationTexture(Texture):
                 # check if it is the last animation, if yes stop it
                 if self.frameIndex == self.animation.frameCount - 1:
                     self.setActive(False)
-                    return
                 else:
                     if self.frameIndex >= len(self.animation.frameTime):
                         logger.error("Frameidx {} larget than frametime arr {}".format(

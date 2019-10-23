@@ -4,6 +4,7 @@ from utilities.timer import Timer
 import system.gamelogic.attackable
 import system.graphics.renderable
 import system.groupid
+import system.gamelogic.offensiveattack
 from messaging import messaging, MessageType
 #from directmessaging import directMessaging, DirectMessageType
 import directmessaging
@@ -27,7 +28,7 @@ class OffensiveSkill(object):
         self.keyAssignment = {
             'q': fileOffenseLoader.skillManager.getSkillData(SkillType.cleave),
             'w': fileOffenseLoader.skillManager.getSkillData(SkillType.laser),
-            'e': fileOffenseLoader.skillManager.getSkillData(SkillType.port),
+            'e': fileOffenseLoader.skillManager.getSkillData(SkillType.block),
             'r': fileOffenseLoader.skillManager.getSkillData(SkillType.explosion),
             'f': fileOffenseLoader.skillManager.getSkillData(SkillType.heal),
             'g': fileOffenseLoader.skillManager.getSkillData(SkillType.port),
@@ -44,20 +45,18 @@ class OffensiveSkill(object):
             }
         }
 
+        self.dispatch = {
+            SkillType.explosion: self.skillExplosion,
+            SkillType.laser: self.skillLaser,
+            SkillType.cleave: self.skillCleave,
+            SkillType.heal: self.skillHeal,
+            SkillType.port: self.skillPort,
+            SkillType.block: self.skillBlock,
+        }
+
 
     def doSkillType(self, skillType :SkillType):
-        if skillType is SkillType.explosion:
-            self.skillExplosion()
-        elif skillType is SkillType.laser:
-            self.skillLaser()
-        elif skillType is SkillType.cleave:
-            self.skillCleave()
-        elif skillType is SkillType.heal:
-            self.skillHeal()
-        elif skillType is SkillType.port:
-            self.skillPort()
-        else:
-            logger.error("Unknown skill {}".format(skillType))
+        self.dispatch[skillType]()
 
 
     def doSkill(self, key):
@@ -94,6 +93,25 @@ class OffensiveSkill(object):
         # self.player.actionCtrl.changeTo(
         #    CharacterAnimationType.shrugging,
         #    self.player.direction)
+
+
+    def skillBlock(self):
+        meRenderable = self.esperData.world.component_for_entity(
+            self.esperData.entity, system.graphics.renderable.Renderable)
+        locCenter = meRenderable.getAttackBaseLocation()
+        locCenter.y -= 2  # FIXME base on skillBlock.yaml
+        # damage = fileOffenseLoader.skillManager.getSkillData(SkillType.block).damage
+        phenomenaType = fileOffenseLoader.skillManager.getSkillData(
+            SkillType.block).phenomenatexture
+        messaging.add(
+            type=MessageType.EmitPhenomenaTexture,
+            data={
+                'phenomenaTextureType': phenomenaType,
+                'location': locCenter,
+                'staticLocation': False,
+                'direction': meRenderable.direction,
+            }
+        )
 
 
     def skillHeal(self):

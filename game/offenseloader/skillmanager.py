@@ -5,6 +5,7 @@ import yaml
 from system.graphics.particleeffecttype import ParticleEffectType
 from game.offenseloader.skilltype import SkillType
 from game.offenseloader.skilldata import SkillData
+from texture.phenomena.phenomenatype import PhenomenaType
 
 logger = logging.getLogger(__name__)
 
@@ -43,9 +44,13 @@ class SkillManager(object):
         with open(filename, 'r') as stream:
             data = yaml.safe_load(stream)
 
+        if 'particleeffect' in data:
+            skill.particleEffectType = ParticleEffectType[data['particleeffect']]
+
+        if 'phenomenatexture' in data:
+            skill.phenomenatexture = PhenomenaType[data['phenomenatexture']]
+
         try:
-            if 'particleeffect' in data:
-                skill.particleEffectType = ParticleEffectType[data['particleeffect']]
             skill.damage = int(data['damage'])
             skill.cooldown = float(data['cooldown'])
         except TypeError as error:

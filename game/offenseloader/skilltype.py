@@ -7,3 +7,4 @@ class SkillType(Enum):
     cleave = 2
     heal = 3
     port = 4
+    block = 5
