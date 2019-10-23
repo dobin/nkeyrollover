@@ -27,7 +27,7 @@ class AiHelper(object):
 
         currentWeaponHitArea = meOffensiveAttack.getCurrentWeaponHitArea()
 
-        if Config.showEnemyHitbox:
+        if Config.showEnemyAttackLocation:
             for hitlocation in currentWeaponHitArea.hitCd:
                 messaging.add(
                     type=MessageType.EmitTextureMinimal,

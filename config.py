@@ -41,10 +41,10 @@ class _Config:
     playerAttacksCd = 0.2  # player attack cooldown
 
     # enemy config
-    enemyMovement = False  # freeze enemies for tests?
+    enemyMovement = True  # freeze enemies for tests?
     enemyAttacking = True
     showEnemyWanderDest = False
-    showEnemyHitbox = False
+    showEnemyAttackLocation = False
     showAttackDestinations = False
     enemiesInStateAttacking = 2
     enemiesInStateChase = 3
