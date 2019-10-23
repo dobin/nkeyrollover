@@ -13,6 +13,7 @@ from messaging import messaging, MessageType
 from utilities.entityfinder import EntityFinder
 from directmessaging import directMessaging, DirectMessageType
 from game.mapmanager import MapManager
+from system.graphics.particleeffecttype import ParticleEffectType
 
 logger = logging.getLogger(__name__)
 
@@ -38,14 +39,32 @@ class MovementProcessor(esper.Processor):
             playerEntity, system.graphics.renderable.Renderable)
 
         for msg in directMessaging.getByType(DirectMessageType.movePlayer):
+            x = msg.data['x']
+            y = msg.data['y']
+            dontChangeDirection = msg.data['dontChangeDirection']
+            whenMoved = msg.data['whenMoved']
+
             didMove = self.moveRenderable(
                 playerRenderable,
                 playerGroupId.getId(),
-                msg.data['x'],
-                msg.data['y'],
-                msg.data['dontChangeDirection'])
+                x,
+                y,
+                dontChangeDirection)
 
             if didMove:
+                if whenMoved == "showAppearEffect":
+                    locCenter = playerRenderable.getLocationCenter()
+                    messaging.add(
+                        type=MessageType.EmitParticleEffect,
+                        data= {
+                            'location': locCenter,
+                            'effectType': ParticleEffectType.appear,
+                            'damage': 0,
+                            'byPlayer': True,
+                            'direction': Direction.none,
+                        }
+                    )
+
                 extcords = ExtCoordinates(
                     playerRenderable.coordinates.x,
                     playerRenderable.coordinates.y,

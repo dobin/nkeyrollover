@@ -10,3 +10,6 @@ class ParticleEffectType(Enum):
 
     floatingDamage = 4
     hitBurst = 5
+
+    disappear = 6
+    appear = 7

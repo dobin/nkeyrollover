@@ -10,6 +10,7 @@ import directmessaging
 from common.direction import Direction
 from game.offenseloader.fileoffenseloader import fileOffenseLoader
 from game.offenseloader.skilltype import SkillType
+from system.graphics.particleeffecttype import ParticleEffectType
 
 logger = logging.getLogger(__name__)
 
@@ -113,6 +114,19 @@ class OffensiveSkill(object):
         if meRenderable.direction is Direction.right:
             moveX = self.data[SkillType.port]['distance']
 
+        # emit effect on old place
+        locCenter = meRenderable.getLocationCenter()
+        messaging.add(
+            type=MessageType.EmitParticleEffect,
+            data= {
+                'location': locCenter,
+                'effectType': ParticleEffectType.disappear,
+                'damage': 0,
+                'byPlayer': True,
+                'direction': Direction.none,
+            }
+        )
+
         directmessaging.directMessaging.add(
             type = directmessaging.DirectMessageType.movePlayer,
             groupId = meGroupId.getId(),
@@ -120,6 +134,7 @@ class OffensiveSkill(object):
                 'x': moveX,
                 'y': 0,
                 'dontChangeDirection': False,
+                'whenMoved': "showAppearEffect",  # emit effect on new place
             }
         )
 

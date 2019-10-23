@@ -133,6 +133,7 @@ class InputProcessor(esper.Processor):
                     'x': x,
                     'y': y,
                     'dontChangeDirection': dontChangeDirection,
+                    'whenMoved': None,
                 },
             )
 

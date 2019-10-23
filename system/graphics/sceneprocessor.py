@@ -149,6 +149,7 @@ class SceneProcessor(esper.Processor):
                         'x': distX,
                         'y': 0,
                         'dontChangeDirection': False,
+                        'whenMoved': None,
                     },
                 )
 

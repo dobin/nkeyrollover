@@ -31,6 +31,17 @@ class ParticleEmiter(object):
         # particleActive is being used by ParticleProcessor, its basically public
         self.particleActive = []
 
+        self.dispatch = {
+            ParticleEffectType.explosion: self.createExplosion,
+            ParticleEffectType.laser: self.createLaser,
+            ParticleEffectType.cleave: self.createCleave,
+            ParticleEffectType.explosion: self.createExplosion,
+            ParticleEffectType.floatingDamage: self.createFloatingDamage,
+            ParticleEffectType.hitBurst: self.createHitBurst,
+            ParticleEffectType.disappear: self.createDisappear,
+            ParticleEffectType.appear: self.createAppear,
+        }
+
 
     def unuse(self, particle):
         self.particleActive.remove(particle)
@@ -45,18 +56,7 @@ class ParticleEmiter(object):
         effectType :ParticleEffectType,
         direction :Direction = Direction.none,
     ):
-        if effectType is ParticleEffectType.explosion:
-            self.createExplosion(loc, direction, byPlayer, damage)
-        if effectType is ParticleEffectType.laser:
-            self.createLaser(loc, direction, byPlayer, damage)
-        if effectType is ParticleEffectType.cleave:
-            self.createCleave(loc, direction, byPlayer, damage)
-        if effectType is ParticleEffectType.dragonExplosion:
-            self.createDragonExplosion(loc, direction, byPlayer, damage)
-        if effectType is ParticleEffectType.floatingDamage:
-            self.createFloatingDamage(loc, direction, byPlayer, damage)
-        if effectType is ParticleEffectType.hitBurst:
-            self.createHitBurst(loc, direction, byPlayer, damage)
+        self.dispatch[effectType](loc, direction, byPlayer, damage)
 
 
     def createHitBurst(self, loc, direction, byPlayer, damage):
@@ -254,3 +254,39 @@ class ParticleEmiter(object):
                 'stun': False,
             }
         )
+
+
+    def createDisappear(self, loc, direction, byPlayer, damage):
+        particleCount = 4
+        life = 20
+        n = 0
+        while n < particleCount:
+            particle = self.particlePool.pop()
+            angle = (360.0 / particleCount) * n
+
+            particle.init(
+                x=loc.x, y=loc.y, life=life, angle=angle,
+                speed=0.1, fadeout=True, byStep=False, charType=1,
+                active=True,
+                damage=damage, damageEveryStep=True, byPlayer=byPlayer)
+
+            self.particleActive.append(particle)
+            n += 1
+
+
+    def createAppear(self, loc, direction, byPlayer, damage):
+        particleCount = 8
+        life = 20
+        n = 0
+        while n < particleCount:
+            particle = self.particlePool.pop()
+            angle = (360.0 / particleCount) * n
+
+            particle.init(
+                x=loc.x, y=loc.y, life=life, angle=angle,
+                speed=0.1, fadeout=True, byStep=False, charType=1,
+                active=True,
+                damage=damage, damageEveryStep=True, byPlayer=byPlayer)
+
+            self.particleActive.append(particle)
+            n += 1

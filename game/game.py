@@ -107,6 +107,7 @@ class Game(object):
         # p handle:   DirectMessage      movePlayer
         # e handle:   DirectMessage      moveEnemy
         # p generate: Message            PlayerLocation
+        # p generate: Message            EmitParticleEffect
         # x generate: Message            EntityMoved
         self.world.add_processor(movementProcessor)
 
