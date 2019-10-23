@@ -44,12 +44,12 @@ class Attackable():
             if stunned['time'] > timeRef:
                 stunCount += 1
 
-        if stunCount < self.maxStunCount:
-            logger.info("Stun check: Can be stunned Cnt: {} max: {} time: {}".format(
+        if stunCount <= self.maxStunCount:
+            logging.info("Stun check: Can be stunned Cnt: {} max: {} time: {}".format(
                 stunCount, self.maxStunCount, timeRef))
             return True
         else:
-            logger.info("Stun check: Can be stunned Cnt: {} max: {} time: {}".format(
+            logging.info("Stun check: Can not be stunned Cnt: {} max: {} time: {}".format(
                 stunCount, self.maxStunCount, timeRef))
             return False
 
