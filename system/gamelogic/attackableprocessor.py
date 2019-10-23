@@ -33,8 +33,8 @@ class AttackableProcessor(esper.Processor):
 
 
     def advance(self, dt):
-        for ent, meAttackable in self.world.get_component(
-            Attackable
+        for ent, (meAttackable, meGroupId) in self.world.get_components(
+            Attackable, GroupId
         ):
             # advance timers
             meAttackable.advance(dt)
@@ -45,7 +45,11 @@ class AttackableProcessor(esper.Processor):
                 meAttackable.stunTimer.stop()
 
                 # generate end-stun message (for animation)
-                # ?
+                messaging.add(
+                    type = MessageType.EntityEndStun,
+                    groupId = meGroupId.getId(),
+                    data = {}
+                )
 
 
     def checkHealth(self):

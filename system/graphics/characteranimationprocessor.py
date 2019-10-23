@@ -18,14 +18,14 @@ class CharacterAnimationProcessor(esper.Processor):
 
 
     def process(self, deltaTime):
-        self.animationUpdateMove()
-        self.animationUpdateAttack()
-        self.animationUpdateStun()
-        self.animationUpdateDying()
-        self.animationUpdateKnockdown()
+        self.checkForMove()
+        self.checkForAttack()
+        self.checkForStun()
+        self.checkForDying()
+        self.checkForKnockdown()
 
 
-    def animationUpdateKnockdown(self):
+    def checkForKnockdown(self):
         for message in messaging.getByType(MessageType.EntityKnockdown):
             entity = EntityFinder.findCharacterByGroupId(self.world, message.groupId)
             meRenderable = self.world.component_for_entity(
@@ -37,7 +37,7 @@ class CharacterAnimationProcessor(esper.Processor):
                 interrupt=True)
 
 
-    def animationUpdateDying(self):
+    def checkForDying(self):
         for message in messaging.getByType(MessageType.EntityDying):
             entity = EntityFinder.findCharacterByGroupId(self.world, message.groupId)
             meRenderable = self.world.component_for_entity(
@@ -51,7 +51,7 @@ class CharacterAnimationProcessor(esper.Processor):
                 interrupt=False)
 
 
-    def animationUpdateMove(self):
+    def checkForMove(self):
         for message in messaging.getByType(MessageType.EntityMoved):
             entity = EntityFinder.findCharacterByGroupId(self.world, message.groupId)
             renderable = self.world.component_for_entity(
@@ -71,10 +71,10 @@ class CharacterAnimationProcessor(esper.Processor):
                     renderable.direction)
 
 
-    def animationUpdateAttack(self):
+    def checkForAttack(self):
         messages = messaging.get()
         for message in messages:
-            # player
+            # PlayerAttack - Player
             if message.type == MessageType.PlayerAttack:
                 playerEntity = EntityFinder.findPlayer(self.world)
                 playerRenderable = self.world.component_for_entity(
@@ -85,7 +85,7 @@ class CharacterAnimationProcessor(esper.Processor):
                     playerRenderable.direction,
                     interrupt=True)
 
-            # enemies
+            # EntityAttack - Enemies
             if message.type == MessageType.EntityAttack:
                 entity = EntityFinder.findCharacterByGroupId(
                     self.world, message.groupId)
@@ -98,7 +98,7 @@ class CharacterAnimationProcessor(esper.Processor):
                     interrupt=True)
 
 
-            # only for enemies
+            # attackWindup- only for Enemies
             if message.type == MessageType.attackWindup:
                 entity = EntityFinder.findCharacterByGroupId(
                     self.world, message.groupId)
@@ -111,13 +111,23 @@ class CharacterAnimationProcessor(esper.Processor):
                     interrupt=True)
 
 
-    def animationUpdateStun(self):
+    def checkForStun(self):
         for message in messaging.getByType(MessageType.EntityStun):
             entity = EntityFinder.findCharacterByGroupId(self.world, message.groupId)
             entityRenderable = self.world.component_for_entity(
                 entity, system.graphics.renderable.Renderable)
 
+            # here we also store the current animation
+            # by interrupt=True
             entityRenderable.texture.changeAnimation(
                 CharacterAnimationType.stun,
                 entityRenderable.direction,
                 interrupt=True)
+
+        for message in messaging.getByType(MessageType.EntityEndStun):
+            entity = EntityFinder.findCharacterByGroupId(self.world, message.groupId)
+            entityRenderable = self.world.component_for_entity(
+                entity, system.graphics.renderable.Renderable)
+
+            # restore saved animation
+            entityRenderable.texture.previousAnimationRestore()

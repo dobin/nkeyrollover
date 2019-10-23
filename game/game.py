@@ -130,6 +130,7 @@ class Game(object):
 
         # x handle:   DirectMessage      receiveDamage
         # x generate: Message            EntityStun
+        # x generate: Message            EntityEndStun
         # x generate: Message            EntityDying
         # x generate: Message            EmitTexture
         # x generate: Message            Gameover
@@ -164,6 +165,7 @@ class Game(object):
         # x handle:   Message            EntityAttack
         # x handle:   Message            EntityMoved
         # x handle:   Message            EntityStun
+        # x handle:   Message            EntityEndStun
         self.world.add_processor(characterAnimationProcessor)
 
         # x handle:   DirectMessage      activateSpeechBubble (emit)

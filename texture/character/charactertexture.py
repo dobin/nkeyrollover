@@ -39,8 +39,8 @@ class CharacterTexture(AnimationTexture):
             subtype :int =0,
             interrupt=False
     ):
-        logger.info("{}: Change texture to: {}  (irq: {})".format(
-            self.name, characterAnimationType, interrupt))
+        logger.info("{}: Change charactertexture to: {}, previous {} (irq: {})".format(
+            self.name, characterAnimationType, self.previousAnimation, interrupt))
 
         # interupt the current animation
         if interrupt:
@@ -50,14 +50,7 @@ class CharacterTexture(AnimationTexture):
             else:
                 # we are already interrupted. overwrite current animation, but dont
                 # touch the self.previousAnimation one
-                logger.info(
-                    "{}: Animation to {}, but already int in {} (prev {})".format(
-                        self.name,
-                        characterAnimationType,
-                        self.animation,
-                        self.previousAnimation
-                    )
-                )
+                pass
         else:
             # if we have a new animation which does not interrupt,
             # remove previously stored one
@@ -76,7 +69,7 @@ class CharacterTexture(AnimationTexture):
 
 
     def setCharacterTextureType(self, characterTextureType):
-        logging.info("Set Character texture to: {}".format(characterTextureType))
+        logging.info("Set charactertexture to: {}".format(characterTextureType))
         self.characterTextureType = characterTextureType
 
 
@@ -88,7 +81,7 @@ class CharacterTexture(AnimationTexture):
 
 
     def previousAnimationStore(self):
-        logger.info("{}: Interrupt, store current: {}".format(
+        logger.info("{}: Store current charactertexture: {}".format(
             self.name, self.animation))
         self.previousAnimation = self.animation
         self.previousFrameIndex = self.frameIndex
@@ -96,8 +89,8 @@ class CharacterTexture(AnimationTexture):
 
 
     def previousAnimationRestore(self):
-        logger.info("{}: Reset Animation to: {}".format(
-            self.name, self.previousAnimation))
+        logger.info("{}: Restore charactertexture from {} to: {}".format(
+            self.name, self.animation, self.previousAnimation))
         self.animation = self.previousAnimation
         self.frameIndex = self.previousFrameIndex
         self.frameTimeLeft = self.previousFrameTimeLeft
@@ -106,6 +99,7 @@ class CharacterTexture(AnimationTexture):
 
 
     def previousAnimationClear(self):
+        logger.info("{}: Remove previous charactertexture".format(self.name))
         self.previousAnimation = None
         self.previousFrameIndex = None
         self.previousFrameTimeLeft = None

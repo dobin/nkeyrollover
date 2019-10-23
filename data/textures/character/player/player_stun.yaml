@@ -1,4 +1,4 @@
-endless: True
+endless: True  # defined by Stun length
 advanceByStep: False
 frameColors:
   - brightwhite

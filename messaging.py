@@ -34,6 +34,7 @@ class MessageType(Enum):
     EmitPhenomenaTexture = 23
     GameRestart = 24
     Deleted = 25
+    EntityEndStun = 26
 
 
 class Message(object):
