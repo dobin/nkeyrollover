@@ -132,6 +132,7 @@ class AttackableProcessor(esper.Processor):
             byPlayer = msg.data['byPlayer']
             direction = msg.data['direction']
             knockback = msg.data['knockback']
+            stun = msg.data['stun']
             isPlayer = self.world.has_component(entity, Player)
 
             # enemy can attack player, and vice-versa
@@ -183,7 +184,7 @@ class AttackableProcessor(esper.Processor):
                     0.1, ColorPalette.getColorByColor(Color.red))
 
             # handle: stun
-            if meAttackable.isStunnable():
+            if stun and meAttackable.isStunnable():
                 stunTime = meAttackable.stunTime
                 meAttackable.stunTimer.setTimer(timerValue=stunTime)
                 meAttackable.stunTimer.start()

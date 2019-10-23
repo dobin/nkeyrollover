@@ -184,6 +184,7 @@ class Particle(object):
                         'byPlayer': self.byPlayer,
                         'direction': Direction.none,
                         'knockback': False,
+                        'stun': False,
                     }
                 )
 

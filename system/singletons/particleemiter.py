@@ -251,5 +251,6 @@ class ParticleEmiter(object):
                 'byPlayer': byPlayer,
                 'direction': direction,
                 'knockback': False,
+                'stun': False,
             }
         )

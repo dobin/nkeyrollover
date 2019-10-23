@@ -91,6 +91,7 @@ class OffensiveAttack():
                     'byPlayer': self.parentChar.isPlayer,
                     'direction': direction,
                     'knockback': knockback,
+                    'stun': True,
                 }
             )
 
