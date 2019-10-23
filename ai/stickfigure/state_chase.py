@@ -48,7 +48,7 @@ class StateChase(State):
         self.canAttackTimer.setTimer(meEnemy.enemyInfo.enemyCanAttackPeriod)
         self.canAttackTimer.reset()
 
-        if not Config.enemyAttacking:
+        if not Config.allowEnemyAttacking:
             self.canAttackTimer.setActive(False)
 
 
@@ -57,7 +57,7 @@ class StateChase(State):
             logger.debug("{}: Check if i can attack player".format(self.name))
             if self.canAttackPlayer():
                 if (EntityFinder.numEnemiesInState(self.brain.owner.world, 'attack')
-                        < Config.enemiesInStateAttacking):
+                        < Config.maxEnemiesInStateAttacking):
                     self.brain.pop()
                     self.brain.push("attackwindup")
 
@@ -137,7 +137,7 @@ class StateChase(State):
         meRenderable = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.graphics.renderable.Renderable)
 
-        if not Config.enemyMovement:
+        if not Config.allowEnemyMovement:
             return
 
         moveX, moveY, dontChangeDirection = AiHelper.getAttackVectorToPlayer(

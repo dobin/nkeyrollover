@@ -95,7 +95,7 @@ class OffensiveAttack():
                 }
             )
 
-            if Config.showAttackDestinations:
+            if Config.showEnemyWeaponAttackLocations:
                 for hitlocation in weaponHitArea.hitCd:
                     messaging.add(
                         type=MessageType.EmitTextureMinimal,

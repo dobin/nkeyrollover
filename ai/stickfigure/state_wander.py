@@ -59,7 +59,7 @@ class StateWander(State):
 
         if self.timeIsUp():
             if (EntityFinder.numEnemiesInState(self.brain.owner.world, 'chase')
-                    < Config.enemiesInStateChase):
+                    < Config.maxEnemiesInStateChase):
                 logger.info("{}: Too long wandering, chase again a bit".format(
                     self.owner))
                 self.brain.pop()
@@ -88,7 +88,7 @@ class StateWander(State):
         meGroupId = self.brain.owner.world.component_for_entity(
             self.brain.owner.entity, system.groupid.GroupId)
 
-        if not Config.enemyMovement:
+        if not Config.allowEnemyMovement:
             return
 
         x, y = AiHelper.getVectorToPlayer(

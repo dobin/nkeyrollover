@@ -40,18 +40,21 @@ class _Config:
     movementKeysPerSec = 20.0
     playerAttacksCd = 0.2  # player attack cooldown
 
-    # enemy config
-    enemyMovement = True  # freeze enemies for tests?
-    enemyAttacking = True
+    # enemy
+    allowEnemyMovement = True  # freeze enemies for tests?
+    allowEnemyAttacking = True
     showEnemyWanderDest = False
-    showEnemyAttackLocation = False
-    showAttackDestinations = False
-    enemiesInStateAttacking = 2
-    enemiesInStateChase = 3
-
+    showEnemyWeaponHitCollisionDetectionTargets = False
+    showEnemyWeaponAttackLocations = False
     showEnemyDamageNumbers = True
+
+    # gfx
     showBurstOnImpact = True
     showBurstOnImpactDamage = 19  # how much damage to activate Burst
+
+    # gameplay
+    maxEnemiesInStateAttacking = 2
+    maxEnemiesInStateChase = 3
 
 
 Config = _Config()
