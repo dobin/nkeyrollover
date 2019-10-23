@@ -89,6 +89,11 @@ class CharacterTexture(AnimationTexture):
 
 
     def previousAnimationRestore(self):
+        if self.previousAnimation is None:
+            logger.warning("{}: Restore charactertexture from {} to failed, no previous".format(
+                self.name, self.animation))
+            return
+
         logger.info("{}: Restore charactertexture from {} to: {}".format(
             self.name, self.animation, self.previousAnimation))
         self.animation = self.previousAnimation
