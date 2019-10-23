@@ -217,17 +217,29 @@ class AttackableProcessor(esper.Processor):
                 else:
                     x = 2
 
-                directMessaging.add(
-                    groupId = meGroupId.getId(),
-                    type = DirectMessageType.moveEnemy,
-                    data = {
-                        'x': x,
-                        'y': 0,
-                        'dontChangeDirection': True,
-                        'updateTexture': False,
-                        'force': True,
-                    },
-                )
+                if isPlayer:
+                    directMessaging.add(
+                        groupId = meGroupId.getId(),
+                        type = DirectMessageType.movePlayer,
+                        data = {
+                            'x': x,
+                            'y': 0,
+                            'dontChangeDirection': True,
+                            'whenMoved': "showOnKnockback",
+                        },
+                    )
+                else:
+                    directMessaging.add(
+                        groupId = meGroupId.getId(),
+                        type = DirectMessageType.moveEnemy,
+                        data = {
+                            'x': x,
+                            'y': 0,
+                            'dontChangeDirection': True,
+                            'updateTexture': False,
+                            'force': True,
+                        },
+                    )
 
                 # no additional effects
                 return

@@ -64,6 +64,8 @@ class MovementProcessor(esper.Processor):
                             'direction': Direction.none,
                         }
                     )
+                if whenMoved == "showOnKnockback":
+                    pass  # for now
 
                 extcords = ExtCoordinates(
                     playerRenderable.coordinates.x,
