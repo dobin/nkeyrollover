@@ -64,7 +64,11 @@ class PlayerProcessor(esper.Processor):
         player = system.gamelogic.player.Player()
         attackable = Attackable(
             initialHealth=100,
-            stunTime=0.75)
+            stunCount=1,
+            stunTimeFrame=8.0,
+            stunTime=0.75,
+            knockdownChance=0.0,
+            knockbackChance=0.9)
 
         texture = CharacterTexture(
             characterTextureType=CharacterTextureType.player,

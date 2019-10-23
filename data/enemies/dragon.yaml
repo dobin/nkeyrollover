@@ -13,7 +13,7 @@ enemyInfo:
   chaseStepDelay: 0.5
 stunTime: 0.4
 stunCount: 2
-stunTimeFrame: 5
+stunTimeFrame: 10
 attackBaseLocation:
   x: -1
   y: 12

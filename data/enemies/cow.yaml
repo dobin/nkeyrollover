@@ -13,7 +13,7 @@ enemyInfo:
   chaseStepDelay: 0.2
 stunTime: 0.75
 stunCount: 3
-stunTimeFrame: 3
+stunTimeFrame: 5
 wanderAttackDistance: 20
 knockdownChance: 0.2
 knockbackChance: 0.3
