@@ -13,8 +13,10 @@ class MockWin(object):
         self.win = [[''] * self.width for i in range(self.height)]
 
 
-    def addstr(self, y, x, string, color=None):
-        for i, ch in enumerate(string):
+    def addstr(
+        self, y, x, char, color, attr=0, bg=0, knownDrawable=False, setbg=False
+    ):
+        for i, ch in enumerate(char):
             self.addChInternal(y, x + i, ch, color)
 
 

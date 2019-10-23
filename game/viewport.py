@@ -33,7 +33,9 @@ class Viewport(object):
         self.win.print_at(char, x, y, color, attr, bg=bg)
 
 
-    def addstr(self, y, x, char, color, attr=0, bg=0, knownDrawable=False, setbg=False):
+    def addstr(
+        self, y, x, char, color, attr=0, bg=0, knownDrawable=False, setbg=False
+    ):
         # Note: This function should be as fast as possible.
 
         x = x - self.x  # getScreenCoords() - fast version
