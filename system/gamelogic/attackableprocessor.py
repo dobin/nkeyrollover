@@ -79,7 +79,6 @@ class AttackableProcessor(esper.Processor):
                         data = {}
                     )
 
-
         # if enemies have less than 0 health, make them gonna die
         for ent, (meAtk, meEnemy, ai, meGroupId, meRend) in self.world.get_components(
             Attackable, Enemy, Ai, GroupId, Renderable
@@ -142,63 +141,6 @@ class AttackableProcessor(esper.Processor):
             # change health
             meAttackable.adjustHealth(-1 * damage)
 
-            # dont stun if there is no health left
-            if meAttackable.getHealth() <= 0.0:
-                return
-
-            # handle: stun
-            if meAttackable.isStunnable():
-                stunTime = meAttackable.stunTime
-                meAttackable.stunTimer.setTimer(timerValue=stunTime)
-                meAttackable.stunTimer.start()
-                meAttackable.isStunned = True
-                meAttackable.addStun(stunTime=stunTime)
-
-                # handle: knockdown
-                if random.random() < meAttackable.knockdownChance:
-                    messaging.add(
-                        type=MessageType.EntityKnockdown,
-                        data={},
-                        groupId = meGroupId.getId(),
-                    )
-                else:
-                    messaging.add(
-                        type=MessageType.EntityStun,
-                        data={
-                            'timerValue': stunTime,
-                        },
-                        groupId = meGroupId.getId(),
-                    )
-
-            # handle: knockback
-            if knockback and random.random() < meAttackable.knockbackChance:
-                if direction is Direction.left:
-                    x = -2
-                else:
-                    x = 2
-
-                directMessaging.add(
-                    groupId = meGroupId.getId(),
-                    type = DirectMessageType.moveEnemy,
-                    data = {
-                        'x': x,
-                        'y': 0,
-                        'dontChangeDirection': True,
-                        'updateTexture': False,
-                        'force': True,
-                    },
-                )
-
-            # gfx: set texture color
-            healthPercentage = meAttackable.getHealthPercentage()
-            # color the texture if we are not dead
-            if healthPercentage > 0.5:
-                meRenderable.texture.setOverwriteColorFor(
-                    0.1, ColorPalette.getColorByColor(Color.yellow))
-            else:
-                meRenderable.texture.setOverwriteColorFor(
-                    0.1, ColorPalette.getColorByColor(Color.red))
-
             # gfx: show floating damage numbers
             if Config.showEnemyDamageNumbers:
                 messaging.add(
@@ -225,3 +167,66 @@ class AttackableProcessor(esper.Processor):
                             'direction': direction,
                         }
                     )
+
+            # no stun, knockdown, knockback, or new color if there is no health left
+            # (animations may overwrite each other)
+            if meAttackable.getHealth() <= 0.0:
+                return
+
+            # gfx: set texture color
+            healthPercentage = meAttackable.getHealthPercentage()
+            if healthPercentage > 0.5:
+                meRenderable.texture.setOverwriteColorFor(
+                    0.1, ColorPalette.getColorByColor(Color.yellow))
+            else:
+                meRenderable.texture.setOverwriteColorFor(
+                    0.1, ColorPalette.getColorByColor(Color.red))
+
+            # handle: stun
+            if meAttackable.isStunnable():
+                stunTime = meAttackable.stunTime
+                meAttackable.stunTimer.setTimer(timerValue=stunTime)
+                meAttackable.stunTimer.start()
+                meAttackable.isStunned = True
+                meAttackable.addStun(stunTime=stunTime)
+
+                # handle: knockdown
+                if random.random() < meAttackable.knockdownChance:
+                    messaging.add(
+                        type=MessageType.EntityKnockdown,
+                        data={},
+                        groupId = meGroupId.getId(),
+                    )
+                else:
+                    messaging.add(
+                        type=MessageType.EntityStun,
+                        data={
+                            'timerValue': stunTime,
+                        },
+                        groupId = meGroupId.getId(),
+                    )
+
+                # no additional effects
+                return
+
+            # handle: knockback
+            if knockback and random.random() < meAttackable.knockbackChance:
+                if direction is Direction.left:
+                    x = -2
+                else:
+                    x = 2
+
+                directMessaging.add(
+                    groupId = meGroupId.getId(),
+                    type = DirectMessageType.moveEnemy,
+                    data = {
+                        'x': x,
+                        'y': 0,
+                        'dontChangeDirection': True,
+                        'updateTexture': False,
+                        'force': True,
+                    },
+                )
+
+                # no additional effects
+                return

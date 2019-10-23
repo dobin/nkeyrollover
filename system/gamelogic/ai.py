@@ -26,6 +26,7 @@ class Ai():
 
     def initAi(self, esperData):
         self.brain :Brain = Brain(esperData)
+        
         self.brain.register(StateSpawn)
         if self.enemyType is EnemyType.cow:
             self.brain.register(CowStateAttack)
