@@ -20,6 +20,7 @@ from system.graphics.characteranimationprocessor import CharacterAnimationProces
 from system.gamelogic.aiprocessor import AiProcessor
 from system.graphics.renderableminimalprocessor import RenderableMinimalProcessor
 from system.gamelogic.gametimeprocessor import GametimeProcessor
+from system.graphics.environmentprocessor import EnvironmentProcessor
 from game.scenemanager import SceneManager
 from game.statusbar import StatusBar
 from utilities.entityfinder import EntityFinder
@@ -85,6 +86,8 @@ class Game(object):
             sceneManager=sceneManager,
         )
         damageProcessor = DamageProcessor()
+        environmentProcessor = EnvironmentProcessor(
+            viewport=viewport, mapManager=mapManager)
 
         self.sceneProcessor :SceneProcessor = sceneProcessor  # show F1 stats
         self.viewport :Viewport = viewport  # for keyboardinput in nkeyrollover.py
@@ -145,7 +148,11 @@ class Game(object):
         # e generate: Message            SpawnEnemy
         # p generate: Message            SpawnPlayer
         # x generate: DirectMessage      activateSpeechBubble
+        # x generate: Message            ScreenMove
         self.world.add_processor(sceneProcessor)
+
+        # x handle:   Message            ScreenMove
+        self.world.add_processor(environmentProcessor)
 
         # e handle:   Message            SpawnEnemy
         # e generate: Message            EntityAttack

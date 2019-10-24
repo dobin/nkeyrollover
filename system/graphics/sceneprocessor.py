@@ -86,10 +86,10 @@ class SceneProcessor(esper.Processor):
                 if playerScreenCoords.x != 10:
                     distance = int(playerScreenCoords.x - 10)
                     if distance < 0:
-                        self.viewport.adjustViewport(-1)
+                        self.adjustViewport(-1)
                         self.screenMoveTimer.reset()
                     elif distance > 0:
-                        self.viewport.adjustViewport(1)
+                        self.adjustViewport(1)
                         self.screenMoveTimer.reset()
 
             elif self.state is State.pushToEnemies:
@@ -98,10 +98,10 @@ class SceneProcessor(esper.Processor):
                 if playerScreenCoords.x != self.xCenter:
                     distance = int(playerScreenCoords.x - self.xCenter)
                     if distance < 0:
-                        self.viewport.adjustViewport(-1)
+                        self.adjustViewport(-1)
                         self.screenMoveTimer.reset()
                     elif distance > 0:
-                        self.viewport.adjustViewport(1)
+                        self.adjustViewport(1)
                         self.screenMoveTimer.reset()
 
             elif self.state is State.brawl:
@@ -109,10 +109,10 @@ class SceneProcessor(esper.Processor):
                 # coming close to left/right of the screen will move it
                 if playerScreenCoords.x >= Config.moveBorderRight:
                     distance = playerScreenCoords.x - Config.moveBorderRight
-                    self.viewport.adjustViewport(distance)
+                    self.adjustViewport(distance)
                 if playerScreenCoords.x <= Config.moveBorderLeft:
                     distance = playerScreenCoords.x - Config.moveBorderLeft
-                    self.viewport.adjustViewport(distance)
+                    self.adjustViewport(distance)
             # /adjust viewport on move
 
             # let the scene decide if we need more enemies
@@ -164,10 +164,10 @@ class SceneProcessor(esper.Processor):
                 if playerScreenCoords.x != 10:
                     distance = int(playerScreenCoords.x - 10)
                     if distance < 0:
-                        self.viewport.adjustViewport(-1)
+                        self.adjustViewport(-1)
                         self.screenMoveTimer.reset()
                     elif distance > 0:
-                        self.viewport.adjustViewport(1)
+                        self.adjustViewport(1)
                         self.screenMoveTimer.reset()
 
                 else:
@@ -179,16 +179,27 @@ class SceneProcessor(esper.Processor):
                 if playerScreenCoords.x != self.xCenter:
                     distance = int(playerScreenCoords.x - self.xCenter)
                     if distance < 0:
-                        self.viewport.adjustViewport(-1)
+                        self.adjustViewport(-1)
                         self.screenMoveTimer.reset()
                     elif distance > 0:
-                        self.viewport.adjustViewport(1)
+                        self.adjustViewport(1)
                         self.screenMoveTimer.reset()
                 else:
                     self.screenMoveTimer.stop()
 
 
         self.sceneManager.advance(dt)
+
+
+    def adjustViewport(self, xoff):
+        self.viewport.adjustViewport(xoff)
+
+        messaging.add(
+            type = MessageType.ScreenMove,
+            data = {
+                'x': xoff,
+            },
+        )
 
 
     def killAllEnemies(self):

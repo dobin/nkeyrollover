@@ -15,6 +15,7 @@ class ParticleProcessor(esper.Processor):
         self,
         viewport :Viewport
     ):
+        super().__init__()
         self.viewport :Viewport = viewport
         self.particleEmiter = ParticleEmiter(viewport=viewport)
 

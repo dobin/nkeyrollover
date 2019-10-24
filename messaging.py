@@ -35,6 +35,7 @@ class MessageType(Enum):
     GameRestart = 24
     Deleted = 25
     EntityEndStun = 26
+    ScreenMove = 27
 
 
 class Message(object):
