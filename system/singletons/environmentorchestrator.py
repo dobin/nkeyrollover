@@ -2,7 +2,6 @@ import logging
 
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
-from system.graphics.renderableminimal import RenderableMinimal
 from system.graphics.renderable import Renderable
 from common.coordinates import Coordinates
 
@@ -23,17 +22,18 @@ class EnvironmentOrchestrator(object):
     def loadEnvironment(self):
         self.envRenderables = [None] * 800  # FIXME self.mapManager.getCurrentMapWidth()
 
-        t = PhenomenaTexture(phenomenaType=PhenomenaType.tree4, setbg=True)
+        t = PhenomenaTexture(phenomenaType=PhenomenaType.puddle, setbg=True)
         r = Renderable(
             texture=t,
             viewport=self.viewport,
-            coordinates=Coordinates(40, 20),
-            active=True
+            coordinates=Coordinates(30, 10),
+            active=True,
+            name='Env Puddle'
         )
         self.addEnvRenderable(r)
 
 
-    def addEnvRenderable(self, renderable :RenderableMinimal):
+    def addEnvRenderable(self, renderable :Renderable):
         x = renderable.getLocation().x
         if not self.envRenderables[x]:
             self.envRenderables[x] = []
@@ -42,7 +42,7 @@ class EnvironmentOrchestrator(object):
 
 
     def trySpawn(self, world, newX):
-        if newX <= 0:
+        if newX < 0:
             return
 
         x = newX
@@ -50,9 +50,11 @@ class EnvironmentOrchestrator(object):
         while x < maxx:
             if self.envRenderables[x] is not None:
                 for renderable in self.envRenderables[x]:
+                    logging.info("Add env {}".format(renderable))
                     entity = world.create_entity()
                     world.add_component(entity, renderable)
                     self.activeEnvEntities.append((entity, renderable))
+                    self.envRenderables[x].remove(renderable)
 
             x += 1
 

@@ -11,3 +11,4 @@ class PhenomenaType(Enum):
     tree4 = 6
     gameover = 7
     skillBlock = 8
+    puddle = 9
