@@ -27,7 +27,7 @@ class Attackable():
         self.stunnedQueue = collections.deque(maxlen=5)
 
         # after message GameRestart, all Renderables are deleted - but not until
-        # the next advance(). Upon restarting the map, if the user presses a key, 
+        # the next advance(). Upon restarting the map, if the user presses a key,
         # checkHeal() in AttackableProcessor would emit yet another stray
         # GameOver message. This is the fix.
         self.isActive = True
@@ -38,6 +38,9 @@ class Attackable():
 
 
     def isStunnable(self):
+        if self.maxStunCount == 0:
+            return False
+
         timeRef = system.singletons.gametime.getGameTime() - self.stunTimeFrame
         stunCount = 0
         for stunned in self.stunnedQueue:
@@ -67,7 +70,6 @@ class Attackable():
 
     def adjustHealth(self, health :int):
         self.health += health
-        logger.info("Got damage: {}  new health: {}".format(health, self.health))
 
 
     def getHealth(self):
@@ -77,6 +79,7 @@ class Attackable():
     def getHealthPercentage(self):
         p = self.health / self.initialHealth
         return p
+
 
     def advance(self, dt):
         self.stunTimer.advance(dt)

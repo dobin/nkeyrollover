@@ -18,7 +18,7 @@ from system.graphics.particleeffecttype import ParticleEffectType
 from config import Config
 from common.direction import Direction
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("AttackableProcessor")
 
 
 class AttackableProcessor(esper.Processor):
@@ -113,10 +113,17 @@ class AttackableProcessor(esper.Processor):
 
                         meRend.setActive(False)
 
+        # environment
+        for ent, (meAtk, meGroupId, meRend) in self.world.get_components(
+            Attackable, GroupId, Renderable
+        ):
+            if meAtk.getHealth() <= 0:
+                meRend.texture.setActive(False)
+
 
     def checkReceiveDamage(self):
         for msg in directMessaging.getByType(DirectMessageType.receiveDamage):
-            entity = EntityFinder.findCharacterByGroupId(self.world, msg.groupId)
+            entity = EntityFinder.findAttackableByGroupId(self.world, msg.groupId)
             if entity is None:
                 # May be already deleted?
                 continue
@@ -141,6 +148,8 @@ class AttackableProcessor(esper.Processor):
 
             # change health
             meAttackable.adjustHealth(-1 * damage)
+            logger.info("{} got {} damage, new health: {}".format(
+                meRenderable, damage, meAttackable.getHealth()))
 
             # gfx: show floating damage numbers
             if Config.showEnemyDamageNumbers:

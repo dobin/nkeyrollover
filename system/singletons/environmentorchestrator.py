@@ -4,6 +4,9 @@ from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
 from system.graphics.renderable import Renderable
 from common.coordinates import Coordinates
+from system.gamelogic.attackable import Attackable
+import game.uniqueid
+from system.groupid import GroupId
 
 logger = logging.getLogger(__name__)
 
@@ -30,15 +33,26 @@ class EnvironmentOrchestrator(object):
             active=True,
             name='Env Puddle'
         )
-        self.addEnvRenderable(r)
+        attackable = Attackable(
+            initialHealth=40,
+            stunCount=0,
+            stunTimeFrame=0.0,
+            stunTime=0,
+            knockdownChance=0.0,
+            knockbackChance=0.0)
+        # groupId = GroupId(id=game.uniqueid.getUniqueId())
+        groupId = GroupId(id=1337)
+        self.addEnvRenderable(r, attackable, groupId)
 
 
-    def addEnvRenderable(self, renderable :Renderable):
+    def addEnvRenderable(
+        self, renderable :Renderable, attackable :Attackable, groupId :GroupId
+    ):
         x = renderable.getLocation().x
         if not self.envRenderables[x]:
             self.envRenderables[x] = []
 
-        self.envRenderables[x].append(renderable)
+        self.envRenderables[x].append((renderable, attackable, groupId))
 
 
     def trySpawn(self, world, newX):
@@ -49,12 +63,18 @@ class EnvironmentOrchestrator(object):
         maxx = x + 78
         while x < maxx:
             if self.envRenderables[x] is not None:
-                for renderable in self.envRenderables[x]:
-                    logging.info("Add env {}".format(renderable))
+                for entry in self.envRenderables[x]:
+                    logging.info("Add env {}".format(entry))
+                    renderable = entry[0]
+                    attackable = entry[1]
+                    groupId = entry[2]
+
                     entity = world.create_entity()
                     world.add_component(entity, renderable)
-                    self.activeEnvEntities.append((entity, renderable))
-                    self.envRenderables[x].remove(renderable)
+                    world.add_component(entity, attackable)
+                    world.add_component(entity, groupId)
+                    self.activeEnvEntities.append((entity, renderable, attackable, groupId))
+                    self.envRenderables[x].remove(entry)
 
             x += 1
 
@@ -66,6 +86,11 @@ class EnvironmentOrchestrator(object):
         for entry in self.activeEnvEntities:
             entity = entry[0]
             renderable = entry[1]
+            attackable = entry[2]
+
+            if attackable.getHealth() <= 0:
+                world.delete_entity(entity)
+                self.activeEnvEntities.remove(entry)
 
             if renderable.getLocation().x < newX - 10:
                 world.delete_entity(entity)

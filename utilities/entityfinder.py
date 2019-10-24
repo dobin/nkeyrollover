@@ -43,6 +43,17 @@ class EntityFinder(object):
 
 
     @staticmethod
+    def findAttackableByGroupId(world, id):
+        for ent, (groupId, renderable, attackable) in world.get_components(
+            system.groupid.GroupId,
+            system.graphics.renderable.Renderable,
+            system.gamelogic.attackable.Attackable,
+        ):
+            if groupId.getId() == id:
+                return ent
+
+
+    @staticmethod
     def findCharacterByGroupId(world, id):
         for ent, (groupId, renderable, player) in world.get_components(
             system.groupid.GroupId,
