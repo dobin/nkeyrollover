@@ -1,4 +1,5 @@
 import logging
+import random
 
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
@@ -23,26 +24,33 @@ class EnvironmentOrchestrator(object):
 
 
     def loadEnvironment(self):
-        self.envRenderables = [None] * 800  # FIXME self.mapManager.getCurrentMapWidth()
+        width = 800  # FIXME self.mapManager.getCurrentMapWidth()
+        self.envRenderables = [None] * width
 
-        t = PhenomenaTexture(phenomenaType=PhenomenaType.puddle, setbg=True)
-        r = Renderable(
-            texture=t,
-            viewport=self.viewport,
-            coordinates=Coordinates(30, 10),
-            active=True,
-            name='Env Puddle'
-        )
-        attackable = Attackable(
-            initialHealth=40,
-            stunCount=0,
-            stunTimeFrame=0.0,
-            stunTime=0,
-            knockdownChance=0.0,
-            knockbackChance=0.0)
-        # groupId = GroupId(id=game.uniqueid.getUniqueId())
-        groupId = GroupId(id=1337)
-        self.addEnvRenderable(r, attackable, groupId)
+
+        n = random.randrange(30, 60)
+        while n < width - 100:
+            t = PhenomenaTexture(phenomenaType=PhenomenaType.puddle, setbg=True)
+            x = n
+            y = random.randrange(10, 20)
+            r = Renderable(
+                texture=t,
+                viewport=self.viewport,
+                coordinates=Coordinates(x, y),
+                active=True,
+                name='Env Puddle'
+            )
+            attackable = Attackable(
+                initialHealth=40,
+                stunCount=0,
+                stunTimeFrame=0.0,
+                stunTime=0,
+                knockdownChance=0.0,
+                knockbackChance=0.0)
+            groupId = GroupId(id=game.uniqueid.getUniqueId())
+            self.addEnvRenderable(r, attackable, groupId)
+
+            n += random.randrange(30, 60)
 
 
     def addEnvRenderable(
