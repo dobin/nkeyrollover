@@ -72,7 +72,7 @@ class EnvironmentOrchestrator(object):
         while x < maxx:
             if self.envRenderables[x] is not None:
                 for entry in self.envRenderables[x]:
-                    logging.info("Add env {}".format(entry))
+                    logger.info("Add to env: {}".format(entry[0]))
                     renderable = entry[0]
                     attackable = entry[1]
                     groupId = entry[2]
