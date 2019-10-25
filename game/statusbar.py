@@ -40,20 +40,20 @@ class StatusBar(object):
         player = self.world.world.component_for_entity(
             playerEntity, Player)
 
-        color = ColorPalette.getColorByColor(Color.black)
-        bgcolor = ColorPalette.getColorByColor(Color.white)
+        color, attr = ColorPalette.getColorByColor(Color.black)
+        bgcolor, _ = ColorPalette.getColorByColor(Color.white)
 
         s = " Health: " + str(playerAttackable.getHealth())
         s += "  Points: " + str(player.points)
         s += " " * (Config.columns - 2 - len(s))
         #s += "  FPS: %.0f" % (fps)
-        self.viewport.addstrStatic(1, 1, s, color, bg=bgcolor)
+        self.viewport.addstrStatic(1, 1, s, color, attr, bg=bgcolor)
 
-        self.printSkillbar(color, bgcolor, playerEntity)
-        self.printAttackbar(color, bgcolor, playerEntity)
+        self.printSkillbar(color, attr, bgcolor, playerEntity)
+        self.printAttackbar(color, attr, bgcolor, playerEntity)
 
 
-    def printSkillbar(self, color, bgcolor, playerEntity):
+    def printSkillbar(self, color, attr, bgcolor, playerEntity):
         playerOffensiveSkill = self.world.world.component_for_entity(
             playerEntity, OffensiveSkill)
 
@@ -61,13 +61,15 @@ class StatusBar(object):
         n = 0
         for skill in playerOffensiveSkill.skillStatus:
             if playerOffensiveSkill.isRdy(skill):
-                self.viewport.addstrStatic(1, basex + n, skill, Screen.COLOUR_BLACK, bg=Screen.COLOUR_GREEN)
+                self.viewport.addstrStatic(
+                    1, basex + n, skill, color, attr, bg=Screen.COLOUR_GREEN)
             else:
-                self.viewport.addstrStatic(1, basex + n, skill, Screen.COLOUR_BLACK, bg=Screen.COLOUR_RED)
+                self.viewport.addstrStatic(
+                    1, basex + n, skill, color, attr, bg=Screen.COLOUR_RED)
 
             n += 1
 
-    def printAttackbar(self, color, bgcolor, playerEntity):
+    def printAttackbar(self, color, attr, bgcolor, playerEntity):
         playerGroupId = self.world.world.component_for_entity(
             playerEntity, GroupId)
         playerOffensiveAttack = EntityFinder.findOffensiveAttackByGroupId(
@@ -80,6 +82,7 @@ class StatusBar(object):
             weaponIdx,
             'W:' + playerOffensiveAttack.getWeaponStr(),
             color,
+            attr,
             bg=bgcolor)
 
         weaponIdx = 52
@@ -88,6 +91,7 @@ class StatusBar(object):
             weaponIdx,
             'APM:' + str(int(apm.getApm() * 60)),
             color,
+            attr,
             bg=bgcolor)
 
         weaponIdx = 62
@@ -96,4 +100,5 @@ class StatusBar(object):
             weaponIdx,
             'DMG/s:' + str(int(damageStat.getDamageStat())),
             color,
+            attr,
             bg=bgcolor)

@@ -213,9 +213,8 @@ class Game(object):
         width = self.viewport.win._buffer._width
         height = self.viewport.win._buffer._height
 
-        fg = ColorPalette.getColorByColor(Color.black)
-        bg = ColorPalette.getColorByColor(Color.black)
-        attr = Screen.A_BOLD
+        fg, attr = ColorPalette.getColorByColor(Color.black)
+        bg, _ = ColorPalette.getColorByColor(Color.black)
         w = 1
 
         tl = (ord(u"┌"), fg, attr, bg, w)
@@ -312,11 +311,13 @@ class Game(object):
             self.logEntityStats()
 
         if self.pause:
+            color, attr = ColorPalette.getColorByColor(Color.white)
             self.win.addstr(
                 12,
                 40,
                 "Paused",
-                ColorPalette.getColorByColor(Color.white))
+                color,
+                attr)
 
 
     def logEntityStats(self):

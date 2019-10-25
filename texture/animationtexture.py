@@ -115,7 +115,8 @@ class AnimationTexture(Texture):
                         pos.y + y,
                         pos.x + x,
                         column,
-                        color,
+                        color=color[0],
+                        attr=color[1],
                         setbg=self.setbg)
 
                 x += 1

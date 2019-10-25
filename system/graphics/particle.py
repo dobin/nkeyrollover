@@ -4,7 +4,7 @@ from asciimatics.screen import Screen
 
 from utilities.timer import Timer
 from utilities.colorpalette import ColorPalette
-from utilities.colortype import ColorType
+from utilities.color import Color
 from messaging import messaging, MessageType
 from common.direction import Direction
 
@@ -73,10 +73,10 @@ class Particle(object):
             'y': -speed * math.sin(self.angleInRadians)
         }
 
-        self.color = ColorPalette.getColorByColorType(ColorType.particle, self.viewport)
+        self.color, self.attr = ColorPalette.getColorByColor(Color.brightmagenta)
         if color is not None:
-            self.color = color
-        self.colorOpt = 0
+            self.color = color[0]
+            self.attr = color[1]
 
         self.setChar()
 
@@ -110,9 +110,9 @@ class Particle(object):
 
     def fadeoutSetColor(self):
         if self.life > (self.originalLife / 2):
-            self.colorOpt = Screen.A_BOLD
+            self.attr = Screen.A_BOLD
         else:
-            self.colorOpt = 0
+            self.attr = Screen.A_NORMAL
 
 
     def setChar(self):
@@ -200,7 +200,8 @@ class Particle(object):
 
 
     def draw(self):
-        self.viewport.addstr(self.y, self.x, self.char, self.color, self.colorOpt)
+        self.viewport.addstr(
+            self.y, self.x, self.char, self.color, self.attr)
 
 
     def isActive(self):

@@ -7,15 +7,14 @@ from utilities.colortype import ColorType
 logger = logging.getLogger(__name__)
 
 
-class TextureMinimal(object): 
+class TextureMinimal(object):
     def __init__(
-        self, 
-        char :str, 
-        colorArr, 
+        self,
+        char :str,
+        colorArr,
         timeArr,
-        movementX :int =0, 
+        movementX :int =0,
         movementY :int =0,
-
     ):
         self.width = 1
         self.height = 1
@@ -27,7 +26,7 @@ class TextureMinimal(object):
 
         self.idx = 0
         self.timer = Timer(self.timeArr[0])
-        self.color = ColorPalette.getColorByColorType(ColorType.specktexture, None)
+
 
     def advance(self, dt):
         self.timer.advance(dt)

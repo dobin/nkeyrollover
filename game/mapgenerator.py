@@ -37,11 +37,13 @@ class MapGenerator(object):
 
     def generateCity(self, width, height):
         # generate complete map
+        color, attr = ColorPalette.getColorByColor(Color.black)
+        bg, _ = ColorPalette.getColorByColor(Color.black)
         emptyCell = {
             'keycode': '',
-            'color': ColorPalette.getColorByColor(Color.black),
-            'bgcolor': ColorPalette.getColorByColor(Color.black),
-            'attr': 0,
+            'color': color,
+            'bgcolor': bg,
+            'attr': attr,
         }
         cells = [[copy.copy(emptyCell) for i in range(height)] for j in range(width)]
 
@@ -106,16 +108,18 @@ class MapGenerator(object):
 
 
     def createTower(self, height, width):
+        color, attr = ColorPalette.getColorByColor(Color.black)
+        bg, _ = ColorPalette.getColorByColor(Color.black)
         emptyCell = {
             'keycode': '',
-            'color': ColorPalette.getColorByColor(Color.black),
-            'bgcolor': ColorPalette.getColorByColor(Color.black),
-            'attr': 0,
+            'color': color,
+            'bgcolor': bg,
+            'attr': attr,
         }
         cells = [[copy.copy(emptyCell) for i in range(height)] for j in range(width)]
 
         m = ' '
-        color = random.choice([
+        bgColors = random.choice([
             ColorPalette.getColorByColor(Color.blue),
             ColorPalette.getColorByColor(Color.blue),
             ColorPalette.getColorByColor(Color.black),
@@ -162,7 +166,7 @@ class MapGenerator(object):
 
                 else:
                     cells[x][y]['keycode'] = m
-                    cells[x][y]['bgcolor'] = color
+                    cells[x][y]['bgcolor'] = bgColors[0]  # no attr for bgcolor
 
                 y += 1
 

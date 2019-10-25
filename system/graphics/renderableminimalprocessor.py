@@ -100,4 +100,5 @@ class RenderableMinimalProcessor(esper.Processor):
             rend.coordinates.y,
             rend.coordinates.x,
             rend.texture.char,
-            color)
+            color=color[0],
+            attr=color[1])

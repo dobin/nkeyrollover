@@ -108,14 +108,18 @@ class SceneIntro(SceneBase):
                 or self.state is IntroSceneState.flydown
                 or self.state is IntroSceneState.drop
                 or self.state is IntroSceneState.flyup):
-            self.viewport.addstr(5, 40,  "N Key Rollover", ColorPalette.getColorByColor(Color.blue))
-            self.viewport.addstr(6, 40,  "Escape from Hong Kong", ColorPalette.getColorByColor(Color.brightblue))
 
-            self.viewport.addstr(8, 40,  "Moving: arrow keys, shift to strafe", ColorPalette.getColorByColor(Color.cyan))
-            self.viewport.addstr(9, 40,  "Select attack: 1 2 3 4", ColorPalette.getColorByColor(Color.cyan))
-            self.viewport.addstr(10, 40,  "Attack       : space", ColorPalette.getColorByColor(Color.cyan))
-            self.viewport.addstr(11, 40, "Skills       : q w e r", ColorPalette.getColorByColor(Color.cyan))
-            self.viewport.addstr(12, 40, "Heal, Port   : f g", ColorPalette.getColorByColor(Color.cyan))
+            c1, a1 = ColorPalette.getColorByColor(Color.blue)
+            c2, a2 = ColorPalette.getColorByColor(Color.brightblue)
+            self.viewport.addstr(5, 40,  "N Key Rollover", c1, a1)
+            self.viewport.addstr(6, 40,  "Escape from Hong Kong", c2, a2)
+
+            c3, a3 = ColorPalette.getColorByColor(Color.cyan)
+            self.viewport.addstr(8, 40,  "Moving: arrow keys, shift to strafe", c3, a3)
+            self.viewport.addstr(9, 40,  "Select attack: 1 2 3 4", c3, a3)
+            self.viewport.addstr(10, 40, "Attack       : space", c3, a3)
+            self.viewport.addstr(11, 40, "Skills       : q w e r", c3, a3)
+            self.viewport.addstr(12, 40, "Heal, Port   : f g", c3, a3)
 
         # state
         if self.state is IntroSceneState.wait1:

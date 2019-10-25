@@ -26,45 +26,65 @@ class ColorPalette(object):
             return color.name
 
         if color is Color.brightwhite:
-            return Screen.COLOUR_WHITE | Screen.A_BOLD
+            color = Screen.COLOUR_WHITE
+            attr = Screen.A_BOLD
         elif color is Color.white:
-            return Screen.COLOUR_WHITE
+            color = Screen.COLOUR_WHITE
+            attr = Screen.A_NORMAL
+
         elif color is Color.grey:
-            return Screen.COLOUR_BLACK | Screen.A_BOLD
+            color = Screen.COLOUR_BLACK
+            attr = Screen.A_BOLD
         elif color is Color.black:
-            return Screen.COLOUR_BLACK
+            color = Screen.COLOUR_BLACK
+            attr = Screen.A_NORMAL
 
         elif color is Color.brightblue:
-            return Screen.COLOUR_BLUE | Screen.A_BOLD
+            color = Screen.COLOUR_BLUE
+            attr = Screen.A_BOLD
         elif color is Color.blue:
-            return Screen.COLOUR_BLUE
+            color = Screen.COLOUR_BLUE
+            attr = Screen.A_NORMAL
+
         elif color is Color.brightcyan:
-            return Screen.COLOUR_CYAN | Screen.A_BOLD
+            color = Screen.COLOUR_CYAN
+            attr = Screen.A_BOLD
         elif color is Color.cyan:
-            return Screen.COLOUR_CYAN
+            color = Screen.COLOUR_CYAN
+            attr = Screen.A_NORMAL
 
         elif color is Color.brightyellow:
-            return Screen.COLOUR_YELLOW | Screen.A_BOLD
+            color = Screen.COLOUR_YELLOW
+            attr = Screen.A_BOLD
         elif color is Color.yellow:
-            return Screen.COLOUR_YELLOW
+            color = Screen.COLOUR_YELLOW
+            attr = Screen.A_NORMAL
 
         elif color is Color.brightred:
-            return Screen.COLOUR_RED | Screen.A_BOLD
+            color = Screen.COLOUR_RED
+            attr = Screen.A_BOLD
         elif color is Color.red:
-            return Screen.COLOUR_RED
+            color = Screen.COLOUR_RED
+            attr = Screen.A_NORMAL
         elif color is Color.brightmagenta:
-            return Screen.COLOUR_MAGENTA | Screen.A_BOLD
+
+            color = Screen.COLOUR_MAGENTA
+            attr = Screen.A_BOLD
         elif color is Color.magenta:
-            return Screen.COLOUR_MAGENTA
+            color = Screen.COLOUR_MAGENTA
+            attr = Screen.A_NORMAL
 
         elif color is Color.brightgreen:
-            return Screen.COLOUR_GREEN | Screen.A_BOLD
+            color = Screen.COLOUR_GREEN
+            attr = Screen.A_BOLD
         elif color is Color.green:
-            return Screen.COLOUR_GREEN
+            color = Screen.COLOUR_GREEN
+            attr = Screen.A_NORMAL
 
         else:
             logger.error("Unknown color: " + str(color))
-            return Screen.COLOUR_WHITE
+
+        return color, attr
 
 
     @staticmethod
@@ -94,7 +114,6 @@ class ColorPalette(object):
 
         elif colorType is ColorType.background:
             color = ColorPalette.getColorByColor(Color.white)
-
 
         else:
             logger.error("Unknown colortype " + str(colorType))

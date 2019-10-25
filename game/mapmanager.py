@@ -23,7 +23,6 @@ class MapManager(object):
         self.viewport :Viewport = viewport
         self.playerInMapX :int = 0
         self.xpmap = None
-        self.color :Color = ColorPalette.getColorByColor(Color.grey)
         self.mapRenderables = None
         self.mapGenerator = MapGenerator()
 
