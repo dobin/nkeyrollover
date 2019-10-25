@@ -67,18 +67,22 @@ class AnimationTexture(Texture):
             # or take the next one
             if self.animation.endless:
                 # endless, just advance
-                self.frameIndex = (self.frameIndex + 1) % self.animation.frameCount
-                self.frameTimeLeft = self.animation.frameTime[self.frameIndex]
+                self.nextFrame()
             else:
                 # check if it is the last animation, if yes stop it
                 if self.frameIndex == self.animation.frameCount - 1:
                     self.setActive(False)
                 else:
+                    # set next frame in animation
                     if self.frameIndex >= len(self.animation.frameTime):
                         logger.error("Frameidx {} larget than frametime arr {}".format(
                             self.frameIndex, self.animation.frameTime))
-                    self.frameTimeLeft = self.animation.frameTime[self.frameIndex]
-                    self.frameIndex += 1
+                    self.nextFrame()
+
+
+    def nextFrame(self):
+        self.frameIndex = (self.frameIndex + 1) % self.animation.frameCount
+        self.frameTimeLeft = self.animation.frameTime[self.frameIndex]
 
 
     def draw(self, viewport, pos):

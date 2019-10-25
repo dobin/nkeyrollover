@@ -130,6 +130,7 @@ class Game(object):
         # p handle:   Message            PlayerKeyPress (skill activate)
         # x generate: Message            EmitParticleEffect (skill)
         # x generate: DirectMessage      activateSpeechBubble
+        # x generate: Message            AttackAt (via OffensiveSkill, imediate dmg)
         self.world.add_processor(offensiveSkillProcessor)
 
         # x handle:   DirectMessage      receiveDamage
@@ -178,13 +179,13 @@ class Game(object):
 
         # x handle:   DirectMessage      activateSpeechBubble (emit)
         # x handle:   Message            GameRestart
-        # x generate: Message            AttackAt
+#        # x generate: Message            AttackAt
         # x generate: DirectMessage      activateSpeechBubble (because of damage)
         # x generate: DirectMessage      GameStart
         self.world.add_processor(renderableProcessor)
 
         # x handle:   Message            EmitParticleEffect
-        # x generate: Message            AttackAt
+        # x generate: Message            AttackAt (via particle, DoT dmg)
         self.world.add_processor(particleProcessor)
 
         # x handle:   Message            AttackAt
