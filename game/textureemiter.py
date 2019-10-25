@@ -9,11 +9,11 @@ from utilities.colorpalette import ColorPalette
 from system.graphics.renderableminimal import RenderableMinimal
 from system.graphics.textureminimal import TextureMinimal
 from system.graphics.renderable import Renderable
-from messaging import messaging, MessageType
-from texture.speech.speechtexture import SpeechTexture
-from config import Config
+from system.graphics.physics import Physics
 from system.singletons.renderablecache import renderableCache
 from texture.texturetype import TextureType
+from texture.speech.speechtexture import SpeechTexture
+from config import Config
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,12 @@ class TextureEmiter(object):
 
 
     def makePhenomenaTexture(
-        self, phenomenaTextureType, location, staticLocation, direction=Direction.right
+        self,
+        phenomenaTextureType,
+        location,
+        staticLocation,
+        physics,
+        direction=Direction.right
     ):
         renderable = renderableCache.getRenderable(TextureType.phenomena)
 
@@ -57,7 +62,7 @@ class TextureEmiter(object):
             name="PhenomenaRenderable (phenomenaTextureType={})".format(
                 phenomenaTextureType))
 
-        self.addRenderable(renderable)
+        self.addRenderable(renderable, physics)
 
 
     def makeActionTexture(
@@ -215,6 +220,10 @@ class TextureEmiter(object):
         self.addRenderable(renderable)
 
 
-    def addRenderable(self, renderable):
+    def addRenderable(self, renderable, physics=False):
         entity = self.world.create_entity()
         self.world.add_component(entity, renderable)
+
+        if physics:
+            physics = Physics()
+            self.world.add_component(entity, physics)

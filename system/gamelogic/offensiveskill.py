@@ -6,7 +6,6 @@ import system.graphics.renderable
 import system.groupid
 import system.gamelogic.offensiveattack
 from messaging import messaging, MessageType
-#from directmessaging import directMessaging, DirectMessageType
 import directmessaging
 from common.direction import Direction
 from game.offenseloader.fileoffenseloader import fileOffenseLoader
@@ -110,6 +109,7 @@ class OffensiveSkill(object):
                 'location': locCenter,
                 'staticLocation': False,
                 'direction': meRenderable.direction,
+                'physics': True,
             }
         )
 

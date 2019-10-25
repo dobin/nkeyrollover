@@ -15,6 +15,7 @@ from system.gamelogic.offensiveattack import OffensiveAttack
 from utilities.entityfinder import EntityFinder
 from system.gamelogic.player import Player
 from common.direction import Direction
+from system.graphics.physics import Physics
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +70,6 @@ class PlayerProcessor(esper.Processor):
             stunTime=0.75,
             knockdownChance=0.0,
             knockbackChance=0.9)
-
         texture = CharacterTexture(
             characterTextureType=CharacterTextureType.player,
             characterAnimationType=CharacterAnimationType.standing,
@@ -82,16 +82,16 @@ class PlayerProcessor(esper.Processor):
             direction=Direction.right,
             name='Player',
             canMoveOutsideMap=False)
-
         esperData = EsperData(self.world, playerEntity, 'player')
         offensiveSkill = OffensiveSkill(
             esperData=esperData,
             viewport=self.viewport)
-
         offensiveAttack = OffensiveAttack(
             parentChar=player,
             parentRenderable=renderable)
+        physics = Physics()
 
+        self.world.add_component(playerEntity, physics)
         self.world.add_component(playerEntity, groupId)
         self.world.add_component(playerEntity, offensiveSkill)
         self.world.add_component(playerEntity, renderable)

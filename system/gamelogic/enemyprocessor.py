@@ -10,6 +10,7 @@ from system.gamelogic.attackable import Attackable
 from system.gamelogic.esperdata import EsperData
 from system.gamelogic.ai import Ai
 from system.gamelogic.offensiveattack import OffensiveAttack
+from system.graphics.physics import Physics
 from messaging import messaging, MessageType
 import game.uniqueid
 from common.coordinates import Coordinates, ExtCoordinates
@@ -26,6 +27,7 @@ logger = logging.getLogger(__name__)
 
 class EnemyCached(object):
     def __init__(self):
+        self.physics = None
         self.ai = None
         self.groupId = None
         self.renderable = None
@@ -166,7 +168,7 @@ class EnemyProcessor(esper.Processor):
         )
         enemyCached.offensiveAttack.switchWeapon(enemySeed.weaponType)
 
-
+        self.world.add_component(entity, enemyCached.physics)
         self.world.add_component(entity, enemyCached.ai)
         self.world.add_component(entity, enemyCached.groupId)
         self.world.add_component(entity, enemyCached.renderable)
@@ -179,24 +181,21 @@ class EnemyProcessor(esper.Processor):
         id = game.uniqueid.getUniqueId()
         name = "Bot " + str(id)
         groupId = GroupId(id=id)
-
         tenemy = Enemy(name=name)
         attackable = Attackable()
         ai = Ai(name=name)
-
         texture = CharacterTexture(
             name=name)
-
         renderable = Renderable(
             texture=texture,
             viewport=self.viewport,
             parent=None,
             active=True,
             name=name)
-
         offensiveAttack = OffensiveAttack(
             parentChar=tenemy,
             parentRenderable=renderable)
+        physics = Physics()
 
         enemyCached = EnemyCached()
         enemyCached.ai = ai
@@ -205,4 +204,5 @@ class EnemyProcessor(esper.Processor):
         enemyCached.tenemy = tenemy
         enemyCached.attackable = attackable
         enemyCached.offensiveAttack = offensiveAttack
+        enemyCached.physics = physics
         return enemyCached

@@ -5,6 +5,7 @@ import system.gamelogic.offensiveattack
 import system.gamelogic.offensiveskill
 import system.gamelogic.attackable
 import system.graphics.renderable
+import system.graphics.physics
 import system.groupid
 
 logger = logging.getLogger(__name__)
@@ -14,7 +15,10 @@ class EntityFinder(object):
     @staticmethod
     def isDestinationEmpty(world, renderable, extCoords :ExtCoordinates) -> bool:
         """Check if renderable/extCoords overlaps with any other renderables"""
-        for ent, otherRend in world.get_component(system.graphics.renderable.Renderable):
+        for ent, (otherRend, physics) in world.get_components(
+            system.graphics.renderable.Renderable,
+            system.graphics.physics.Physics
+        ):
             dist = otherRend.distanceToBorder(extCoords)
             # fast check: distance
             if dist['x'] <= 0 and dist['y'] <= 0:

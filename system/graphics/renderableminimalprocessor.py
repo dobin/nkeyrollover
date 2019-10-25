@@ -51,7 +51,8 @@ class RenderableMinimalProcessor(esper.Processor):
                 phenomenaTextureType = message.data['phenomenaTextureType'],
                 location = message.data['location'],
                 staticLocation = message.data['staticLocation'],
-                direction = message.data['direction']
+                direction = message.data['direction'],
+                physics = message.data['physics']
             )
 
 

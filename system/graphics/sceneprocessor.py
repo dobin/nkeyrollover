@@ -45,6 +45,7 @@ class SceneProcessor(esper.Processor):
                     'location': Coordinates(10, 10),
                     'staticLocation': True,
                     'direction': Direction.right,
+                    'physics': False,
                 }
             )
 
