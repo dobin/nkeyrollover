@@ -4,6 +4,7 @@ import random
 from texture.phenomena.phenomenatexture import PhenomenaTexture
 from texture.phenomena.phenomenatype import PhenomenaType
 from system.graphics.renderable import Renderable
+from system.graphics.physics import Physics
 from common.coordinates import Coordinates
 from system.gamelogic.attackable import Attackable
 import game.uniqueid
@@ -27,7 +28,29 @@ class EnvironmentOrchestrator(object):
         width = 800  # FIXME self.mapManager.getCurrentMapWidth()
         self.envRenderables = [None] * width
 
+        # boxes
+        t = PhenomenaTexture(phenomenaType=PhenomenaType.box, setbg=True)
+        x = 30
+        y = 15
+        r = Renderable(
+            texture=t,
+            viewport=self.viewport,
+            coordinates=Coordinates(x, y),
+            active=True,
+            name='Env Puddle'
+        )
+        attackable = Attackable(
+            initialHealth=40,
+            stunCount=0,
+            stunTimeFrame=0.0,
+            stunTime=0,
+            knockdownChance=0.0,
+            knockbackChance=0.0)
+        physics = Physics()
+        groupId = GroupId(id=game.uniqueid.getUniqueId())
+        self.addEnvRenderable(r, attackable, groupId, physics)
 
+        # puddles
         n = random.randrange(30, 60)
         while n < width - 100:
             t = PhenomenaTexture(phenomenaType=PhenomenaType.puddle, setbg=True)
@@ -40,27 +63,20 @@ class EnvironmentOrchestrator(object):
                 active=True,
                 name='Env Puddle'
             )
-            attackable = Attackable(
-                initialHealth=40,
-                stunCount=0,
-                stunTimeFrame=0.0,
-                stunTime=0,
-                knockdownChance=0.0,
-                knockbackChance=0.0)
             groupId = GroupId(id=game.uniqueid.getUniqueId())
-            self.addEnvRenderable(r, attackable, groupId)
+            self.addEnvRenderable(r, None, groupId, None)
 
             n += random.randrange(30, 60)
 
 
     def addEnvRenderable(
-        self, renderable :Renderable, attackable :Attackable, groupId :GroupId
+        self, renderable :Renderable, attackable :Attackable, groupId :GroupId, physics
     ):
         x = renderable.getLocation().x
         if not self.envRenderables[x]:
             self.envRenderables[x] = []
 
-        self.envRenderables[x].append((renderable, attackable, groupId))
+        self.envRenderables[x].append((renderable, attackable, groupId, physics))
 
 
     def trySpawn(self, world, newX):
@@ -79,8 +95,9 @@ class EnvironmentOrchestrator(object):
 
                     entity = world.create_entity()
                     world.add_component(entity, renderable)
-                    world.add_component(entity, attackable)
                     world.add_component(entity, groupId)
+                    if attackable is not None:
+                        world.add_component(entity, attackable)
                     self.activeEnvEntities.append((entity, renderable, attackable, groupId))
                     self.envRenderables[x].remove(entry)
 
@@ -96,9 +113,9 @@ class EnvironmentOrchestrator(object):
             renderable = entry[1]
             attackable = entry[2]
 
-            if attackable.getHealth() <= 0:
-                #world.delete_entity(entity)  # done atm in renderableprocessor
-                self.activeEnvEntities.remove(entry)
+            # if attackable.getHealth() <= 0:
+            #    world.delete_entity(entity)  # done atm in renderableprocessor
+            #    self.activeEnvEntities.remove(entry)
 
             if renderable.getLocation().x < newX - 10:
                 world.delete_entity(entity)

@@ -12,3 +12,4 @@ class PhenomenaType(Enum):
     gameover = 7
     skillBlock = 8
     puddle = 9
+    box = 10
