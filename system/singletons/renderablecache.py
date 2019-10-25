@@ -45,6 +45,7 @@ class RenderableCache(object):
                 name="PhenomenaRenderable init")
             self.addRenderable(renderable, TextureType.phenomena)
             n += 1
+            
 
     def addRenderable(self, renderable, textureType):
         self.cache[textureType].append(renderable)

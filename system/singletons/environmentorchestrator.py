@@ -97,7 +97,7 @@ class EnvironmentOrchestrator(object):
             attackable = entry[2]
 
             if attackable.getHealth() <= 0:
-                world.delete_entity(entity)
+                #world.delete_entity(entity)  # done atm in renderableprocessor
                 self.activeEnvEntities.remove(entry)
 
             if renderable.getLocation().x < newX - 10:

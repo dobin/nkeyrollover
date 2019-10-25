@@ -1,8 +1,6 @@
 import logging
 
 from utilities.timer import Timer
-from utilities.colorpalette import ColorPalette
-from utilities.colortype import ColorType
 
 logger = logging.getLogger(__name__)
 
