@@ -187,10 +187,12 @@ class AttackableProcessor(esper.Processor):
             healthPercentage = meAttackable.getHealthPercentage()
             if healthPercentage > 0.5:
                 meRenderable.texture.setOverwriteColorFor(
-                    0.1, ColorPalette.getColorByColor(Color.yellow))
+                    Config.overwriteColorTime,
+                    ColorPalette.getColorByColor(Color.yellow))
             else:
                 meRenderable.texture.setOverwriteColorFor(
-                    0.1, ColorPalette.getColorByColor(Color.red))
+                    Config.overwriteColorTime,
+                    ColorPalette.getColorByColor(Color.red))
 
             # handle: stun
             if stun and meAttackable.isStunnable():

@@ -51,6 +51,7 @@ class _Config:
     # gfx
     showBurstOnImpact = True
     showBurstOnImpactDamage = 19  # how much damage to activate Burst
+    overwriteColorTime = 0.2
 
     # gameplay
     maxEnemiesInStateAttacking = 2
