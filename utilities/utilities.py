@@ -44,6 +44,25 @@ class Utility(object):
 
 
     @staticmethod
+    def getListFromTexture(frame):
+        carr = []
+
+        y = 0
+        while y < len(frame):
+            x = 0
+            while x < len(frame[y]):
+                column = frame[y][x]
+                if column != '':
+                    c = Coordinates(x, y)
+                    carr.append(c)
+
+                x += 1
+            y += 1
+
+        return carr
+
+
+    @staticmethod
     def isPointInArea(coord1 :Coordinates, location2 :ExtCoordinates):
         if coord1.x >= location2.x and coord1.x < location2.x + location2.width and coord1.y >= location2.y and coord1.y < location2.y + location2.height:
             return True

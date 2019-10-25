@@ -15,11 +15,13 @@ from system.graphics.sceneprocessor import SceneProcessor
 from system.graphics.renderableminimal import RenderableMinimal
 from system.gamelogic.offensiveattackprocessor import OffensiveAttackProcessor
 from system.gamelogic.movementprocessor import MovementProcessor
+from system.gamelogic.aiprocessor import AiProcessor
+from system.gamelogic.gametimeprocessor import GametimeProcessor
+from system.gamelogic.damageprocessor import DamageProcessor
+from system.gamelogic.passiveattackprocessor import PassiveAttackProcessor
 from system.io.inputprocessor import InputProcessor
 from system.graphics.characteranimationprocessor import CharacterAnimationProcessor
-from system.gamelogic.aiprocessor import AiProcessor
 from system.graphics.renderableminimalprocessor import RenderableMinimalProcessor
-from system.gamelogic.gametimeprocessor import GametimeProcessor
 from system.graphics.environmentprocessor import EnvironmentProcessor
 from game.scenemanager import SceneManager
 from game.statusbar import StatusBar
@@ -27,13 +29,11 @@ from utilities.entityfinder import EntityFinder
 from messaging import messaging
 from directmessaging import directMessaging
 from system.singletons.renderablecache import renderableCache
-from system.gamelogic.damageprocessor import DamageProcessor
 from texture.filetextureloader import fileTextureLoader
 from game.offenseloader.fileoffenseloader import fileOffenseLoader
 from utilities.colorpalette import ColorPalette
 from utilities.color import Color
 from config import Config
-from asciimatics.screen import Screen
 
 logger = logging.getLogger(__name__)
 
@@ -88,6 +88,7 @@ class Game(object):
         damageProcessor = DamageProcessor()
         environmentProcessor = EnvironmentProcessor(
             viewport=viewport, mapManager=mapManager)
+        passiveAttackProcessor = PassiveAttackProcessor()
 
         self.sceneProcessor :SceneProcessor = sceneProcessor  # show F1 stats
         self.viewport :Viewport = viewport  # for keyboardinput in nkeyrollover.py
@@ -132,6 +133,9 @@ class Game(object):
         # x generate: DirectMessage      activateSpeechBubble
         # x generate: Message            AttackAt (via OffensiveSkill, imediate dmg)
         self.world.add_processor(offensiveSkillProcessor)
+
+        # x generate: Message            AttackAt
+        self.world.add_processor(passiveAttackProcessor)
 
         # x handle:   DirectMessage      receiveDamage
         # x generate: Message            EntityStun

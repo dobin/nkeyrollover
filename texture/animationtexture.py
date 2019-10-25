@@ -2,6 +2,7 @@ import logging
 
 from texture.texture import Texture
 from texture.animation import Animation
+from common.direction import Direction
 
 logger = logging.getLogger(__name__)
 
@@ -12,6 +13,7 @@ class AnimationTexture(Texture):
         super(AnimationTexture, self).__init__(type=type, name=name)
         self.setbg = setbg
         self.animation :Animation = None
+        self.frameChanged = False
         self.init()
 
 
@@ -57,6 +59,9 @@ class AnimationTexture(Texture):
         if not self.isActive():
             return
 
+        # reset frame status
+        self.setFrameChanged(False)
+
         # done in advanceStep()
         if self.animation.advanceByStep:
             return
@@ -83,6 +88,15 @@ class AnimationTexture(Texture):
     def nextFrame(self):
         self.frameIndex = (self.frameIndex + 1) % self.animation.frameCount
         self.frameTimeLeft = self.animation.frameTime[self.frameIndex]
+        self.setFrameChanged(True)
+
+
+    def setFrameChanged(self, frameChanged):
+        self.frameChanged = frameChanged
+
+
+    def isFrameChanged(self):
+        return self.frameChanged
 
 
     def draw(self, viewport, pos):
