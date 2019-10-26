@@ -102,3 +102,13 @@ telnet          stream  tcp     nowait  telnetd /usr/sbin/tcpd  /usr/sbin/in.tel
 ```
 # service inetd restart
 ```
+
+## Install?
+
+Ubuntu 18.04:
+
+```
+sudo apt install python3-pip  # Install python 3.6 pip
+python3.7 -m pip install pip  # install 3.7 pip
+python3.7 -m pip install -r requirements.txt
+```
