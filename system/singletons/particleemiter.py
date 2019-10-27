@@ -35,7 +35,7 @@ class ParticleEmiter(object):
             ParticleEffectType.explosion: self.createExplosion,
             ParticleEffectType.laser: self.createLaser,
             ParticleEffectType.cleave: self.createCleave,
-            ParticleEffectType.explosion: self.createExplosion,
+            ParticleEffectType.dragonExplosion: self.createDragonExplosion,
             ParticleEffectType.floatingDamage: self.createFloatingDamage,
             ParticleEffectType.hitBurst: self.createHitBurst,
             ParticleEffectType.disappear: self.createDisappear,
