@@ -47,7 +47,7 @@ class SpeechAnimationManager(object):
 
         l4 = []
         l4.append('/')
-        l4.extend(list(' ' * (l - 1)))
+        l4.extend(list('' * (l - 1)))
         animation.arr[0].append(l4)
 
         return animation

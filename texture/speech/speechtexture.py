@@ -8,8 +8,8 @@ logger = logging.getLogger(__name__)
 
 
 class SpeechTexture(AnimationTexture):
-    def __init__(self, displayText=None, time=None):
-        super(SpeechTexture, self).__init__(type=TextureType.speech)
+    def __init__(self, displayText=None, time=None, setbg=True):
+        super(SpeechTexture, self).__init__(type=TextureType.speech, setbg=setbg)
         self.speechAnimationManager = SpeechAnimationManager()
 
         if displayText is not None:
