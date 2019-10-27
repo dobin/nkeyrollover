@@ -6,7 +6,7 @@ frameColors:
   - white
   - white
   - white
-direction: right
+direction: left
 frameTime:
   - 0.2
   - 0.2
