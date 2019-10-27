@@ -1,11 +1,11 @@
 endless: False
 advanceByStep: False
 frameColors:
-  - grey
-  - grey
-  - grey
-  - grey
-  - grey
+  - white
+  - white
+  - white
+  - white
+  - white
 direction: right
 frameTime:
   - 0.2
