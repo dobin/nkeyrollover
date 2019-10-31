@@ -39,6 +39,7 @@ class _Config:
     announceDamage = 350  # min amount of damage done
     movementKeysPerSec = 20.0
     playerAttacksCd = 0.2  # player attack cooldown
+    turnOnSpot = True
 
     # enemy
     allowEnemyMovement = True  # freeze enemies for tests?

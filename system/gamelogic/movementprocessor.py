@@ -46,6 +46,16 @@ class MovementProcessor(esper.Processor):
             dontChangeDirection = msg.data['dontChangeDirection']
             whenMoved = msg.data['whenMoved']
 
+            if not dontChangeDirection and Config.turnOnSpot:
+                if playerRenderable.direction is Direction.left and x > 0:
+                    self.updateRenderableDirection(
+                        playerRenderable, Direction.right, playerGroupId.getId())
+                    continue
+                if playerRenderable.direction is Direction.right and x < 0:
+                    self.updateRenderableDirection(
+                        playerRenderable, Direction.left, playerGroupId.getId())
+                    continue
+
             # coords to test if we can move to it
             # Note: same x/y calc like in self.moveRenderable()
             extCoords = playerRenderable.getLocationAndSize()
@@ -161,6 +171,21 @@ class MovementProcessor(esper.Processor):
                     y,
                     msg.data['dontChangeDirection'],
                     msg.data['updateTexture'])
+
+
+    def updateRenderableDirection(self, renderable, direction, groupId):
+        renderable.setDirection(direction)
+
+        # notify texture manager
+        messaging.add(
+            groupId = groupId,
+            type = MessageType.EntityMoved,
+            data = {
+                'didChangeDirection': True,
+                'x': 0,
+                'y': 0,
+            }
+        )
 
 
     def moveRenderable(
