@@ -8,6 +8,7 @@ from system.graphics.physics import Physics
 from common.coordinates import Coordinates
 from system.gamelogic.attackable import Attackable
 import game.uniqueid
+from system.graphics.destructable import Destructable
 from system.groupid import GroupId
 from system.gamelogic.passiveattack import PassiveAttack
 
@@ -42,15 +43,16 @@ class EnvironmentOrchestrator(object):
             z=1,  # background
         )
         attackable = Attackable(
-            initialHealth=40,
+            initialHealth=100,
             stunCount=0,
             stunTimeFrame=0.0,
             stunTime=0,
             knockdownChance=0.0,
             knockbackChance=0.0)
         physics = Physics()
+        destructable = Destructable()
         groupId = GroupId(id=game.uniqueid.getUniqueId())
-        self.addEnvRenderable(r, attackable, groupId, physics, None)
+        self.addEnvRenderable(r, attackable, groupId, physics, None, destructable)
 
         # puddles
         if True:
@@ -69,7 +71,7 @@ class EnvironmentOrchestrator(object):
                 )
                 p = PassiveAttack([10, 10])
                 groupId = GroupId(id=game.uniqueid.getUniqueId())
-                self.addEnvRenderable(r, None, groupId, None, p)
+                self.addEnvRenderable(r, None, groupId, None, p, None)
 
                 n += random.randrange(30, 60)
         else:
@@ -86,7 +88,7 @@ class EnvironmentOrchestrator(object):
             )
             p = PassiveAttack([10, 10])
             groupId = GroupId(id=game.uniqueid.getUniqueId())
-            self.addEnvRenderable(r, None, groupId, None, p)
+            self.addEnvRenderable(r, None, groupId, None, p, None)
 
 
 
@@ -97,12 +99,13 @@ class EnvironmentOrchestrator(object):
         groupId :GroupId,
         physics,
         passiveAttack,
+        destructable,
     ):
         x = renderable.getLocation().x
         if not self.envRenderables[x]:
             self.envRenderables[x] = []
 
-        self.envRenderables[x].append((renderable, attackable, groupId, physics, passiveAttack))
+        self.envRenderables[x].append((renderable, attackable, groupId, physics, passiveAttack, destructable))
 
 
     def trySpawn(self, world, newX):
@@ -120,6 +123,7 @@ class EnvironmentOrchestrator(object):
                     groupId = entry[2]
                     physics = entry[3]
                     passiveAttack = entry[4]
+                    destructable = entry[5]
 
                     entity = world.create_entity()
                     world.add_component(entity, renderable)
@@ -131,6 +135,9 @@ class EnvironmentOrchestrator(object):
                     if passiveAttack is not None:
                         logger.info("Add to env {}: passive attack".format(entry[0]))
                         world.add_component(entity, passiveAttack)
+                    if destructable is not None:
+                        logger.info("Add to env {}: destructable".format(entry[0]))
+                        world.add_component(entity, destructable)
 
                     self.activeEnvEntities.append((entity, renderable, attackable, groupId))
                     self.envRenderables[x].remove(entry)

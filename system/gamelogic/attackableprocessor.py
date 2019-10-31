@@ -2,6 +2,7 @@ import esper
 import logging
 import random
 
+from system.graphics.destructable import Destructable
 from system.graphics.renderable import Renderable
 from system.groupid import GroupId
 from system.gamelogic.enemy import Enemy
@@ -27,8 +28,9 @@ class AttackableProcessor(esper.Processor):
 
 
     def process(self, dt):
-        self.checkHealth()
-        self.checkReceiveDamage()  # dont stun if he has no health left..
+        healthUpdated = self.checkReceiveDamage()
+        if healthUpdated:
+            self.checkHealth()
         self.advance(dt)
 
 
@@ -114,14 +116,23 @@ class AttackableProcessor(esper.Processor):
                         meRend.setActive(False)
 
         # environment
-        for ent, (meAtk, meGroupId, meRend) in self.world.get_components(
-            Attackable, GroupId, Renderable
+        for ent, (destructable, meAtk, meGroupId, meRend) in self.world.get_components(
+            Destructable, Attackable, GroupId, Renderable
         ):
             if meAtk.getHealth() <= 0:
                 meRend.texture.setActive(False)
+            else:
+                frameCount = meRend.texture.animation.frameCount - 1
+                d = meAtk.getHealth() / (meAtk.initialHealth / frameCount)
+                animationIndex = frameCount - int(d)
+
+                if animationIndex != meRend.texture.frameIndex:
+                    meRend.texture.advanceStep()
 
 
     def checkReceiveDamage(self):
+        healthUpdated = False
+
         for msg in directMessaging.getByType(DirectMessageType.receiveDamage):
             entity = EntityFinder.findAttackableByGroupId(self.world, msg.groupId)
             if entity is None:
@@ -148,6 +159,7 @@ class AttackableProcessor(esper.Processor):
 
             # change health
             meAttackable.adjustHealth(-1 * damage)
+            healthUpdated = True
             logger.info("{} got {} damage, new health: {}".format(
                 meRenderable, damage, meAttackable.getHealth()))
 
@@ -181,7 +193,7 @@ class AttackableProcessor(esper.Processor):
             # no stun, knockdown, knockback, or new color if there is no health left
             # (animations may overwrite each other)
             if meAttackable.getHealth() <= 0.0:
-                return
+                continue
 
             # gfx: set texture color
             healthPercentage = meAttackable.getHealthPercentage()
@@ -219,7 +231,7 @@ class AttackableProcessor(esper.Processor):
                     )
 
                 # no additional effects
-                return
+                continue
 
             # handle: knockback
             if knockback and random.random() < meAttackable.knockbackChance:
@@ -253,4 +265,6 @@ class AttackableProcessor(esper.Processor):
                     )
 
                 # no additional effects
-                return
+                continue
+
+        return healthUpdated
