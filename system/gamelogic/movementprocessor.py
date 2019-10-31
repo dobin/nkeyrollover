@@ -33,16 +33,28 @@ class MovementProcessor(esper.Processor):
         playerEntity = EntityFinder.findPlayer(self.world)
         if playerEntity is None:
             return
-        playerGroupId = self.world.component_for_entity(
-            playerEntity, system.groupid.GroupId)
-        playerRenderable = self.world.component_for_entity(
-            playerEntity, system.graphics.renderable.Renderable)
 
         for msg in directMessaging.getByType(DirectMessageType.movePlayer):
+            # usually just one msg...
+            playerGroupId = self.world.component_for_entity(
+                playerEntity, system.groupid.GroupId)
+            playerRenderable = self.world.component_for_entity(
+                playerEntity, system.graphics.renderable.Renderable)
+
             x = msg.data['x']
             y = msg.data['y']
             dontChangeDirection = msg.data['dontChangeDirection']
             whenMoved = msg.data['whenMoved']
+
+            # coords to test if we can move to it
+            # Note: same x/y calc like in self.moveRenderable()
+            extCoords = playerRenderable.getLocationAndSize()
+            extCoords.x += msg.data['x']
+            extCoords.y += msg.data['y']
+            canMove = EntityFinder.isDestinationEmpty(
+                self.world, playerRenderable, extCoords)
+            if not canMove:
+                continue
 
             didMove = self.moveRenderable(
                 playerRenderable,
