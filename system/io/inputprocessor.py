@@ -19,7 +19,7 @@ class InputProcessor(esper.Processor):
     def __init__(self):
         super().__init__()
         self.movementTimer = Timer(1.0 / Config.movementKeysPerSec, instant=True)
-
+        self.keyCache = []
 
     def process(self, deltaTime):
         self.handleKeyboardInput()
@@ -42,11 +42,26 @@ class InputProcessor(esper.Processor):
         attackable = self.world.component_for_entity(
             playerEntity, system.gamelogic.attackable.Attackable)
 
+        # return if we cannot handle key, but cache it first
+        if attackable.isStunned or player.isAttacking:
+            for message in messaging.getByType(MessageType.PlayerKeypress):
+                # store a few movement commands
+                if len(self.keyCache) >= 1:
+                    del(self.keyCache[0])
+
+                self.keyCache.append(message)
+
+            return
+
         didMove = False
-        if attackable.isStunned:
-            return
-        if player.isAttacking:
-            return
+        for message in self.keyCache:
+            # identical to bottom loop atm
+            apm.tick(message.data['time'])
+            didMoveTmp = self.handleKeyPress(
+                message.data['key'], player, renderable, playerEntity)
+            if didMoveTmp:
+                didMove = True
+        self.keyCache.clear()
 
         for message in messaging.getByType(MessageType.PlayerKeypress):
             if not player.isAlive:
