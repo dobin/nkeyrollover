@@ -31,28 +31,57 @@ class EnvironmentOrchestrator(object):
         self.envRenderables = [None] * width
 
         # boxes
-        t = PhenomenaTexture(phenomenaType=PhenomenaType.box, setbg=True)
-        x = 30
-        y = 15
-        r = Renderable(
-            texture=t,
-            viewport=self.viewport,
-            coordinates=Coordinates(x, y),
-            active=True,
-            name='Env Box',
-            z=1,  # background
-        )
-        attackable = Attackable(
-            initialHealth=100,
-            stunCount=0,
-            stunTimeFrame=0.0,
-            stunTime=0,
-            knockdownChance=0.0,
-            knockbackChance=0.0)
-        physics = Physics()
-        destructable = Destructable()
-        groupId = GroupId(id=game.uniqueid.getUniqueId())
-        self.addEnvRenderable(r, attackable, groupId, physics, None, destructable)
+        if True:
+            n = random.randrange(30, 60)
+            while n < width - 100:
+                t = PhenomenaTexture(phenomenaType=PhenomenaType.box, setbg=True)
+                x = n
+                y = random.randrange(10, 20)
+                r = Renderable(
+                    texture=t,
+                    viewport=self.viewport,
+                    coordinates=Coordinates(x, y),
+                    active=True,
+                    name='Env Box',
+                    z=1,  # background
+                )
+                attackable = Attackable(
+                    initialHealth=100,
+                    stunCount=0,
+                    stunTimeFrame=0.0,
+                    stunTime=0,
+                    knockdownChance=0.0,
+                    knockbackChance=0.0)
+                physics = Physics()
+                destructable = Destructable()
+                groupId = GroupId(id=game.uniqueid.getUniqueId())
+                self.addEnvRenderable(r, attackable, groupId, physics, None, destructable)
+
+                n += random.randrange(30, 60)
+
+        else:
+            t = PhenomenaTexture(phenomenaType=PhenomenaType.box, setbg=True)
+            x = 30
+            y = 15
+            r = Renderable(
+                texture=t,
+                viewport=self.viewport,
+                coordinates=Coordinates(x, y),
+                active=True,
+                name='Env Box',
+                z=1,  # background
+            )
+            attackable = Attackable(
+                initialHealth=100,
+                stunCount=0,
+                stunTimeFrame=0.0,
+                stunTime=0,
+                knockdownChance=0.0,
+                knockbackChance=0.0)
+            physics = Physics()
+            destructable = Destructable()
+            groupId = GroupId(id=game.uniqueid.getUniqueId())
+            self.addEnvRenderable(r, attackable, groupId, physics, None, destructable)
 
         # puddles
         if True:
