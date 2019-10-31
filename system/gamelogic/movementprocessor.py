@@ -64,7 +64,21 @@ class MovementProcessor(esper.Processor):
             canMove = EntityFinder.isDestinationEmpty(
                 self.world, playerRenderable, extCoords)
             if not canMove:
-                continue
+                # try with one step, instead of the original two
+                if x > 0:
+                    x -= 1
+                    extCoords.x -= 1
+                elif x < 0:
+                    x -= 1
+                    extCoords.x += 1
+
+                canMove = EntityFinder.isDestinationEmpty(
+                    self.world, playerRenderable, extCoords)
+                if not canMove:
+                    continue
+                else:
+                    # can move with new coordinates
+                    pass
 
             didMove = self.moveRenderable(
                 playerRenderable,
