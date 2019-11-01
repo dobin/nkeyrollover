@@ -63,6 +63,7 @@ class RenderableMinimalProcessor(esper.Processor):
 
             # remove it if inactive
             if not rend.isActive():
+                logger.info("Remove Entity: {}".format(ent))
                 self.world.delete_entity(ent)
 
 

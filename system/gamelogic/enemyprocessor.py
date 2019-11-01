@@ -91,6 +91,7 @@ class EnemyProcessor(esper.Processor):
                 self.objectCache.addObject(enemyCached)
 
                 # delete it
+                logger.info("Remove Entity: {}".format(ent))
                 self.world.delete_entity(ent)
 
                 # message everyone that it is really dead now

@@ -162,10 +162,8 @@ class EnvironmentOrchestrator(object):
                     if physics is not None:
                         world.add_component(entity, physics)
                     if passiveAttack is not None:
-                        logger.info("Add to env {}: passive attack".format(entry[0]))
                         world.add_component(entity, passiveAttack)
                     if destructable is not None:
-                        logger.info("Add to env {}: destructable".format(entry[0]))
                         world.add_component(entity, destructable)
 
                     self.activeEnvEntities.append((entity, renderable, attackable, groupId))
@@ -181,12 +179,15 @@ class EnvironmentOrchestrator(object):
         for entry in self.activeEnvEntities:
             entity = entry[0]
             renderable = entry[1]
-
-            # attackable = entry[2]
-            # if attackable.getHealth() <= 0:
-            #    world.delete_entity(entity)  # done atm in renderableprocessor
-            #    self.activeEnvEntities.remove(entry)
+            attackable = entry[2]
 
             if renderable.getLocation().x < newX - 10:
-                world.delete_entity(entity)
+                if attackable is not None:
+                    # if not already removed from esper world
+                    if attackable.getHealth() > 0:
+                        logger.info("Remove Entity: {}".format(entity))
+                        world.delete_entity(entity)
+                else:
+                    logger.info("Remove Entity: {}".format(entity))
+                    world.delete_entity(entity)
                 self.activeEnvEntities.remove(entry)
