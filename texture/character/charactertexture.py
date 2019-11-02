@@ -17,8 +17,10 @@ class CharacterTexture(AnimationTexture):
             characterAnimationType :CharacterAnimationType =None,
             direction :Direction =Direction.none,
             name = '',
+            setbg = True,
     ):
-        super(CharacterTexture, self).__init__(type=TextureType.character, name=name)
+        super(CharacterTexture, self).__init__(
+            type=TextureType.character, name=name, setbg=setbg)
         self.previousAnimation = None
         self.previousFrameIndex = None
         self.previousFrameTimeLeft = None
