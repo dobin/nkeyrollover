@@ -19,7 +19,7 @@ from system.io.inputprocessor import InputProcessor
 from system.graphics.renderableminimalprocessor import RenderableMinimalProcessor
 from system.graphics.renderableprocessor import RenderableProcessor
 from utilities.entityfinder import EntityFinder
-
+from system.graphics.physics import Physics
 
 class RenderableTest(unittest.TestCase):
     def test_renderableBasic(self):
@@ -153,8 +153,10 @@ class RenderableTest(unittest.TestCase):
             coordinates=coordinates,
             direction=Direction.right,
             name='Player')
+        physics = Physics()
 
         self.world.add_component(playerEntity, playerRenderable)
+        self.world.add_component(playerEntity, physics)
         # /Player
 
         # Enemy
@@ -175,20 +177,22 @@ class RenderableTest(unittest.TestCase):
             coordinates=coordinates,
             direction=Direction.right,
             name='Enemy')
+        physics = Physics()
 
         self.world.add_component(enemyEntity, enemyRenderable)
+        self.world.add_component(playerEntity, physics)
         # /Enemy
 
         # process it
         targetFrameTime = 1.0 / Config.fps
-        extCoords = playerRenderable.getLocationAndSize()
+        playerExtCoords = playerRenderable.getLocationAndSize()
 
         # x adjectant
-        overlap = enemyRenderable.overlapsWithCoordinates(extCoords)
+        overlap = enemyRenderable.overlapsWithCoordinates(playerExtCoords)
         self.assertFalse(overlap)
-        empty = EntityFinder.isDestinationEmpty(self.world, playerRenderable, extCoords)
+        empty = EntityFinder.isDestinationEmpty(self.world, playerRenderable, enemyRenderable.getLocationAndSize())
         self.assertTrue(empty)
-        distance = enemyRenderable.distanceToBorder(extCoords)
+        distance = enemyRenderable.distanceToBorder(playerExtCoords)
         self.assertTrue(distance['x'] == 0)
         self.assertTrue(distance['y'] == 0)
         ret = EntityFinder.isDestinationEmpty(
@@ -197,11 +201,11 @@ class RenderableTest(unittest.TestCase):
 
         # x one space distance
         enemyRenderable.coordinates.x += 1
-        overlap = enemyRenderable.overlapsWithCoordinates(extCoords)
+        overlap = enemyRenderable.overlapsWithCoordinates(playerExtCoords)
         self.assertFalse(overlap)
-        empty = EntityFinder.isDestinationEmpty(self.world, playerRenderable, extCoords)
+        empty = EntityFinder.isDestinationEmpty(self.world, playerRenderable, enemyRenderable.getLocationAndSize())
         self.assertTrue(empty)
-        distance = enemyRenderable.distanceToBorder(extCoords)
+        distance = enemyRenderable.distanceToBorder(playerExtCoords)
         self.assertTrue(distance['x'] == 1)
         self.assertTrue(distance['y'] == 0)
         ret = EntityFinder.isDestinationEmpty(
@@ -213,11 +217,11 @@ class RenderableTest(unittest.TestCase):
         # /|/|\     
         # / / \ 
         enemyRenderable.coordinates.x -= 2
-        overlap = enemyRenderable.overlapsWithCoordinates(extCoords)
+        overlap = enemyRenderable.overlapsWithCoordinates(playerExtCoords)
         self.assertTrue(overlap)
-        empty = EntityFinder.isDestinationEmpty(self.world, playerRenderable, extCoords)
+        empty = EntityFinder.isDestinationEmpty(self.world, enemyRenderable, enemyRenderable.getLocationAndSize())
         self.assertFalse(empty)
-        distance = enemyRenderable.distanceToBorder(extCoords)
+        distance = enemyRenderable.distanceToBorder(playerExtCoords)
         self.assertTrue(distance['x'] == -1)
         self.assertTrue(distance['y'] == 0)
         ret = EntityFinder.isDestinationEmpty(
@@ -226,11 +230,11 @@ class RenderableTest(unittest.TestCase):
 
         # x inside 2
         enemyRenderable.coordinates.x -= 1
-        overlap = enemyRenderable.overlapsWithCoordinates(extCoords)
+        overlap = enemyRenderable.overlapsWithCoordinates(playerExtCoords)
         self.assertTrue(overlap)
-        empty = EntityFinder.isDestinationEmpty(self.world, playerRenderable, extCoords)
+        empty = EntityFinder.isDestinationEmpty(self.world, enemyRenderable, enemyRenderable.getLocationAndSize())
         self.assertFalse(empty)
-        distance = enemyRenderable.distanceToBorder(extCoords)
+        distance = enemyRenderable.distanceToBorder(playerExtCoords)
         self.assertTrue(distance['x'] == -2)
         self.assertTrue(distance['y'] == 0)
         ret = EntityFinder.isDestinationEmpty(
@@ -238,13 +242,18 @@ class RenderableTest(unittest.TestCase):
         self.assertFalse(ret)
 
         # y 2
+        #      o
+        #   o /|\
+        #  /|\/ \
+        #  / \
         enemyRenderable.coordinates.x += 2
         enemyRenderable.coordinates.y -= 1
-        overlap = enemyRenderable.overlapsWithCoordinates(extCoords)
+        overlap = enemyRenderable.overlapsWithCoordinates(playerExtCoords)
         self.assertFalse(overlap)
-        empty = EntityFinder.isDestinationEmpty(self.world, playerRenderable, extCoords)
+        empty = EntityFinder.isDestinationEmpty(self.world, enemyRenderable, enemyRenderable.getLocationAndSize())
         self.assertTrue(empty)
-        distance = enemyRenderable.distanceToBorder(extCoords)
+
+        distance = enemyRenderable.distanceToBorder(playerExtCoords)
         self.assertTrue(distance['x'] == 0)
         self.assertTrue(distance['y'] == -2)
         ret = EntityFinder.isDestinationEmpty(
@@ -253,31 +262,31 @@ class RenderableTest(unittest.TestCase):
 
         # y 3
         enemyRenderable.coordinates.y -= 2
-        overlap = enemyRenderable.overlapsWithCoordinates(extCoords)
+        overlap = enemyRenderable.overlapsWithCoordinates(playerExtCoords)
         self.assertFalse(overlap)
-        empty = EntityFinder.isDestinationEmpty(self.world, playerRenderable, extCoords)
+        empty = EntityFinder.isDestinationEmpty(self.world, enemyRenderable, enemyRenderable.getLocationAndSize())
         self.assertTrue(empty)
-        distance = enemyRenderable.distanceToBorder(extCoords)
+        distance = enemyRenderable.distanceToBorder(playerExtCoords)
         self.assertTrue(distance['x'] == 0)
         self.assertTrue(distance['y'] == 0)
 
         # y above each other
         enemyRenderable.coordinates.x -= 3
-        overlap = enemyRenderable.overlapsWithCoordinates(extCoords)
+        overlap = enemyRenderable.overlapsWithCoordinates(playerExtCoords)
         self.assertFalse(overlap)
-        empty = EntityFinder.isDestinationEmpty(self.world, playerRenderable, extCoords)
+        empty = EntityFinder.isDestinationEmpty(self.world, enemyRenderable, enemyRenderable.getLocationAndSize())
         self.assertTrue(empty)
-        distance = enemyRenderable.distanceToBorder(extCoords)
+        distance = enemyRenderable.distanceToBorder(playerExtCoords)
         self.assertTrue(distance['x'] == 0)
         self.assertTrue(distance['y'] == 0)
 
         # directly on top of each other
         enemyRenderable.coordinates.y += 3
-        overlap = enemyRenderable.overlapsWithCoordinates(extCoords)
+        overlap = enemyRenderable.overlapsWithCoordinates(playerExtCoords)
         self.assertTrue(overlap)
-        empty = EntityFinder.isDestinationEmpty(self.world, playerRenderable, extCoords)
+        empty = EntityFinder.isDestinationEmpty(self.world, enemyRenderable, enemyRenderable.getLocationAndSize())
         self.assertFalse(empty)
-        distance = enemyRenderable.distanceToBorder(extCoords)
+        distance = enemyRenderable.distanceToBorder(playerExtCoords)
         self.assertTrue(distance['x'] == 0)
         self.assertTrue(distance['y'] == 0)
 

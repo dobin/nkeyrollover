@@ -196,11 +196,11 @@ class Renderable(object):
 
 
     def overlapsWithCoordinates(self, coords :Coordinates):
-        if (self.coordinates.x + self.texture.width > coords.x
-                and self.coordinates.x < coords.x + coords.width):
-            if (self.coordinates.y < coords.y + coords.height
-                    and self.coordinates.y + self.texture.height > coords.y):
-                return True
+        if self.coordinates.x + self.texture.width > coords.x:
+            if self.coordinates.x < coords.x + coords.width:
+                if self.coordinates.y < coords.y + coords.height:
+                    if self.coordinates.y + self.texture.height > coords.y:
+                        return True
 
         return False
 
