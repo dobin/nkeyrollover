@@ -61,7 +61,7 @@ class SceneMapBlame(SceneBase):
         if Config.devMode:
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                enemyType = EnemyType.stickfigure,
+                enemyType = EnemyType.dragon,
                 spawnTime = None,
                 spawnX = 25,
                 spawnLocation = Coordinates(36, 8),
@@ -103,7 +103,7 @@ class SceneMapBlame(SceneBase):
         waveIdx = 0
         waveCount = 9
 
-        intraWaveXoffset = 50
+        intraWaveXoffset = 30
         waveX = 30
         while waveIdx < waveCount:
             self.prepareWave(waveX, self.enemyQueue)
@@ -124,10 +124,14 @@ class SceneMapBlame(SceneBase):
             # spawnLocation = self.getRandomSpawnCoords(
             #    trapX=playerTrapX, rightSideBias=0.8)
 
-            dir = Direction.left
+            xoff = random.randint(0, 4)
             roll = random.random()
             if roll < 0.8:
                 dir = Direction.right
+                playerTrapX += xoff
+            else:
+                dir = Direction.left
+                playerTrapX -= xoff
 
             enemyCell = EnemyCell(
                 id = self.enemyCount,
@@ -143,7 +147,8 @@ class SceneMapBlame(SceneBase):
 
         n = 0
         while n < numCows:
-            playerTrapX = waveX + 20
+            xoff = random.randint(0, 4)
+            playerTrapX = waveX + 10 + xoff
             # spawnLocation = self.getRandomSpawnCoords(
             #    trapX=playerTrapX, rightSideBias=0.8)
             enemyCell = EnemyCell(
@@ -160,7 +165,7 @@ class SceneMapBlame(SceneBase):
 
         n = 0
         while n < numDragons:
-            playerTrapX = waveX + 40
+            playerTrapX = waveX + 30
             # spawnLocation = self.getRandomSpawnCoords(
             #    trapX=playerTrapX, rightSideBias=0.8)
             enemyCell = EnemyCell(
