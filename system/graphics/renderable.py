@@ -253,7 +253,7 @@ class Renderable(object):
         if self.direction is Direction.left:
             loc.x += self.attackBaseLocation.x
         else:
-            loc.x += (self.texture.width - 1) - self.attackBaseLocation.x
+            loc.x += (self.texture.width - 1 - self.attackBaseLocation.x)
 
         return loc
 
@@ -266,7 +266,7 @@ class Renderable(object):
         if self.direction is Direction.right:
             loc.x += self.attackBaseLocation.x
         else:
-            loc.x += (self.texture.width - 1) - self.attackBaseLocation.x
+            loc.x += (self.texture.width - 1 - self.attackBaseLocation.x)
 
         return loc
 

@@ -51,8 +51,6 @@ class TextureEmiter(object):
                 phenomenaTextureType))
 
         # manage renderable
-        if direction is Direction.left:
-            location.x -= renderable.texture.width
         if staticLocation:
             location.x += self.viewport.getx()
         renderable.setLocation(location)

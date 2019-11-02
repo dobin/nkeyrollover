@@ -111,6 +111,10 @@ class RenderableTest(unittest.TestCase):
         self.assertTrue(attackLocation.x == 9)
         self.assertTrue(attackLocation.y == 11)
 
+        attackLocation = renderable.getAttackBaseLocationInverted()
+        self.assertTrue(attackLocation.x == 13)
+        self.assertTrue(attackLocation.y == 11)
+
 
     def test_renderableDistanceToBorder(self):
         game.isunittest.setIsUnitTest()
@@ -269,8 +273,6 @@ class RenderableTest(unittest.TestCase):
 
         # directly on top of each other
         enemyRenderable.coordinates.y += 3
-        # self.world.process(targetFrameTime)
-        # self.viewport.internalPrint()
         overlap = enemyRenderable.overlapsWithCoordinates(extCoords)
         self.assertTrue(overlap)
         empty = EntityFinder.isDestinationEmpty(self.world, playerRenderable, extCoords)
@@ -278,6 +280,9 @@ class RenderableTest(unittest.TestCase):
         distance = enemyRenderable.distanceToBorder(extCoords)
         self.assertTrue(distance['x'] == 0)
         self.assertTrue(distance['y'] == 0)
+
+        # self.world.process(targetFrameTime)
+        # self.viewport.internalPrint()
 
 
 if __name__ == '__main__':
