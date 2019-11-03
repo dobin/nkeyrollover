@@ -61,7 +61,7 @@ class SceneMapBlame(SceneBase):
         if Config.devMode:
             enemyCell = EnemyCell(
                 id = self.enemyCount,
-                enemyType = EnemyType.dragon,
+                enemyType = EnemyType.stickfigure,
                 spawnTime = None,
                 spawnX = 25,
                 spawnLocation = Coordinates(36, 8),

@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class ColorType(Enum):
     particle = 0
     sprite = 1
@@ -8,5 +9,4 @@ class ColorType(Enum):
     scene = 4
     world = 5
     menu = 6
-
     background = 7

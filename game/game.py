@@ -33,6 +33,7 @@ from texture.filetextureloader import fileTextureLoader
 from game.offenseloader.fileoffenseloader import fileOffenseLoader
 from utilities.colorpalette import ColorPalette
 from utilities.color import Color
+from utilities.colortype import ColorType
 from config import Config
 
 logger = logging.getLogger(__name__)
@@ -317,7 +318,7 @@ class Game(object):
 
         if self.pause:
             color, attr = ColorPalette.getColorByColor(Color.white)
-            self.win.addstr(
+            self.viewport.addstr(
                 12,
                 40,
                 "Paused",
@@ -342,6 +343,7 @@ class Game(object):
     def drawStats(self):
         x = 2
         y = 1
+        color, attr = ColorPalette.getColorByColorType(ColorType.menu)
 
         o = []
 
@@ -375,7 +377,7 @@ class Game(object):
 
         n = 0
         while n < len(o):
-            self.win.addstr(y + n, x, o[n])
+            self.viewport.addstr(y + n, x, o[n], color=color, attr=attr)
             n += 1
 
 

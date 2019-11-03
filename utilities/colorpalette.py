@@ -88,7 +88,7 @@ class ColorPalette(object):
 
 
     @staticmethod
-    def getColorByColorType(colorType: ColorType, viewport :Viewport):
+    def getColorByColorType(colorType: ColorType):
         color = 0
 
         if colorType is ColorType.particle:

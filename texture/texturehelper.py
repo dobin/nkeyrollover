@@ -49,7 +49,7 @@ class TextureHelper(object):
                 color = color.split('.')[1]
                 colorType = ColorPalette.getColorTypeByStr(color)
                 animation.frameColors[n] = ColorPalette.getColorByColorType(
-                    colorType, viewport=None)
+                    colorType)
             else:
                 color = ColorPalette.getColorByStr(color)
                 animation.frameColors[n] = ColorPalette.getColorByColor(

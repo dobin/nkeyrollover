@@ -193,14 +193,14 @@ class SceneProcessor(esper.Processor):
 
 
     def adjustViewport(self, xoff):
-        self.viewport.adjustViewport(xoff)
-
-        messaging.add(
-            type = MessageType.ScreenMove,
-            data = {
-                'x': xoff,
-            },
-        )
+        viewportChanged = self.viewport.adjustViewport(xoff)
+        if viewportChanged:
+            messaging.add(
+                type = MessageType.ScreenMove,
+                data = {
+                    'x': xoff,
+                },
+            )
 
 
     def killAllEnemies(self):
