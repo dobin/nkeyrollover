@@ -216,92 +216,31 @@ class Renderable(object):
         right = min(
             meRenderable.coordinates.x + meRenderable.texture.width,
             heRenderable.coordinates.x + heRenderable.texture.width)
-
-        logging.warn("X Left: {}  Right: {}".format(left, right))
-
         me_left = left - meRenderable.coordinates.x
         me_right = right - meRenderable.coordinates.x
-
-        logging.warn("XMe Left: {}  Right: {}".format(me_left, me_right))
-
-        # logging.warn("X Me {} He: {}".format(meRenderable.coordinates.x, heRenderable.coordinates.x))
-        # logging.warn("Left2: {}  Right: {}".format(left, right))
 
         top = max(meRenderable.coordinates.y, heRenderable.coordinates.y)
         bottom = min(
             meRenderable.coordinates.y + meRenderable.texture.height,
             heRenderable.coordinates.y + heRenderable.texture.height)
-
-        logging.warn("Y Top: {}  Bottom: {}".format(top, bottom))
-
         me_top = top - meRenderable.coordinates.y
         me_bottom = bottom - meRenderable.coordinates.y
 
-        logging.warn("YMe Top: {}  Bottom: {}".format(me_top, me_bottom))
-
-        # logging.warn("Y Me {} He: {}".format(meRenderable.coordinates.y, heRenderable.coordinates.y))
-        # logging.warn("Top2: {}  Bottom: {}".format(top, bottom))
-        # logging.warn("--xOff: {}  yOff: {}".format(xOff, yOff))
-
-        ret = False
         y = me_top
         while y < me_bottom:
             x = me_left
             while x < me_right:
                 myc = meTextureArr[y][x]
-                # logging.warn("y={} + YOff={}: {}".format(y, yOff, y-yOff))
                 xxx, yyy = Utility.getOffsetFor(self, renderable, x, y)
-                logging.warn("XXX: {}  YYY: {}".format(xxx, yyy))
-                hisc = heTextureArr[xxx][yyy]
-
-                logging.warn("myc: {}  hisc: {}".format(myc, hisc))
-
-                if False:
-                    messaging.add(
-                        type=MessageType.EmitTextureMinimal,
-                        data={
-                            'char': '.',
-                            'timeout': 3.0,
-                            'coordinate': Coordinates(
-                                x+xxx, y+yyy),
-                            'color': Color.green
-                        }
-                    )
-
-                if False:
-                    messaging.add(
-                        type=MessageType.EmitParticleEffect,
-                        data= {
-                            'location': Coordinates(
-                                x + meRenderable.coordinates.x,
-                                y + meRenderable.coordinates.y),
-                            'effectType': ParticleEffectType.char,
-                            'damage': 00,
-                            'byPlayer': False,
-                            'direction': Direction.none,
-                        }
-                    )
-
-                    messaging.add(
-                        type=MessageType.EmitParticleEffect,
-                        data= {
-                            'location': Coordinates(
-                                xxx + meRenderable.coordinates.x,
-                                yyy + heRenderable.coordinates.y),
-                            'effectType': ParticleEffectType.char,
-                            'damage': 00,
-                            'byPlayer': False,
-                            'direction': Direction.none,
-                        }
-                    )
+                hisc = heTextureArr[yyy][xxx]
 
                 if myc != '' and hisc != '':
-                    ret = True
+                    return True
 
                 x += 1
             y += 1
 
-        return ret
+        return False
 
 
     def distanceToBorder(self, extCoords):
