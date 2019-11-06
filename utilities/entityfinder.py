@@ -27,11 +27,12 @@ class EntityFinder(object):
                     overlap = otherRend.overlapsWithCoordinates(extCoords)
                     if overlap:
                         # slowest: pixel perfect check
-                        # TODO if otherRend.overlapsPixelWithTexture(renderable):
-                        logger.info("{} Cant go to {}/{} because {}".format(
-                            renderable, extCoords.x, extCoords.y, otherRend
-                        ))
-                        return False
+                        overlap = otherRend.overlapsWithRenderable(renderable)
+                        if overlap:
+                            logger.info("{} Cant go to {}/{} because {}".format(
+                                renderable, extCoords.x, extCoords.y, otherRend
+                            ))
+                            return False
 
         return True
 

@@ -13,3 +13,5 @@ class ParticleEffectType(Enum):
 
     disappear = 6
     appear = 7
+
+    char = 8

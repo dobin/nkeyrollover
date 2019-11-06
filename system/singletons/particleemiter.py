@@ -40,6 +40,7 @@ class ParticleEmiter(object):
             ParticleEffectType.hitBurst: self.createHitBurst,
             ParticleEffectType.disappear: self.createDisappear,
             ParticleEffectType.appear: self.createAppear,
+            ParticleEffectType.char: self.createChar,
         }
 
 
@@ -57,6 +58,25 @@ class ParticleEmiter(object):
         direction :Direction = Direction.none,
     ):
         self.dispatch[effectType](loc, direction, byPlayer, damage)
+
+
+    def createChar(self, loc, direction, byPlayer, damage):
+        particle = self.particlePool.pop()
+        x = loc.x
+        y = loc.y
+        particle.init(
+            x=x, y=y,
+            life=100,
+            angle=0,
+            speed=0.0,
+            fadeout=True,
+            byStep=False,
+            charType=3,
+            active=True,
+            damage=damage,
+            damageEveryStep=True,
+            color=ColorPalette.getColorByColor(Color.green))
+        self.particleActive.append(particle)
 
 
     def createHitBurst(self, loc, direction, byPlayer, damage):

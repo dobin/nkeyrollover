@@ -13,6 +13,26 @@ logger = logging.getLogger(__name__)
 
 class Utility(object):
     @staticmethod
+    def getOffsetFor(srcRenderable, destRenderable, x, y):
+        logging.warn("src:  {}/{}".format(
+            srcRenderable.coordinates.x,
+            srcRenderable.coordinates.y))
+
+        logging.warn("dest:  {}/{}".format(
+            destRenderable.coordinates.x,
+            destRenderable.coordinates.y))
+
+        logging.warn("offset:  {}/{}".format(
+            x,
+            y))
+
+        xx = srcRenderable.coordinates.x - destRenderable.coordinates.x + x
+        yy = srcRenderable.coordinates.y - destRenderable.coordinates.y + y
+
+        return xx, yy
+
+
+    @staticmethod
     def diceRoll(diceStr):
         # like "1d6"
         d = int(diceStr.split('d')[1])

@@ -58,27 +58,40 @@ class MovementProcessor(esper.Processor):
 
             # coords to test if we can move to it
             # Note: same x/y calc like in self.moveRenderable()
+            origX = playerRenderable.coordinates.x
+            origY = playerRenderable.coordinates.y
+
+            playerRenderable.coordinates.x += x
+            playerRenderable.coordinates.y += y
             extCoords = playerRenderable.getLocationAndSize()
-            extCoords.x += msg.data['x']
-            extCoords.y += msg.data['y']
+
             canMove = EntityFinder.isDestinationEmpty(
                 self.world, playerRenderable, extCoords)
             if not canMove:
                 # try with one step, instead of the original two
                 if x > 0:
                     x -= 1
+                    playerRenderable.coordinates.x -= 1
                     extCoords.x -= 1
                 elif x < 0:
-                    x -= 1
+                    x += 1
                     extCoords.x += 1
+                    playerRenderable.coordinates.x += 1
 
                 canMove = EntityFinder.isDestinationEmpty(
                     self.world, playerRenderable, extCoords)
                 if not canMove:
+                    # reset..
+                    playerRenderable.coordinates.x = origX
+                    playerRenderable.coordinates.y = origY
+
                     continue
                 else:
                     # can move with new coordinates
                     pass
+
+            playerRenderable.coordinates.x = origX
+            playerRenderable.coordinates.y = origY
 
             didMove = self.moveRenderable(
                 playerRenderable,

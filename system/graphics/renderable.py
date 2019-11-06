@@ -10,6 +10,10 @@ from common.coordinates import Coordinates, ExtCoordinates
 from common.direction import Direction
 from texture.texture import Texture
 from game.viewport import Viewport
+from messaging import messaging, MessageType
+from utilities.color import Color
+from system.graphics.particleeffecttype import ParticleEffectType
+from utilities.utilities import Utility
 
 logger = logging.getLogger(__name__)
 
@@ -150,6 +154,10 @@ class Renderable(object):
 
 
     def collidesWithPoint(self, hitCoords :Coordinates):
+        """
+        Returns true if the 1x1 particle at hitCoords hits a nonempty part of
+        this renderable's texture
+        """
         # broad check
         if (hitCoords.x >= self.coordinates.x
                 and hitCoords.x < self.coordinates.x + self.texture.width
@@ -178,24 +186,13 @@ class Renderable(object):
         return False
 
 
-    def overlapsWithTexture(self, renderable):
-        # function not yet used or finished. just a reminder
-        myTextureArr = self.texture.getCurrentFrame()
-        hisTextureArr = renderable.texture.getCurrentFrame()
-
-        xOff = self.coordinates.x - renderable.coordinates.x
-        yOff = self.coordinates.y - renderable.coordinates.y
-
-        y = 0
-        while y < len(myTextureArr):
-            x = 0
-            while x < len(myTextureArr[y]):
-                column = myTextureArr[y][x]
-                if column != '':
-                    pass
-
-
     def overlapsWithCoordinates(self, coords :Coordinates):
+        """
+        Returns true if the semi-sprite, indicated by coords, overlaps with
+        this current renderables texture
+
+        Fast but unexact.
+        """
         if self.coordinates.x + self.texture.width > coords.x:
             if self.coordinates.x < coords.x + coords.width:
                 if self.coordinates.y < coords.y + coords.height:
@@ -203,6 +200,108 @@ class Renderable(object):
                         return True
 
         return False
+
+
+    def overlapsWithRenderable(self, renderable):
+        # if not self.overlapsWithCoordinates(renderable.getLocationAndSize()):
+        #     return False
+
+        meTextureArr = self.texture.getCurrentFrame()
+        heTextureArr = renderable.texture.getCurrentFrame()
+
+        meRenderable = self
+        heRenderable = renderable
+
+        left = max(meRenderable.coordinates.x, heRenderable.coordinates.x)
+        right = min(
+            meRenderable.coordinates.x + meRenderable.texture.width,
+            heRenderable.coordinates.x + heRenderable.texture.width)
+
+        logging.warn("X Left: {}  Right: {}".format(left, right))
+
+        me_left = left - meRenderable.coordinates.x
+        me_right = right - meRenderable.coordinates.x
+
+        logging.warn("XMe Left: {}  Right: {}".format(me_left, me_right))
+
+        # logging.warn("X Me {} He: {}".format(meRenderable.coordinates.x, heRenderable.coordinates.x))
+        # logging.warn("Left2: {}  Right: {}".format(left, right))
+
+        top = max(meRenderable.coordinates.y, heRenderable.coordinates.y)
+        bottom = min(
+            meRenderable.coordinates.y + meRenderable.texture.height,
+            heRenderable.coordinates.y + heRenderable.texture.height)
+
+        logging.warn("Y Top: {}  Bottom: {}".format(top, bottom))
+
+        me_top = top - meRenderable.coordinates.y
+        me_bottom = bottom - meRenderable.coordinates.y
+
+        logging.warn("YMe Top: {}  Bottom: {}".format(me_top, me_bottom))
+
+        # logging.warn("Y Me {} He: {}".format(meRenderable.coordinates.y, heRenderable.coordinates.y))
+        # logging.warn("Top2: {}  Bottom: {}".format(top, bottom))
+        # logging.warn("--xOff: {}  yOff: {}".format(xOff, yOff))
+
+        ret = False
+        y = me_top
+        while y < me_bottom:
+            x = me_left
+            while x < me_right:
+                myc = meTextureArr[y][x]
+                # logging.warn("y={} + YOff={}: {}".format(y, yOff, y-yOff))
+                xxx, yyy = Utility.getOffsetFor(self, renderable, x, y)
+                logging.warn("XXX: {}  YYY: {}".format(xxx, yyy))
+                hisc = heTextureArr[xxx][yyy]
+
+                logging.warn("myc: {}  hisc: {}".format(myc, hisc))
+
+                if False:
+                    messaging.add(
+                        type=MessageType.EmitTextureMinimal,
+                        data={
+                            'char': '.',
+                            'timeout': 3.0,
+                            'coordinate': Coordinates(
+                                x+xxx, y+yyy),
+                            'color': Color.green
+                        }
+                    )
+
+                if False:
+                    messaging.add(
+                        type=MessageType.EmitParticleEffect,
+                        data= {
+                            'location': Coordinates(
+                                x + meRenderable.coordinates.x,
+                                y + meRenderable.coordinates.y),
+                            'effectType': ParticleEffectType.char,
+                            'damage': 00,
+                            'byPlayer': False,
+                            'direction': Direction.none,
+                        }
+                    )
+
+                    messaging.add(
+                        type=MessageType.EmitParticleEffect,
+                        data= {
+                            'location': Coordinates(
+                                xxx + meRenderable.coordinates.x,
+                                yyy + heRenderable.coordinates.y),
+                            'effectType': ParticleEffectType.char,
+                            'damage': 00,
+                            'byPlayer': False,
+                            'direction': Direction.none,
+                        }
+                    )
+
+                if myc != '' and hisc != '':
+                    ret = True
+
+                x += 1
+            y += 1
+
+        return ret
 
 
     def distanceToBorder(self, extCoords):
