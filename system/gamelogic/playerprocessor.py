@@ -16,6 +16,7 @@ from utilities.entityfinder import EntityFinder
 from system.gamelogic.player import Player
 from common.direction import Direction
 from system.graphics.physics import Physics
+from game.playerseed import PlayerSeed
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +26,7 @@ class PlayerProcessor(esper.Processor):
         super().__init__()
 
         self.viewport = viewport
+        self.playerSeed = PlayerSeed()
 
 
     def process(self, deltaTime):
@@ -64,12 +66,12 @@ class PlayerProcessor(esper.Processor):
         groupId = GroupId(id=myid)
         player = system.gamelogic.player.Player()
         attackable = Attackable(
-            initialHealth=100,
-            stunCount=1,
-            stunTimeFrame=8.0,
-            stunTime=0.75,
-            knockdownChance=0.0,
-            knockbackChance=0.9)
+            initialHealth=self.playerSeed.initialHealth,
+            stunCount=self.playerSeed.stunCount,
+            stunTimeFrame=self.playerSeed.stunTimeFrame,
+            stunTime=self.playerSeed.stunTime,
+            knockdownChance=self.playerSeed.knockdownChance,
+            knockbackChance=self.playerSeed.knockbackChance)
         texture = CharacterTexture(
             characterTextureType=CharacterTextureType.player,
             characterAnimationType=CharacterAnimationType.standing,
