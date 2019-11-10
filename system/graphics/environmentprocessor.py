@@ -29,8 +29,15 @@ class EnvironmentProcessor(esper.Processor):
 
     def checkMessages(self):
         for message in messaging.getByType(MessageType.ScreenMove):
-            # newX = message.data['x']
-            newX = self.viewport.getx()
+            self.trySpawn()
 
-            self.environmentOrchestrator.trySpawn(self.world, newX)
-            self.environmentOrchestrator.tryRemoveOld(self.world, newX)
+        for message in messaging.getByType(MessageType.GameStart):
+            self.trySpawn()
+
+
+    def trySpawn(self):
+        # newX = message.data['x']
+        newX = self.viewport.getx()
+
+        self.environmentOrchestrator.trySpawn(self.world, newX)
+        self.environmentOrchestrator.tryRemoveOld(self.world, newX)

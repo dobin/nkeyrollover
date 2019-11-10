@@ -30,9 +30,8 @@ class SceneProcessor(esper.Processor):
         super().__init__()
         self.viewport = viewport
         self.sceneManager = sceneManager
-        self.sceneManager.startScene()  # start first scene
         self.xCenter = Config.columns / 2 - 5
-        self.state = State.brawl
+        self.state = State.start
         self.screenMoveTimer = Timer(0.1)
         self.lastKnownPlayerPos = None
         self.gameoverTimer = Timer(3.0, active=False)  # show gameover for this long

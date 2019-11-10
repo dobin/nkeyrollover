@@ -5,6 +5,7 @@ from game.scenes.scene_logo import SceneLogo
 from game.scenes.scene_intro import SceneIntro
 from game.scenes.scene_mapblame import SceneMapBlame
 from config import Config
+from messaging import messaging, MessageType
 
 logger = logging.getLogger(__name__)
 
@@ -74,6 +75,12 @@ class SceneManager(object):
         self.currentScene.leave()
         self.currentScene.init()
         self.startScene()
+
+        if self.currentScene.isShowPlayer:
+            messaging.add(
+                type=MessageType.GameStart,
+                data={}
+            )
 
 
     def advance(self, dt):

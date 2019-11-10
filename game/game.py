@@ -153,9 +153,11 @@ class Game(object):
         # p generate: Message            SpawnPlayer
         # x generate: DirectMessage      activateSpeechBubble
         # x generate: Message            ScreenMove
+        # x generate: Message            GameStart
         self.world.add_processor(sceneProcessor)
 
         # x handle:   Message            ScreenMove
+        # x handle:   Message            GameStart
         self.world.add_processor(environmentProcessor)
 
         # e handle:   Message            SpawnEnemy
