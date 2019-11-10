@@ -53,6 +53,9 @@ class InputProcessor(esper.Processor):
 
             return
 
+        if not player.isAlive:
+            return
+
         didMove = False
         for message in self.keyCache:
             # identical to bottom loop atm
@@ -64,14 +67,6 @@ class InputProcessor(esper.Processor):
         self.keyCache.clear()
 
         for message in messaging.getByType(MessageType.PlayerKeypress):
-            if not player.isAlive:
-                messaging.add(
-                    type = MessageType.GameRestart,
-                    data = {},
-                )
-                message.type = MessageType.Deleted
-                return
-
             apm.tick(message.data['time'])
             didMoveTmp = self.handleKeyPress(
                 message.data['key'], player, renderable, playerEntity)

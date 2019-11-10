@@ -31,6 +31,8 @@ AttackableProcessor:
 SceneProcessor:
     Handle: Gameover
         - show gameover texture
+        - start timer
+        - set state to State.gameover
 
 CharacterAnimationProcessor:
     Handle: EntityDying
@@ -38,21 +40,24 @@ CharacterAnimationProcessor:
 
 <advance>
 
-InputProcessor:
-    # continue when key is pressed on gameover screen / texture
+SceneProcessor:
+    # move from gameover screen to start of map
+    # use state.start to let renderableprocessor do
+    # what it should do, then start
     Handle: PlayerKeyPress
-        if not player.isAlive:
-            - Emit: GameRestart
+        if timer.timeisup:
+        - state = state.start
+        - emit ClearRenderables
 
 RenderableProcessor:
-    Handle: GameRestart
+    Handle: ClearRenderables
         - removeall renderables (including player, enemies)
-    Emit: GameStart
 
 <advance>
 
 SceneProcessor:
-    Handle: GameStart
+    if state is state.start:
+        - state = state.brawl
         - sceneManager.restartScene()
             - reset viewport
             - load map

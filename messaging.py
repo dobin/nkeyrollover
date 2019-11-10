@@ -32,10 +32,10 @@ class MessageType(Enum):
 
     Gameover = 22
     EmitPhenomenaTexture = 23
-    GameRestart = 24
     Deleted = 25
     EntityEndStun = 26
     ScreenMove = 27
+    ClearRenderables = 28
 
 
 class Message(object):

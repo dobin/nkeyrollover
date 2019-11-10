@@ -21,6 +21,9 @@ class State(Enum):
     pushToEnemies = 1
     brawl = 2
 
+    gameover = 3
+    start = 4
+
 
 class SceneProcessor(esper.Processor):
     def __init__(self, viewport, sceneManager):
@@ -32,12 +35,17 @@ class SceneProcessor(esper.Processor):
         self.state = State.brawl
         self.screenMoveTimer = Timer(0.1)
         self.lastKnownPlayerPos = None
+        self.gameoverTimer = Timer(3.0, active=False)  # show gameover for this long
 
 
     def process(self, dt):
         self.screenMoveTimer.advance(dt)
+        self.gameoverTimer.advance(dt)
 
         for message in messaging.getByType(MessageType.Gameover):
+            self.gameoverTimer.reset()
+            self.gameoverTimer.start()
+            self.state = State.gameover
             messaging.add(
                 type=MessageType.EmitPhenomenaTexture,
                 data={
@@ -49,8 +57,19 @@ class SceneProcessor(esper.Processor):
                 }
             )
 
-        for message in directMessaging.getByType(DirectMessageType.GameStart):
+        if self.state is State.gameover:
+            for message in messaging.getByType(MessageType.PlayerKeypress):
+                if self.gameoverTimer.timeIsUp():
+                    messaging.add(
+                        type=MessageType.ClearRenderables,
+                        data={}
+                    )
+
+                    self.state = State.start
+        elif self.state is State.start:
             self.sceneManager.restartScene()
+            self.state = State.brawl
+
 
         for message in messaging.getByType(MessageType.EntityDying):
             # if no enemies are alive, we want to go to the next akt
