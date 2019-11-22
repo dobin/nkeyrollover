@@ -5,5 +5,5 @@ frameTime:
   - 1.5
 frameColors:
   - green
-  - brightgreen
+  - green
 direction: right
