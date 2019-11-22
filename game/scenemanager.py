@@ -61,6 +61,16 @@ class SceneManager(object):
         self.viewport.reset()
         self.currentScene.enter()
 
+        if self.currentScene.hasEnvironment:
+            # Environment is current listing for screenmove messages, which
+            # are only in maps (not intro etc.)
+            messaging.add(
+                type = MessageType.ScreenMove,
+                data = {
+                    'x': 0,
+                },
+            )
+
 
     def nextScene(self):
         logger.info("Change to scene {}: {}".format(

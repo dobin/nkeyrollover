@@ -25,7 +25,7 @@ class Akt(object):
 
 class SceneMapBlame(SceneBase):
     def __init__(self, viewport, world):
-        super().__init__(world=world, viewport=viewport)
+        super().__init__(world=world, viewport=viewport, hasEnvironment=True)
         self.name = "MapBlame"
         self.isShowPlayer = True
         self.isShowMap = True

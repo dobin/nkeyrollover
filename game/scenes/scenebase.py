@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 
 
 class SceneBase(object): 
-    def __init__(self, world, viewport):
+    def __init__(self, world, viewport, hasEnvironment=False):
         self.world = world
         self.viewport = viewport
 
@@ -22,6 +22,8 @@ class SceneBase(object):
 
         self.isShowPlayer = False
         self.isShowMap = False
+
+        self.hasEnvironment = hasEnvironment
 
 
     def __repr__(self):
