@@ -326,7 +326,7 @@ class RenderableTest(unittest.TestCase):
 
         # empty = EntityFinder.isDestinationEmpty(self.world, enemyRenderable, enemyRenderable.getLocationAndSize())
         empty = EntityFinder.isDestinationEmpty(self.world, playerRenderable, playerRenderable.getLocationAndSize())
-        self.assertFalse(empty)
+        self.assertTrue(empty)
 
         distance = enemyRenderable.distanceToBorder(playerExtCoords)
         self.assertTrue(distance['x'] == -1)
