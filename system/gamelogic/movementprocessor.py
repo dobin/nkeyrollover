@@ -146,6 +146,12 @@ class MovementProcessor(esper.Processor):
             x = msg.data['x']
             y = msg.data['y']
 
+            origX = meRenderable.coordinates.x
+            origY = meRenderable.coordinates.y
+
+            meRenderable.coordinates.x += x
+            meRenderable.coordinates.y += y
+
             if msg.data['force']:
                 canMove = True
             else:
@@ -161,6 +167,7 @@ class MovementProcessor(esper.Processor):
                         x = msg.data['x']
                         y = 0
                         extCoords.y -= msg.data['y']
+                        meRenderable.coordinates.y -= msg.data['y']
                         canMove = EntityFinder.isDestinationEmpty(
                             self.world, meRenderable, extCoords)
 
@@ -170,11 +177,17 @@ class MovementProcessor(esper.Processor):
                             y = msg.data['y']
                             extCoords.x -= msg.data['x']
                             extCoords.y += msg.data['y']
+                            meRenderable.coordinates.x -= msg.data['x']
+                            meRenderable.coordinates.y += msg.data['y']
+
                             canMove = EntityFinder.isDestinationEmpty(
                                 self.world, meRenderable, extCoords)
 
                 # check if we are stuck
                 if not canMove:
+                    meRenderable.coordinates.x = origX
+                    meRenderable.coordinates.y = origY
+
                     isStuck = not EntityFinder.isDestinationEmpty(
                         self.world, meRenderable, meRenderable.getLocationAndSize()
                     )
@@ -189,6 +202,9 @@ class MovementProcessor(esper.Processor):
                         # as another enemy most likely blocks our way
                         logger.info("{}: Does not overlap, wait until moving".format(meRenderable))
                         pass
+
+            meRenderable.coordinates.x = origX
+            meRenderable.coordinates.y = origY
 
             if canMove:
                 self.moveRenderable(
