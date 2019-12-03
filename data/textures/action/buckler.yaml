@@ -1,6 +1,6 @@
 endless: False
 frameTime: 
-  - 5.5
+  - 0.5
 advanceByStep: False
 frameColors:
   - brightyellow

@@ -17,8 +17,14 @@ class DefenseProcessor(esper.Processor):
 
 
     def process(self, dt):
+        self.advance(dt)
         self.checkDefenseMessages()
         self.checkReceiveDamageMessages()
+
+
+    def advance(self, dt):
+        for ent, defense in self.world.get_component(Defense):
+            defense.advance(dt)
 
 
     def checkDefenseMessages(self):
@@ -29,6 +35,8 @@ class DefenseProcessor(esper.Processor):
             entity = EntityFinder.findByGroupId(self.world, groupId)
             defense = self.world.component_for_entity(entity, Defense)
             defense.coordinates = location
+            defense.isActive = True
+            defense.timer.reset()
 
 
     def checkReceiveDamageMessages(self):
@@ -39,6 +47,9 @@ class DefenseProcessor(esper.Processor):
 
             if self.world.has_component(destinationEntity, Defense):
                 defense = self.world.component_for_entity(destinationEntity, Defense)
+
+                if not defense.isActive:
+                    continue
 
                 destinationRenderable = self.world.component_for_entity(
                     destinationEntity, Renderable)
