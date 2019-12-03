@@ -157,6 +157,9 @@ class AttackableProcessor(esper.Processor):
             if not byPlayer ^ isPlayer:
                 continue
 
+            if damage == 0:
+                continue
+
             # change health
             meAttackable.adjustHealth(-1 * damage)
             healthUpdated = True
