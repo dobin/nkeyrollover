@@ -19,6 +19,7 @@ from system.gamelogic.aiprocessor import AiProcessor
 from system.gamelogic.gametimeprocessor import GametimeProcessor
 from system.gamelogic.damageprocessor import DamageProcessor
 from system.gamelogic.passiveattackprocessor import PassiveAttackProcessor
+from system.gamelogic.defenseprocessor import DefenseProcessor
 from system.io.inputprocessor import InputProcessor
 from system.graphics.characteranimationprocessor import CharacterAnimationProcessor
 from system.graphics.renderableminimalprocessor import RenderableMinimalProcessor
@@ -90,6 +91,7 @@ class Game(object):
         environmentProcessor = EnvironmentProcessor(
             viewport=viewport, mapManager=mapManager)
         passiveAttackProcessor = PassiveAttackProcessor()
+        defenseProcessor = DefenseProcessor()
 
         self.sceneProcessor :SceneProcessor = sceneProcessor  # show F1 stats
         self.viewport :Viewport = viewport  # for keyboardinput in nkeyrollover.py
@@ -133,6 +135,9 @@ class Game(object):
         # x generate: DirectMessage      activateSpeechBubble
         # x generate: Message            AttackAt (via OffensiveSkill, imediate dmg)
         self.world.add_processor(offensiveSkillProcessor)
+
+        # x change:   Message            receiveDamage
+        self.world.add_processor(defenseProcessor)
 
         # x generate: Message            AttackAt
         self.world.add_processor(passiveAttackProcessor)

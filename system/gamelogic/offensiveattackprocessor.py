@@ -52,6 +52,9 @@ class OffensiveAttackProcessor(esper.Processor):
             if key == ord(' '):
                 playerAttack.attack()
 
+        if key == ord('t'):
+            playerAttack.showBuckler()
+
 
     def getPlayerAttack(self):
         # find player

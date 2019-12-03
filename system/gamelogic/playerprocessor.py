@@ -17,6 +17,7 @@ from system.gamelogic.player import Player
 from common.direction import Direction
 from system.graphics.physics import Physics
 from game.playerseed import PlayerSeed
+from system.gamelogic.defense import Defense
 
 logger = logging.getLogger(__name__)
 
@@ -92,6 +93,7 @@ class PlayerProcessor(esper.Processor):
             parentChar=player,
             parentRenderable=renderable)
         physics = Physics()
+        defense = Defense()
 
         self.world.add_component(playerEntity, physics)
         self.world.add_component(playerEntity, groupId)
@@ -100,3 +102,4 @@ class PlayerProcessor(esper.Processor):
         self.world.add_component(playerEntity, player)
         self.world.add_component(playerEntity, attackable)
         self.world.add_component(playerEntity, offensiveAttack)
+        self.world.add_component(playerEntity, defense)

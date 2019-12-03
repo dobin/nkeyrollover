@@ -19,6 +19,11 @@ class Animation(object):
 
     def getAnimationLength(self):
         n = 0
+
+        if self.frameTime is None:
+            raise Exception("Animation {}: Frametime is none (wrong call?)".format(
+                self.name))
+
         for frameTime in self.frameTime:
             n += frameTime
         return n

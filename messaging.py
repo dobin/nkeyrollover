@@ -38,6 +38,8 @@ class MessageType(Enum):
     ClearRenderables = 28
     GameStart = 29
 
+    Defense = 30
+
 
 class Message(object):
     def __init__(self, type, data, groupId):

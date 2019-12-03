@@ -49,16 +49,32 @@ class OffensiveAttack():
         self.weaponType = weaponType
 
 
+    def showBuckler(self):
+        weaponData = fileOffenseLoader.weaponManager.getWeaponData(WeaponType.buckler)
+        self.attackWithWeapon(weaponData, physics=True)
+
+        location = self.getWeaponBaseLocation(weaponData)
+        messaging.add(
+            MessageType.Defense,
+            data = {
+                'location': location,
+                'groupId': 0,  # TODO: Real groupid here, not just player
+            })
+
+
     def attack(self):
+        weaponData = fileOffenseLoader.weaponManager.getWeaponData(self.weaponType)
+        self.attackWithWeapon(weaponData)
+
+
+    def attackWithWeapon(self, weaponData, physics=False):
         self.cooldownTimer.reset()  # activate cooldown
 
-        weaponData = fileOffenseLoader.weaponManager.getWeaponData(
-            self.weaponType)
         direction = self.parentRenderable.getDirection()
         actionTextureType = weaponData.actionTextureType
 
         # handle weapon offset
-        location = self.getWeaponBaseLocation()
+        location = self.getWeaponBaseLocation(weaponData)
 
         messaging.add(
             type=MessageType.EmitActionTexture,
@@ -67,6 +83,7 @@ class OffensiveAttack():
                 'location': location,
                 'fromPlayer': self.parentChar.isPlayer,
                 'direction': direction,
+                'physics': physics,
             }
         )
 
@@ -92,6 +109,7 @@ class OffensiveAttack():
                     'direction': direction,
                     'knockback': knockback,
                     'stun': True,
+                    'sourceRenderable': self.parentRenderable,
                 }
             )
 
@@ -135,7 +153,7 @@ class OffensiveAttack():
             self.weaponType)
         wha = copy.deepcopy(weaponData.weaponHitDetect[direction])
 
-        loc = self.getWeaponBaseLocation()
+        loc = self.getWeaponBaseLocation(weaponData)
         Utility.updateCoordinateListWithBase(
             wha,
             loc,
@@ -144,8 +162,8 @@ class OffensiveAttack():
         return wha
 
 
-    def getWeaponBaseLocation(self):
-        """The position of the attack weapon of the char. 
+    def getWeaponBaseLocation(self, weaponData):
+        """The position of the attack weapon of the char.
         Used to:
         - As Enemy/AI: check if we can attack player (chase)
         - Use as baseline for attack texture (and therefore also hit detection)
@@ -159,8 +177,6 @@ class OffensiveAttack():
         else:
             loc.x += (self.parentRenderable.texture.width) - self.weaponBaseLocation.x
 
-        weaponData = fileOffenseLoader.weaponManager.getWeaponData(
-            self.weaponType)
         if self.parentRenderable.direction is Direction.left:
             loc.x += weaponData.locationOffset.x
         else:

@@ -64,7 +64,7 @@ class TextureEmiter(object):
 
 
     def makeActionTexture(
-        self, actionTextureType, location, fromPlayer, direction
+        self, actionTextureType, location, fromPlayer, direction, physics
     ):
         renderable = renderableCache.getRenderable(TextureType.action)
 
@@ -86,7 +86,7 @@ class TextureEmiter(object):
             name="ActionRenderable (actionTexture={} fromPlayer={})".format(
                 actionTextureType, fromPlayer))
 
-        self.addRenderable(renderable)
+        self.addRenderable(renderable, physics=physics)
 
 
     def showCharAtPos(

@@ -8,3 +8,4 @@ class ActionType(Enum):
     hitLine = 3
     charge = 4
     spitfire = 5
+    buckler = 6

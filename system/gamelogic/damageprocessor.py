@@ -38,7 +38,14 @@ class DamageProcessor(esper.Processor):
                 knockback = msg.data['knockback']
                 stun = msg.data['stun']
 
+                if 'sourceRenderable' in msg.data:
+                    sourceRenderable = msg.data['sourceRenderable']
+                else:
+                    sourceRenderable = None
+
                 if renderable.isHitBy(hitLocations):
+                    hitLocations = None  # TODO
+
                     directMessaging.add(
                         groupId=groupId.id,
                         type=DirectMessageType.receiveDamage,
@@ -48,6 +55,10 @@ class DamageProcessor(esper.Processor):
                             'direction': direction,
                             'knockback': knockback,
                             'stun': stun,
+
+                            'sourceRenderable': sourceRenderable,
+                            'destinationEntity': entity,
+                            'hitLocations': hitLocations,
                         }
                     )
 

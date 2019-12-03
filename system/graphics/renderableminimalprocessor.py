@@ -43,7 +43,8 @@ class RenderableMinimalProcessor(esper.Processor):
                 actionTextureType = message.data['actionTextureType'],
                 location = message.data['location'],
                 fromPlayer = message.data['fromPlayer'],
-                direction = message.data['direction']
+                direction = message.data['direction'],
+                physics = message.data['physics'],
             )
 
         for message in messaging.getByType(MessageType.EmitPhenomenaTexture):
@@ -52,7 +53,7 @@ class RenderableMinimalProcessor(esper.Processor):
                 location = message.data['location'],
                 staticLocation = message.data['staticLocation'],
                 direction = message.data['direction'],
-                physics = message.data['physics']
+                physics = message.data['physics'],
             )
 
 

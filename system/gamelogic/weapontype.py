@@ -10,3 +10,4 @@ class WeaponType(Enum):
 
     charge = 10  # for cow
     spitfire = 11  # for dragon
+    buckler = 12
