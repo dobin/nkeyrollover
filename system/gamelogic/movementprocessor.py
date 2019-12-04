@@ -56,42 +56,30 @@ class MovementProcessor(esper.Processor):
                         playerRenderable, Direction.left, playerGroupId.getId())
                     continue
 
-            # coords to test if we can move to it
-            # Note: same x/y calc like in self.moveRenderable()
-            origX = playerRenderable.coordinates.x
-            origY = playerRenderable.coordinates.y
-
-            playerRenderable.coordinates.x += x
-            playerRenderable.coordinates.y += y
-            extCoords = playerRenderable.getLocationAndSize()
+            playerRenderable.storeCoords()
+            playerRenderable.changeLocationFromStored(x, y)
 
             canMove = EntityFinder.isDestinationEmpty(
-                self.world, playerRenderable, extCoords)
+                self.world, playerRenderable)
             if not canMove:
                 # try with one step, instead of the original two
                 if x > 0:
                     x -= 1
-                    playerRenderable.coordinates.x -= 1
-                    extCoords.x -= 1
+                    playerRenderable.changeLocationFromStored(x, y)
                 elif x < 0:
                     x += 1
-                    extCoords.x += 1
-                    playerRenderable.coordinates.x += 1
+                    playerRenderable.changeLocationFromStored(x, y)
 
                 canMove = EntityFinder.isDestinationEmpty(
-                    self.world, playerRenderable, extCoords)
+                    self.world, playerRenderable)
                 if not canMove:
-                    # reset..
-                    playerRenderable.coordinates.x = origX
-                    playerRenderable.coordinates.y = origY
-
+                    playerRenderable.restoreCoords()
                     continue
                 else:
                     # can move with new coordinates
                     pass
 
-            playerRenderable.coordinates.x = origX
-            playerRenderable.coordinates.y = origY
+            playerRenderable.restoreCoords()
 
             didMove = self.moveRenderable(
                 playerRenderable,
@@ -136,27 +124,18 @@ class MovementProcessor(esper.Processor):
             meRenderable = self.world.component_for_entity(
                 entity, system.graphics.renderable.Renderable)
 
-            # coords to test if we can move to it
-            # Note: same x/y calc like in self.moveRenderable()
-            extCoords = meRenderable.getLocationAndSize()
-            extCoords.x += msg.data['x']
-            extCoords.y += msg.data['y']
-
             # these are the actual x/y position change we will use to move
             x = msg.data['x']
             y = msg.data['y']
 
-            origX = meRenderable.coordinates.x
-            origY = meRenderable.coordinates.y
-
-            meRenderable.coordinates.x += x
-            meRenderable.coordinates.y += y
+            meRenderable.storeCoords()
+            meRenderable.changeLocationFromStored(x, y)
 
             if msg.data['force']:
                 canMove = True
             else:
                 canMove = EntityFinder.isDestinationEmpty(
-                    self.world, meRenderable, extCoords)
+                    self.world, meRenderable)
 
                 if not canMove:
                     # seems we cannot move in the chose direction.
@@ -166,30 +145,24 @@ class MovementProcessor(esper.Processor):
                         # try x. yes this is ugly, but fast
                         x = msg.data['x']
                         y = 0
-                        extCoords.y -= msg.data['y']
-                        meRenderable.coordinates.y -= msg.data['y']
+                        meRenderable.changeLocationFromStored(x, y)
                         canMove = EntityFinder.isDestinationEmpty(
-                            self.world, meRenderable, extCoords)
+                            self.world, meRenderable)
 
                         if not canMove:
                             # try y... ugh
                             x = 0
                             y = msg.data['y']
-                            extCoords.x -= msg.data['x']
-                            extCoords.y += msg.data['y']
-                            meRenderable.coordinates.x -= msg.data['x']
-                            meRenderable.coordinates.y += msg.data['y']
-
+                            meRenderable.changeLocationFromStored(x, y)
                             canMove = EntityFinder.isDestinationEmpty(
-                                self.world, meRenderable, extCoords)
+                                self.world, meRenderable)
 
                 # check if we are stuck
                 if not canMove:
-                    meRenderable.coordinates.x = origX
-                    meRenderable.coordinates.y = origY
+                    meRenderable.restoreCoords()
 
                     isStuck = not EntityFinder.isDestinationEmpty(
-                        self.world, meRenderable, meRenderable.getLocationAndSize()
+                        self.world, meRenderable
                     )
                     if isStuck:
                         logger.info("{}: Overlaps, force way out".format(meRenderable))
@@ -200,11 +173,11 @@ class MovementProcessor(esper.Processor):
                     else:
                         # not stuck, just wait until we are free,
                         # as another enemy most likely blocks our way
-                        logger.info("{}: Does not overlap, wait until moving".format(meRenderable))
+                        logger.info("{}: Does not overlap, wait until moving".format(
+                            meRenderable))
                         pass
 
-            meRenderable.coordinates.x = origX
-            meRenderable.coordinates.y = origY
+            meRenderable.restoreCoords()
 
             if canMove:
                 self.moveRenderable(

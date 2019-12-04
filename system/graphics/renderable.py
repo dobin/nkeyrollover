@@ -41,6 +41,8 @@ class Renderable(object):
         self.attackBaseLocation = Coordinates(-1, 1)
         self.weaponBaseLocation = Coordinates(0, -1)
 
+        self.storedCoordinates = Coordinates()
+
         # if parent is given, this position will always be relative
         # to that parent
         self.parent :Renderable = parent
@@ -186,23 +188,21 @@ class Renderable(object):
         return False
 
 
-    def overlapsWithCoordinates(self, coords :Coordinates):
+    def overlapsWith(self, renderable):
         """
-        Returns true if the semi-sprite, indicated by coords, overlaps with
-        this current renderables texture
-
+        Returns true if the renderable overlaps with this current renderables texture
         Fast but unexact.
         """
-        if self.coordinates.x + self.texture.width > coords.x:
-            if self.coordinates.x < coords.x + coords.width:
-                if self.coordinates.y < coords.y + coords.height:
-                    if self.coordinates.y + self.texture.height > coords.y:
+        if self.coordinates.x + self.texture.width > renderable.coordinates.x:
+            if self.coordinates.x < renderable.coordinates.x + renderable.texture.width:
+                if self.coordinates.y < renderable.coordinates.y + renderable.texture.height:
+                    if self.coordinates.y + self.texture.height > renderable.coordinates.y:
                         return True
 
         return False
 
 
-    def overlapsWithRenderable(self, renderable):
+    def overlapsWithRenderablePixel(self, renderable):
         # if not self.overlapsWithCoordinates(renderable.getLocationAndSize()):
         #     return False
 
@@ -243,17 +243,17 @@ class Renderable(object):
         return False
 
 
-    def distanceToBorder(self, extCoords):
+    def distanceToBorder(self, renderable):
         """Distance from my border to the border of extCoords.
 
         If renderables are adjectant, distance is 0.
         """
-        if self.coordinates.x < extCoords.x:
+        if self.coordinates.x < renderable.coordinates.x:
             # Me   Extcoords
-            distX = extCoords.x - (self.coordinates.x + self.texture.width)
-        elif self.coordinates.x > extCoords.x:
+            distX = renderable.coordinates.x - (self.coordinates.x + self.texture.width)
+        elif self.coordinates.x > renderable.coordinates.x:
             # Extcoords   Me
-            distX = self.coordinates.x - (extCoords.x + extCoords.width)
+            distX = self.coordinates.x - (renderable.coordinates.x + renderable.texture.width)
         else:
             # Extcoords
             # Me
@@ -261,10 +261,10 @@ class Renderable(object):
 
         # Me
         # Extcoords
-        if self.coordinates.y < extCoords.y:
-            distY = extCoords.y - (self.coordinates.y + self.texture.height)
-        elif self.coordinates.y > extCoords.y:
-            distY = self.coordinates.y - (extCoords.y + extCoords.height)
+        if self.coordinates.y < renderable.coordinates.y:
+            distY = renderable.coordinates.y - (self.coordinates.y + self.texture.height)
+        elif self.coordinates.y > renderable.coordinates.y:
+            distY = self.coordinates.y - (renderable.coordinates.y + renderable.texture.height)
         else:
             distY = 0
 
@@ -315,6 +315,21 @@ class Renderable(object):
             return True
         else:
             return False
+
+
+    def storeCoords(self):
+        self.storedCoordinates.x = self.coordinates.x
+        self.storedCoordinates.y = self.coordinates.y
+
+
+    def restoreCoords(self):
+        self.coordinates.x = self.storedCoordinates.x
+        self.coordinates.y = self.storedCoordinates.y
+
+
+    def changeLocationFromStored(self, x, y):
+        self.coordinates.x = self.storedCoordinates.x + x
+        self.coordinates.y = self.storedCoordinates.y + y
 
 
     def isActive(self):
