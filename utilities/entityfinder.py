@@ -42,6 +42,20 @@ class EntityFinder(object):
 
 
     @staticmethod
+    def isDestinationEmptyForParticle(world, particle) -> bool:
+        """Check if renderable/extCoords overlaps with any other renderables"""
+        for ent, (otherRend, physics) in world.get_components(
+            system.graphics.renderable.Renderable,
+            system.graphics.physics.Physics
+        ):
+            if otherRend.distanceToPoint(particle.x, particle.y) <= 0:
+                if otherRend.overlapsWithPointPixel(particle.x, particle.y):
+                    return False
+
+        return True
+
+
+    @staticmethod
     def findByGroupId(world, id):
         for ent, (groupId, renderable) in world.get_components(
             system.groupid.GroupId,

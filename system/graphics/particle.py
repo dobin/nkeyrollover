@@ -206,3 +206,7 @@ class Particle(object):
 
     def isActive(self):
         return self.active
+
+
+    def setActive(self, active):
+        self.active = active

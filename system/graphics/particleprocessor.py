@@ -4,6 +4,7 @@ import esper
 from game.viewport import Viewport
 from messaging import messaging, MessageType
 from system.singletons.particleemiter import ParticleEmiter
+from utilities.entityfinder import EntityFinder
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +41,9 @@ class ParticleProcessor(esper.Processor):
     def advance(self, dt):
         for particle in self.particleEmiter.particleActive:
             particle.advance(dt)
+            if not EntityFinder.isDestinationEmptyForParticle(self.world, particle):
+                # Note: it already did damage and everything
+                particle.setActive(False)
 
             if not particle.isActive():
                 self.particleEmiter.unuse(particle)

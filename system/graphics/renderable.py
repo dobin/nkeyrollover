@@ -243,6 +243,18 @@ class Renderable(object):
         return False
 
 
+    def overlapsWithPointPixel(self, x, y):
+        meTextureArr = self.texture.getCurrentFrame()
+
+        meX = x - self.coordinates.x
+        meY = y - self.coordinates.y
+
+        if meTextureArr[meY][meX] != '':
+            return True
+
+        return False
+
+
     def distanceToBorder(self, renderable):
         """Distance from my border to the border of extCoords.
 
@@ -275,6 +287,12 @@ class Renderable(object):
         }
 
         return res
+
+
+    def distanceToPoint(self, x, y):
+        x = abs(self.coordinates.x - x)
+        y = abs(self.coordinates.y - y)
+        return x + y
 
 
     def getAttackBaseLocation(self):
