@@ -47,6 +47,7 @@ class TextureEmiterTest(unittest.TestCase):
             location=location,
             fromPlayer=True,
             direction=Direction.right,
+            physics=None
         )
 
         messages = messaging.getByType(MessageType.PlayerAttack)
