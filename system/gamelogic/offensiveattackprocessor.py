@@ -52,7 +52,8 @@ class OffensiveAttackProcessor(esper.Processor):
             if key == ord(' '):
                 playerAttack.attack()
 
-        if key == ord('t'):
+        # if key == ord('t'):
+        if key == -301:  # tab
             playerAttack.showBuckler()
 
 
