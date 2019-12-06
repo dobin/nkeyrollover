@@ -41,7 +41,7 @@ class EnemyProcessor(esper.Processor):
         super().__init__()
         self.enemyLoader :EnemyLoader = EnemyLoader()
         self.viewport = viewport
-        self.num = 16
+        self.num = 64
         self.objectCache = ObjectCache(size=self.num)
         self.didLoad = False
 
@@ -82,7 +82,6 @@ class EnemyProcessor(esper.Processor):
                 attackable = self.world.component_for_entity(ent, Attackable)
                 offensiveAttack = self.world.component_for_entity(ent, OffensiveAttack)
                 enemyCached = EnemyCached()
-                enemyCached.ai = ai
                 enemyCached.groupId = groupId
                 enemyCached.renderable = renderable
                 enemyCached.tenemy = enemy
@@ -115,17 +114,18 @@ class EnemyProcessor(esper.Processor):
 
         extCoords = ExtCoordinates(myx, myy, textureWidth, textureHeight)
 
-        spotFree = False
-        while not spotFree:
-            if EntityFinder.isDestinationEmpty(
-                world=self.world, renderable=None, extCoords=extCoords
-            ):
-                spotFree = True
-            else:
-                if direction is Direction.right:
-                    extCoords.x += 3
+        if False:
+            spotFree = False
+            while not spotFree:
+                if EntityFinder.isDestinationEmpty(
+                    world=self.world, renderable=None, extCoords=extCoords
+                ):
+                    spotFree = True
                 else:
-                    extCoords.x -= 3
+                    if direction is Direction.right:
+                        extCoords.x += 3
+                    else:
+                        extCoords.x -= 3
 
         return extCoords
 
