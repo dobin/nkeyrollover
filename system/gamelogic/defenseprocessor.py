@@ -6,6 +6,7 @@ from directmessaging import directMessaging, DirectMessageType
 from messaging import messaging, MessageType
 from utilities.entityfinder import EntityFinder
 from utilities.utilities import Utility
+from system.graphics.renderable import Renderable
 
 logger = logging.getLogger("DefenseProcessor")
 
