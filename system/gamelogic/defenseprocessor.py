@@ -44,6 +44,10 @@ class DefenseProcessor(esper.Processor):
             sourceRenderable = msg.data['sourceRenderable']
             destinationEntity = msg.data['destinationEntity']
 
+            if sourceRenderable is None:
+                # not applicable
+                continue
+
             if not self.world.has_entity(destinationEntity):
                 # already gone
                 continue
