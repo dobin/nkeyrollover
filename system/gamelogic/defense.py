@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 class Defense():
     def __init__(self):
         self.coordinates = None
-        self.timer = Timer(1.5)
+        self.timer = Timer(1.0)
         self.isActive = False
 
 

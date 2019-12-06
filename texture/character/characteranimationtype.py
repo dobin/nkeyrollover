@@ -13,3 +13,4 @@ class CharacterAnimationType(Enum):
     hitWhip = 7
     knockdown = 8
     onhit = 9
+    holdshield = 10
