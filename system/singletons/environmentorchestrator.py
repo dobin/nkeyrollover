@@ -11,6 +11,7 @@ import game.uniqueid
 from system.graphics.destructable import Destructable
 from system.groupid import GroupId
 from system.gamelogic.passiveattack import PassiveAttack
+from config import Config
 
 logger = logging.getLogger(__name__)
 
@@ -30,39 +31,16 @@ class EnvironmentOrchestrator(object):
         width = 800  # FIXME self.mapManager.getCurrentMapWidth()
         self.envRenderables = [None] * width
 
+        if Config.devMode:
+            self.loadDebugEnvironment()
+            return
+
         # boxes
-        if True:
-            n = random.randrange(30, 60)
-            while n < width - 100:
-                t = PhenomenaTexture(phenomenaType=PhenomenaType.box, setbg=True)
-                x = n
-                y = random.randrange(10, 20)
-                r = Renderable(
-                    texture=t,
-                    viewport=self.viewport,
-                    coordinates=Coordinates(x, y),
-                    active=True,
-                    name='Env Box',
-                    z=1,  # background
-                )
-                attackable = Attackable(
-                    initialHealth=100,
-                    stunCount=0,
-                    stunTimeFrame=0.0,
-                    stunTime=0,
-                    knockdownChance=0.0,
-                    knockbackChance=0.0)
-                physics = Physics()
-                destructable = Destructable()
-                groupId = GroupId(id=game.uniqueid.getUniqueId())
-                self.addEnvRenderable(r, attackable, groupId, physics, None, destructable)
-
-                n += random.randrange(30, 60)
-
-        else:
+        n = random.randrange(30, 60)
+        while n < width - 100:
             t = PhenomenaTexture(phenomenaType=PhenomenaType.box, setbg=True)
-            x = 30
-            y = 15
+            x = n
+            y = random.randrange(10, 20)
             r = Renderable(
                 texture=t,
                 viewport=self.viewport,
@@ -83,42 +61,69 @@ class EnvironmentOrchestrator(object):
             groupId = GroupId(id=game.uniqueid.getUniqueId())
             self.addEnvRenderable(r, attackable, groupId, physics, None, destructable)
 
-        # puddles
-        if True:
-            n = random.randrange(30, 60)
-            while n < width - 100:
-                t = PhenomenaTexture(phenomenaType=PhenomenaType.puddle, setbg=True)
-                x = n
-                y = random.randrange(10, 20)
-                r = Renderable(
-                    texture=t,
-                    viewport=self.viewport,
-                    coordinates=Coordinates(x, y),
-                    active=True,
-                    name='Env Puddle',
-                    z=1,  # background
-                )
-                p = PassiveAttack([10, 10])
-                groupId = GroupId(id=game.uniqueid.getUniqueId())
-                self.addEnvRenderable(r, None, groupId, None, p, None)
+            n += random.randrange(30, 60)
 
-                n += random.randrange(30, 60)
-        else:
+        # puddles
+        n = random.randrange(30, 60)
+        while n < width - 100:
             t = PhenomenaTexture(phenomenaType=PhenomenaType.puddle, setbg=True)
-            x = 10
-            y = 10
+            x = n
+            y = random.randrange(10, 20)
             r = Renderable(
                 texture=t,
                 viewport=self.viewport,
                 coordinates=Coordinates(x, y),
                 active=True,
-                name='Env Puddle 10 10',
+                name='Env Puddle',
                 z=1,  # background
             )
             p = PassiveAttack([10, 10])
             groupId = GroupId(id=game.uniqueid.getUniqueId())
             self.addEnvRenderable(r, None, groupId, None, p, None)
 
+            n += random.randrange(30, 60)
+
+
+    def loadDebugEnvironment(self):
+        # a box
+        t = PhenomenaTexture(phenomenaType=PhenomenaType.box, setbg=True)
+        x = 30
+        y = 10
+        r = Renderable(
+            texture=t,
+            viewport=self.viewport,
+            coordinates=Coordinates(x, y),
+            active=True,
+            name='Env Box',
+            z=1,  # background
+        )
+        attackable = Attackable(
+            initialHealth=100,
+            stunCount=0,
+            stunTimeFrame=0.0,
+            stunTime=0,
+            knockdownChance=0.0,
+            knockbackChance=0.0)
+        physics = Physics()
+        destructable = Destructable()
+        groupId = GroupId(id=game.uniqueid.getUniqueId())
+        self.addEnvRenderable(r, attackable, groupId, physics, None, destructable)
+
+        # a puddle
+        t = PhenomenaTexture(phenomenaType=PhenomenaType.puddle, setbg=True)
+        x = 20
+        y = 20
+        r = Renderable(
+            texture=t,
+            viewport=self.viewport,
+            coordinates=Coordinates(x, y),
+            active=True,
+            name='Env Puddle 10 10',
+            z=1,  # background
+        )
+        p = PassiveAttack([10, 10])
+        groupId = GroupId(id=game.uniqueid.getUniqueId())
+        self.addEnvRenderable(r, None, groupId, None, p, None)
 
 
     def addEnvRenderable(
