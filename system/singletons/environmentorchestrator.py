@@ -27,6 +27,21 @@ class EnvironmentOrchestrator(object):
         self.loadEnvironment()
 
 
+    def isEmpty(self, renderable):
+        x = 0
+        while x < len(self.envRenderables):
+            if self.envRenderables[x] is not None:
+                for entry in self.envRenderables[x]:
+                    otherRend = entry[0]
+                    overlap = otherRend.overlapsWith(renderable)
+                    if overlap:
+                        return False
+
+            x += 1
+
+        return True
+
+
     def loadEnvironment(self):
         width = 800  # FIXME self.mapManager.getCurrentMapWidth()
         self.envRenderables = [None] * width
@@ -59,8 +74,11 @@ class EnvironmentOrchestrator(object):
             physics = Physics()
             destructable = Destructable()
             groupId = GroupId(id=game.uniqueid.getUniqueId())
-            self.addEnvRenderable(r, attackable, groupId, physics, None, destructable)
 
+            if not self.isEmpty(r):
+                continue
+
+            self.addEnvRenderable(r, attackable, groupId, physics, None, destructable)
             n += random.randrange(30, 60)
 
         # puddles
@@ -79,8 +97,11 @@ class EnvironmentOrchestrator(object):
             )
             p = PassiveAttack([10, 10])
             groupId = GroupId(id=game.uniqueid.getUniqueId())
-            self.addEnvRenderable(r, None, groupId, None, p, None)
 
+            if not self.isEmpty(r):
+                continue
+
+            self.addEnvRenderable(r, None, groupId, None, p, None)
             n += random.randrange(30, 60)
 
 
