@@ -167,6 +167,12 @@ class World:
         """
         return tuple(self._entities[entity].values())
 
+    def has_entity(self, entity: int) -> bool:
+        if entity in self._entities:
+            return True
+        else:
+            return False
+
     def has_component(self, entity: int, component_type: Any) -> bool:
         """Check if a specific Entity has a Component of a certain type.
 

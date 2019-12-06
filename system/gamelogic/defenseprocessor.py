@@ -2,7 +2,6 @@ import esper
 import logging
 
 from system.gamelogic.defense import Defense
-from system.graphics.renderable import Renderable
 from directmessaging import directMessaging, DirectMessageType
 from messaging import messaging, MessageType
 from utilities.entityfinder import EntityFinder
@@ -43,6 +42,10 @@ class DefenseProcessor(esper.Processor):
         for msg in directMessaging.getByType(DirectMessageType.receiveDamage, keep=True):
             sourceRenderable = msg.data['sourceRenderable']
             destinationEntity = msg.data['destinationEntity']
+
+            if not self.world.has_entity(destinationEntity):
+                # already gone
+                continue
 
             if self.world.has_component(destinationEntity, Defense):
                 defense = self.world.component_for_entity(destinationEntity, Defense)
