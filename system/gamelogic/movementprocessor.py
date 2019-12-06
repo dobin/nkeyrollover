@@ -46,6 +46,7 @@ class MovementProcessor(esper.Processor):
             dontChangeDirection = msg.data['dontChangeDirection']
             whenMoved = msg.data['whenMoved']
 
+            # only turn, dont walk
             if not dontChangeDirection and Config.turnOnSpot:
                 if playerRenderable.direction is Direction.left and x > 0:
                     self.updateRenderableDirection(
@@ -73,6 +74,7 @@ class MovementProcessor(esper.Processor):
                 canMove = EntityFinder.isDestinationEmpty(
                     self.world, playerRenderable)
                 if not canMove:
+                    # we are stuck
                     playerRenderable.restoreCoords()
                     continue
                 else:
@@ -133,6 +135,25 @@ class MovementProcessor(esper.Processor):
 
             if msg.data['force']:
                 canMove = True
+
+                # push player out of the way, if there
+                isDestEmpty = EntityFinder.isDestinationEmpty(
+                    self.world, meRenderable)
+                if not isDestEmpty:
+                    if EntityFinder.isDestinationWithPlayer(
+                        self.world, meRenderable
+                    ):
+                        directMessaging.add(
+                            groupId = 0,
+                            type = DirectMessageType.movePlayer,
+                            data = {
+                                'x': x,
+                                'y': 0,
+                                'dontChangeDirection': True,
+                                'whenMoved': None,
+                            },
+                        )
+
             else:
                 canMove = EntityFinder.isDestinationEmpty(
                     self.world, meRenderable)

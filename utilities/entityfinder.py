@@ -41,6 +41,26 @@ class EntityFinder(object):
 
 
     @staticmethod
+    def isDestinationWithPlayer(world, renderable :Renderable) -> bool:
+        playerEntity = EntityFinder.findPlayer(world)
+        otherRend = world.component_for_entity(playerEntity, Renderable)
+
+        dist = otherRend.distanceToBorder(renderable)
+        # fast check: distance
+        if dist['x'] <= 0 and dist['y'] <= 0:
+            if not renderable == otherRend:
+                # slower check: overlap
+                overlap = otherRend.overlapsWith(renderable)
+                if overlap:
+                    # slowest: pixel perfect check
+                    overlap = otherRend.overlapsWithRenderablePixel(renderable)
+                    if overlap:
+                        return True
+
+        return False
+
+
+    @staticmethod
     def isDestinationEmptyForParticle(world, particle) -> bool:
         """Check if renderable/extCoords overlaps with any other renderables"""
         for ent, (otherRend, physics) in world.get_components(
