@@ -131,14 +131,15 @@ class SceneProcessor(esper.Processor):
                         self.screenMoveTimer.reset()
 
             elif self.state is State.brawl:
-                # player can move freely
-                # coming close to left/right of the screen will move it
-                if playerScreenCoords.x >= Config.moveBorderRight:
-                    distance = playerScreenCoords.x - Config.moveBorderRight
-                    self.adjustViewport(distance)
-                if playerScreenCoords.x <= Config.moveBorderLeft:
-                    distance = playerScreenCoords.x - Config.moveBorderLeft
-                    self.adjustViewport(distance)
+                if not self.enemiesLeftOfChar(self.lastKnownPlayerPos.x):
+                    # player can move freely
+                    # coming close to left/right of the screen will move it
+                    if playerScreenCoords.x >= Config.moveBorderRight:
+                        distance = playerScreenCoords.x - Config.moveBorderRight
+                        self.adjustViewport(distance)
+                    if playerScreenCoords.x <= Config.moveBorderLeft:
+                        distance = playerScreenCoords.x - Config.moveBorderLeft
+                        self.adjustViewport(distance)
             # /adjust viewport on move
 
             # let the scene decide if we need more enemies
@@ -263,4 +264,3 @@ class SceneProcessor(esper.Processor):
                 return True
 
         return False
-
