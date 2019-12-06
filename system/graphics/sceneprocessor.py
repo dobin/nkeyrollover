@@ -37,6 +37,11 @@ class SceneProcessor(esper.Processor):
         self.gameoverTimer = Timer(3.0, active=False)  # show gameover for this long
 
 
+    def setState(self, state):
+        logging.debug("Set to state: {}".format(state))
+        self.state = state
+
+
     def process(self, dt):
         self.screenMoveTimer.advance(dt)
         self.gameoverTimer.advance(dt)
@@ -44,7 +49,7 @@ class SceneProcessor(esper.Processor):
         for message in messaging.getByType(MessageType.Gameover):
             self.gameoverTimer.reset()
             self.gameoverTimer.start()
-            self.state = State.gameover
+            self.setState(State.gameover)
             messaging.add(
                 type=MessageType.EmitPhenomenaTexture,
                 data={
@@ -64,17 +69,19 @@ class SceneProcessor(esper.Processor):
                         data={}
                     )
 
-                    self.state = State.start
+                    self.setState(State.start)
         elif self.state is State.start:
             self.sceneManager.restartScene()
-            self.state = State.brawl
+            self.setState(State.brawl)
 
 
         for message in messaging.getByType(MessageType.EntityDying):
             # if no enemies are alive, we want to go to the next akt
             if self.numEnemiesAlive() == 0:
                 self.screenMoveTimer.start()
-                self.setState(State.pushToNextScene)
+
+                if self.state is not State.gameover:
+                    self.setState(State.pushToNextScene)
             break
 
         for message in messaging.getByType(MessageType.PlayerLocation):
@@ -257,7 +264,3 @@ class SceneProcessor(esper.Processor):
 
         return False
 
-
-    def setState(self, state):
-        if self.state != state:
-            self.state = state

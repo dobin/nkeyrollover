@@ -40,7 +40,6 @@ class DefenseProcessor(esper.Processor):
 
 
     def checkReceiveDamageMessages(self):
-
         for msg in directMessaging.getByType(DirectMessageType.receiveDamage, keep=True):
             sourceRenderable = msg.data['sourceRenderable']
             destinationEntity = msg.data['destinationEntity']

@@ -1,6 +1,5 @@
 import logging
 
-from common.coordinates import ExtCoordinates
 from system.graphics.renderable import Renderable
 import system.gamelogic.offensiveattack
 import system.gamelogic.offensiveskill
