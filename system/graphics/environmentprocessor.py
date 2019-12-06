@@ -32,6 +32,7 @@ class EnvironmentProcessor(esper.Processor):
             self.trySpawn()
 
         for message in messaging.getByType(MessageType.GameStart):
+            self.environmentOrchestrator.loadEnvironment()
             self.trySpawn()
 
 
