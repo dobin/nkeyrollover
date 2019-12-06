@@ -185,9 +185,9 @@ class EnvironmentOrchestrator(object):
                 if attackable is not None:
                     # if not already removed from esper world
                     if attackable.getHealth() > 0:
-                        logger.info("Remove Entity: {}".format(entity))
+                        logger.info("Remove Entity D: {}".format(entity))
                         world.delete_entity(entity)
                 else:
-                    logger.info("Remove Entity: {}".format(entity))
+                    logger.info("Remove Entity E: {}".format(entity))
                     world.delete_entity(entity)
                 self.activeEnvEntities.remove(entry)
