@@ -57,48 +57,51 @@ class SceneMapBlame(SceneBase):
         self.prepareEnemies()
 
 
+    def prepareDebugEnemies(self):
+        enemyCell = EnemyCell(
+            id = self.enemyCount,
+            enemyType = EnemyType.stickfigure,
+            spawnTime = None,
+            spawnX = 25,
+            spawnLocation = Coordinates(36, 8),
+            spawnDirection = None
+        )
+        self.enemyQueue.append(enemyCell)
+
+        enemyCell = EnemyCell(
+            id = self.enemyCount,
+            enemyType = EnemyType.stickfigure,
+            spawnTime = None,
+            spawnX = 40,
+            spawnLocation = Coordinates(40, 8),
+            spawnDirection = None
+        )
+        self.enemyQueue.append(enemyCell)
+
+        enemyCell = EnemyCell(
+            id = self.enemyCount,
+            enemyType = EnemyType.cow,
+            spawnTime = None,
+            spawnX = 45,
+            spawnLocation = Coordinates(86, 13),
+            spawnDirection = None
+        )
+        self.enemyQueue.append(enemyCell)
+
+        enemyCell = EnemyCell(
+            id = self.enemyCount,
+            enemyType = EnemyType.stickfigure,
+            spawnTime = None,
+            spawnX = 80,
+            spawnLocation = Coordinates(60 + 80, 13),
+            spawnDirection = None
+        )
+        self.enemyQueue.append(enemyCell)
+
+
     def prepareEnemies(self):
         if Config.devMode:
-            enemyCell = EnemyCell(
-                id = self.enemyCount,
-                enemyType = EnemyType.stickfigure,
-                spawnTime = None,
-                spawnX = 25,
-                spawnLocation = Coordinates(36, 8),
-                spawnDirection = None
-            )
-            self.enemyQueue.append(enemyCell)
-
-            enemyCell = EnemyCell(
-                id = self.enemyCount,
-                enemyType = EnemyType.stickfigure,
-                spawnTime = None,
-                spawnX = 40,
-                spawnLocation = Coordinates(40, 8),
-                spawnDirection = None
-            )
-            self.enemyQueue.append(enemyCell)
-
-            enemyCell = EnemyCell(
-                id = self.enemyCount,
-                enemyType = EnemyType.cow,
-                spawnTime = None,
-                spawnX = 45,
-                spawnLocation = Coordinates(86, 13),
-                spawnDirection = None
-            )
-            self.enemyQueue.append(enemyCell)
-
-            enemyCell = EnemyCell(
-                id = self.enemyCount,
-                enemyType = EnemyType.stickfigure,
-                spawnTime = None,
-                spawnX = 80,
-                spawnLocation = Coordinates(60 + 80, 13),
-                spawnDirection = None
-            )
-            self.enemyQueue.append(enemyCell)
-            return
+            self.prepareDebugEnemies()
 
         waveIdx = 0
         waveCount = 9

@@ -6,3 +6,4 @@ class EnemyType(Enum):
     stickfigure = 1
     cow = 2
     dragon = 3
+    big = 4

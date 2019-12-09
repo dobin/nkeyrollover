@@ -1,0 +1,18 @@
+characterTextureType: big
+weaponType: hitLine
+health: 100
+enemyInfo:
+  attackWindupTime: 0.8
+  attackStateTime: 1.0  # how long the attack state lasts
+  enemyCanAttackPeriod: 0.3
+  wanderTime: 5.0
+  wanderTimeRnd: 2.0
+  wanderStepDelay: 0.3
+  chaseTime: 5.0
+  chaseTimeRnd: 2.0
+  chaseStepDelay: 0.2
+stunTime: 0.75
+stunCount: 3
+stunTimeFrame: 6
+knockdownChance: 0.5
+knockbackChance: 1.0
