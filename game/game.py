@@ -24,6 +24,9 @@ from system.io.inputprocessor import InputProcessor
 from system.graphics.characteranimationprocessor import CharacterAnimationProcessor
 from system.graphics.renderableminimalprocessor import RenderableMinimalProcessor
 from system.graphics.environmentprocessor import EnvironmentProcessor
+from system.singletons.particleemiter import ParticleEmiter
+from system.gamelogic.onhitprocessor import OnhitProcessor
+from system.graphics.particleemiterprocessor import ParticleEmiterProcessor
 from game.scenemanager import SceneManager
 from game.statusbar import StatusBar
 from utilities.entityfinder import EntityFinder
@@ -65,8 +68,10 @@ class Game(object):
             world=self.world,
             mapManager=mapManager)
         renderableCache.init(viewport=viewport)
+        particleEmiter = ParticleEmiter(viewport=viewport)
 
-        particleProcessor = ParticleProcessor(viewport=viewport)
+        particleProcessor = ParticleProcessor(
+            viewport=viewport, particleEmiter=particleEmiter)
         gametimeProcessor = GametimeProcessor()
         aiProcessor = AiProcessor()
         characterAnimationProcessor = CharacterAnimationProcessor()
@@ -79,7 +84,9 @@ class Game(object):
         offensiveSkillProcessor = OffensiveSkillProcessor()
         movementProcessor = MovementProcessor(mapManager)
         inputProcessor = InputProcessor()
-        renderableProcessor = RenderableProcessor(textureEmiter=textureEmiter)
+        renderableProcessor = RenderableProcessor(
+            textureEmiter=textureEmiter,
+            particleEmiter=particleEmiter)
         renderableMinimalProcessor = RenderableMinimalProcessor(
             viewport=viewport,
             textureEmiter=textureEmiter)
@@ -87,16 +94,22 @@ class Game(object):
             viewport=viewport,
             sceneManager=sceneManager,
         )
+        particleEmiterProcessor = ParticleEmiterProcessor(
+            particleEmiter=particleEmiter
+        )
         damageProcessor = DamageProcessor()
         environmentProcessor = EnvironmentProcessor(
             viewport=viewport, mapManager=mapManager)
         passiveAttackProcessor = PassiveAttackProcessor()
         defenseProcessor = DefenseProcessor()
+        onhitProcessor = OnhitProcessor()
 
         self.sceneProcessor :SceneProcessor = sceneProcessor  # show F1 stats
         self.viewport :Viewport = viewport  # for keyboardinput in nkeyrollover.py
         self.mapManager :MapManager = mapManager  # map is handled here in game
         self.sceneManager :SceneManager = sceneManager  # to check for showmap here in game
+
+        self.bg = self.createBg(Config.columns, Config.rows)
 
         # Lots of comments to check if the order of the processors really work,
         # as Messaging looses all messages on every iteration (use DirectMessaging
@@ -136,11 +149,25 @@ class Game(object):
         # x generate: Message            AttackAt (via OffensiveSkill, imediate dmg)
         self.world.add_processor(offensiveSkillProcessor)
 
+        # x generate: Message            AttackAt (passive DoT)
+        self.world.add_processor(passiveAttackProcessor)
+
+        # x generate: Message            AttackAt (via particle, dmg on move)
+        self.world.add_processor(particleProcessor)
+
+        # x handle:   Message            AttackAt
+        # x generate: Message            EmitParticleEffect (on-hit effects)
+        self.world.add_processor(onhitProcessor)
+
+        # x handle:   Message            EmitParticleEffect
+        self.world.add_processor(particleEmiterProcessor)
+        
+        # x handle:   Message            AttackAt
+        # x generate: DirectMessage      receiveDamage
+        self.world.add_processor(damageProcessor)
+
         # x change:   Message            receiveDamage
         self.world.add_processor(defenseProcessor)
-
-        # x generate: Message            AttackAt
-        self.world.add_processor(passiveAttackProcessor)
 
         # x handle:   DirectMessage      receiveDamage
         # x generate: Message            EntityStun
@@ -174,10 +201,6 @@ class Game(object):
         # p handle:   Message            PlayerAttack
         self.world.add_processor(playerProcessor)
 
-        # x handle:   Message            EmitTextureMinimal
-        # x handle:   Message            EmitTexture
-        self.world.add_processor(renderableMinimalProcessor)
-
         # e handle:   Message            EntityDying
         # p handle:   Message            PlayerAttack
         # x handle:   Message            AttackWindup
@@ -187,20 +210,13 @@ class Game(object):
         # x handle:   Message            EntityEndStun
         self.world.add_processor(characterAnimationProcessor)
 
+        # x handle:   Message            EmitTextureMinimal
+        # x handle:   Message            EmitTexture
+        self.world.add_processor(renderableMinimalProcessor)
+
         # x handle:   DirectMessage      activateSpeechBubble (emit)
-#        # x generate: Message            AttackAt
         # x generate: DirectMessage      activateSpeechBubble (because of damage)
         self.world.add_processor(renderableProcessor)
-
-        # x handle:   Message            EmitParticleEffect
-        # x generate: Message            AttackAt (via particle, DoT dmg)
-        self.world.add_processor(particleProcessor)
-
-        # x handle:   Message            AttackAt
-        # x generate: DirectMessage      receiveDamage
-        self.world.add_processor(damageProcessor)
-
-        self.bg = self.createBg(Config.columns, Config.rows)
 
 
     def draw1(self, frame :int):

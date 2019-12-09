@@ -10,6 +10,7 @@ from directmessaging import directMessaging, DirectMessageType
 from config import Config
 from utilities.timer import Timer
 from system.singletons.damagestat import damageStat
+from system.graphics.particleeffecttype import ParticleEffectType
 
 logger = logging.getLogger(__name__)
 
@@ -44,8 +45,6 @@ class DamageProcessor(esper.Processor):
                     sourceRenderable = None
 
                 if renderable.isHitBy(hitLocations):
-                    hitLocations = None  # TODO
-
                     directMessaging.add(
                         groupId=groupId.id,
                         type=DirectMessageType.receiveDamage,

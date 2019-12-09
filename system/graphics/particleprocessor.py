@@ -14,28 +14,16 @@ class ParticleProcessor(esper.Processor):
 
     def __init__(
         self,
-        viewport :Viewport
+        viewport :Viewport,
+        particleEmiter :ParticleEmiter
     ):
         super().__init__()
         self.viewport :Viewport = viewport
-        self.particleEmiter = ParticleEmiter(viewport=viewport)
+        self.particleEmiter :ParticleEmiter = particleEmiter
 
 
     def process(self, dt):
-        self.checkMessages()
         self.advance(dt)
-        self.render()
-
-
-    def checkMessages(self):
-        for message in messaging.getByType(MessageType.EmitParticleEffect):
-            self.particleEmiter.emit(
-                loc=message.data['location'],
-                effectType=message.data['effectType'],
-                direction=message.data['direction'],
-                byPlayer=message.data['byPlayer'],
-                damage=message.data['damage']
-            )
 
 
     def advance(self, dt):
@@ -47,8 +35,3 @@ class ParticleProcessor(esper.Processor):
 
             if not particle.isActive():
                 self.particleEmiter.unuse(particle)
-
-
-    def render(self):
-        for particle in self.particleEmiter.particleActive:
-            particle.draw()

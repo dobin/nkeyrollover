@@ -155,6 +155,15 @@ class Renderable(object):
         return False
 
 
+    def getHitLocationsOf(self, hitLocations :List[Coordinates]):
+        locations = []
+        for hitLocation in hitLocations:
+            if self.collidesWithPoint(hitLocation):
+                locations.append(hitLocation)
+
+        return locations
+        
+
     def collidesWithPoint(self, hitCoords :Coordinates):
         """
         Returns true if the 1x1 particle at hitCoords hits a nonempty part of

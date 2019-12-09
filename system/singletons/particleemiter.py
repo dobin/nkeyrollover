@@ -41,6 +41,7 @@ class ParticleEmiter(object):
             ParticleEffectType.disappear: self.createDisappear,
             ParticleEffectType.appear: self.createAppear,
             ParticleEffectType.char: self.createChar,
+            ParticleEffectType.impact: self.createImpact,
         }
 
 
@@ -310,3 +311,22 @@ class ParticleEmiter(object):
 
             self.particleActive.append(particle)
             n += 1
+
+
+    def createImpact(self, loc, direction, byPlayer, damage):
+        particle = self.particlePool.pop()
+
+        particle.init(
+            x=loc.x, y=loc.y,
+            life=100,
+            angle=0,
+            speed=0.0,
+            fadeout=True,
+            byStep=False,
+            charType=3,
+            active=True,
+            damage=0,
+            damageEveryStep=False,
+            color=ColorPalette.getColorByColor(Color.green))
+
+        self.particleActive.append(particle)

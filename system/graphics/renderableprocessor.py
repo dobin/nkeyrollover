@@ -16,9 +16,10 @@ logger = logging.getLogger(__name__)
 
 
 class RenderableProcessor(esper.Processor):
-    def __init__(self, textureEmiter):
+    def __init__(self, textureEmiter, particleEmiter):
         super().__init__()
         self.textureEmiter = textureEmiter
+        self.particleEmiter = particleEmiter
 
         # list of HEIGHT lists
         # used to add renderable objects in the right Z order for render()
@@ -29,7 +30,8 @@ class RenderableProcessor(esper.Processor):
         # TODO which one first?
         self.removeInactiveRenderables()
         self.advance(dt)
-        self.render()
+        self.renderRenderables()
+        self.renderParticles()
         self.makeSpeechBubble()
         self.checkClearRenderables()
 
@@ -77,7 +79,7 @@ class RenderableProcessor(esper.Processor):
                     self.world.delete_entity(ent)
 
 
-    def render(self):
+    def renderRenderables(self):
         for l in self.renderOrder:
             l.clear()
 
@@ -95,3 +97,9 @@ class RenderableProcessor(esper.Processor):
         for l in self.renderOrder:
             for rend in l:
                 rend.draw()
+
+
+    def renderParticles(self):
+        # render particles too
+        for particle in self.particleEmiter.particleActive:
+            particle.draw()

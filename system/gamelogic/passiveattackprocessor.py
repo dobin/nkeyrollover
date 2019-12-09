@@ -12,6 +12,8 @@ logger = logging.getLogger(__name__)
 
 
 class PassiveAttackProcessor(esper.Processor):
+    """Implement damage-on-framechange, e.g. for puddles"""
+    
     def __init__(self):
         super().__init__()
 
