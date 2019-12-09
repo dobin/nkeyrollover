@@ -1,0 +1,4 @@
+endless: True
+advanceByStep: False
+frameColors:
+  - ColorType.background
