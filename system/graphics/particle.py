@@ -88,9 +88,6 @@ class Particle(object):
 
 
     def __repr__(self):
-        # return "{}/{}  vel: {}/{}  life: {}".format(
-        #     self.x, self.y, self.velocity['x'], self.velocity['y'], self.life
-        # )
         return "Particle {}/{}".format(
             self.x, self.y
         )
@@ -119,7 +116,7 @@ class Particle(object):
         if self.charType == 0:
             pass
 
-        if self.charType == 1:
+        elif self.charType == 1:
             if self.life > ((self.originalLife / 3) * 2):
                 self.char = 'O'
             elif self.life < ((self.originalLife / 3) * 1):
@@ -127,7 +124,7 @@ class Particle(object):
             else:
                 self.char = 'o'
 
-        if self.charType == 2:
+        elif self.charType == 2:
             if self.life > ((self.originalLife / 3) * 2):
                 self.char = '#'
             elif self.life < ((self.originalLife / 3) * 1):
@@ -135,13 +132,24 @@ class Particle(object):
             else:
                 self.char = '|'
 
-        if self.charType == 3:
+        elif self.charType == 3:
             if self.life > ((self.originalLife / 3) * 2):
                 self.char = 'O'
             elif self.life < ((self.originalLife / 3) * 1):
                 self.char = '.'
             else:
                 self.char = 'o'
+
+        elif self.charType == 4:
+            if self.life > ((self.originalLife / 3) * 2):
+                self.char = '¦'
+            elif self.life < ((self.originalLife / 3) * 1):
+                self.char = ','
+            else:
+                self.char = ':'
+
+        else:
+            raise Exception("Invalid charType: {}".format(self.charType))
 
 
     def makeStep(self, dt, adjustLife=True):

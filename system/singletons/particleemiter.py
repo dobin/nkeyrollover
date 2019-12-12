@@ -318,15 +318,15 @@ class ParticleEmiter(object):
 
         particle.init(
             x=loc.x, y=loc.y,
-            life=10,
+            life=20,
             angle=0,
             speed=0.0,
             fadeout=True,
             byStep=False,
-            charType=3,
+            charType=4,
             active=True,
             damage=0,
             damageEveryStep=False,
-            color=ColorPalette.getColorByColor(Color.green))
+            color=ColorPalette.getColorByColor(Color.grey))
 
         self.particleActive.append(particle)
