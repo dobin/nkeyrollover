@@ -75,7 +75,7 @@ class ParticleEmiter(object):
             charType=3,
             active=True,
             damage=damage,
-            damageEveryStep=True,
+            damageEveryStep=False,
             color=ColorPalette.getColorByColor(Color.green))
         self.particleActive.append(particle)
 
@@ -105,7 +105,7 @@ class ParticleEmiter(object):
                 charType=3,
                 active=True,
                 damage=damage,
-                damageEveryStep=True,
+                damageEveryStep=False,
                 color=ColorPalette.getColorByColor(Color.grey))
 
             self.particleActive.append(particle)

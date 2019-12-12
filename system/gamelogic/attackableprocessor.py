@@ -169,7 +169,7 @@ class AttackableProcessor(esper.Processor):
             # gfx: show floating damage numbers
             if Config.showEnemyDamageNumbers:
                 messaging.add(
-                    type=MessageType.EmitParticleEffect,
+                    type=MessageType.EmitMirageParticleEffect,
                     data= {
                         'location': meRenderable.getLocationTopCenter(),
                         'effectType': ParticleEffectType.floatingDamage,
@@ -183,7 +183,7 @@ class AttackableProcessor(esper.Processor):
             if Config.showBurstOnImpact:
                 if damage > Config.showBurstOnImpactDamage:
                     messaging.add(
-                        type=MessageType.EmitParticleEffect,
+                        type=MessageType.EmitMirageParticleEffect,
                         data= {
                             'location': meRenderable.getAttackBaseLocationInverted(),
                             'effectType': ParticleEffectType.hitBurst,

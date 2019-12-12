@@ -30,6 +30,6 @@ class ParticleMirageEmiterProcessor(esper.Processor):
                 loc=message.data['location'],
                 effectType=message.data['effectType'],
                 direction=message.data['direction'],
-                byPlayer=None,
-                damage=None,
+                byPlayer=message.data['byPlayer'],
+                damage=message.data['damage'],
             )
