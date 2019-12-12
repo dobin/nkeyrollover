@@ -247,6 +247,20 @@ class Renderable(object):
             while x < me_right:
                 myc = meTextureArr[y][x]
                 xxx, yyy = Utility.getOffsetFor(self, renderable, x, y)
+                
+                # Sometimes crash here. lets log it for now
+                # Make non-overlapping on error for now
+                if yyy > len(heTextureArr):
+                    logging.error("Coordinate does not exist: Y: {}  Len: {}".format(
+                        yyy, len(heTextureArr)
+                    ))
+                    return False
+                if xxx > len(heTextureArr[yyy]):
+                    logging.error("Coordinate does not exist: X: {}  Len: {}".format(
+                        xxx, len(heTextureArr[yyy])
+                    ))
+                    return False
+
                 hisc = heTextureArr[yyy][xxx]
 
                 if myc != '' and hisc != '':
