@@ -20,6 +20,7 @@ from system.graphics.renderableminimalprocessor import RenderableMinimalProcesso
 from system.graphics.renderableprocessor import RenderableProcessor
 from utilities.entityfinder import EntityFinder
 from system.graphics.physics import Physics
+from system.singletons.particleemiter import ParticleEmiter
 
 class RenderableTest(unittest.TestCase):
     def test_renderableBasic(self):
@@ -29,8 +30,11 @@ class RenderableTest(unittest.TestCase):
         self.viewport = MockWin(20, 10)
         self.world = esper.World()
         self.textureEmiter = None
+        particleEmiter = ParticleEmiter(viewport=self.viewport)
 
-        renderableProcessor = RenderableProcessor(textureEmiter=self.textureEmiter)
+        renderableProcessor = RenderableProcessor(
+            textureEmiter=self.textureEmiter,
+            particleEmiter=particleEmiter)
         movementProcessor = MovementProcessor(mapManager=None)
         inputProcessor = InputProcessor()
         renderableMinimalProcessor = RenderableMinimalProcessor(
@@ -124,7 +128,11 @@ class RenderableTest(unittest.TestCase):
         self.world = esper.World()
         self.textureEmiter = None
 
-        renderableProcessor = RenderableProcessor(textureEmiter=self.textureEmiter)
+        particleEmiter = ParticleEmiter(viewport=self.viewport)
+
+        renderableProcessor = RenderableProcessor(
+            textureEmiter=self.textureEmiter,
+            particleEmiter=particleEmiter)
         movementProcessor = MovementProcessor(mapManager=None)
         inputProcessor = InputProcessor()
         renderableMinimalProcessor = RenderableMinimalProcessor(
@@ -347,7 +355,11 @@ class RenderableTest(unittest.TestCase):
         self.world = esper.World()
         self.textureEmiter = None
 
-        renderableProcessor = RenderableProcessor(textureEmiter=self.textureEmiter)
+        particleEmiter = ParticleEmiter(viewport=self.viewport)
+
+        renderableProcessor = RenderableProcessor(
+            textureEmiter=self.textureEmiter,
+            particleEmiter=particleEmiter)
         movementProcessor = MovementProcessor(mapManager=None)
         inputProcessor = InputProcessor()
         renderableMinimalProcessor = RenderableMinimalProcessor(

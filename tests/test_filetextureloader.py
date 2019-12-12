@@ -24,8 +24,8 @@ class FileTextureLoaderTest(unittest.TestCase):
         self.assertTrue(animation.advanceByStep is False)
         self.assertTrue(animation.frameTime[0] == 0.1)
         self.assertTrue(animation.frameTime[1] == 0.2)
-        self.assertTrue(animation.frameColors[0] == 'white')
-        self.assertTrue(animation.frameColors[1] == 'green')
+        self.assertTrue(animation.frameColors[0][0] == 'white')
+        self.assertTrue(animation.frameColors[1][0] == 'green')
 
         x = 0
         y = 0
@@ -66,9 +66,9 @@ class FileTextureLoaderTest(unittest.TestCase):
         self.assertTrue(animation.frameTime[0] == 0.1)
         self.assertTrue(animation.frameTime[1] == 0.1)
         self.assertTrue(animation.frameTime[2] == 0.1)
-        self.assertTrue(animation.frameColors[0] == 'brightyellow')
-        self.assertTrue(animation.frameColors[1] == 'brightyellow')
-        self.assertTrue(animation.frameColors[2] == 'brightyellow')
+        self.assertTrue(animation.frameColors[0][0] == 'brightyellow')
+        self.assertTrue(animation.frameColors[1][0] == 'brightyellow')
+        self.assertTrue(animation.frameColors[2][0] == 'brightyellow')
 
         x = 0
         y = 1

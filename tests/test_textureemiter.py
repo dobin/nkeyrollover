@@ -18,7 +18,7 @@ from texture.action.actiontype import ActionType
 from common.direction import Direction
 from system.singletons.renderablecache import renderableCache
 from texture.filetextureloader import fileTextureLoader
-
+from system.singletons.particleemiter import ParticleEmiter
 
 class TextureEmiterTest(unittest.TestCase):
     def test_actionemiter(self):
@@ -29,8 +29,11 @@ class TextureEmiterTest(unittest.TestCase):
         self.world = esper.World()
         self.textureEmiter = TextureEmiter(viewport=self.viewport, world=self.world)
         renderableCache.init(viewport=self.viewport)
+        particleEmiter = ParticleEmiter(viewport=self.viewport)
 
-        renderableProcessor = RenderableProcessor(textureEmiter=self.textureEmiter)
+        renderableProcessor = RenderableProcessor(
+            textureEmiter=self.textureEmiter,
+            particleEmiter=particleEmiter)
         movementProcessor = MovementProcessor(mapManager=None)
         inputProcessor = InputProcessor()
         renderableMinimalProcessor = RenderableMinimalProcessor(

@@ -23,7 +23,7 @@ class ColorPalette(object):
     @staticmethod
     def getColorByColor(color :Color):
         if game.isunittest.getIsUnitTest():
-            return color.name
+            return color.name, None
 
         if color is Color.brightwhite:
             color = Screen.COLOUR_WHITE
