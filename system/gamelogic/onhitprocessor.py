@@ -70,3 +70,4 @@ class OnhitProcessor(esper.Processor):
                                 'byPlayer': True,
                                 'direction': direction,
                             }
+                        )
