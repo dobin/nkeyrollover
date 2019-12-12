@@ -290,7 +290,7 @@ class ParticleEmiter(object):
                 x=loc.x, y=loc.y, life=life, angle=angle,
                 speed=0.1, fadeout=True, byStep=False, charType=1,
                 active=True,
-                damage=damage, damageEveryStep=True, byPlayer=byPlayer)
+                damage=damage, damageEveryStep=False, byPlayer=byPlayer)
 
             self.particleActive.append(particle)
             n += 1
@@ -308,7 +308,7 @@ class ParticleEmiter(object):
                 x=loc.x, y=loc.y, life=life, angle=angle,
                 speed=0.1, fadeout=True, byStep=False, charType=1,
                 active=True,
-                damage=damage, damageEveryStep=True, byPlayer=byPlayer)
+                damage=damage, damageEveryStep=False, byPlayer=byPlayer)
 
             self.particleActive.append(particle)
             n += 1
