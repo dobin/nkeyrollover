@@ -7,6 +7,8 @@ from messaging import messaging, MessageType
 from utilities.entityfinder import EntityFinder
 from utilities.utilities import Utility
 from system.graphics.renderable import Renderable
+from common.direction import Direction
+from system.graphics.particleeffecttype import ParticleEffectType
 
 logger = logging.getLogger("DefenseProcessor")
 
@@ -66,10 +68,18 @@ class DefenseProcessor(esper.Processor):
                 distanceEnemy = Utility.distance(
                     sourceRenderable.coordinates, destinationRenderable.coordinates)
 
-                # logging.warn("{} {}".format(distanceDefense, distanceEnemy))
                 if distanceDefense['sum'] < distanceEnemy['sum']:
-                    logging.info("Blocked")
                     msg.data['damage'] = 0
-                    # msg.mitigated = True
-                else:
-                    logging.info("Not Blocked")
+                    # msg.data['mitigated'] = True
+
+                    messaging.add(
+                        type=MessageType.EmitParticleEffect,
+                        data= {
+                            'location': destinationRenderable.getLocationTopCenter(),
+                            'effectType': ParticleEffectType.floatingDamage,
+                            'damage': 'Blocked',
+                            'byPlayer': None,
+                            'direction': Direction.none,
+                        }
+                    )
+
