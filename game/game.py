@@ -27,6 +27,7 @@ from system.graphics.environmentprocessor import EnvironmentProcessor
 from system.singletons.particleemiter import ParticleEmiter
 from system.gamelogic.onhitprocessor import OnhitProcessor
 from system.graphics.particleemiterprocessor import ParticleEmiterProcessor
+from system.graphics.particlemirageemiterprocessor import ParticleMirageEmiterProcessor
 from game.scenemanager import SceneManager
 from game.statusbar import StatusBar
 from utilities.entityfinder import EntityFinder
@@ -103,6 +104,9 @@ class Game(object):
         passiveAttackProcessor = PassiveAttackProcessor()
         defenseProcessor = DefenseProcessor()
         onhitProcessor = OnhitProcessor()
+        emitMirageParticleEffect = ParticleMirageEmiterProcessor(
+            particleEmiter=particleEmiter
+        )
 
         self.sceneProcessor :SceneProcessor = sceneProcessor  # show F1 stats
         self.viewport :Viewport = viewport  # for keyboardinput in nkeyrollover.py
@@ -126,7 +130,7 @@ class Game(object):
         # p handle:   DirectMessage      movePlayer
         # e handle:   DirectMessage      moveEnemy
         # p generate: Message            PlayerLocation
-        # p generate: Message            EmitParticleEffect
+        # p generate: Message            EmitMirageParticleEffect (appear)
         # x generate: Message            EntityMoved
         self.world.add_processor(movementProcessor)
 
@@ -146,8 +150,11 @@ class Game(object):
         # p handle:   Message            PlayerKeyPress (skill activate)
         # x generate: Message            EmitParticleEffect (skill)
         # x generate: DirectMessage      activateSpeechBubble
-        # x generate: Message            AttackAt (via OffensiveSkill, imediate dmg)
         self.world.add_processor(offensiveSkillProcessor)
+
+        # x handle:   Message            EmitParticleEffect
+        # x generate: Message            AttackAt (for skills)
+        self.world.add_processor(particleEmiterProcessor)
 
         # x generate: Message            AttackAt (passive DoT)
         self.world.add_processor(passiveAttackProcessor)
@@ -156,7 +163,7 @@ class Game(object):
         self.world.add_processor(particleProcessor)
 
         # x handle:   Message            AttackAt
-        # x generate: Message            EmitParticleEffect (on-hit effects)
+        # x generate: Message            EmitMirageParticleEffect (impact)
         self.world.add_processor(onhitProcessor)
         
         # x handle:   Message            AttackAt
@@ -164,7 +171,7 @@ class Game(object):
         self.world.add_processor(damageProcessor)
 
         # x change:   Message            receiveDamage
-        # x generate: Message            EmitParticleEffect
+        # x generate: Message            EmitMirageParticleEffect (floating 'Blocked')
         self.world.add_processor(defenseProcessor)
 
         # x handle:   DirectMessage      receiveDamage
@@ -173,11 +180,11 @@ class Game(object):
         # x generate: Message            EntityDying
         # x generate: Message            EmitTexture
         # x generate: Message            Gameover
-        # x generate: Messdage           EmitParticleEffect (floating Damage)
+        # x generate: Message            EmitMirageParticleEffect (floating Damage)
         self.world.add_processor(attackableProcessor)
 
-        # x handle:   Message            EmitParticleEffect
-        self.world.add_processor(particleEmiterProcessor)
+        # x handle:   Message            EmitMirageParticleEffect
+        self.world.add_processor(emitMirageParticleEffect)
 
         # p handle:   Message            PlayerLocation
         # x handle:   Message            EntityDying

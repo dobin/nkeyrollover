@@ -73,7 +73,7 @@ class DefenseProcessor(esper.Processor):
                     # msg.data['mitigated'] = True
 
                     messaging.add(
-                        type=MessageType.EmitParticleEffect,
+                        type=MessageType.EmitMirageParticleEffect,
                         data= {
                             'location': destinationRenderable.getLocationTopCenter(),
                             'effectType': ParticleEffectType.floatingDamage,

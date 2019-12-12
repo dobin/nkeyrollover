@@ -94,7 +94,7 @@ class MovementProcessor(esper.Processor):
                 if whenMoved == "showAppearEffect":
                     locCenter = playerRenderable.getLocationCenter()
                     messaging.add(
-                        type=MessageType.EmitParticleEffect,
+                        type=MessageType.EmitMirageParticleEffect,
                         data= {
                             'location': locCenter,
                             'effectType': ParticleEffectType.appear,

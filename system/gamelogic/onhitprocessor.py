@@ -60,7 +60,7 @@ class OnhitProcessor(esper.Processor):
 
                     for particleLocation in particleLocations:
                         messaging.add(
-                            type=MessageType.EmitParticleEffect,
+                            type=MessageType.EmitMirageParticleEffect,
                             data={
                                 'location': particleLocation,
                                 'effectType': ParticleEffectType.impact,

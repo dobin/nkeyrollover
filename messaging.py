@@ -39,6 +39,7 @@ class MessageType(Enum):
     GameStart = 29
 
     Defense = 30
+    EmitMirageParticleEffect = 31
 
 
 class Message(object):

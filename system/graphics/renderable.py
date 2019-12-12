@@ -169,6 +169,12 @@ class Renderable(object):
         Returns true if the 1x1 particle at hitCoords hits a nonempty part of
         this renderable's texture
         """
+
+        logging.debug("Hit: {}/{}  Renderable: {}/{} W: {} H: {}".format(
+            hitCoords.x, hitCoords.y,
+            self.coordinates.x, self.coordinates.y,
+            self.texture.height, self.texture.width
+        ))
         # broad check
         if (hitCoords.x >= self.coordinates.x
                 and hitCoords.x < self.coordinates.x + self.texture.width
