@@ -144,7 +144,7 @@ class Particle(object):
             if self.life > ((self.originalLife / 3) * 2):
                 self.char = '¦'
             elif self.life < ((self.originalLife / 3) * 1):
-                self.char = ','
+                self.char = '.'
             else:
                 self.char = ':'
 
@@ -193,6 +193,7 @@ class Particle(object):
                         'direction': Direction.none,
                         'knockback': False,
                         'stun': False,
+                        'sourceRenderable': None,
                     }
                 )
 

@@ -29,23 +29,21 @@ class OnhitProcessor(esper.Processor):
             #damage = msg.data['damage']
             byPlayer = msg.data['byPlayer']
             direction = msg.data['direction']
+            sourceRenderable = msg.data['sourceRenderable']
             #knockback = msg.data['knockback']
             #stun = msg.data['stun']
             
-            #if 'onHitEffect' in msg.data:
-            #    onHitEffect = msg.data['onHitEffect']
-            #else:
-            #    onHitEffect = None
-            onHitEffect = True
-
-            if onHitEffect:
-                self.handleOnHit(hitLocations, direction, byPlayer)
+            # always show on hit effects currently
+            self.handleOnHit(hitLocations, direction, byPlayer, sourceRenderable)
 
 
-    def handleOnHit(self, hitLocations, direction, byPlayer):
+    def handleOnHit(self, hitLocations, direction, byPlayer, sourceRenderable):
             for entity, renderable in self.world.get_component(
                 Renderable
             ):
+                if renderable == sourceRenderable:
+                    continue
+
                 isPlayer = self.world.has_component(entity, Player)
                 isEnemy = self.world.has_component(entity, Enemy)
 

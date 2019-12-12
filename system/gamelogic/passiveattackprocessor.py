@@ -51,5 +51,6 @@ class PassiveAttackProcessor(esper.Processor):
                 'direction': direction,
                 'knockback': False,
                 'stun': False,
+                'sourceRenderable': renderable,
             }
         )

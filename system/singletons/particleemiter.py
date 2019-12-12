@@ -273,6 +273,7 @@ class ParticleEmiter(object):
                 'direction': direction,
                 'knockback': False,
                 'stun': False,
+                'sourceRenderable': None,
             }
         )
 
@@ -327,6 +328,6 @@ class ParticleEmiter(object):
             active=True,
             damage=0,
             damageEveryStep=False,
-            color=ColorPalette.getColorByColor(Color.grey))
+            color=ColorPalette.getColorByColor(Color.red))
 
         self.particleActive.append(particle)
