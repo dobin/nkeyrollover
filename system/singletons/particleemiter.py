@@ -318,7 +318,7 @@ class ParticleEmiter(object):
 
         particle.init(
             x=loc.x, y=loc.y,
-            life=100,
+            life=10,
             angle=0,
             speed=0.0,
             fadeout=True,

@@ -5,6 +5,7 @@ from system.graphics.renderable import Renderable
 from system.groupid import GroupId
 from system.gamelogic.attackable import Attackable
 from system.gamelogic.player import Player
+from system.gamelogic.enemy import Enemy
 from messaging import messaging, MessageType
 from directmessaging import directMessaging, DirectMessageType
 from config import Config
@@ -42,25 +43,30 @@ class OnhitProcessor(esper.Processor):
 
 
     def handleOnHit(self, hitLocations, direction, byPlayer):
-            for entity, (meAtk, groupId, renderable) in self.world.get_components(
-                Attackable, GroupId, Renderable
+            for entity, renderable in self.world.get_component(
+                Renderable
             ):
                 isPlayer = self.world.has_component(entity, Player)
-                # enemy can attack player, and vice-versa
-                if not byPlayer ^ isPlayer:
-                    continue
+                isEnemy = self.world.has_component(entity, Enemy)
 
                 if renderable.isHitBy(hitLocations):
-                    hitLocations = renderable.getHitLocationsOf(hitLocations)
+                    particleLocations = renderable.getHitLocationsOf(hitLocations)
 
-                    for hitLocation in hitLocations:
+                    if not isPlayer and not isEnemy:
+                        # its environment. allow
+                        pass
+                    else:
+                        # enemy can attack player, and vice-versa
+                        if not byPlayer ^ isPlayer:
+                            continue
+
+                    for particleLocation in particleLocations:
                         messaging.add(
                             type=MessageType.EmitParticleEffect,
                             data={
-                                'location': hitLocation,
+                                'location': particleLocation,
                                 'effectType': ParticleEffectType.impact,
                                 'damage': 0,
                                 'byPlayer': True,
                                 'direction': direction,
                             }
-                        )    

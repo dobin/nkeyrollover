@@ -108,7 +108,7 @@ class EnvironmentOrchestrator(object):
     def loadDebugEnvironment(self):
         # a box
         t = PhenomenaTexture(phenomenaType=PhenomenaType.box, setbg=True)
-        x = 30
+        x = 28
         y = 10
         r = Renderable(
             texture=t,

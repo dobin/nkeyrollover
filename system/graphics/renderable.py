@@ -162,7 +162,7 @@ class Renderable(object):
                 locations.append(hitLocation)
 
         return locations
-        
+
 
     def collidesWithPoint(self, hitCoords :Coordinates):
         """
