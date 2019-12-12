@@ -111,7 +111,7 @@ class EnemyProcessor(esper.Processor):
         maxY = Config.areaMoveable['maxy']
         myy = random.randint(minY, maxY)
 
-        renderable.setLocation(myx, myy)
+        renderable.setLocation(Coordinates(myx, myy))
 
         # if enemies overlap, move them sideway away from player
         spotFree = False
