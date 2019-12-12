@@ -158,15 +158,13 @@ class Game(object):
         # x handle:   Message            AttackAt
         # x generate: Message            EmitParticleEffect (on-hit effects)
         self.world.add_processor(onhitProcessor)
-
-        # x handle:   Message            EmitParticleEffect
-        self.world.add_processor(particleEmiterProcessor)
         
         # x handle:   Message            AttackAt
         # x generate: DirectMessage      receiveDamage
         self.world.add_processor(damageProcessor)
 
         # x change:   Message            receiveDamage
+        # x generate: Message            EmitParticleEffect
         self.world.add_processor(defenseProcessor)
 
         # x handle:   DirectMessage      receiveDamage
@@ -175,7 +173,11 @@ class Game(object):
         # x generate: Message            EntityDying
         # x generate: Message            EmitTexture
         # x generate: Message            Gameover
+        # x generate: Messdage           EmitParticleEffect (floating Damage)
         self.world.add_processor(attackableProcessor)
+
+        # x handle:   Message            EmitParticleEffect
+        self.world.add_processor(particleEmiterProcessor)
 
         # p handle:   Message            PlayerLocation
         # x handle:   Message            EntityDying
