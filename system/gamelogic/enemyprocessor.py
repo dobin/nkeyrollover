@@ -100,34 +100,31 @@ class EnemyProcessor(esper.Processor):
                     data = {}
                 )
 
-    def getSomeSpawnCoordinates(self, direction, textureWidth, textureHeight):
+    def setSomeSpawnCoordinates(self, renderable, direction):
         # X
         if direction is Direction.right:
             myx = self.viewport.getx() + Config.columns + 1
         else:
-            myx = self.viewport.getx() - 1 - textureWidth
+            myx = self.viewport.getx() - 1 - renderable.texture.width
 
-        # Y
         minY = Config.areaMoveable['miny']
         maxY = Config.areaMoveable['maxy']
         myy = random.randint(minY, maxY)
 
-        extCoords = ExtCoordinates(myx, myy, textureWidth, textureHeight)
+        renderable.setLocation(myx, myy)
 
-        if False:
-            spotFree = False
-            while not spotFree:
-                if EntityFinder.isDestinationEmpty(
-                    world=self.world, renderable=None, extCoords=extCoords
-                ):
-                    spotFree = True
+        # if enemies overlap, move them sideway away from player
+        spotFree = False
+        while not spotFree:
+            if EntityFinder.isDestinationEmpty(
+                world=self.world, renderable=renderable
+            ):
+                spotFree = True
+            else:
+                if direction is Direction.right:
+                    renderable.coordinates.x += 3
                 else:
-                    if direction is Direction.right:
-                        extCoords.x += 3
-                    else:
-                        extCoords.x -= 3
-
-        return extCoords
+                    renderable.coordinates.x -= 3
 
 
     def spawnEnemy(self, data):
@@ -153,16 +150,16 @@ class EnemyProcessor(esper.Processor):
         enemyCached.renderable.texture.changeAnimation(
             CharacterAnimationType.standing,
             enemyCached.renderable.direction)
+        enemyCached.renderable.setActive(True)
 
         # after texture config above
         if coordinates is None:
-            coordinates = self.getSomeSpawnCoordinates(
-                data.spawnDirection,
-                enemyCached.renderable.texture.width,
-                enemyCached.renderable.texture.height)
+            self.setSomeSpawnCoordinates(
+                enemyCached.renderable,
+                data.spawnDirection)
+        else:
+            enemyCached.renderable.setLocation(coordinates)
 
-        enemyCached.renderable.setActive(True)
-        enemyCached.renderable.setLocation(coordinates)
         enemyCached.renderable.attackBaseLocation = Coordinates(
             enemySeed.attackBaseLocation['x'],
             enemySeed.attackBaseLocation['y']
