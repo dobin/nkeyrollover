@@ -60,7 +60,7 @@ class SceneMapBlame(SceneBase):
     def prepareDebugEnemies(self):
         enemyCell = EnemyCell(
             id = self.enemyCount,
-            enemyType = EnemyType.stickfigure,
+            enemyType = EnemyType.rambo,
             spawnTime = None,
             spawnX = 25,
             spawnLocation = Coordinates(36, 8),
@@ -117,8 +117,8 @@ class SceneMapBlame(SceneBase):
     def prepareWave(self, waveX, enemyQueue):
         # intraWaveSpawnTime = 3
 
-        numStickfigures = 10
-        numCows = 3
+        numStickfigures = 5
+        numCows = 2
         numDragons = 1
 
         n = 0
