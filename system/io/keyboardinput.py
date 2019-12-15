@@ -1,5 +1,6 @@
 import logging
 from asciimatics.screen import Screen
+from asciimatics.event import KeyboardEvent
 
 from messaging import messaging, MessageType
 import system.singletons.gametime
@@ -19,8 +20,9 @@ class KeyboardInput(object):
         gotInput = False
         event = self.viewport.win.get_event()
         while event is not None:
-            gotInput = True
-            self.handleInput(event.key_code)
+            if type(event) is KeyboardEvent:
+                gotInput = True
+                self.handleInput(event.key_code)
             event = self.viewport.win.get_event()
 
         return gotInput
