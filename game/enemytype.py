@@ -7,3 +7,4 @@ class EnemyType(Enum):
     cow = 2
     dragon = 3
     big = 4
+    rambo = 5

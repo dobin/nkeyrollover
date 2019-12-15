@@ -1,0 +1,7 @@
+endless: True
+advanceByStep: False
+frameColors:
+  - grey
+frameTime:
+  - 0.5
+direction: right

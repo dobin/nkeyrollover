@@ -11,7 +11,9 @@ from ai.stickfigure.state_spawn import StateSpawn
 from ai.stickfigure.state_wander import StateWander
 from ai.stickfigure.state_dead import StateDead
 from game.enemytype import EnemyType
-
+from ai.rambo.state_attacking import RamboStateAttacking
+from ai.rambo.state_standing import RamboStateStanding
+from ai.rambo.state_spawn import RamboStateSpawn
 
 logger = logging.getLogger(__name__)
 
@@ -27,19 +29,27 @@ class Ai():
     def initAi(self, esperData):
         self.brain :Brain = Brain(esperData)
         
-        self.brain.register(StateSpawn)
-        if self.enemyType is EnemyType.cow:
-            self.brain.register(CowStateAttack)
+        if self.enemyType is EnemyType.rambo:
+            self.brain.register(RamboStateAttacking)
+            self.brain.register(RamboStateStanding)
+            self.brain.register(RamboStateSpawn)
+
+            self.brain.register(StateDying)
+            self.brain.register(StateDead)
         else:
-            self.brain.register(StateAttack)
-        if self.enemyType is EnemyType.dragon:
-            self.brain.register(DragonStateChase)
-        else:
-            self.brain.register(StateChase)
-        self.brain.register(StateWander)
-        self.brain.register(StateDying)
-        self.brain.register(StateDead)
-        self.brain.register(StateAttackWindup)
+            self.brain.register(StateSpawn)
+            if self.enemyType is EnemyType.cow:
+                self.brain.register(CowStateAttack)
+            else:
+                self.brain.register(StateAttack)
+            if self.enemyType is EnemyType.dragon:
+                self.brain.register(DragonStateChase)
+            else:
+                self.brain.register(StateChase)
+            self.brain.register(StateWander)
+            self.brain.register(StateDying)
+            self.brain.register(StateDead)
+            self.brain.register(StateAttackWindup)
         self.brain.push("spawn")
 
 

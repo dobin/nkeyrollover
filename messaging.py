@@ -40,6 +40,7 @@ class MessageType(Enum):
 
     Defense = 30
     EmitMirageParticleEffect = 31
+    EntityStanding = 32
 
 
 class Message(object):

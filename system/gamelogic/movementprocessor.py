@@ -130,6 +130,16 @@ class MovementProcessor(esper.Processor):
             x = msg.data['x']
             y = msg.data['y']
 
+            # turning on the spot
+            if meRenderable.direction is Direction.left and x > 0:
+                self.updateRenderableDirection(
+                    meRenderable, Direction.right, msg.groupId)
+                continue
+            if meRenderable.direction is Direction.right and x < 0:
+                self.updateRenderableDirection(
+                    meRenderable, Direction.left, msg.groupId)
+                continue
+
             meRenderable.storeCoords()
             meRenderable.changeLocationFromStored(x, y)
 

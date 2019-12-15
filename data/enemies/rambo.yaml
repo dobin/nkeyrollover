@@ -1,0 +1,21 @@
+characterTextureType: rambo
+weaponType: hitLine  # not used
+health: 100
+enemyInfo:
+  attackWindupTime: 0.8
+  attackStateTime: 1.0  
+  enemyCanAttackPeriod: 0.3
+  wanderTime: 5.0
+  wanderTimeRnd: 2.0
+  wanderStepDelay: 0.3
+  chaseTime: 5.0
+  chaseTimeRnd: 2.0
+  chaseStepDelay: 0.2
+stunTime: 0.0
+stunCount: 3
+stunTimeFrame: 6
+knockdownChance: 0.0
+knockbackChance: 0.0
+attackBaseLocation:
+  x: 0
+  y: 2

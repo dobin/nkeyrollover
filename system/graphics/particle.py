@@ -148,6 +148,9 @@ class Particle(object):
             else:
                 self.char = ':'
 
+        elif self.charType == 5:
+            self.char = '-'
+
         else:
             raise Exception("Invalid charType: {}".format(self.charType))
 

@@ -7,3 +7,4 @@ class CharacterTextureType(Enum):
     cow = 2
     dragon = 3
     big = 4
+    rambo = 5

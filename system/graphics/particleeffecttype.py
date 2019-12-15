@@ -12,3 +12,4 @@ class ParticleEffectType(Enum):
     appear = 7
     char = 8
     impact = 9
+    bullet = 10

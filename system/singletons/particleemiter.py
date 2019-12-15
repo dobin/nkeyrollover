@@ -42,6 +42,7 @@ class ParticleEmiter(object):
             ParticleEffectType.appear: self.createAppear,
             ParticleEffectType.char: self.createChar,
             ParticleEffectType.impact: self.createImpact,
+            ParticleEffectType.bullet: self.createBullet,
         }
 
 
@@ -174,10 +175,17 @@ class ParticleEmiter(object):
             angle = (360.0 / particleCount) * n
 
             particle.init(
-                x=loc.x, y=loc.y, life=life, angle=angle,
-                speed=0.1, fadeout=True, byStep=False, charType=1,
+                x=loc.x, y=loc.y, 
+                life=life, 
+                angle=angle,
+                speed=0.1, 
+                fadeout=True, 
+                byStep=False, 
+                charType=1,
                 active=True,
-                damage=damage, damageEveryStep=True, byPlayer=byPlayer)
+                damage=damage, 
+                damageEveryStep=True, 
+                byPlayer=byPlayer)
 
             self.particleActive.append(particle)
             n += 1
@@ -328,6 +336,31 @@ class ParticleEmiter(object):
             active=True,
             damage=0,
             damageEveryStep=False,
+            color=ColorPalette.getColorByColor(Color.red))
+
+        self.particleActive.append(particle)
+
+
+    def createBullet(self, loc, direction, byPlayer, damage):
+        particle = self.particlePool.pop()
+
+        if direction is Direction.left:
+            angle = 180
+        else:
+            angle = 0
+
+        particle.init(
+            x=loc.x, y=loc.y,
+            life=100,
+            angle=angle,
+            speed=0.1,
+            fadeout=False,
+            byStep=False,
+            charType=5,
+            active=True,
+            damage=10,
+            damageEveryStep=True,
+            byPlayer=byPlayer,
             color=ColorPalette.getColorByColor(Color.red))
 
         self.particleActive.append(particle)

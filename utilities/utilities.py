@@ -227,5 +227,15 @@ class Utility(object):
         elif char == '>':
             return '<'
 
+        if char == '`':
+            return '´'
+        elif char == '´':
+            return '`'
+
+        if char == '⌐':
+            return '¬'
+        elif char == '¬':
+            return '⌐'
+
         else:
             return char
