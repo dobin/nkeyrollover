@@ -72,8 +72,8 @@ class SceneMapBlame(SceneBase):
             id = self.enemyCount,
             enemyType = EnemyType.stickfigure,
             spawnTime = None,
-            spawnX = 40,
-            spawnLocation = Coordinates(40, 8),
+            spawnX = 50,
+            spawnLocation = Coordinates(50, 8),
             spawnDirection = None
         )
         self.enemyQueue.append(enemyCell)
@@ -120,6 +120,8 @@ class SceneMapBlame(SceneBase):
         numStickfigures = 5
         numCows = 2
         numDragons = 1
+        numRambos = 2
+        numBig = 2
 
         n = 0
         while n < numStickfigures:
@@ -139,6 +141,60 @@ class SceneMapBlame(SceneBase):
             enemyCell = EnemyCell(
                 id = self.enemyCount,
                 enemyType = EnemyType.stickfigure,
+                spawnTime = None,  # waveIdx * intraWaveSpawnTime + n,
+                spawnX = playerTrapX,
+                spawnLocation = None,
+                spawnDirection = dir
+            )
+            self.enemyCount += 1
+            enemyQueue.append(enemyCell)
+            n += 1
+
+        n = 0
+        while n < numBig:
+            playerTrapX = waveX
+            # spawnLocation = self.getRandomSpawnCoords(
+            #    trapX=playerTrapX, rightSideBias=0.8)
+
+            xoff = random.randint(0, 4)
+            roll = random.random()
+            if roll < 0.8:
+                dir = Direction.right
+                playerTrapX += xoff
+            else:
+                dir = Direction.left
+                playerTrapX -= xoff
+
+            enemyCell = EnemyCell(
+                id = self.enemyCount,
+                enemyType = EnemyType.big,
+                spawnTime = None,  # waveIdx * intraWaveSpawnTime + n,
+                spawnX = playerTrapX,
+                spawnLocation = None,
+                spawnDirection = dir
+            )
+            self.enemyCount += 1
+            enemyQueue.append(enemyCell)
+            n += 1
+
+        n = 0
+        while n < numRambos:
+            playerTrapX = waveX
+            # spawnLocation = self.getRandomSpawnCoords(
+            #    trapX=playerTrapX, rightSideBias=0.8)
+
+            xoff = random.randint(0, 4)
+            roll = random.random()
+            if roll < 0.8:
+                dir = Direction.right
+                playerTrapX += xoff
+            else:
+                dir = Direction.left
+                playerTrapX -= xoff
+
+            enemyCell = EnemyCell(
+                id = self.enemyCount,
+                enemyType = EnemyType.rambo,
                 spawnTime = None,  # waveIdx * intraWaveSpawnTime + n,
                 spawnX = playerTrapX,
                 spawnLocation = None,
