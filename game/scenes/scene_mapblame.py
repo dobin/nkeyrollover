@@ -185,7 +185,7 @@ class SceneMapBlame(SceneBase):
 
             xoff = random.randint(0, 4)
             roll = random.random()
-            if roll < 0.8:
+            if True:  # always on the right
                 dir = Direction.right
                 playerTrapX += xoff
             else:
