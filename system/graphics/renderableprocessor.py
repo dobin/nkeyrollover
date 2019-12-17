@@ -23,7 +23,8 @@ class RenderableProcessor(esper.Processor):
 
         # list of HEIGHT lists
         # used to add renderable objects in the right Z order for render()
-        self.renderOrder = [[] for i in range(Config.rows + 3)]
+        # 5 is an arbitrary number
+        self.renderOrder = [[] for i in range(Config.rows + 5)]
 
 
     def process(self, dt):
